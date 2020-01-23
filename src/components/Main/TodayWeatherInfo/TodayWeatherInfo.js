@@ -2,18 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core';
 
 import WbSunnyIcon from '@material-ui/icons/WbSunny';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
+import { ReactComponent as Humidity } from 'svgs/humidity.svg';
+import { ReactComponent as Precipitation } from 'svgs/precipitation.svg';
+import { ReactComponent as UvIndex } from 'svgs/uvIndex.svg';
+
+import WithSvg from 'components/WithSvg/WithSvg';
 import { RIGHT_DRAWER_WIDTH } from 'constants/constants';
 import WeatherInfo from './WeatherInfo/WeatherInfo';
 import styles from './TodayWeatherInfo.module.css';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   paper: {
     width: RIGHT_DRAWER_WIDTH,
     paddingTop: '105px',
@@ -55,8 +59,14 @@ const TodayWeatherInfo = props => {
         <img src="https://via.placeholder.com/350x200.jpg" />
       </div>
       <Divider variant="middle" />
-      <WeatherInfo>
-        <CircularProgress size={65} variant="static" value={75} />
+      <WeatherInfo progressValue={75} text="Humidity" withPercent textBottomGutter={5}>
+        <WithSvg component={Humidity} size={20} />
+      </WeatherInfo>
+      <WeatherInfo progressValue={46} text="Precipitation" withPercent textBottomGutter={5}>
+        <WithSvg component={Precipitation} size={20} />
+      </WeatherInfo>
+      <WeatherInfo progressValue={10} text="UV index" textBottomGutter={5}>
+        <WithSvg component={UvIndex} size={20} />
       </WeatherInfo>
     </Drawer>
   );
