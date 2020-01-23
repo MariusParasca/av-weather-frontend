@@ -6,14 +6,14 @@ import Button from '@material-ui/core/Button';
 
 import PinDropIcon from '@material-ui/icons/PinDrop';
 
-import { DRAWER_WIDTH } from 'constants/constants';
+import { LEFT_DRAWER_WIDTH } from 'constants/constants';
 import classes from './ApplicationBar.module.css';
 
 const useStyles = makeStyles(theme => ({
-  paper: { width: DRAWER_WIDTH },
+  paper: { width: LEFT_DRAWER_WIDTH },
   drawer: {
     [theme.breakpoints.up('sm')]: {
-      width: DRAWER_WIDTH,
+      width: LEFT_DRAWER_WIDTH,
       flexShrink: 0,
     },
   },

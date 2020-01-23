@@ -1,0 +1,15 @@
+.sunInfoContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.sunInfoMiniContainer {
+  display: flex;
+  align-items: center;
+  margin-left: 15px;
+}
+
+.sunText:first-child {
+  margin-left: 3px;
+}

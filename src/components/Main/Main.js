@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core';
 import darkSkyAxios from 'axios/darkSky';
 import hereWeatherAxios from 'axios/hereWeather';
 import ipStackAxios from 'axios/ipStack';
-import { DRAWER_WIDTH } from 'constants/constants';
+import { LEFT_DRAWER_WIDTH, RIGHT_DRAWER_WIDTH } from 'constants/constants';
 import useHttp from 'hooks/useHttp';
 
 import Forecast from './Forecast/Forecast';
@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
   container: {
     padding: theme.spacing(6),
     [theme.breakpoints.up('sm')]: {
-      width: `calc(100% - ${DRAWER_WIDTH})`,
+      width: `calc(100% - ${LEFT_DRAWER_WIDTH}px - ${RIGHT_DRAWER_WIDTH}px - ${2 * theme.spacing(6)}px)`,
     },
   },
 }));
@@ -87,7 +87,7 @@ const Main = () => {
   useEffect(() => {
     startClock();
     setInterval(startClock, 60 * 1000);
-    sendRequestIpStack(ipStackAxios, ['/check'], 'get');
+    // sendRequestIpStack(ipStackAxios, ['/check'], 'get');
   }, [sendRequestIpStack, startClock]);
 
   useEffect(() => {
