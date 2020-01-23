@@ -14,7 +14,7 @@ import { ReactComponent as UvIndex } from 'svgs/uvIndex.svg';
 import { ReactComponent as Cloud } from 'svgs/cloud.svg';
 
 import WithSvg from 'components/WithSvg/WithSvg';
-import { RIGHT_DRAWER_WIDTH } from 'constants/constants';
+import { RIGHT_DRAWER_WIDTH, MAX_UV } from 'constants/constants';
 import WeatherInfo from './WeatherInfo/WeatherInfo';
 import styles from './TodayWeatherInfo.module.css';
 
@@ -37,7 +37,22 @@ const useStyles = makeStyles(() => ({
 const TodayWeatherInfo = props => {
   const { weatherInfo } = props;
 
+  const {
+    maxWind,
+    humidity,
+    precipitation,
+    uvIndex,
+    cloudCover,
+    pressure,
+    visibility,
+    dewPoint,
+    sunriseTime,
+    sunsetTime,
+  } = weatherInfo;
+
   const classes = useStyles();
+
+  console.log(weatherInfo);
 
   return (
     <Drawer anchor="right" classes={{ paper: classes.paper }} variant="permanent">
@@ -60,22 +75,32 @@ const TodayWeatherInfo = props => {
           <img src="https://via.placeholder.com/350x200.jpg" />
         </div>
         <Divider variant="middle" />
-        <WeatherInfo progressValue={75} text="Humidity" withPercent textBottomGutter={5}>
+        <WeatherInfo progressValue={humidity * 100} text="Humidity" withPercent textBottomGutter={5}>
           <WithSvg component={Humidity} size={20} />
         </WeatherInfo>
-        <WeatherInfo progressValue={46} text="Precipitation" withPercent textBottomGutter={5}>
+        <WeatherInfo progressValue={precipitation * 100} text="Precipitation" withPercent textBottomGutter={5}>
           <WithSvg component={Precipitation} size={20} />
         </WeatherInfo>
-        <WeatherInfo progressValue={0} text="UV index" textBottomGutter={5}>
+        <WeatherInfo
+          progressValue={(uvIndex / MAX_UV) * 100}
+          progressText={uvIndex}
+          text="UV index"
+          textBottomGutter={5}
+        >
           <WithSvg component={UvIndex} size={20} />
         </WeatherInfo>
-        <WeatherInfo progressValue={25} text="Cloud cover" textBottomGutter={5}>
+        <WeatherInfo progressValue={cloudCover * 100} text="Cloud cover" withPercent textBottomGutter={5}>
           <WithSvg component={Cloud} size={20} />
         </WeatherInfo>
-        <WeatherInfo progressValue={25} text="Pressure" textBottomGutter={5}>
+        <WeatherInfo
+          progressValue={(pressure / 10000) * 100}
+          progressText={pressure}
+          text="Pressure"
+          textBottomGutter={5}
+        >
           <WithSvg component={UvIndex} size={20} />
         </WeatherInfo>
-        <WeatherInfo progressValue={87} text="Visibility" withPercent textBottomGutter={5}>
+        <WeatherInfo progressValue={(visibility / 40) * 100} text="Visibility" withPercent textBottomGutter={5}>
           <WithSvg component={Precipitation} size={20} />
         </WeatherInfo>
         <WeatherInfo progressValue={23} text="Dew Point" withPercent textBottomGutter={5}>

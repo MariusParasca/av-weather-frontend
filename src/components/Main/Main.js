@@ -88,7 +88,7 @@ const Main = () => {
   useEffect(() => {
     startClock();
     setInterval(startClock, 60 * 1000);
-    // sendRequestIpStack(ipStackAxios, ['/check'], 'get');
+    sendRequestIpStack(ipStackAxios, ['/check'], 'get');
   }, [sendRequestIpStack, startClock]);
 
   useEffect(() => {
