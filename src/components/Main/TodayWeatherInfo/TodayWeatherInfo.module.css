@@ -1,3 +1,8 @@
+.drawerContainer {
+  margin-top: 100px;
+  margin-bottom: 20px;
+}
+
 .sunInfoContainer {
   display: flex;
   justify-content: center;

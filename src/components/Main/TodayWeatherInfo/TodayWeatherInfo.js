@@ -11,6 +11,7 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import { ReactComponent as Humidity } from 'svgs/humidity.svg';
 import { ReactComponent as Precipitation } from 'svgs/precipitation.svg';
 import { ReactComponent as UvIndex } from 'svgs/uvIndex.svg';
+import { ReactComponent as Cloud } from 'svgs/cloud.svg';
 
 import WithSvg from 'components/WithSvg/WithSvg';
 import { RIGHT_DRAWER_WIDTH } from 'constants/constants';
@@ -19,8 +20,7 @@ import styles from './TodayWeatherInfo.module.css';
 
 const useStyles = makeStyles(() => ({
   paper: {
-    width: RIGHT_DRAWER_WIDTH,
-    paddingTop: '105px',
+    width: RIGHT_DRAWER_WIDTH - 30,
     paddingLeft: '30px',
     display: 'flex',
     flexDirection: 'column',
@@ -41,33 +41,50 @@ const TodayWeatherInfo = props => {
 
   return (
     <Drawer anchor="right" classes={{ paper: classes.paper }} variant="permanent">
-      <div className={styles.sunInfoContainer}>
-        <div className={styles.sunInfoMiniContainer}>
-          <WbSunnyIcon classes={{ root: classes.iconRoot }} />
-          <span className={styles.sunText}>Sun</span>
+      <div className={styles.drawerContainer}>
+        <div className={styles.sunInfoContainer}>
+          <div className={styles.sunInfoMiniContainer}>
+            <WbSunnyIcon classes={{ root: classes.iconRoot }} />
+            <span className={styles.sunText}>Sun</span>
+          </div>
+          <div className={styles.sunInfoMiniContainer}>
+            <ArrowUpwardIcon />
+            <span className={styles.sunText}>10:20</span>
+          </div>
+          <div className={styles.sunInfoMiniContainer}>
+            <ArrowDownwardIcon />
+            <span className={styles.sunText}>20:20</span>
+          </div>
         </div>
-        <div className={styles.sunInfoMiniContainer}>
-          <ArrowUpwardIcon />
-          <span className={styles.sunText}>10:20</span>
+        <div>
+          <img src="https://via.placeholder.com/350x200.jpg" />
         </div>
-        <div className={styles.sunInfoMiniContainer}>
-          <ArrowDownwardIcon />
-          <span className={styles.sunText}>20:20</span>
-        </div>
+        <Divider variant="middle" />
+        <WeatherInfo progressValue={75} text="Humidity" withPercent textBottomGutter={5}>
+          <WithSvg component={Humidity} size={20} />
+        </WeatherInfo>
+        <WeatherInfo progressValue={46} text="Precipitation" withPercent textBottomGutter={5}>
+          <WithSvg component={Precipitation} size={20} />
+        </WeatherInfo>
+        <WeatherInfo progressValue={0} text="UV index" textBottomGutter={5}>
+          <WithSvg component={UvIndex} size={20} />
+        </WeatherInfo>
+        <WeatherInfo progressValue={25} text="Cloud cover" textBottomGutter={5}>
+          <WithSvg component={Cloud} size={20} />
+        </WeatherInfo>
+        <WeatherInfo progressValue={25} text="Pressure" textBottomGutter={5}>
+          <WithSvg component={UvIndex} size={20} />
+        </WeatherInfo>
+        <WeatherInfo progressValue={87} text="Visibility" withPercent textBottomGutter={5}>
+          <WithSvg component={Precipitation} size={20} />
+        </WeatherInfo>
+        <WeatherInfo progressValue={23} text="Dew Point" withPercent textBottomGutter={5}>
+          <WithSvg component={Precipitation} size={20} />
+        </WeatherInfo>
+        <WeatherInfo progressValue={53} text="Dew Point" withPercent textBottomGutter={5}>
+          <WithSvg component={Precipitation} size={20} />
+        </WeatherInfo>
       </div>
-      <div>
-        <img src="https://via.placeholder.com/350x200.jpg" />
-      </div>
-      <Divider variant="middle" />
-      <WeatherInfo progressValue={75} text="Humidity" withPercent textBottomGutter={5}>
-        <WithSvg component={Humidity} size={20} />
-      </WeatherInfo>
-      <WeatherInfo progressValue={46} text="Precipitation" withPercent textBottomGutter={5}>
-        <WithSvg component={Precipitation} size={20} />
-      </WeatherInfo>
-      <WeatherInfo progressValue={10} text="UV index" textBottomGutter={5}>
-        <WithSvg component={UvIndex} size={20} />
-      </WeatherInfo>
     </Drawer>
   );
 };

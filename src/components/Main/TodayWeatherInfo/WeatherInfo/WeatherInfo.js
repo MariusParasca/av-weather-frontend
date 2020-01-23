@@ -1,23 +1,24 @@
 import React from 'react';
-import CircularProgress from '@material-ui/core/CircularProgress';
-
 import PropTypes from 'prop-types';
-
 import Typography from '@material-ui/core/Typography';
+
+import CircularProgress from 'components/CircularProgress/CircularProgress';
 import styles from './WeatherInfo.module.css';
 
 const WeatherInfo = props => {
-  const { children, progressValue, text, withPercent, textBottomGutter } = props;
+  const { children, progressValue, progressText, text, withPercent, textBottomGutter } = props;
 
-  const leftPosition = withPercent ? '18px' : '21px';
-  const topPosition = withPercent ? '20px' : '21px';
+  let leftPosition = withPercent ? 18 : 21;
+  const topPosition = withPercent ? 20 : 21;
+
+  if (progressValue < 10) {
+    leftPosition += 6;
+  }
 
   return (
     <div className={styles.weatherInfoContainer}>
       <div className={styles.circularProgressContainer}>
-        <div className={styles.mirroring}>
-          <CircularProgress size={65} variant="static" value={progressValue} />
-        </div>
+        <CircularProgress percent={progressValue} />
         <span
           style={{
             position: 'absolute',
@@ -25,7 +26,7 @@ const WeatherInfo = props => {
             top: topPosition,
           }}
         >
-          {progressValue}
+          {!progressText ? progressValue : progressText}
           {withPercent ? '%' : null}
         </span>
       </div>
@@ -43,10 +44,12 @@ WeatherInfo.propTypes = {
   text: PropTypes.string.isRequired,
   withPercent: PropTypes.bool.isRequired,
   textBottomGutter: PropTypes.number,
+  progressText: PropTypes.string,
 };
 
 WeatherInfo.defaultProps = {
   textBottomGutter: 0,
+  progressText: undefined,
 };
 
 export default WeatherInfo;

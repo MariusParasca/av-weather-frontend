@@ -7,6 +7,7 @@ import ipStackAxios from 'axios/ipStack';
 import { LEFT_DRAWER_WIDTH, RIGHT_DRAWER_WIDTH } from 'constants/constants';
 import useHttp from 'hooks/useHttp';
 
+import CircularProgress from 'components/CircularProgress/CircularProgress';
 import Forecast from './Forecast/Forecast';
 import TodayWeatherInfo from './TodayWeatherInfo/TodayWeatherInfo';
 
