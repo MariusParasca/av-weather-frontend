@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const ipStackInstance = axios.create({
-  baseURL: 'http://api.ipstack.com/',
+  baseURL: 'http://api.ipstack.com',
 });
 
 ipStackInstance.interceptors.request.use(config => ({

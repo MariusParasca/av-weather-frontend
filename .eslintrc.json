@@ -32,13 +32,6 @@
       {
         "extensions": [".js", ".jsx"]
       }
-    ],
-    "capitalized-comments": [
-      "error",
-      "always",
-      {
-        "ignoreConsecutiveComments": true
-      }
     ]
   },
   "settings": {

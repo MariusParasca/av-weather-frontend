@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const weatherStackInstance = axios.create({
-  baseURL: 'http://api.weatherstack.com/',
+  baseURL: 'http://api.weatherstack.com',
 });
 
 weatherStackInstance.interceptors.request.use(config => ({

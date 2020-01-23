@@ -1,10 +1,14 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { makeStyles } from '@material-ui/core';
 
-import weatherStackAxios from 'axios/weatherStack';
+import darkSkyAxios from 'axios/darkSky';
+import hereWeatherAxios from 'axios/hereWeather';
 import ipStackAxios from 'axios/ipStack';
 import { DRAWER_WIDTH } from 'constants/constants';
 import useHttp from 'hooks/useHttp';
+
+import Forecast from './Forecast/Forecast';
+import TodayWeatherInfo from './TodayWeatherInfo/TodayWeatherInfo';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -16,24 +20,60 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Main = () => {
-  const styles = useStyles();
+  const classes = useStyles();
 
   const [currentTime, setCurrentTime] = useState('00:00');
-  const [city, setCity] = useState('');
-  const [country, setCountry] = useState('');
-  const [currentWeatherData, setCurrentWeatherData] = useState({});
-  const [weatherForecast, setWeatherForecast] = useState({});
 
-  const weatherHttp = useHttp();
-  const { sendRequest: sendRequestWeather } = weatherHttp;
+  const [locationData, setLocationData] = useState({ latitude: 0, longitude: 0, city: '', country: '' });
+
+  const [currentWeather, setCurrentWeather] = useState({
+    temperature: 0,
+    feelsLike: 0,
+    description: '',
+    airQuality: 0,
+  });
+  const [todayWeather, setTodayWeather] = useState({
+    maxWind: 0,
+    humidity: 0,
+    precipitation: 0,
+    uvIndex: 0,
+    cloudCover: 0,
+    pressure: 0,
+    visibility: 0,
+    dewPoint: 0,
+    sunriseTime: 0,
+    sunsetTime: 0,
+  });
+  const [weatherForecast, setWeatherForecast] = useState([]);
+
+  const hereWeatherHttp = useHttp();
+  const { sendRequest: sendRequestHereWeather } = hereWeatherHttp;
   const ipStackHttp = useHttp();
   const { sendRequest: sendRequestIpStack } = ipStackHttp;
+  const darkSkyHttp = useHttp();
+  const { sendRequest: sendRequestDarkSky } = darkSkyHttp;
 
   const getWeatherForecast = useCallback(
     cityQuery => {
-      sendRequestWeather(weatherStackAxios, ['forecast', { params: { query: cityQuery } }], 'get');
+      sendRequestHereWeather(
+        hereWeatherAxios,
+        ['', { params: { name: cityQuery, product: 'forecast_7days_simple' } }],
+        'get',
+      );
+      // SendRequestWeather(weatherStackAxios, ['/forecast', { params: { query: cityQuery } }], 'get');
     },
-    [sendRequestWeather],
+    [sendRequestHereWeather],
+  );
+
+  const getWeatherByDarkSky = useCallback(
+    (latitude, longitude) => {
+      sendRequestDarkSky(
+        darkSkyAxios,
+        [`/${latitude},${longitude}`, { params: { units: 'si', exclude: '[minutely,hourly]' } }],
+        'get',
+      );
+    },
+    [sendRequestDarkSky],
   );
 
   const startClock = useCallback(() => {
@@ -47,39 +87,80 @@ const Main = () => {
   useEffect(() => {
     startClock();
     setInterval(startClock, 60 * 1000);
-    sendRequestIpStack(ipStackAxios, ['check'], 'get');
+    sendRequestIpStack(ipStackAxios, ['/check'], 'get');
   }, [sendRequestIpStack, startClock]);
 
   useEffect(() => {
     if (ipStackHttp.data) {
-      setCity(ipStackHttp.data.city);
-      setCountry(ipStackHttp.data.country_name);
+      setLocationData({
+        city: ipStackHttp.data.city,
+        country: ipStackHttp.data.country_name,
+        latitude: ipStackHttp.data.latitude,
+        longitude: ipStackHttp.data.longitude,
+      });
     }
   }, [ipStackHttp.data]);
 
-  useEffect(() => {
-    if (weatherHttp.data) {
-      setCurrentWeatherData(weatherHttp.data.current);
-      setWeatherForecast(weatherHttp.data.forecast);
-    }
-  }, [weatherHttp.data]);
+  const tackleCurrentWeather = useCallback(data => {
+    setCurrentWeather({
+      temperature: data.temperature,
+      description: data.summary,
+      feelsLike: data.apparentTemperature,
+    });
+    setTodayWeather({
+      maxWind: data.windSpeed,
+      humidity: data.humidity,
+      precipitation: data.precipProbability,
+      uvIndex: data.uvIndex,
+      cloudCover: data.cloudCover,
+      pressure: data.pressure,
+      dewPoint: data.dewPoint,
+      sunriseTime: data.sunriseTime,
+      sunsetTime: data.sunsetTime,
+    });
+  }, []);
+
+  const tackleForecastWeather = useCallback(dataArray => {
+    setWeatherForecast(
+      dataArray.map(el => ({ temperatureNight: el.temperatureLow, temperatureDay: el.temperatureHigh })),
+    );
+  }, []);
 
   useEffect(() => {
-    if (city && country) {
-      getWeatherForecast(`${city}, ${country}`);
+    if (hereWeatherHttp.data && darkSkyHttp.data) {
+      const today = darkSkyHttp.data.daily.data[0];
+      tackleCurrentWeather({
+        ...darkSkyHttp.data.currently,
+        sunriseTime: today.sunriseTime,
+        sunsetTime: today.sunsetTime,
+      });
+      tackleForecastWeather(darkSkyHttp.data.daily.data);
     }
-  }, [city, country, getWeatherForecast]);
+  }, [darkSkyHttp.data, hereWeatherHttp.data, tackleForecastWeather, tackleCurrentWeather]);
+
+  useEffect(() => {
+    if (locationData.city) {
+      getWeatherForecast(locationData.city);
+      getWeatherByDarkSky(locationData.latitude, locationData.longitude);
+    }
+  }, [locationData.city, getWeatherForecast, locationData.latitude, locationData.longitude, getWeatherByDarkSky]);
 
   return (
-    <div className={styles.container}>
-      <p>{currentTime}</p>
-      <p>Hour: to be</p>
-      <p>
-        Location: {country}, {city}
-      </p>
-      <p>Weather data: {JSON.stringify(currentWeatherData)}</p>
-      <p>Weather forecast: {JSON.stringify(weatherForecast)}</p>
-    </div>
+    <>
+      <div className={classes.container}>
+        <div>
+          <p>Local Time: {currentTime}</p>
+          <p>
+            Location: {locationData.city}, {locationData.country}
+          </p>
+          <p>Temperature: {currentWeather.temperature} </p>
+          <p>Description: {currentWeather.description} </p>
+          <p>Feels like: {currentWeather.feelsLike} </p>
+        </div>
+        <Forecast daysTemperature={weatherForecast} />
+      </div>
+      <TodayWeatherInfo weatherInfo={todayWeather} />
+    </>
   );
 };
 
