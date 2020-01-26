@@ -9,6 +9,7 @@ import useHttp from 'hooks/useHttp';
 
 import { zeroPadTime } from 'utils/dateTimeUtils';
 import CircularProgress from 'components/CircularProgress/CircularProgress';
+import LabeledCircularProgress from 'components/LabeledCircularProgress/LabeledCircularProgress';
 import Forecast from './Forecast/Forecast';
 import TodayWeatherInfo from './TodayWeatherInfo/TodayWeatherInfo';
 
@@ -160,7 +161,7 @@ const Main = () => {
           <p>Description: {currentWeather.description} </p>
           <p>Feels like: {currentWeather.feelsLike} </p>
         </div>
-        <CircularProgress percent={2} />
+        <LabeledCircularProgress circularProgressSize={65} labelFontSize={16} progressValue={20} />
         <Forecast daysTemperature={weatherForecast} />
       </div>
 
