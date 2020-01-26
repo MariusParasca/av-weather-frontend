@@ -15,8 +15,8 @@ const Forecast = props => {
 
   return (
     <div className={classes.height}>
-      {daysTemperature.map(el => (
-        <p>{JSON.stringify(el)}</p>
+      {daysTemperature.map((el, i) => (
+        <p key={`x-${i}`}>{JSON.stringify(el)}</p>
       ))}
     </div>
   );

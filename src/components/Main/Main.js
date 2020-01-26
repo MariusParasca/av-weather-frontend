@@ -7,6 +7,7 @@ import ipStackAxios from 'axios/ipStack';
 import { LEFT_DRAWER_WIDTH, RIGHT_DRAWER_WIDTH } from 'constants/constants';
 import useHttp from 'hooks/useHttp';
 
+import { zeroPadTime } from 'utils/dateTimeUtils';
 import CircularProgress from 'components/CircularProgress/CircularProgress';
 import Forecast from './Forecast/Forecast';
 import TodayWeatherInfo from './TodayWeatherInfo/TodayWeatherInfo';
@@ -79,8 +80,8 @@ const Main = () => {
 
   const startClock = useCallback(() => {
     const currentDate = new Date();
-    const currentHours = `0${currentDate.getHours()}`.slice(-2);
-    const currentMinutes = `0${currentDate.getMinutes()}`.slice(-2);
+    const currentHours = zeroPadTime(currentDate.getHours());
+    const currentMinutes = zeroPadTime(currentDate.getMinutes());
 
     setCurrentTime(`${currentHours}:${currentMinutes}`);
   }, []);
@@ -118,6 +119,7 @@ const Main = () => {
       dewPoint: data.dewPoint,
       sunriseTime: data.sunriseTime,
       sunsetTime: data.sunsetTime,
+      visibility: data.visibility,
     });
   }, []);
 
@@ -158,8 +160,10 @@ const Main = () => {
           <p>Description: {currentWeather.description} </p>
           <p>Feels like: {currentWeather.feelsLike} </p>
         </div>
+        <CircularProgress percent={2} />
         <Forecast daysTemperature={weatherForecast} />
       </div>
+
       <TodayWeatherInfo weatherInfo={todayWeather} />
     </>
   );
