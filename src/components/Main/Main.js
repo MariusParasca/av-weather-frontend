@@ -7,11 +7,9 @@ import ipStackAxios from 'axios/ipStack';
 import { LEFT_DRAWER_WIDTH, RIGHT_DRAWER_WIDTH } from 'constants/constants';
 import useHttp from 'hooks/useHttp';
 
-import { zeroPadTime } from 'utils/dateTimeUtils';
-import CircularProgress from 'components/CircularProgress/CircularProgress';
-import LabeledCircularProgress from 'components/LabeledCircularProgress/LabeledCircularProgress';
 import Forecast from './Forecast/Forecast';
 import TodayWeatherInfo from './TodayWeatherInfo/TodayWeatherInfo';
+import CurrentWeather from './CurrentWeather/CurrentWeather';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -24,8 +22,6 @@ const useStyles = makeStyles(theme => ({
 
 const Main = () => {
   const classes = useStyles();
-
-  const [currentTime, setCurrentTime] = useState('00:00');
 
   const [locationData, setLocationData] = useState({ latitude: 0, longitude: 0, city: '', country: '' });
 
@@ -79,19 +75,9 @@ const Main = () => {
     [sendRequestDarkSky],
   );
 
-  const startClock = useCallback(() => {
-    const currentDate = new Date();
-    const currentHours = zeroPadTime(currentDate.getHours());
-    const currentMinutes = zeroPadTime(currentDate.getMinutes());
-
-    setCurrentTime(`${currentHours}:${currentMinutes}`);
-  }, []);
-
   useEffect(() => {
-    startClock();
-    setInterval(startClock, 60 * 1000);
     sendRequestIpStack(ipStackAxios, ['/check'], 'get');
-  }, [sendRequestIpStack, startClock]);
+  }, [sendRequestIpStack]);
 
   useEffect(() => {
     if (ipStackHttp.data) {
@@ -152,15 +138,7 @@ const Main = () => {
   return (
     <>
       <div className={classes.container}>
-        <div>
-          <p>Local Time: {currentTime}</p>
-          <p>
-            Location: {locationData.city}, {locationData.country}
-          </p>
-          <p>Temperature: {currentWeather.temperature} </p>
-          <p>Description: {currentWeather.description} </p>
-          <p>Feels like: {currentWeather.feelsLike} </p>
-        </div>
+        <CurrentWeather city={locationData.city} country={locationData.country} weatherData={currentWeather} />
         <Forecast daysTemperature={weatherForecast} />
       </div>
 

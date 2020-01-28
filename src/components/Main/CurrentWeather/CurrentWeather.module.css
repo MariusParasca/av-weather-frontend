@@ -1,0 +1,35 @@
+.locationContainer {
+  margin-top: 10px;
+}
+
+.temperatureContainer {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.icon {
+  margin-left: 35px;
+}
+
+.descriptionContainer {
+  margin-top: 15px;
+}
+
+.feelsLikeContainer {
+  margin-top: 10px;
+}
+
+.leftContainer {
+  flex-grow: 1;
+}
+
+.rightContainer {
+  width: 210px;
+  height: 160px;
+  border: 1px solid black;
+}
+
+.mainContainer {
+  display: flex;
+}
