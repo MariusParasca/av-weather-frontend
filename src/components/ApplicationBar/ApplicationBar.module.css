@@ -1,3 +1,12 @@
 .firstButton {
   margin-top: 21px;
 }
+
+.mainOptionsContainer {
+  width: 100%;
+  flex-grow: 1;
+}
+
+.settingsContainer {
+  margin-bottom: 20px;
+}

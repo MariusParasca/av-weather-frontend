@@ -5,9 +5,14 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 
 import PinDropIcon from '@material-ui/icons/PinDrop';
+import MapIcon from '@material-ui/icons/Map';
+import ShowChartIcon from '@material-ui/icons/ShowChart';
+import StarBorderIcon from '@material-ui/icons/StarBorder';
+import RestoreIcon from '@material-ui/icons/Restore';
+import SettingsIcon from '@material-ui/icons/Settings';
 
 import { LEFT_DRAWER_WIDTH } from 'constants/constants';
-import classes from './ApplicationBar.module.css';
+import styles from './ApplicationBar.module.css';
 
 const useStyles = makeStyles(theme => ({
   paper: { width: LEFT_DRAWER_WIDTH },
@@ -20,22 +25,38 @@ const useStyles = makeStyles(theme => ({
   small: {
     width: theme.spacing(3),
     height: theme.spacing(3),
-    margin: '26px',
-  },
-  firstButton: {
-    marginTop: '21px',
+    margin: '26px 26px 47px 26px',
   },
 }));
 
 const ApplicationBar = () => {
-  const styles = useStyles();
+  const classes = useStyles();
   return (
-    <nav className={styles.drawer}>
-      <Drawer classes={{ paper: styles.paper }} variant="permanent">
-        <Avatar className={styles.small} />
-        <Button className={styles.firstButton}>
-          <PinDropIcon />
-        </Button>
+    <nav className={classes.drawer}>
+      <Drawer classes={{ paper: classes.paper }} variant="permanent">
+        <Avatar className={classes.small} />
+        <div className={styles.mainOptionsContainer}>
+          <Button fullWidth>
+            <PinDropIcon />
+          </Button>
+          <Button fullWidth>
+            <MapIcon />
+          </Button>
+          <Button fullWidth>
+            <ShowChartIcon />
+          </Button>
+          <Button fullWidth>
+            <StarBorderIcon />
+          </Button>
+          <Button fullWidth>
+            <RestoreIcon />
+          </Button>
+        </div>
+        <div className={styles.settingsContainer}>
+          <Button fullWidth>
+            <SettingsIcon />
+          </Button>
+        </div>
       </Drawer>
     </nav>
   );
