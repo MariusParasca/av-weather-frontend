@@ -14,7 +14,7 @@ import { ReactComponent as Cloud } from 'svgs/cloud.svg';
 import { createDateFromEpoch, getTimeFromDate } from 'utils/dateTimeUtils';
 import WithSvg from 'components/WithSvg/WithSvg';
 import LabeledCircularProgress from 'components/LabeledCircularProgress/LabeledCircularProgress';
-import { RIGHT_DRAWER_WIDTH, MAX_UV, MAX_PRESSURE, MAX_VISIBILITY, MAX_DEW_POINT } from 'constants/constants';
+import { RIGHT_DRAWER_WIDTH, MAX_UV, MAX_PRESSURE, MAX_VISIBILITY, MAX_DEW_POINT, MAX_WIND } from 'constants/constants';
 import WeatherInfo from './WeatherInfo/WeatherInfo';
 import styles from './TodayWeatherInfo.module.css';
 
@@ -61,7 +61,7 @@ const TodayWeatherInfo = props => {
   const screenSunriseTime = getTimeFromDate(createDateFromEpoch(sunriseTime));
   const screenSunsetTime = getTimeFromDate(createDateFromEpoch(sunsetTime));
 
-  console.log(dewPoint);
+  console.log(maxWind);
 
   return (
     <div className={classes.paper}>
@@ -87,7 +87,11 @@ const TodayWeatherInfo = props => {
       </div>
       <div className={styles.weatherInfoContainer}>
         <div className={styles.windContainer}>
-          <LabeledCircularProgress circularProgressSize={65} labelFontSize={16} progressValue={20} />
+          <LabeledCircularProgress
+            labelFontSize={16}
+            progressValue={(maxWind / MAX_WIND) * 100}
+            progressText={String(Number(maxWind).toFixed(1))}
+          />
           <WithSvg component={Humidity} size={20} className={styles.windIconContainer} />
           <Typography variant="h5">Max wind (m/s)</Typography>
         </div>
@@ -106,7 +110,11 @@ const TodayWeatherInfo = props => {
         <WeatherInfo progressValue={cloudCover * 100} text="Cloud cover" withPercent>
           <WithSvg component={Cloud} size={20} />
         </WeatherInfo>
-        <WeatherInfo progressValue={(pressure / MAX_PRESSURE) * 100} progressText={String(pressure)} text="Pressure">
+        <WeatherInfo
+          progressValue={(pressure / MAX_PRESSURE) * 100}
+          progressText={String(Math.round(pressure))}
+          text="Pressure"
+        >
           <WithSvg component={UvIndex} size={20} />
         </WeatherInfo>
         <WeatherInfo
@@ -118,7 +126,7 @@ const TodayWeatherInfo = props => {
         </WeatherInfo>
         <WeatherInfo
           progressValue={-1 * (dewPoint / MAX_DEW_POINT) * 100}
-          progressText={`${dewPoint}°`}
+          progressText={`${Number(dewPoint).toFixed(2)}°`}
           text="Dew Point"
         >
           <WithSvg component={Precipitation} size={20} />

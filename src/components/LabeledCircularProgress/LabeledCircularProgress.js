@@ -34,7 +34,7 @@ const LabeledCircularProgress = props => {
         <CircularProgress
           size={circularProgressSize}
           percent={progressValue}
-          text={!progressText ? progressValue : progressText}
+          text={!progressText ? String(progressValue) : progressText}
         />
       </div>
     </div>
