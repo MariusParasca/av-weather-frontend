@@ -161,7 +161,6 @@ const Main = () => {
           <p>Description: {currentWeather.description} </p>
           <p>Feels like: {currentWeather.feelsLike} </p>
         </div>
-        <LabeledCircularProgress circularProgressSize={65} labelFontSize={16} progressValue={20} />
         <Forecast daysTemperature={weatherForecast} />
       </div>
 

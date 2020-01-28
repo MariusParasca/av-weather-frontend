@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const WithSvg = ({ component: Svg, size, className, width, height }) => {
-  let actualWidth;
-  let actualHeight;
+  let actualWidth = width;
+  let actualHeight = height;
   if (size && !width && !height) {
     actualWidth = size;
     actualHeight = size;

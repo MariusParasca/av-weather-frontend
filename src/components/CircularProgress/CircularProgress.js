@@ -44,7 +44,7 @@ CircularProgress.propTypes = {
 };
 
 CircularProgress.defaultProps = {
-  size: 65,
+  size: 70,
   strokeWidth: 9,
   activeColor: '#FF9F1E',
   inactiveColor: '#e6e6e6',

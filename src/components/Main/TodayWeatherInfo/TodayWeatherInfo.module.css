@@ -1,6 +1,10 @@
+.weatherInfoContainer {
+  overflow: auto;
+  padding-bottom: 20px;
+}
+
 .drawerContainer {
   margin-top: 100px;
-  margin-bottom: 20px;
 }
 
 .sunInfoContainer {
@@ -17,4 +21,14 @@
 
 .sunText:first-child {
   margin-left: 3px;
+}
+
+.windIconContainer {
+  margin-left: 16px;
+  margin-right: 10px;
+}
+
+.windContainer {
+  display: flex;
+  align-items: center;
 }

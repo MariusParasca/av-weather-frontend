@@ -6,7 +6,7 @@ import CircularProgress from 'components/CircularProgress/CircularProgress';
 import styles from './WeatherInfo.module.css';
 
 const WeatherInfo = props => {
-  const { children, progressValue, progressText, text, withPercent, textBottomGutter } = props;
+  const { children, progressValue, progressText, text, withPercent } = props;
 
   const percentChar = withPercent ? '%' : '';
   const actualProgressValue = withPercent ? Math.round(progressValue) : progressValue;
@@ -17,10 +17,10 @@ const WeatherInfo = props => {
         percent={actualProgressValue}
         text={`${!progressText ? actualProgressValue : progressText}${percentChar}`}
       />
-      <div className={styles.weatherIconContainer}>{children}</div>
-      <Typography variant="h5" style={{ marginBottom: textBottomGutter }}>
-        {text}
-      </Typography>
+      <div className={styles.textContainer}>
+        <div className={styles.weatherIconContainer}>{children}</div>
+        <Typography variant="h5">{text}</Typography>
+      </div>
     </div>
   );
 };
@@ -30,12 +30,10 @@ WeatherInfo.propTypes = {
   progressValue: PropTypes.number.isRequired,
   text: PropTypes.string.isRequired,
   withPercent: PropTypes.bool,
-  textBottomGutter: PropTypes.number,
   progressText: PropTypes.string,
 };
 
 WeatherInfo.defaultProps = {
-  textBottomGutter: 0,
   withPercent: false,
   progressText: undefined,
 };
