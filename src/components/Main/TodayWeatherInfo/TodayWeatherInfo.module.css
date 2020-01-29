@@ -1,3 +1,11 @@
+.paper {
+  width: 360px;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
+}
+
 .weatherInfoContainer {
   overflow: auto;
   padding-bottom: 20px;

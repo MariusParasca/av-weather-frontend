@@ -14,19 +14,12 @@ import { ReactComponent as Cloud } from 'svgs/cloud.svg';
 import { createDateFromEpoch, getTimeFromDate } from 'utils/dateTimeUtils';
 import WithSvg from 'components/WithSvg/WithSvg';
 import LabeledCircularProgress from 'components/LabeledCircularProgress/LabeledCircularProgress';
-import { RIGHT_DRAWER_WIDTH, MAX_UV, MAX_PRESSURE, MAX_VISIBILITY, MAX_DEW_POINT, MAX_WIND } from 'constants/constants';
+import { MAX_UV, MAX_PRESSURE, MAX_VISIBILITY, MAX_DEW_POINT, MAX_WIND } from 'constants/constants';
 import Spinner from 'components/Spinner/Spinner';
 import WeatherInfo from './WeatherInfo/WeatherInfo';
 import styles from './TodayWeatherInfo.module.css';
 
 const useStyles = makeStyles(() => ({
-  paper: {
-    width: RIGHT_DRAWER_WIDTH - 20,
-    paddingLeft: '20px',
-    display: 'flex',
-    flexDirection: 'column',
-    borderLeft: '1px solid rgba(0, 0, 0, 0.12)',
-  },
   iconRoot: {
     fontSize: '1em',
     marginRight: '5px',
@@ -63,7 +56,7 @@ const TodayWeatherInfo = props => {
   const screenSunsetTime = getTimeFromDate(createDateFromEpoch(sunsetTime));
 
   return (
-    <div className={classes.paper}>
+    <div className={styles.paper}>
       {isLoading ? (
         <Spinner />
       ) : (
