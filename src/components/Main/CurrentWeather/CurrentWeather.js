@@ -8,7 +8,7 @@ import { ReactComponent as PartlyCloudyDaySvg } from 'svgs/weatherTypes/partly-c
 import styles from './CurrentWeather.module.css';
 
 const CurrentWeather = props => {
-  const { city, country, weatherData } = props;
+  const { city, country, weatherData, className } = props;
 
   const [currentTime, setCurrentTime] = useState('00:00');
 
@@ -26,7 +26,7 @@ const CurrentWeather = props => {
   }, []);
 
   return (
-    <div className={styles.mainContainer}>
+    <div className={`${styles.mainContainer} ${className}`}>
       <div className={styles.leftContainer}>
         <Typography variant="subtitle1">Local Time: {currentTime}</Typography>
         <div className={styles.locationContainer}>
@@ -51,11 +51,16 @@ const CurrentWeather = props => {
 CurrentWeather.propTypes = {
   city: PropTypes.string.isRequired,
   country: PropTypes.string.isRequired,
+  className: PropTypes.string,
   weatherData: PropTypes.shape({
     temperature: PropTypes.number,
     description: PropTypes.string,
     feelsLike: PropTypes.number,
   }).isRequired,
+};
+
+CurrentWeather.defaultProps = {
+  className: '',
 };
 
 export default CurrentWeather;

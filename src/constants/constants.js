@@ -6,3 +6,5 @@ export const MAX_PRESSURE = 10000;
 export const MAX_VISIBILITY = 25;
 export const MAX_DEW_POINT = 25;
 export const MAX_WIND = 40;
+
+export const WEEK_DAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];

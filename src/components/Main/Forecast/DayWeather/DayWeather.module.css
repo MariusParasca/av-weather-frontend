@@ -1,0 +1,29 @@
+.mainContainer {
+  min-height: 175px;
+  margin: 0 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.weatherContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.iconContainer {
+  display: flex;
+  justify-content: center;
+  margin: 15px 0;
+}
+
+.dayContainer {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+.nightContainer {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}

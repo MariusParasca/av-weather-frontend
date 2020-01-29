@@ -61,8 +61,6 @@ const TodayWeatherInfo = props => {
   const screenSunriseTime = getTimeFromDate(createDateFromEpoch(sunriseTime));
   const screenSunsetTime = getTimeFromDate(createDateFromEpoch(sunsetTime));
 
-  console.log(maxWind);
-
   return (
     <div className={classes.paper}>
       <div className={styles.drawerContainer}>

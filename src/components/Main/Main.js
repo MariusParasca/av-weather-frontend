@@ -4,21 +4,16 @@ import { makeStyles } from '@material-ui/core';
 import darkSkyAxios from 'axios/darkSky';
 import hereWeatherAxios from 'axios/hereWeather';
 import ipStackAxios from 'axios/ipStack';
-import { LEFT_DRAWER_WIDTH, RIGHT_DRAWER_WIDTH } from 'constants/constants';
+import { WEEK_DAYS } from 'constants/constants';
 import useHttp from 'hooks/useHttp';
 
+import { createDateFromEpoch } from 'utils/dateTimeUtils';
 import Forecast from './Forecast/Forecast';
 import TodayWeatherInfo from './TodayWeatherInfo/TodayWeatherInfo';
 import CurrentWeather from './CurrentWeather/CurrentWeather';
+import styles from './Main.module.css';
 
-const useStyles = makeStyles(theme => ({
-  container: {
-    padding: theme.spacing(6),
-    [theme.breakpoints.up('sm')]: {
-      width: `calc(100% - ${LEFT_DRAWER_WIDTH}px - ${RIGHT_DRAWER_WIDTH}px - ${2 * theme.spacing(6)}px)`,
-    },
-  },
-}));
+const useStyles = makeStyles(theme => ({}));
 
 const Main = () => {
   const classes = useStyles();
@@ -96,6 +91,7 @@ const Main = () => {
       description: data.summary,
       feelsLike: data.apparentTemperature,
     });
+
     setTodayWeather({
       maxWind: data.windSpeed,
       humidity: data.humidity,
@@ -112,12 +108,24 @@ const Main = () => {
 
   const tackleForecastWeather = useCallback(dataArray => {
     setWeatherForecast(
-      dataArray.map(el => ({ temperatureNight: el.temperatureLow, temperatureDay: el.temperatureHigh })),
+      dataArray.map((el, index) => {
+        if (index === 0)
+          return {
+            label: 'Today',
+            temperatureNight: el.temperatureLow,
+            temperatureDay: el.temperatureHigh,
+          };
+        return {
+          label: WEEK_DAYS[createDateFromEpoch(el.time).getDay()],
+          temperatureNight: el.temperatureLow,
+          temperatureDay: el.temperatureHigh,
+        };
+      }),
     );
   }, []);
 
   useEffect(() => {
-    if (hereWeatherHttp.data && darkSkyHttp.data) {
+    if (darkSkyHttp.data) {
       const today = darkSkyHttp.data.daily.data[0];
       tackleCurrentWeather({
         ...darkSkyHttp.data.currently,
@@ -126,20 +134,25 @@ const Main = () => {
       });
       tackleForecastWeather(darkSkyHttp.data.daily.data);
     }
-  }, [darkSkyHttp.data, hereWeatherHttp.data, tackleForecastWeather, tackleCurrentWeather]);
+  }, [darkSkyHttp.data, tackleForecastWeather, tackleCurrentWeather]);
 
   useEffect(() => {
     if (locationData.city) {
-      getWeatherForecast(locationData.city);
+      // getWeatherForecast(locationData.city);
       getWeatherByDarkSky(locationData.latitude, locationData.longitude);
     }
   }, [locationData.city, getWeatherForecast, locationData.latitude, locationData.longitude, getWeatherByDarkSky]);
 
   return (
     <>
-      <div className={classes.container}>
-        <CurrentWeather city={locationData.city} country={locationData.country} weatherData={currentWeather} />
-        <Forecast daysTemperature={weatherForecast} />
+      <div className={styles.container}>
+        <CurrentWeather
+          className={styles.todayContainer}
+          city={locationData.city}
+          country={locationData.country}
+          weatherData={currentWeather}
+        />
+        <Forecast forecastTemperature={weatherForecast} />
       </div>
 
       <TodayWeatherInfo weatherInfo={todayWeather} />
