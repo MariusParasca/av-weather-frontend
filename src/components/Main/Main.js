@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { makeStyles } from '@material-ui/core';
 
 import darkSkyAxios from 'axios/darkSky';
 import hereWeatherAxios from 'axios/hereWeather';
@@ -8,16 +7,13 @@ import { WEEK_DAYS } from 'constants/constants';
 import useHttp from 'hooks/useHttp';
 
 import { createDateFromEpoch } from 'utils/dateTimeUtils';
+import Spinner from 'components/Spinner/Spinner';
 import Forecast from './Forecast/Forecast';
 import TodayWeatherInfo from './TodayWeatherInfo/TodayWeatherInfo';
 import CurrentWeather from './CurrentWeather/CurrentWeather';
 import styles from './Main.module.css';
 
-const useStyles = makeStyles(theme => ({}));
-
 const Main = () => {
-  const classes = useStyles();
-
   const [locationData, setLocationData] = useState({ latitude: 0, longitude: 0, city: '', country: '' });
 
   const [currentWeather, setCurrentWeather] = useState({
@@ -39,9 +35,11 @@ const Main = () => {
     sunsetTime: 0,
   });
   const [weatherForecast, setWeatherForecast] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const hereWeatherHttp = useHttp();
   const { sendRequest: sendRequestHereWeather } = hereWeatherHttp;
+
   const ipStackHttp = useHttp();
   const { sendRequest: sendRequestIpStack } = ipStackHttp;
   const darkSkyHttp = useHttp();
@@ -71,6 +69,7 @@ const Main = () => {
   );
 
   useEffect(() => {
+    setIsLoading(true);
     sendRequestIpStack(ipStackAxios, ['/check'], 'get');
   }, [sendRequestIpStack]);
 
@@ -82,6 +81,7 @@ const Main = () => {
         latitude: ipStackHttp.data.latitude,
         longitude: ipStackHttp.data.longitude,
       });
+      console.log('ipstack');
     }
   }, [ipStackHttp.data]);
 
@@ -133,6 +133,7 @@ const Main = () => {
         sunsetTime: today.sunsetTime,
       });
       tackleForecastWeather(darkSkyHttp.data.daily.data);
+      setIsLoading(false);
     }
   }, [darkSkyHttp.data, tackleForecastWeather, tackleCurrentWeather]);
 
@@ -146,16 +147,22 @@ const Main = () => {
   return (
     <>
       <div className={styles.container}>
-        <CurrentWeather
-          className={styles.todayContainer}
-          city={locationData.city}
-          country={locationData.country}
-          weatherData={currentWeather}
-        />
-        <Forecast forecastTemperature={weatherForecast} />
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <>
+            <CurrentWeather
+              className={styles.todayContainer}
+              city={locationData.city}
+              country={locationData.country}
+              weatherData={currentWeather}
+            />
+            <Forecast forecastTemperature={weatherForecast} />
+          </>
+        )}
       </div>
 
-      <TodayWeatherInfo weatherInfo={todayWeather} />
+      <TodayWeatherInfo isLoading={isLoading} weatherInfo={todayWeather} />
     </>
   );
 };

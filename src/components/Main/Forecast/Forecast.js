@@ -1,20 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles, Typography, Divider } from '@material-ui/core';
+import { Divider } from '@material-ui/core';
 
-import WithSvg from 'components/WithSvg/WithSvg';
-import { ReactComponent as PartlyCloudyDaySvg } from 'svgs/weatherTypes/partly-cloudy-day.svg';
 import styles from './Forecast.module.css';
 import DayWeather from './DayWeather/DayWeather';
 
-const useStyles = makeStyles(theme => ({}));
-
 const Forecast = props => {
-  const classes = useStyles();
-
   const { forecastTemperature } = props;
-
-  console.log(forecastTemperature);
 
   return (
     <div className={styles.container}>
