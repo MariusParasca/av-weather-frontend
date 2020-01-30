@@ -3,8 +3,19 @@
 }
 
 .container {
-  flex: 2;
   display: flex;
   flex-direction: column;
-  padding: 48px 48px 0 48px;
+  width: 100%;
+  padding: 0 0 0 48px;
+}
+
+.bottomContainer {
+  display: flex;
+}
+
+.forecastContainer {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }

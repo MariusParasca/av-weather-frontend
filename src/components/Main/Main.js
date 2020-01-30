@@ -8,6 +8,7 @@ import useHttp from 'hooks/useHttp';
 
 import { createDateFromEpoch } from 'utils/dateTimeUtils';
 import Spinner from 'components/Spinner/Spinner';
+import HomeChart from 'HomeChart/HomeChart';
 import Forecast from './Forecast/Forecast';
 import TodayWeatherInfo from './TodayWeatherInfo/TodayWeatherInfo';
 import CurrentWeather from './CurrentWeather/CurrentWeather';
@@ -157,22 +158,34 @@ const Main = () => {
   return (
     <>
       <div className={styles.container}>
+        <CurrentWeather
+          className={styles.todayContainer}
+          city={locationData.city}
+          country={locationData.country}
+          weatherData={currentWeather}
+        />
+        <div className={styles.bottomContainer}>
+          <div className={styles.forecastContainer}>
+            <HomeChart hourlyData={currentWeather.hourly} />
+            <Forecast forecastTemperature={weatherForecast} />
+          </div>
+          <div>
+            <TodayWeatherInfo isLoading={false} weatherInfo={todayWeather} />
+          </div>
+        </div>
+      </div>
+
+      {/* <div className={styles.container}>
         {isLoading ? (
           <Spinner />
         ) : (
           <>
-            <CurrentWeather
-              className={styles.todayContainer}
-              city={locationData.city}
-              country={locationData.country}
-              weatherData={currentWeather}
-            />
+            
             <Forecast forecastTemperature={weatherForecast} />
           </>
         )}
       </div>
-
-      <TodayWeatherInfo isLoading={isLoading} weatherInfo={todayWeather} />
+      <TodayWeatherInfo isLoading={isLoading} weatherInfo={todayWeather} /> */}
     </>
   );
 };

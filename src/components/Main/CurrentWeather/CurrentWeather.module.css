@@ -20,14 +20,25 @@
   margin-top: 10px;
 }
 
-.leftContainer {
+.leftWeatherContainer {
   flex-grow: 1;
 }
 
-.rightContainer {
+.rightWeatherContainer {
   width: 210px;
   height: 160px;
   border: 1px solid black;
+}
+
+.rightContainer {
+  width: 360px;
+}
+
+.weatherContainer {
+  display: flex;
+  flex-grow: 1;
+  padding-top: 48px;
+  padding-right: 20px;
 }
 
 .mainContainer {

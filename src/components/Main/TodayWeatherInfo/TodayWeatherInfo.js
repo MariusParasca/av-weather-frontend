@@ -2,16 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles, Typography, Divider } from '@material-ui/core';
 
-import WbSunnyIcon from '@material-ui/icons/WbSunny';
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-
 import { ReactComponent as Humidity } from 'svgs/humidity.svg';
 import { ReactComponent as Precipitation } from 'svgs/precipitation.svg';
 import { ReactComponent as UvIndex } from 'svgs/uvIndex.svg';
 import { ReactComponent as Cloud } from 'svgs/cloud.svg';
 
-import { createDateFromEpoch, getTimeFromDate } from 'utils/dateTimeUtils';
 import WithSvg from 'components/WithSvg/WithSvg';
 import LabeledCircularProgress from 'components/LabeledCircularProgress/LabeledCircularProgress';
 import { MAX_UV, MAX_PRESSURE, MAX_VISIBILITY, MAX_DEW_POINT, MAX_WIND } from 'constants/constants';
@@ -19,41 +14,10 @@ import Spinner from 'components/Spinner/Spinner';
 import WeatherInfo from './WeatherInfo/WeatherInfo';
 import styles from './TodayWeatherInfo.module.css';
 
-const useStyles = makeStyles(() => ({
-  iconRoot: {
-    fontSize: '1em',
-    marginRight: '5px',
-  },
-  circularProgressRoot: {
-    width: '65px',
-    height: '65px',
-  },
-  dividerRoot: {
-    marginTop: '15px',
-    marginBottom: '15px',
-  },
-}));
-
 const TodayWeatherInfo = props => {
   const { weatherInfo, isLoading } = props;
 
-  const {
-    maxWind,
-    humidity,
-    precipitation,
-    uvIndex,
-    cloudCover,
-    pressure,
-    visibility,
-    dewPoint,
-    sunriseTime,
-    sunsetTime,
-  } = weatherInfo;
-
-  const classes = useStyles();
-
-  const screenSunriseTime = getTimeFromDate(createDateFromEpoch(sunriseTime));
-  const screenSunsetTime = getTimeFromDate(createDateFromEpoch(sunsetTime));
+  const { maxWind, humidity, precipitation, uvIndex, cloudCover, pressure, visibility, dewPoint } = weatherInfo;
 
   return (
     <div className={styles.paper}>
@@ -61,26 +25,6 @@ const TodayWeatherInfo = props => {
         <Spinner />
       ) : (
         <>
-          <div className={styles.drawerContainer}>
-            <div className={styles.sunInfoContainer}>
-              <div className={styles.sunInfoMiniContainer}>
-                <WbSunnyIcon classes={{ root: classes.iconRoot }} />
-                <span className={styles.sunText}>Sun</span>
-              </div>
-              <div className={styles.sunInfoMiniContainer}>
-                <ArrowUpwardIcon />
-                <span className={styles.sunText}>{screenSunriseTime}</span>
-              </div>
-              <div className={styles.sunInfoMiniContainer}>
-                <ArrowDownwardIcon />
-                <span className={styles.sunText}>{screenSunsetTime}</span>
-              </div>
-            </div>
-            <div>
-              <img alt="weather type" src="https://via.placeholder.com/340x200.jpg" />
-            </div>
-            <Divider variant="middle" classes={{ root: classes.dividerRoot }} />
-          </div>
           <div className={styles.weatherInfoContainer}>
             <div className={styles.windContainer}>
               <LabeledCircularProgress
@@ -144,8 +88,6 @@ TodayWeatherInfo.propTypes = {
     pressure: PropTypes.number,
     visibility: PropTypes.number,
     dewPoint: PropTypes.number,
-    sunriseTime: PropTypes.number,
-    sunsetTime: PropTypes.number,
   }).isRequired,
   isLoading: PropTypes.bool.isRequired,
 };

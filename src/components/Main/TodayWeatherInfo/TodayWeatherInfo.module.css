@@ -1,34 +1,8 @@
 .paper {
   width: 360px;
-  padding-left: 20px;
   display: flex;
   flex-direction: column;
   border-left: 1px solid rgba(0, 0, 0, 0.12);
-}
-
-.weatherInfoContainer {
-  overflow: auto;
-  padding-bottom: 20px;
-}
-
-.drawerContainer {
-  margin-top: 100px;
-}
-
-.sunInfoContainer {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 10px;
-}
-
-.sunInfoMiniContainer {
-  display: flex;
-  align-items: center;
-  margin-left: 15px;
-}
-
-.sunText:first-child {
-  margin-left: 3px;
 }
 
 .windIconContainer {
