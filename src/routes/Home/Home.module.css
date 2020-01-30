@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+  height: 100%;
+}
+
+.forecastContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.detailsWeatherContainer {
+  overflow: auto;
+}
+
+.chartContainer {
+  flex-grow: 1;
+}

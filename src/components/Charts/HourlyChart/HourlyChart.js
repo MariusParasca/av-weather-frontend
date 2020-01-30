@@ -11,8 +11,6 @@ const HomeChart = props => {
   const [hourly, setHourly] = useState([]);
   const [timeline, setTimeline] = useState([]);
 
-  console.log(hourlyData);
-
   useEffect(() => {
     const newHourly = [];
     const newTimeline = [];
@@ -25,6 +23,7 @@ const HomeChart = props => {
     setHourly(newHourly);
     setTimeline(newTimeline);
   }, [hourlyData]);
+
   return <ReactEcharts option={getHourlyChartOption(timeline, hourly)} />;
 };
 

@@ -6,7 +6,7 @@ const getHourlyChartOption = (timeline, hourly) => {
     },
     grid: {
       left: '0%',
-      right: '0%',
+      right: '5%',
       bottom: '1%',
       containLabel: true,
     },

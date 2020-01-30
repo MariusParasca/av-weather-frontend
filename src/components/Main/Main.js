@@ -8,9 +8,7 @@ import useHttp from 'hooks/useHttp';
 
 import { createDateFromEpoch } from 'utils/dateTimeUtils';
 import Spinner from 'components/Spinner/Spinner';
-import HomeChart from 'HomeChart/HomeChart';
-import Forecast from './Forecast/Forecast';
-import TodayWeatherInfo from './TodayWeatherInfo/TodayWeatherInfo';
+import Home from 'routes/Home/Home';
 import CurrentWeather from './CurrentWeather/CurrentWeather';
 import styles from './Main.module.css';
 
@@ -156,39 +154,37 @@ const Main = () => {
   }, [locationData.city, getWeatherForecast, locationData.latitude, locationData.longitude, getWeatherByDarkSky]);
 
   return (
-    <>
-      <div className={styles.container}>
-        <div className={styles.topContainer}>
-          <CurrentWeather
-            className={styles.todayContainer}
-            city={locationData.city}
-            country={locationData.country}
-            weatherData={currentWeather}
-          />
-        </div>
-        <div className={styles.bottomContainer}>
-          <div className={styles.forecastContainer}>
-            <HomeChart hourlyData={currentWeather.hourly} />
-            <Forecast forecastTemperature={weatherForecast} />
+    <div className={styles.container}>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <>
+          <div className={styles.topContainer}>
+            <CurrentWeather
+              className={styles.todayContainer}
+              city={locationData.city}
+              country={locationData.country}
+              weatherData={currentWeather}
+            />
           </div>
-          <div className={styles.detailsWeatherContainer}>
-            <TodayWeatherInfo isLoading={false} weatherInfo={todayWeather} />
+          <div className={styles.bottomContainer}>
+            <Home hourly={currentWeather.hourly} weatherForecast={weatherForecast} todayWeather={todayWeather} />
           </div>
-        </div>
-      </div>
+        </>
+      )}
+    </div>
 
-      {/* <div className={styles.container}>
-        {isLoading ? (
-          <Spinner />
-        ) : (
-          <>
-            
-            <Forecast forecastTemperature={weatherForecast} />
-          </>
-        )}
-      </div>
-      <TodayWeatherInfo isLoading={isLoading} weatherInfo={todayWeather} /> */}
-    </>
+    // {/* <div className={styles.container}>
+    //   {isLoading ? (
+    //     <Spinner />
+    //   ) : (
+    //     <>
+
+    //       <Forecast forecastTemperature={weatherForecast} />
+    //     </>
+    //   )}
+    // </div>
+    // <TodayWeatherInfo isLoading={isLoading} weatherInfo={todayWeather} /> */}
   );
 };
 

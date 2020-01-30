@@ -16,18 +16,6 @@
 }
 
 .bottomContainer {
-  display: flex;
-  justify-content: space-between;
   height: 72%;
   overflow: hidden;
-}
-
-.forecastContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.detailsWeatherContainer {
-  overflow: auto;
 }
