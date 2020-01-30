@@ -158,18 +158,20 @@ const Main = () => {
   return (
     <>
       <div className={styles.container}>
-        <CurrentWeather
-          className={styles.todayContainer}
-          city={locationData.city}
-          country={locationData.country}
-          weatherData={currentWeather}
-        />
+        <div className={styles.topContainer}>
+          <CurrentWeather
+            className={styles.todayContainer}
+            city={locationData.city}
+            country={locationData.country}
+            weatherData={currentWeather}
+          />
+        </div>
         <div className={styles.bottomContainer}>
           <div className={styles.forecastContainer}>
             <HomeChart hourlyData={currentWeather.hourly} />
             <Forecast forecastTemperature={weatherForecast} />
           </div>
-          <div>
+          <div className={styles.detailsWeatherContainer}>
             <TodayWeatherInfo isLoading={false} weatherInfo={todayWeather} />
           </div>
         </div>

@@ -1,5 +1,5 @@
 .paper {
-  width: 360px;
+  width: 300px;
   display: flex;
   flex-direction: column;
   border-left: 1px solid rgba(0, 0, 0, 0.12);
@@ -13,4 +13,9 @@
 .windContainer {
   display: flex;
   align-items: center;
+  justify-content: center;
+}
+
+.otherContainer {
+  margin-left: 35px;
 }

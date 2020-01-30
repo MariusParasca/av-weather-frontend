@@ -7,15 +7,27 @@
   flex-direction: column;
   width: 100%;
   padding: 0 0 0 48px;
+  height: 100vh;
+  min-width: 1350px;
+}
+
+.topContainer {
+  height: 38%;
 }
 
 .bottomContainer {
   display: flex;
+  justify-content: space-between;
+  height: 72%;
+  overflow: hidden;
 }
 
 .forecastContainer {
-  flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.detailsWeatherContainer {
+  overflow: auto;
 }

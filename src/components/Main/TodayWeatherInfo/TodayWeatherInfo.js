@@ -24,17 +24,17 @@ const TodayWeatherInfo = props => {
       {isLoading ? (
         <Spinner />
       ) : (
-        <>
-          <div className={styles.weatherInfoContainer}>
-            <div className={styles.windContainer}>
-              <LabeledCircularProgress
-                labelFontSize={16}
-                progressValue={(maxWind / MAX_WIND) * 100}
-                progressText={String(Number(maxWind).toFixed(1))}
-              />
-              <WithSvg component={Humidity} size={20} className={styles.windIconContainer} />
-              <Typography variant="h5">Max wind (m/s)</Typography>
-            </div>
+        <div className={styles.weatherInfoContainer}>
+          <div className={styles.windContainer}>
+            <LabeledCircularProgress
+              labelFontSize={16}
+              progressValue={(maxWind / MAX_WIND) * 100}
+              progressText={String(Number(maxWind).toFixed(1))}
+            />
+            <WithSvg component={Humidity} size={20} className={styles.windIconContainer} />
+            <Typography variant="subtitle1">Max wind (m/s)</Typography>
+          </div>
+          <div className={styles.otherContainer}>
             <WeatherInfo progressValue={53} text="Wind | TO DO" withPercent>
               <WithSvg component={Precipitation} size={20} />
             </WeatherInfo>
@@ -72,7 +72,7 @@ const TodayWeatherInfo = props => {
               <WithSvg component={Precipitation} size={20} />
             </WeatherInfo>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

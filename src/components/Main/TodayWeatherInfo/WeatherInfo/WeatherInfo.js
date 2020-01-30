@@ -19,7 +19,7 @@ const WeatherInfo = props => {
       />
       <div className={styles.textContainer}>
         <div className={styles.weatherIconContainer}>{children}</div>
-        <Typography variant="h5">{text}</Typography>
+        <Typography variant="subtitle1">{text}</Typography>
       </div>
     </div>
   );

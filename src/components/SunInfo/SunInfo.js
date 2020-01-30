@@ -41,7 +41,7 @@ const SunInfo = props => {
         </div>
       </div>
       <div>
-        <img alt="weather type" src="https://via.placeholder.com/340x200.jpg" />
+        <img alt="weather type" src="https://via.placeholder.com/200x150.jpg" />
       </div>
     </div>
   );
