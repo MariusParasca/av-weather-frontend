@@ -11,3 +11,7 @@ export const zeroPadTime = number => {
 export const getTimeFromDate = date => {
   return `${zeroPadTime(date.getHours())}:${zeroPadTime(date.getMinutes())}`;
 };
+
+export const getHourFromEpoch = utcSeconds => {
+  return zeroPadTime(createDateFromEpoch(utcSeconds).getHours());
+};

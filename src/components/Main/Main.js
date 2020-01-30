@@ -3,7 +3,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import darkSkyAxios from 'axios/darkSky';
 import hereWeatherAxios from 'axios/hereWeather';
 import ipStackAxios from 'axios/ipStack';
-import { WEEK_DAYS } from 'constants/constants';
+import { WEEK_DAYS, DAY_NO_HOURS } from 'constants/constants';
 import useHttp from 'hooks/useHttp';
 
 import { createDateFromEpoch } from 'utils/dateTimeUtils';
@@ -21,6 +21,9 @@ const Main = () => {
     feelsLike: 0,
     description: '',
     airQuality: 0,
+    sunriseTime: 0,
+    sunsetTime: 0,
+    hourly: [],
   });
   const [todayWeather, setTodayWeather] = useState({
     maxWind: 0,
@@ -61,7 +64,7 @@ const Main = () => {
     (latitude, longitude) => {
       sendRequestDarkSky(
         darkSkyAxios,
-        [`/${latitude},${longitude}`, { params: { units: 'si', exclude: '[minutely,hourly]' } }],
+        [`/${latitude},${longitude}`, { params: { units: 'si', exclude: '[minutely]' } }],
         'get',
       );
     },
@@ -90,6 +93,10 @@ const Main = () => {
       temperature: data.temperature,
       description: data.summary,
       feelsLike: data.apparentTemperature,
+      sunriseTime: data.sunriseTime,
+      sunsetTime: data.sunsetTime,
+      hourly: data.hourly,
+      // air
     });
 
     setTodayWeather({
@@ -129,6 +136,9 @@ const Main = () => {
       const today = darkSkyHttp.data.daily.data[0];
       tackleCurrentWeather({
         ...darkSkyHttp.data.currently,
+        hourly: darkSkyHttp.data.hourly.data
+          .slice(0, DAY_NO_HOURS + 1)
+          .map(el => ({ time: el.time, temperature: Math.round(el.temperature) })),
         sunriseTime: today.sunriseTime,
         sunsetTime: today.sunsetTime,
       });
