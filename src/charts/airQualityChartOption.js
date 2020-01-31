@@ -19,20 +19,21 @@ const getAirQualityChartOption = value => ({
         lineStyle: {
           width: 0,
           color: [
-            [value / 100, 'red'],
-            [1, 'blue'],
+            [value / 100, '#7874DE'],
+            [1, '#29294E'],
           ],
         },
       },
       splitLine: {
-        length: 20,
+        length: 18,
         lineStyle: {
           width: 2,
           color: 'auto',
         },
       },
       axisTick: {
-        length: 20,
+        length: 18,
+        splitNumber: 7,
         lineStyle: {
           width: 2,
           color: 'auto',
