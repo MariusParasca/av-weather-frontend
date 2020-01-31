@@ -7,5 +7,5 @@ export const MAX_VISIBILITY = 25;
 export const MAX_DEW_POINT = 25;
 export const MAX_WIND = 40;
 
-export const WEEK_DAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+export const WEEK_DAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 export const DAY_NO_HOURS = 24;

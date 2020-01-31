@@ -36,9 +36,7 @@ const Home = props => {
         </div>
         <Forecast forecastTemperature={weatherForecast} />
       </div>
-      <div className={styles.detailsWeatherContainer}>
-        <TodayWeatherInfo isLoading={false} weatherInfo={todayWeather} />
-      </div>
+      <TodayWeatherInfo isLoading={false} weatherInfo={todayWeather} />
     </div>
   );
 };

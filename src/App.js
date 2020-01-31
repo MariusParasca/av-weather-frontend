@@ -7,13 +7,13 @@ import styles from './App.module.css';
 
 function App() {
   return (
-    <div className={styles.mainContainer}>
+    <>
       <div className={styles.app}>
         <ApplicationBar />
         <Main />
       </div>
       <SearchBox placeholder="City, postcode or place" className={styles.searchBox} />
-    </div>
+    </>
   );
 }
 

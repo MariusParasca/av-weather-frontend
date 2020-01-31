@@ -7,15 +7,11 @@
   flex-direction: column;
   width: 100%;
   padding: 0 0 0 48px;
-  height: 100vh;
   min-width: 1350px;
 }
 
 .topContainer {
-  height: 38%;
 }
 
 .bottomContainer {
-  height: 72%;
-  overflow: hidden;
 }

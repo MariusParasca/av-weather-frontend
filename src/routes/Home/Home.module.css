@@ -1,8 +1,6 @@
 .container {
   display: flex;
   justify-content: space-between;
-  overflow: hidden;
-  height: 100%;
 }
 
 .forecastContainer {
@@ -11,9 +9,7 @@
 }
 
 .detailsWeatherContainer {
-  overflow: auto;
 }
 
 .chartContainer {
-  flex-grow: 1;
 }
