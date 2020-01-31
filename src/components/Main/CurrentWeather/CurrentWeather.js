@@ -6,6 +6,7 @@ import { makeStyles, Typography, Divider } from '@material-ui/core';
 import WithSvg from 'components/WithSvg/WithSvg';
 import SunInfo from 'components/SunInfo/SunInfo';
 import { ReactComponent as PartlyCloudyDaySvg } from 'svgs/weatherTypes/partly-cloudy-day.svg';
+import AirQualityChart from 'components/Charts/AirQualityChart/AirQualityChart';
 import styles from './CurrentWeather.module.css';
 
 const useStyles = makeStyles(() => ({
@@ -35,6 +36,8 @@ const CurrentWeather = props => {
     setInterval(startClock, 60 * 1000);
   }, []);
 
+  console.log(weatherData.airQuality);
+
   return (
     <div className={`${className}`}>
       <div className={styles.mainContainer}>
@@ -55,7 +58,9 @@ const CurrentWeather = props => {
               <Typography variant="h5">Feels like {Math.round(weatherData.feelsLike)}°</Typography>
             </div>
           </div>
-          <div className={styles.rightWeatherContainer}>TODO</div>
+          <div className={styles.rightWeatherContainer}>
+            <AirQualityChart value={weatherData.airQuality} />
+          </div>
         </div>
         <div className={styles.rightContainer}>
           <SunInfo sunriseTime={weatherData.sunriseTime} sunsetTime={weatherData.sunsetTime} />
@@ -141,6 +146,7 @@ CurrentWeather.propTypes = {
   weatherData: PropTypes.shape({
     temperature: PropTypes.number,
     description: PropTypes.string,
+    airQuality: PropTypes.number,
     feelsLike: PropTypes.number,
     sunriseTime: PropTypes.number.isRequired,
     sunsetTime: PropTypes.number.isRequired,

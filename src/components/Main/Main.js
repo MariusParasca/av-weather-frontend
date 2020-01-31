@@ -83,7 +83,6 @@ const Main = () => {
         latitude: ipStackHttp.data.latitude,
         longitude: ipStackHttp.data.longitude,
       });
-      console.log('ipstack');
     }
   }, [ipStackHttp.data]);
 
