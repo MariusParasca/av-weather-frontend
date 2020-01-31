@@ -19,8 +19,8 @@ const getAirQualityChartOption = value => ({
         lineStyle: {
           width: 0,
           color: [
-            [value / 100, '#7874DE'],
-            [1, '#29294E'],
+            [value / 100, '#FF9F1E'],
+            [1, '#E6E6E6'],
           ],
         },
       },
@@ -46,7 +46,7 @@ const getAirQualityChartOption = value => ({
         length: '70%',
       },
       itemStyle: {
-        color: '#5B56CF',
+        color: '#FF9F1E',
       },
     },
   ],
