@@ -2,12 +2,7 @@ const get7DaysChartOption = (xLabel, dayData, nightData) => {
   const option = {
     tooltip: {
       trigger: 'axis',
-      axisPointer: {
-        type: 'cross',
-        label: {
-          backgroundColor: '#6a7985',
-        },
-      },
+      formatter: '{a0}: {c0}° C<br />{a1}: {c1}° C',
     },
     legend: {
       data: ['Day', 'Night'],
