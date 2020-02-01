@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { zeroPadTime, getHourFromEpoch } from 'utils/dateTimeUtils';
-import { makeStyles, Typography, Divider } from '@material-ui/core';
+import { zeroPadTime } from 'utils/dateTimeUtils';
+import { Typography } from '@material-ui/core';
 import WithSvg from 'components/WithSvg/WithSvg';
 import { ReactComponent as PartlyCloudyDaySvg } from 'svgs/weatherTypes/partly-cloudy-day.svg';
 import styles from './CurrentWeather.module.css';

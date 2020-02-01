@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles, Typography, Divider } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 
 import { ReactComponent as Humidity } from 'svgs/humidity.svg';
 import { ReactComponent as Precipitation } from 'svgs/precipitation.svg';

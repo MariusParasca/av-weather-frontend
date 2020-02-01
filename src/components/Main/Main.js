@@ -186,7 +186,7 @@ const Main = () => {
           </div>
           <div className={styles.bottomContainer}>
             <Route exact path={PageRoute.home}>
-              <Home hourly={currentWeather.hourly} weatherForecast={weatherForecast} todayWeather={todayWeather} />
+              <Home weatherForecast={weatherForecast} todayWeather={todayWeather} />
             </Route>
             <Route path={PageRoute.map}>
               <Map />
@@ -204,18 +204,6 @@ const Main = () => {
         </>
       )}
     </div>
-
-    // {/* <div className={styles.container}>
-    //   {isLoading ? (
-    //     <Spinner />
-    //   ) : (
-    //     <>
-
-    //       <Forecast forecastTemperature={weatherForecast} />
-    //     </>
-    //   )}
-    // </div>
-    // <TodayWeatherInfo isLoading={isLoading} weatherInfo={todayWeather} /> */}
   );
 };
 
