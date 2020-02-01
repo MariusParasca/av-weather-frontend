@@ -5,6 +5,10 @@
   align-items: center;
 }
 
+.weatherInfoContainer:last-child {
+  margin-bottom: 20px;
+}
+
 .circularProgressContainer {
   position: relative;
 }

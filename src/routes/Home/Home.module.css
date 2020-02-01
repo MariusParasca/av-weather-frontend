@@ -1,15 +1,13 @@
 .container {
+  position: relative;
+  overflow-y: hidden;
   display: flex;
   justify-content: space-between;
+  width: 100%;
 }
 
 .forecastContainer {
   display: flex;
   flex-direction: column;
-}
-
-.detailsWeatherContainer {
-}
-
-.chartContainer {
+  justify-content: flex-end;
 }

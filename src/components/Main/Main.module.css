@@ -10,6 +10,7 @@
   height: 100%;
   padding: 0 0 0 48px;
   min-width: 1350px;
+  justify-content: space-between;
 }
 
 .leftWeatherContainer {
@@ -27,4 +28,6 @@
 }
 
 .bottomContainer {
+  flex-grow: 1;
+  display: flex;
 }
