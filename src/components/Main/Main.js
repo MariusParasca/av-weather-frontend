@@ -56,7 +56,7 @@ const Main = () => {
   const { sendRequest: sendRequestDarkSky } = darkSkyHttp;
 
   const getWeatherForecast = useCallback(
-    cityQuery => {
+    async cityQuery => {
       sendRequestHereWeather(
         hereWeatherAxios,
         ['', { params: { name: cityQuery, product: 'forecast_7days_simple' } }],
@@ -68,7 +68,7 @@ const Main = () => {
   );
 
   const getWeatherByDarkSky = useCallback(
-    (latitude, longitude) => {
+    async (latitude, longitude) => {
       sendRequestDarkSky(
         darkSkyAxios,
         [`/${latitude},${longitude}`, { params: { units: 'si', exclude: '[minutely]' } }],
