@@ -9,3 +9,11 @@ export const MAX_WIND = 40;
 
 export const WEEK_DAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 export const DAY_NO_HOURS = 24;
+export const CHART_OPTIONS = ['Week', 'Day 24h'];
+export const CHART_SUB_PAGE_TITLES = [
+  'Temperature (C°)',
+  'Precipitation (%)',
+  'Humidity (%)',
+  'Wind (m/s)',
+  'Pressure (mb)',
+];

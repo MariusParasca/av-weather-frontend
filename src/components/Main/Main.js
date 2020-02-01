@@ -192,7 +192,7 @@ const Main = () => {
               <Map />
             </Route>
             <Route path={PageRoute.charts}>
-              <Charts />
+              <Charts hourly={currentWeather.hourly} />
             </Route>
             <Route path={PageRoute.history}>
               <History />

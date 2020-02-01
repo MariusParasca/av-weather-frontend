@@ -13,8 +13,8 @@ import SettingsIcon from '@material-ui/icons/Settings';
 
 import { LEFT_DRAWER_WIDTH } from 'constants/constants';
 import { PageRoute } from 'utils/routes';
+import MenuButton from 'components/MenuButton/MenuButton';
 import styles from './ApplicationBar.module.css';
-import MenuButton from './MenuButton/MenuButton';
 
 const useStyles = makeStyles(theme => ({
   paper: { width: LEFT_DRAWER_WIDTH },

@@ -8,7 +8,6 @@
   flex-direction: column;
   width: 100%;
   height: 100%;
-  padding: 0 0 0 48px;
   min-width: 1350px;
   justify-content: space-between;
 }
@@ -24,6 +23,7 @@
 }
 
 .topContainer {
+  padding-left: 48px;
   display: flex;
 }
 
