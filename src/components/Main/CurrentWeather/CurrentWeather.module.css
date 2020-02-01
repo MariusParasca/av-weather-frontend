@@ -20,20 +20,6 @@
   margin-top: 10px;
 }
 
-.leftWeatherContainer {
-  flex-grow: 1;
-}
-
-.rightWeatherContainer {
-  width: 300px;
-  /* border: 1px solid black; */
-}
-
-.rightContainer {
-  width: 315px;
-  border-left: 1px solid rgba(0, 0, 0, 0.12);
-}
-
 .weatherContainer {
   display: flex;
   flex-grow: 1;

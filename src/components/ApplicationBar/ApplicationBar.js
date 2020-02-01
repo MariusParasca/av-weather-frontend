@@ -12,7 +12,9 @@ import RestoreIcon from '@material-ui/icons/Restore';
 import SettingsIcon from '@material-ui/icons/Settings';
 
 import { LEFT_DRAWER_WIDTH } from 'constants/constants';
+import { PageRoute } from 'utils/routes';
 import styles from './ApplicationBar.module.css';
+import MenuButton from './MenuButton/MenuButton';
 
 const useStyles = makeStyles(theme => ({
   paper: { width: LEFT_DRAWER_WIDTH },
@@ -36,21 +38,21 @@ const ApplicationBar = () => {
       <Drawer classes={{ paper: classes.paper }} variant="permanent">
         <Avatar className={classes.small} />
         <div className={styles.mainOptionsContainer}>
-          <Button fullWidth>
+          <MenuButton exact path={PageRoute.home}>
             <PinDropIcon />
-          </Button>
-          <Button fullWidth>
+          </MenuButton>
+          <MenuButton path={PageRoute.map}>
             <MapIcon />
-          </Button>
-          <Button fullWidth>
+          </MenuButton>
+          <MenuButton path={PageRoute.charts}>
             <ShowChartIcon />
-          </Button>
-          <Button fullWidth>
+          </MenuButton>
+          <MenuButton path={PageRoute.favorites}>
             <StarBorderIcon />
-          </Button>
-          <Button fullWidth>
+          </MenuButton>
+          <MenuButton path={PageRoute.history}>
             <RestoreIcon />
-          </Button>
+          </MenuButton>
         </div>
         <div className={styles.settingsContainer}>
           <Button fullWidth>

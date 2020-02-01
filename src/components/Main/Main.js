@@ -1,14 +1,22 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { Route } from 'react-router-dom';
 
 import darkSkyAxios from 'axios/darkSky';
 import hereWeatherAxios from 'axios/hereWeather';
 import ipStackAxios from 'axios/ipStack';
 import { WEEK_DAYS, DAY_NO_HOURS } from 'constants/constants';
 import useHttp from 'hooks/useHttp';
+import { PageRoute } from 'utils/routes';
 
 import { createDateFromEpoch } from 'utils/dateTimeUtils';
 import Spinner from 'components/Spinner/Spinner';
 import Home from 'routes/Home/Home';
+import Charts from 'routes/Charts/Charts';
+import History from 'routes/History/History';
+import Favorites from 'routes/Favorites/Favorites';
+import Map from 'routes/Map/Map';
+import AirGauge from 'components/AirGauge/AirGauge';
+import HomeAdditional from 'routes/Home/HomeAdditional/HomeAdditional';
 import CurrentWeather from './CurrentWeather/CurrentWeather';
 import styles from './Main.module.css';
 
@@ -159,15 +167,39 @@ const Main = () => {
       ) : (
         <>
           <div className={styles.topContainer}>
-            <CurrentWeather
-              className={styles.todayContainer}
-              city={locationData.city}
-              country={locationData.country}
-              weatherData={currentWeather}
-            />
+            <div className={styles.todayContainer}>
+              <CurrentWeather
+                className={styles.leftWeatherContainer}
+                city={locationData.city}
+                country={locationData.country}
+                weatherData={currentWeather}
+              />
+              <Route exact path={PageRoute.home}>
+                <AirGauge className={styles.rightWeatherContainer} airQuality={73} />
+              </Route>
+            </div>
+            <div className={styles.abstractContainer}>
+              <Route exact path={PageRoute.home}>
+                <HomeAdditional sunsetTime={currentWeather.sunsetTime} sunriseTime={currentWeather.sunriseTime} />
+              </Route>
+            </div>
           </div>
           <div className={styles.bottomContainer}>
-            <Home hourly={currentWeather.hourly} weatherForecast={weatherForecast} todayWeather={todayWeather} />
+            <Route exact path={PageRoute.home}>
+              <Home hourly={currentWeather.hourly} weatherForecast={weatherForecast} todayWeather={todayWeather} />
+            </Route>
+            <Route path={PageRoute.map}>
+              <Map />
+            </Route>
+            <Route path={PageRoute.charts}>
+              <Charts />
+            </Route>
+            <Route path={PageRoute.history}>
+              <History />
+            </Route>
+            <Route path={PageRoute.favorites}>
+              <Favorites />
+            </Route>
           </div>
         </>
       )}

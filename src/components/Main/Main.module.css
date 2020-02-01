@@ -1,4 +1,5 @@
 .todayContainer {
+  display: flex;
   flex-grow: 1;
 }
 
@@ -6,11 +7,23 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: 100%;
   padding: 0 0 0 48px;
   min-width: 1350px;
 }
 
+.leftWeatherContainer {
+  padding-top: 30px;
+  flex-grow: 1;
+}
+
+.rightWeatherContainer {
+  width: 300px;
+  /* border: 1px solid black; */
+}
+
 .topContainer {
+  display: flex;
 }
 
 .bottomContainer {
