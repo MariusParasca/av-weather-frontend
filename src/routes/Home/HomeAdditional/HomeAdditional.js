@@ -17,7 +17,7 @@ const HomeAdditional = props => {
   const classes = useStyles();
 
   return (
-    <div className={styles.container}>
+    <div>
       <SunInfo sunriseTime={sunriseTime} sunsetTime={sunsetTime} />
       <Divider variant="middle" classes={{ root: classes.dividerRoot }} />
     </div>

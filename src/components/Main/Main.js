@@ -178,7 +178,7 @@ const Main = () => {
                 <AirGauge className={styles.rightWeatherContainer} airQuality={73} />
               </Route>
             </div>
-            <div className={styles.abstractContainer}>
+            <div className={styles.additionalContainer}>
               <Route exact path={PageRoute.home}>
                 <HomeAdditional sunsetTime={currentWeather.sunsetTime} sunriseTime={currentWeather.sunriseTime} />
               </Route>
