@@ -24,6 +24,7 @@
 .subMenu {
   border: 1px solid rgba(0, 0, 0, 0.12);
   display: flex;
+  z-index: 100;
 }
 
 .titleContainer {

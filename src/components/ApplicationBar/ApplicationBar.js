@@ -12,7 +12,7 @@ import RestoreIcon from '@material-ui/icons/Restore';
 import SettingsIcon from '@material-ui/icons/Settings';
 
 import { LEFT_DRAWER_WIDTH } from 'constants/constants';
-import { PageRoute } from 'utils/routes';
+import { PageRoute, ChartsRoute } from 'utils/routes';
 import MenuButton from 'components/MenuButton/MenuButton';
 import styles from './ApplicationBar.module.css';
 
@@ -44,7 +44,7 @@ const ApplicationBar = () => {
           <MenuButton path={PageRoute.map}>
             <MapIcon />
           </MenuButton>
-          <MenuButton path={PageRoute.charts}>
+          <MenuButton path={`${PageRoute.charts}${ChartsRoute.temperature}`}>
             <ShowChartIcon />
           </MenuButton>
           <MenuButton path={PageRoute.favorites}>

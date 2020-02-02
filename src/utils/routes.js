@@ -6,4 +6,12 @@ export const PageRoute = {
   favorites: '/favorites',
 };
 
+export const ChartsRoute = {
+  temperature: '/temperature',
+  precipitation: '/precipitation',
+  humidity: '/humidity',
+  wind: '/wind',
+  pressure: '/pressure',
+};
+
 export const basename = '/';
