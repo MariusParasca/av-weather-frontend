@@ -4,7 +4,7 @@ import { Route } from 'react-router-dom';
 import darkSkyAxios from 'axios/darkSky';
 import hereWeatherAxios from 'axios/hereWeather';
 import ipStackAxios from 'axios/ipStack';
-import { WEEK_DAYS, DAY_NO_HOURS } from 'constants/constants';
+import { DAY_NO_HOURS, WEEK_DAYS } from 'constants/constants';
 import useHttp from 'hooks/useHttp';
 import { PageRoute } from 'utils/routes';
 
@@ -121,19 +121,10 @@ const Main = () => {
 
   const tackleForecastWeather = useCallback(dataArray => {
     setWeatherForecast(
-      dataArray.map((el, index) => {
-        if (index === 0)
-          return {
-            label: 'Today',
-            temperatureNight: el.temperatureLow,
-            temperatureDay: el.temperatureHigh,
-          };
-        return {
-          label: WEEK_DAYS[createDateFromEpoch(el.time).getDay()],
-          temperatureNight: el.temperatureLow,
-          temperatureDay: el.temperatureHigh,
-        };
-      }),
+      dataArray.map((el, index) => ({
+        ...el,
+        label: index === 0 ? 'Today' : WEEK_DAYS[createDateFromEpoch(el.time).getDay()],
+      })),
     );
   }, []);
 
@@ -142,9 +133,8 @@ const Main = () => {
       const today = darkSkyHttp.data.daily.data[0];
       tackleCurrentWeather({
         ...darkSkyHttp.data.currently,
-        hourly: darkSkyHttp.data.hourly.data
-          .slice(0, DAY_NO_HOURS + 1)
-          .map(el => ({ time: el.time, temperature: Math.round(el.temperature) })),
+        hourly: darkSkyHttp.data.hourly.data.slice(0, DAY_NO_HOURS + 1),
+        // .map(el => ({ time: el.time, temperature: Math.round(el.temperature) })),
         sunriseTime: today.sunriseTime,
         sunsetTime: today.sunsetTime,
       });
@@ -192,7 +182,7 @@ const Main = () => {
               <Map />
             </Route>
             <Route path={PageRoute.charts}>
-              <Charts hourly={currentWeather.hourly} />
+              <Charts hourly={currentWeather.hourly} daily={weatherForecast} />
             </Route>
             <Route path={PageRoute.history}>
               <History />

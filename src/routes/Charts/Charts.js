@@ -7,7 +7,6 @@ import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
 
 import { PageRoute, ChartsRoute } from 'utils/routes';
 import { CHART_OPTIONS, CHART_SUB_PAGE_TITLES } from 'constants/constants';
-import HourlyChart from 'components/Charts/HourlyChart/HourlyChart';
 import MenuButton from 'components/MenuButton/MenuButton';
 import styles from './Charts.module.css';
 import Temperature from './Temperature/Temperature';
@@ -17,17 +16,12 @@ import Wind from './Wind/Wind';
 import Pressure from './Pressure/Pressure';
 
 const Charts = props => {
-  const { hourly } = props;
+  const { hourly, daily } = props;
   const [currentOption, setCurrentOption] = useState(0);
 
   const changeOption = event => {
     setCurrentOption(event.target.value);
   };
-
-  let chart;
-  if (CHART_OPTIONS[currentOption] === CHART_OPTIONS[0]) {
-    chart = <HourlyChart hourlyData={hourly} />;
-  }
 
   return (
     <Router>
@@ -44,19 +38,19 @@ const Charts = props => {
           </div>
           <div className={styles.chartContainer}>
             <Switch>
-              <Route exact to={ChartsRoute.temperature}>
-                <Temperature />
+              <Route path={`${PageRoute.charts}${ChartsRoute.temperature}`}>
+                <Temperature hourly={hourly} daily={daily} option={currentOption} />
               </Route>
-              <Route to={ChartsRoute.precipitation}>
+              <Route path={`${PageRoute.charts}${ChartsRoute.precipitation}`}>
                 <Precipitation />
               </Route>
-              <Route to={ChartsRoute.humidity}>
+              <Route path={`${PageRoute.charts}${ChartsRoute.humidity}`}>
                 <Humidity />
               </Route>
-              <Route to={ChartsRoute.wind}>
+              <Route path={`${PageRoute.charts}${ChartsRoute.wind}`}>
                 <Wind />
               </Route>
-              <Route to={ChartsRoute.pressure}>
+              <Route path={`${PageRoute.charts}${ChartsRoute.pressure}`}>
                 <Pressure />
               </Route>
             </Switch>
@@ -81,7 +75,23 @@ const Charts = props => {
             </MenuButton>
           </div>
           <div className={styles.titleContainer}>
-            <Typography variant="h5">{CHART_SUB_PAGE_TITLES[0]}</Typography>
+            <Switch>
+              <Route path={`${PageRoute.charts}${ChartsRoute.temperature}`}>
+                <Typography variant="h5">{CHART_SUB_PAGE_TITLES[0]}</Typography>
+              </Route>
+              <Route path={`${PageRoute.charts}${ChartsRoute.precipitation}`}>
+                <Typography variant="h5">{CHART_SUB_PAGE_TITLES[1]}</Typography>
+              </Route>
+              <Route path={`${PageRoute.charts}${ChartsRoute.humidity}`}>
+                <Typography variant="h5">{CHART_SUB_PAGE_TITLES[2]}</Typography>
+              </Route>
+              <Route path={`${PageRoute.charts}${ChartsRoute.wind}`}>
+                <Typography variant="h5">{CHART_SUB_PAGE_TITLES[3]}</Typography>
+              </Route>
+              <Route path={`${PageRoute.charts}${ChartsRoute.pressure}`}>
+                <Typography variant="h5">{CHART_SUB_PAGE_TITLES[4]}</Typography>
+              </Route>
+            </Switch>
           </div>
         </div>
       </div>
@@ -90,7 +100,8 @@ const Charts = props => {
 };
 
 Charts.propTypes = {
-  hourly: PropTypes.arrayOf().isRequired,
+  hourly: PropTypes.arrayOf(PropTypes.object).isRequired,
+  daily: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default Charts;

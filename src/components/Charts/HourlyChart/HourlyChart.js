@@ -16,7 +16,7 @@ const HomeChart = props => {
     const newTimeline = [];
 
     for (const weatherHour of hourlyData) {
-      newHourly.push(weatherHour.temperature);
+      newHourly.push(Math.round(weatherHour.temperature));
       newTimeline.push(`${getHourFromEpoch(weatherHour.time)}:00`);
     }
 
@@ -28,7 +28,7 @@ const HomeChart = props => {
 };
 
 HomeChart.propTypes = {
-  hourlyData: PropTypes.arrayOf().isRequired,
+  hourlyData: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default HomeChart;

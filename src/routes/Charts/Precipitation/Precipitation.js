@@ -1,8 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import BarChart from 'components/Charts/BarChart/BarChart';
 
 const Precipitation = props => {
-  return <div>Precipitation</div>;
+  return (
+    <div>
+      <BarChart />
+    </div>
+  );
 };
 
 Precipitation.propTypes = {};

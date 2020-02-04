@@ -1,9 +1,11 @@
 .selectContainer {
   width: 100px;
+  margin-bottom: 40px;
 }
 
 .topContainer {
   padding-left: 48px;
+  padding-right: 40px;
   flex-grow: 1;
 }
 
