@@ -1,5 +1,12 @@
-const getBarChartOption = xLabels => {
+const getBarChartOption = (xLabels, fullBarArray, dataArray) => {
   return {
+    plugins: {
+      datalabels: {
+        display: true,
+        align: 'center',
+        anchor: 'center',
+      },
+    },
     color: ['#3398DB'],
     grid: {
       left: '0',
@@ -10,9 +17,10 @@ const getBarChartOption = xLabels => {
     xAxis: [
       {
         type: 'category',
-        data: ['yesterday', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        data: xLabels,
         axisTick: {
           alignWithLabel: true,
+          show: false,
         },
       },
     ],
@@ -37,16 +45,25 @@ const getBarChartOption = xLabels => {
         itemStyle: {
           color: 'rgba(0,0,0,0.05)',
         },
+        label: {
+          show: false,
+        },
         barGap: '-100%',
         barWidth: '40',
         animation: false,
-        data: [100, 100, 100, 100, 100, 100, 100, 100],
+        data: fullBarArray,
       },
       {
         type: 'bar',
-        emphasis: {},
         barWidth: '40',
-        data: [2, 10, 52, 20, 33, 90, 30, 20],
+        label: {
+          show: true,
+          position: 'top',
+          // color: 'red',
+          formatter: '{c} %',
+          // verticalAlign: 'top',
+        },
+        data: dataArray,
       },
     ],
   };

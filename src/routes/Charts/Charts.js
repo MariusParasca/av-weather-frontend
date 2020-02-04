@@ -42,13 +42,13 @@ const Charts = props => {
                 <Temperature hourly={hourly} daily={daily} option={currentOption} />
               </Route>
               <Route path={`${PageRoute.charts}${ChartsRoute.precipitation}`}>
-                <Precipitation />
+                <Precipitation hourly={hourly} daily={daily} option={currentOption} />
               </Route>
               <Route path={`${PageRoute.charts}${ChartsRoute.humidity}`}>
-                <Humidity />
+                <Humidity hourly={hourly} daily={daily} option={currentOption} />
               </Route>
               <Route path={`${PageRoute.charts}${ChartsRoute.wind}`}>
-                <Wind />
+                <Wind hourly={hourly} daily={daily} option={currentOption} />
               </Route>
               <Route path={`${PageRoute.charts}${ChartsRoute.pressure}`}>
                 <Pressure />
