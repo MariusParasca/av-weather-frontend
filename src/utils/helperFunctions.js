@@ -1,8 +1,10 @@
-export const createChartData = (
-  array,
-  { label, propName },
-  { round = false, toPercent = true, additionalArray = false },
-) => {
+export const createChartData = (array, { label, propName }, options) => {
+  let currentOptions;
+  if (!options) {
+    currentOptions = { round: false, toPercent: false, additionalArray: false, toFixed: 0 };
+  } else {
+    currentOptions = options;
+  }
   const newXLabels = [];
   const newDataArray = [];
   const newFullBarArray = [];
@@ -10,15 +12,20 @@ export const createChartData = (
   for (const day of array) {
     newXLabels.push(day[label]);
     let value = day[propName];
-    if (toPercent) {
+    if (currentOptions.toFixed) {
+      value = value.toFixed(currentOptions.toFixed);
+    }
+
+    if (currentOptions.toPercent) {
       value *= 100;
     }
-    if (round) {
+
+    if (currentOptions.round) {
       value = Math.round(value);
     }
 
     newDataArray.push(value);
-    if (additionalArray) {
+    if (currentOptions.additionalArray) {
       newFullBarArray.push(100);
     }
   }
@@ -26,4 +33,4 @@ export const createChartData = (
   return [newXLabels, newDataArray, newFullBarArray];
 };
 
-export const name = params => {};
+export default createChartData;

@@ -50,6 +50,10 @@ const Humidity = props => {
   return <div>{chart}</div>;
 };
 
-Humidity.propTypes = {};
+Humidity.propTypes = {
+  hourly: PropTypes.arrayOf(PropTypes.object).isRequired,
+  daily: PropTypes.arrayOf(PropTypes.object).isRequired,
+  option: PropTypes.number.isRequired,
+};
 
 export default Humidity;

@@ -50,6 +50,10 @@ const Precipitation = props => {
   return <div>{chart}</div>;
 };
 
-Precipitation.propTypes = {};
+Precipitation.propTypes = {
+  hourly: PropTypes.arrayOf(PropTypes.object).isRequired,
+  daily: PropTypes.arrayOf(PropTypes.object).isRequired,
+  option: PropTypes.number.isRequired,
+};
 
 export default Precipitation;

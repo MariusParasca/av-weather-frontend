@@ -10,6 +10,9 @@ const LineChart = props => {
   return <ReactEcharts option={getLineChartOption(xLabels, dataArray)} />;
 };
 
-LineChart.propTypes = {};
+LineChart.propTypes = {
+  xLabels: PropTypes.arrayOf(PropTypes.string).isRequired,
+  dataArray: PropTypes.arrayOf(PropTypes.number).isRequired,
+};
 
 export default LineChart;

@@ -4,15 +4,15 @@ import ReactEcharts from 'echarts-for-react';
 
 import getHourlyChartOption from 'charts/hourlyChart';
 
-const HomeChart = props => {
+const HourlyChart = props => {
   const { timeline, hourly } = props;
 
   return <ReactEcharts option={getHourlyChartOption(timeline, hourly)} />;
 };
 
-HomeChart.propTypes = {
-  hourly: PropTypes.arrayOf(PropTypes.object).isRequired,
+HourlyChart.propTypes = {
+  hourly: PropTypes.arrayOf(PropTypes.number).isRequired,
   timeline: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
-export default HomeChart;
+export default HourlyChart;
