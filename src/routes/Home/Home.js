@@ -12,8 +12,6 @@ const Home = props => {
 
   const [modifiedWeatherForecast, setModifiedWeatherForecast] = useState([]);
 
-  console.log('weatherForecast', weatherForecast);
-
   useEffect(() => {
     setModifiedWeatherForecast(
       weatherForecast.map(el => ({

@@ -133,8 +133,9 @@ const Main = () => {
       const today = darkSkyHttp.data.daily.data[0];
       tackleCurrentWeather({
         ...darkSkyHttp.data.currently,
-        hourly: darkSkyHttp.data.hourly.data.slice(0, DAY_NO_HOURS + 1)
-        .map(el => ({ ...el, hour: `${getHourFromEpoch(el.time)}:00`, temperature: Math.round(el.temperature) })),
+        hourly: darkSkyHttp.data.hourly.data
+          .slice(0, DAY_NO_HOURS + 1)
+          .map(el => ({ ...el, hour: `${getHourFromEpoch(el.time)}:00`, temperature: Math.round(el.temperature) })),
         sunriseTime: today.sunriseTime,
         sunsetTime: today.sunsetTime,
       });

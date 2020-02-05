@@ -51,7 +51,7 @@ const Charts = props => {
                 <Wind hourly={hourly} daily={daily} option={currentOption} />
               </Route>
               <Route path={`${PageRoute.charts}${ChartsRoute.pressure}`}>
-                <Pressure />
+                <Pressure hourly={hourly} daily={daily} option={currentOption} />
               </Route>
             </Switch>
           </div>

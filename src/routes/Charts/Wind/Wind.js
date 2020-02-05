@@ -15,7 +15,7 @@ const Wind = props => {
   const [dataArrayHourly, setDataArrayHourly] = useState([]);
 
   useEffect(() => {
-    const [newXLabels, newDataArray] = createChartData(daily, { label: 'label', propName: 'windSpeed' }, );
+    const [newXLabels, newDataArray] = createChartData(daily, { label: 'label', propName: 'windSpeed' });
 
     setXLabelsDaily(newXLabels);
     setDataArrayDaily(newDataArray);
