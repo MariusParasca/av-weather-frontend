@@ -1,0 +1,32 @@
+.container {
+  height: 280px;
+  width: 400px;
+  border: 1px solid black;
+  padding: 20px 30px;
+}
+
+.localTimeContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.degreeValue {
+  align-self: flex-start;
+}
+
+.imageContainer {
+  margin-left: 20px;
+}
+
+.image {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.valueContainer {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

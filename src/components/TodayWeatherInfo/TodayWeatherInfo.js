@@ -19,8 +19,6 @@ const TodayWeatherInfo = props => {
 
   const { maxWind, humidity, precipitation, uvIndex, cloudCover, pressure, visibility, dewPoint } = weatherInfo;
 
-  console.log(dewPoint);
-
   return isLoading ? (
     <Spinner />
   ) : (
