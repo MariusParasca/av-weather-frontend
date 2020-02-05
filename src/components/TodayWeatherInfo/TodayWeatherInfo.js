@@ -19,6 +19,8 @@ const TodayWeatherInfo = props => {
 
   const { maxWind, humidity, precipitation, uvIndex, cloudCover, pressure, visibility, dewPoint } = weatherInfo;
 
+  console.log(dewPoint);
+
   return isLoading ? (
     <Spinner />
   ) : (
@@ -63,7 +65,7 @@ const TodayWeatherInfo = props => {
           <WithSvg component={Precipitation} size={20} />
         </WeatherInfo>
         <WeatherInfo
-          progressValue={-1 * (dewPoint / MAX_DEW_POINT) * 100}
+          progressValue={(dewPoint < 0 ? -1 : 1) * (dewPoint / MAX_DEW_POINT) * 100}
           progressText={`${Number(dewPoint).toFixed(2)}°`}
           text="Dew Point"
         >
