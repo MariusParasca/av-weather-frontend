@@ -23,18 +23,25 @@ const get7DaysChartOption = (xLabel, dayData, nightData) => {
         axisTick: {
           show: false,
         },
+        axisLine: {
+          show: true,
+        },
       },
     ],
     yAxis: [
       {
         type: 'value',
         axisLine: {
-          show: false,
+          show: true,
         },
         axisTick: {
           show: false,
         },
+        splitLine: {
+          show: false,
+        },
         axisLabel: {
+          show: false,
           textStyle: {
             color: '#999',
           },
