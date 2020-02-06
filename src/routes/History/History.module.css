@@ -1,5 +1,9 @@
 .container {
   padding-left: 48px;
+  padding-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 table.calendarTable {
