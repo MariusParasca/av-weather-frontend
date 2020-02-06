@@ -7,10 +7,9 @@ import styles from './Favorites.module.css';
 const Favorites = props => {
   return (
     <div className={styles.container}>
-      <FavoriteCity time="22:32" location="IASI, ROMANIA" degreeValue={-2} />
-      <FavoriteCity time="22:32" location="IASI, ROMANIA" degreeValue={-2} />
-      <FavoriteCity time="22:32" location="IASI, ROMANIA" degreeValue={-2} />
-      <FavoriteCity time="22:32" location="IASI, ROMANIA" degreeValue={-2} />
+      <FavoriteCity city="Los Angeles" country="America" degreeValue={-2} />
+      <FavoriteCity city="Iasi" country="Romania" degreeValue={-2} />
+      <FavoriteCity city="IASI" country="Romania" degreeValue={-2} />
     </div>
   );
 };

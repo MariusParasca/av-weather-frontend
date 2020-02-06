@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { zeroPadTime } from 'utils/dateTimeUtils';
+import { getTimeFromDate } from 'utils/dateTimeUtils';
 import { Typography } from '@material-ui/core';
 import WithSvg from 'components/WithSvg/WithSvg';
 import { ReactComponent as PartlyCloudyDaySvg } from 'svgs/weatherTypes/partly-cloudy-day.svg';
@@ -14,10 +14,8 @@ const CurrentWeather = props => {
 
   const startClock = () => {
     const currentDate = new Date();
-    const currentHours = zeroPadTime(currentDate.getHours());
-    const currentMinutes = zeroPadTime(currentDate.getMinutes());
 
-    setCurrentTime(`${currentHours}:${currentMinutes}`);
+    setCurrentTime(getTimeFromDate(currentDate));
   };
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 .container {
-  height: 280px;
+  min-height: 280px;
   width: 400px;
   border: 1px solid black;
   padding: 20px 30px;
