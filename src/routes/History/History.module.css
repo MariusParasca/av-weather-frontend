@@ -1,6 +1,6 @@
 .container {
   position: relative;
-  overflow-y: hidden;
+  /* overflow-y: hidden; */
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -23,7 +23,7 @@ table.calendarTable {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding-bottom: 48px;
+  /* padding-bottom: 48px; */
   height: 100%;
 }
 
