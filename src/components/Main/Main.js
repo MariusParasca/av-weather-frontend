@@ -21,6 +21,39 @@ import HistoryAdditional from 'routes/History/HistoryAdditional/HistoryAdditiona
 import CurrentWeather from './CurrentWeather/CurrentWeather';
 import styles from './Main.module.css';
 
+// Calendar dumb data
+const february = [
+  { dayTemperature: 2, nightTemperature: -3 },
+  { dayTemperature: 9, nightTemperature: -5 },
+  { dayTemperature: 3, nightTemperature: -2 },
+  { dayTemperature: 12, nightTemperature: -9 },
+  { dayTemperature: 3, nightTemperature: -1 },
+  { dayTemperature: 1, nightTemperature: 3 },
+  { dayTemperature: 7, nightTemperature: 2 },
+  { dayTemperature: 8, nightTemperature: 13 },
+  { dayTemperature: 2, nightTemperature: 14 },
+  { dayTemperature: 5, nightTemperature: -3 },
+  { dayTemperature: 5, nightTemperature: -3 },
+  { dayTemperature: 2, nightTemperature: -3 },
+  { dayTemperature: 2, nightTemperature: -3 },
+  { dayTemperature: 2, nightTemperature: -3 },
+  { dayTemperature: 2, nightTemperature: -3 },
+  { dayTemperature: 2, nightTemperature: -3 },
+  { dayTemperature: 2, nightTemperature: -3 },
+  { dayTemperature: 2, nightTemperature: -3 },
+  { dayTemperature: 2, nightTemperature: -3 },
+  { dayTemperature: 2, nightTemperature: -3 },
+  { dayTemperature: 2, nightTemperature: -3 },
+  { dayTemperature: 2, nightTemperature: -3 },
+  { dayTemperature: 2, nightTemperature: -3 },
+  { dayTemperature: 2, nightTemperature: -3 },
+  { dayTemperature: 2, nightTemperature: -3 },
+  { dayTemperature: 2, nightTemperature: -3 },
+  { dayTemperature: 2, nightTemperature: -3 },
+  { dayTemperature: 2, nightTemperature: -3 },
+  { dayTemperature: 2, nightTemperature: -3 },
+];
+
 const Main = () => {
   const [locationData, setLocationData] = useState({ latitude: 0, longitude: 0, city: '', country: '' });
 
@@ -206,7 +239,7 @@ const Main = () => {
               <Charts hourly={currentWeather.hourly} daily={weatherForecast} />
             </Route>
             <Route path={PageRoute.history}>
-              <History />
+              <History monthTemperature={february} />
             </Route>
             <Route path={PageRoute.favorites}>
               <Favorites />

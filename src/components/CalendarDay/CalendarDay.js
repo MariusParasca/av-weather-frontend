@@ -7,7 +7,7 @@ import { ReactComponent as PartlyCloudyDaySvg } from 'svgs/weatherTypes/partly-c
 import styles from './CalendarDay.module.css';
 
 const CalendarDay = props => {
-  const { dayNumber } = props;
+  const { dayNumber, dayTemperature, nightTemperature } = props;
   return (
     <div className={styles.container}>
       <div className={styles.dayNumber}>
@@ -17,7 +17,7 @@ const CalendarDay = props => {
       </div>
       <div className={styles.dayTemperature}>
         <Typography variant="h5" display="inline">
-          8°
+          {dayTemperature}°
         </Typography>
       </div>
       <div className={styles.iconContainer}>
@@ -25,7 +25,7 @@ const CalendarDay = props => {
       </div>
       <div className={styles.nightTemperature}>
         <Typography variant="subtitle1" display="inline">
-          7°
+          {nightTemperature}°
         </Typography>
       </div>
     </div>
@@ -34,6 +34,8 @@ const CalendarDay = props => {
 
 CalendarDay.propTypes = {
   dayNumber: PropTypes.number.isRequired,
+  dayTemperature: PropTypes.number.isRequired,
+  nightTemperature: PropTypes.number.isRequired,
 };
 
 export default CalendarDay;

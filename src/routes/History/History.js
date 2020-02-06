@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { TextField, MenuItem } from '@material-ui/core';
 
 import { WEEK_DAYS, MONTHS } from 'constants/constants';
@@ -7,7 +7,7 @@ import CalendarDay from 'components/CalendarDay/CalendarDay';
 import styles from './History.module.css';
 
 const getWeekDays = () => {
-  return WEEK_DAYS.map(day => <th>{day}</th>);
+  return WEEK_DAYS.map(day => <th key={day}>{day}</th>);
 };
 
 const currentYear = new Date().getFullYear();
@@ -17,7 +17,8 @@ const daysInMonth = (iMonth, iYear) => {
 };
 
 const History = props => {
-  const [month, setMonth] = useState(0);
+  const { monthTemperature } = props;
+  const [month, setMonth] = useState(new Date().getMonth());
 
   const changeOption = event => {
     setMonth(event.target.value);
@@ -39,7 +40,12 @@ const History = props => {
         } else if (date > daysInMonth(month, currentYear)) {
           break;
         } else {
-          rowCells.push({ key: `${i}${j}`, dayNumber: date });
+          rowCells.push({
+            key: `${i}${j}`,
+            dayNumber: date,
+            dayTemperature: monthTemperature[date - 1] ? monthTemperature[date - 1].dayTemperature : 0,
+            nightTemperature: monthTemperature[date - 1] ? monthTemperature[date - 1].nightTemperature : 0,
+          });
           date += 1;
         }
       }
@@ -47,7 +53,7 @@ const History = props => {
     }
 
     return content;
-  }, [month]);
+  }, [month, monthTemperature]);
 
   return (
     <div className={styles.container}>
@@ -71,7 +77,11 @@ const History = props => {
                 if (cell.dayNumber) {
                   return (
                     <td key={cell.key}>
-                      <CalendarDay dayNumber={cell.dayNumber} />
+                      <CalendarDay
+                        dayNumber={cell.dayNumber}
+                        dayTemperature={cell.dayTemperature}
+                        nightTemperature={cell.nightTemperature}
+                      />
                     </td>
                   );
                 }
@@ -85,6 +95,8 @@ const History = props => {
   );
 };
 
-History.propTypes = {};
+History.propTypes = {
+  monthTemperature: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
 
 export default History;
