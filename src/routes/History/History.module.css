@@ -1,9 +1,9 @@
 .container {
-  padding-left: 48px;
-  padding-bottom: 40px;
+  position: relative;
+  overflow-y: hidden;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  justify-content: space-between;
+  width: 100%;
 }
 
 table.calendarTable {
@@ -16,4 +16,23 @@ table.calendarTable {
 
 .selectContainer {
   margin-bottom: 10px;
+}
+
+.subContainer {
+  padding-left: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 10px;
+  height: 100%;
+}
+
+.textInfoContainer {
+  margin-right: 20px;
+}
+
+.textInfo {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
 }

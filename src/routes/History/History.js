@@ -1,10 +1,22 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { TextField, MenuItem } from '@material-ui/core';
+import { TextField, MenuItem, Typography, makeStyles } from '@material-ui/core';
 
+import { ReactComponent as Humidity } from 'svgs/humidity.svg';
+import { ReactComponent as Precipitation } from 'svgs/precipitation.svg';
 import { WEEK_DAYS, MONTHS } from 'constants/constants';
 import CalendarDay from 'components/CalendarDay/CalendarDay';
+import WithSvg from 'components/WithSvg/WithSvg';
+import LabeledCircularProgress from 'components/LabeledCircularProgress/LabeledCircularProgress';
+import WeatherInfo from 'components/TodayWeatherInfo/WeatherInfo/WeatherInfo';
+import RightBottomContainer from 'components/RightBottomContainer/RightBottomContainer';
 import styles from './History.module.css';
+
+const useStyles = makeStyles(theme => ({
+  typeRoot: {
+    fontSize: '1.8rem',
+  },
+}));
 
 const getWeekDays = () => {
   return WEEK_DAYS.map(day => <th key={day}>{day}</th>);
@@ -18,6 +30,9 @@ const daysInMonth = (iMonth, iYear) => {
 
 const History = props => {
   const { monthTemperature } = props;
+
+  const classes = useStyles();
+
   const [month, setMonth] = useState(new Date().getMonth());
 
   const changeOption = event => {
@@ -30,10 +45,8 @@ const History = props => {
 
     let date = 1;
     for (let i = 0; i < 6; i += 1) {
-      // creates a table row
       const rowCells = [];
 
-      // creating individual cells, filing them up with data.
       for (let j = 0; j < 7; j += 1) {
         if (i === 0 && j < firstDay) {
           rowCells.push({ key: `${i}${j}` });
@@ -57,40 +70,79 @@ const History = props => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.selectContainer}>
-        <TextField select onChange={changeOption} value={month}>
-          {MONTHS.map((option, index) => (
-            <MenuItem key={option} value={index}>
-              {option}
-            </MenuItem>
-          ))}
-        </TextField>
+      <div className={styles.subContainer}>
+        <div className={styles.selectContainer}>
+          <TextField select onChange={changeOption} value={month}>
+            {MONTHS.map((option, index) => (
+              <MenuItem key={option} value={index}>
+                {option}
+              </MenuItem>
+            ))}
+          </TextField>
+        </div>
+        <table className={styles.calendarTable}>
+          <thead>
+            <tr>{getWeekDays()}</tr>
+          </thead>
+          <tbody>
+            {getTableContent().map((row, index) => (
+              <tr key={WEEK_DAYS[index]}>
+                {row.map(cell => {
+                  if (cell.dayNumber) {
+                    return (
+                      <td key={cell.key}>
+                        <CalendarDay
+                          dayNumber={cell.dayNumber}
+                          dayTemperature={cell.dayTemperature}
+                          nightTemperature={cell.nightTemperature}
+                        />
+                      </td>
+                    );
+                  }
+                  return <td key={cell.key} />;
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-      <table className={styles.calendarTable}>
-        <thead>
-          <tr>{getWeekDays()}</tr>
-        </thead>
-        <tbody>
-          {getTableContent().map((row, index) => (
-            <tr key={WEEK_DAYS[index]}>
-              {row.map(cell => {
-                if (cell.dayNumber) {
-                  return (
-                    <td key={cell.key}>
-                      <CalendarDay
-                        dayNumber={cell.dayNumber}
-                        dayTemperature={cell.dayTemperature}
-                        nightTemperature={cell.nightTemperature}
-                      />
-                    </td>
-                  );
-                }
-                return <td key={cell.key} />;
-              })}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <RightBottomContainer>
+        <div className={styles.textInfoContainer}>
+          <div className={styles.textInfo}>
+            <Typography variant="h5">Clear days</Typography>
+            <Typography variant="h5" classes={{ root: classes.typeRoot }}>
+              2
+            </Typography>
+          </div>
+          <div className={styles.textInfo}>
+            <Typography variant="h5">Partly cloudy days</Typography>
+            <Typography variant="h5" classes={{ root: classes.typeRoot }}>
+              10
+            </Typography>
+          </div>
+          <div className={styles.textInfo}>
+            <Typography variant="h5">Cloudy days</Typography>
+            <Typography variant="h5" classes={{ root: classes.typeRoot }}>
+              14
+            </Typography>
+          </div>
+          <div className={styles.textInfo}>
+            <Typography variant="h5">Rainy days</Typography>
+            <Typography variant="h5" classes={{ root: classes.typeRoot }}>
+              5
+            </Typography>
+          </div>
+        </div>
+        <WeatherInfo progressValue={53} text="Wind | TO DO" withPercent>
+          <WithSvg component={Precipitation} size={20} />
+        </WeatherInfo>
+        <WeatherInfo progressValue={53} text="Wind | TO DO" withPercent>
+          <WithSvg component={Precipitation} size={20} />
+        </WeatherInfo>
+        <WeatherInfo progressValue={53} text="Wind | TO DO" withPercent>
+          <WithSvg component={Precipitation} size={20} />
+        </WeatherInfo>
+      </RightBottomContainer>
     </div>
   );
 };

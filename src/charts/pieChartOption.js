@@ -3,6 +3,7 @@ const getPieChartOption = params => {
     title: {
       text: 'Average per month',
       left: '20',
+      top: '25',
     },
     legend: {
       type: 'scroll',

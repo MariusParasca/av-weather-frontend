@@ -11,6 +11,7 @@ import WithSvg from 'components/WithSvg/WithSvg';
 import LabeledCircularProgress from 'components/LabeledCircularProgress/LabeledCircularProgress';
 import { MAX_UV, MAX_PRESSURE, MAX_VISIBILITY, MAX_DEW_POINT, MAX_WIND } from 'constants/constants';
 import Spinner from 'components/Spinner/Spinner';
+import RightBottomContainer from 'components/RightBottomContainer/RightBottomContainer';
 import WeatherInfo from './WeatherInfo/WeatherInfo';
 import styles from './TodayWeatherInfo.module.css';
 
@@ -22,7 +23,7 @@ const TodayWeatherInfo = props => {
   return isLoading ? (
     <Spinner />
   ) : (
-    <div className={styles.paper}>
+    <RightBottomContainer>
       <div className={styles.windContainer}>
         <LabeledCircularProgress
           labelFontSize={16}
@@ -33,9 +34,6 @@ const TodayWeatherInfo = props => {
         <Typography variant="subtitle1">Max wind (m/s)</Typography>
       </div>
       <div className={styles.otherContainer}>
-        <WeatherInfo progressValue={53} text="Wind | TO DO" withPercent>
-          <WithSvg component={Precipitation} size={20} />
-        </WeatherInfo>
         <WeatherInfo progressValue={humidity * 100} text="Humidity" withPercent>
           <WithSvg component={Humidity} size={20} />
         </WeatherInfo>
@@ -70,7 +68,7 @@ const TodayWeatherInfo = props => {
           <WithSvg component={Precipitation} size={20} />
         </WeatherInfo>
       </div>
-    </div>
+    </RightBottomContainer>
   );
 };
 
