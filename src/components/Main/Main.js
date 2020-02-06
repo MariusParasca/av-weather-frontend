@@ -183,14 +183,16 @@ const Main = () => {
                   <AirGauge className={styles.rightWeatherContainer} airQuality={73} />
                 </Route>
               </div>
-              <div className={styles.additionalContainer}>
-                <Route exact path={PageRoute.home}>
+              <Route exact path={PageRoute.home}>
+                <div className={styles.additionalContainer}>
                   <HomeAdditional sunsetTime={currentWeather.sunsetTime} sunriseTime={currentWeather.sunriseTime} />
-                </Route>
-                <Route path={PageRoute.history}>
+                </div>
+              </Route>
+              <Route path={PageRoute.history}>
+                <div className={styles.additionalContainer}>
                   <HistoryAdditional />
-                </Route>
-              </div>
+                </div>
+              </Route>
             </div>
           </Route>
           <div className={styles.bottomContainer}>

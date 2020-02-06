@@ -17,3 +17,17 @@ export const CHART_SUB_PAGE_TITLES = [
   'Wind (m/s)',
   'Pressure (mb)',
 ];
+export const MONTHS = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];

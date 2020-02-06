@@ -1,0 +1,15 @@
+.container {
+  padding-left: 48px;
+}
+
+table.calendarTable {
+  border-spacing: 10px;
+}
+
+.calendarTable thead tr th {
+  padding-bottom: 10px;
+}
+
+.selectContainer {
+  margin-bottom: 10px;
+}
