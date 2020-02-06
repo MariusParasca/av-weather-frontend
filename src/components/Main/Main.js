@@ -17,6 +17,7 @@ import Favorites from 'routes/Favorites/Favorites';
 import Map from 'routes/Map/Map';
 import AirGauge from 'components/AirGauge/AirGauge';
 import HomeAdditional from 'routes/Home/HomeAdditional/HomeAdditional';
+import HistoryAdditional from 'routes/History/HistoryAdditional/HistoryAdditional';
 import CurrentWeather from './CurrentWeather/CurrentWeather';
 import styles from './Main.module.css';
 
@@ -182,9 +183,12 @@ const Main = () => {
                   <AirGauge className={styles.rightWeatherContainer} airQuality={73} />
                 </Route>
               </div>
-              <div>
+              <div className={styles.additionalContainer}>
                 <Route exact path={PageRoute.home}>
                   <HomeAdditional sunsetTime={currentWeather.sunsetTime} sunriseTime={currentWeather.sunriseTime} />
+                </Route>
+                <Route path={PageRoute.history}>
+                  <HistoryAdditional />
                 </Route>
               </div>
             </div>

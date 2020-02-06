@@ -25,7 +25,7 @@ const SunInfo = props => {
   const screenSunriseTime = getTimeFromDate(createDateFromEpoch(sunriseTime));
   const screenSunsetTime = getTimeFromDate(createDateFromEpoch(sunsetTime));
   return (
-    <div className={styles.drawerContainer}>
+    <div>
       <div className={styles.sunInfoContainer}>
         <div className={styles.sunInfoMiniContainer}>
           <WbSunnyIcon classes={{ root: classes.iconRoot }} />
