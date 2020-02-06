@@ -106,7 +106,7 @@ const History = props => {
           </tbody>
         </table>
       </div>
-      <RightBottomContainer>
+      <RightBottomContainer className={styles.justifyEnd}>
         <div className={styles.textInfoContainer}>
           <div className={styles.textInfo}>
             <Typography variant="h5">Clear days</Typography>

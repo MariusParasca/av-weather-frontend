@@ -40,3 +40,7 @@ table.calendarTable {
 .otherContainer {
   margin-left: 25px;
 }
+
+.justifyEnd {
+  justify-content: flex-end;
+}
