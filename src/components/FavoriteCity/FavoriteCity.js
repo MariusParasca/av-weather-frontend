@@ -6,7 +6,7 @@ import { getTimeFromDate } from 'utils/dateTimeUtils';
 import StarIcon from '@material-ui/icons/Star';
 import styles from './FavoriteCity.module.css';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   starButtonRoot: {
     padding: 0,
     minWidth: 0,
@@ -22,7 +22,7 @@ const getTimeBasedOnTimeZone = offset => {
 };
 
 const FavoriteCity = props => {
-  const { city, country, degreeValue } = props;
+  const { city, country, degreeValue, utcOffset } = props;
 
   const classes = useStyles();
 
@@ -30,27 +30,24 @@ const FavoriteCity = props => {
 
   const startClock = useCallback(() => {
     if (city && country) {
-      const countryTimeData = -480;
       let date;
-      if (countryTimeData) date = getTimeBasedOnTimeZone(countryTimeData);
+      if (utcOffset) date = getTimeBasedOnTimeZone(utcOffset);
 
       if (date) {
         setTime(getTimeFromDate(date));
       }
     }
-  }, [city, country]);
+  }, [city, country, utcOffset]);
 
   useEffect(() => {
     startClock();
     setInterval(startClock, 60 * 1000);
   }, [startClock]);
 
-  console.log(new Date().getTimezoneOffset());
-
   return (
     <div className={styles.container}>
       <div className={styles.localTimeContainer}>
-        <Typography variant="h6">Local time: {time}</Typography>
+        <Typography variant="h6">{utcOffset && `Local time: ${time}`}</Typography>
         <Button classes={{ root: classes.starButtonRoot }}>
           <StarIcon />
         </Button>
@@ -72,6 +69,11 @@ FavoriteCity.propTypes = {
   city: PropTypes.string.isRequired,
   country: PropTypes.string.isRequired,
   degreeValue: PropTypes.number.isRequired,
+  utcOffset: PropTypes.number,
+};
+
+FavoriteCity.defaultProps = {
+  utcOffset: undefined,
 };
 
 export default FavoriteCity;

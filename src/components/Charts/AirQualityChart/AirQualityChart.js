@@ -7,7 +7,7 @@ import getAirQualityChartOption from 'charts/airQualityChartOption';
 const AirQualityChart = props => {
   const { value } = props;
 
-  return <ReactEcharts option={getAirQualityChartOption(73)} />;
+  return <ReactEcharts option={getAirQualityChartOption(value)} />;
 };
 
 AirQualityChart.propTypes = {
