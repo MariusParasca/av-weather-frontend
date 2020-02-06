@@ -23,7 +23,7 @@ table.calendarTable {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding-bottom: 10px;
+  padding-bottom: 48px;
   height: 100%;
 }
 

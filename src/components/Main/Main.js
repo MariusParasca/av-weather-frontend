@@ -187,7 +187,7 @@ const Main = () => {
 
   return (
     <div className={styles.container}>
-      {false && isLoading ? (
+      {isLoading ? (
         <Spinner />
       ) : (
         <>
