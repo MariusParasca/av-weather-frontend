@@ -36,3 +36,7 @@ table.calendarTable {
   justify-content: space-between;
   margin-top: 5px;
 }
+
+.otherContainer {
+  margin-left: 25px;
+}

@@ -7,7 +7,7 @@ import { ReactComponent as Precipitation } from 'svgs/precipitation.svg';
 import { WEEK_DAYS, MONTHS } from 'constants/constants';
 import CalendarDay from 'components/CalendarDay/CalendarDay';
 import WithSvg from 'components/WithSvg/WithSvg';
-import LabeledCircularProgress from 'components/LabeledCircularProgress/LabeledCircularProgress';
+import Wind from 'components/Wind/Wind';
 import WeatherInfo from 'components/TodayWeatherInfo/WeatherInfo/WeatherInfo';
 import RightBottomContainer from 'components/RightBottomContainer/RightBottomContainer';
 import styles from './History.module.css';
@@ -29,7 +29,7 @@ const daysInMonth = (iMonth, iYear) => {
 };
 
 const History = props => {
-  const { monthTemperature } = props;
+  const { monthTemperature, maxWind, precipitation, humidity } = props;
 
   const classes = useStyles();
 
@@ -132,16 +132,16 @@ const History = props => {
               5
             </Typography>
           </div>
+          <Wind maxWind={maxWind} />
         </div>
-        <WeatherInfo progressValue={53} text="Wind | TO DO" withPercent>
-          <WithSvg component={Precipitation} size={20} />
-        </WeatherInfo>
-        <WeatherInfo progressValue={53} text="Wind | TO DO" withPercent>
-          <WithSvg component={Precipitation} size={20} />
-        </WeatherInfo>
-        <WeatherInfo progressValue={53} text="Wind | TO DO" withPercent>
-          <WithSvg component={Precipitation} size={20} />
-        </WeatherInfo>
+        <div className={styles.otherContainer}>
+          <WeatherInfo progressValue={humidity * 100} text="Humidity" withPercent>
+            <WithSvg component={Humidity} size={20} />
+          </WeatherInfo>
+          <WeatherInfo progressValue={precipitation * 100} text="Precipitation" withPercent>
+            <WithSvg component={Precipitation} size={20} />
+          </WeatherInfo>
+        </div>
       </RightBottomContainer>
     </div>
   );

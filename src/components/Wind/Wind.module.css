@@ -1,0 +1,10 @@
+.windIconContainer {
+  margin-left: 16px;
+  margin-right: 10px;
+}
+
+.windContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

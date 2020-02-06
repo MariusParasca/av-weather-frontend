@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Typography } from '@material-ui/core';
 
 import { ReactComponent as Humidity } from 'svgs/humidity.svg';
 import { ReactComponent as Precipitation } from 'svgs/precipitation.svg';
@@ -8,10 +7,10 @@ import { ReactComponent as UvIndex } from 'svgs/uvIndex.svg';
 import { ReactComponent as Cloud } from 'svgs/cloud.svg';
 
 import WithSvg from 'components/WithSvg/WithSvg';
-import LabeledCircularProgress from 'components/LabeledCircularProgress/LabeledCircularProgress';
-import { MAX_UV, MAX_PRESSURE, MAX_VISIBILITY, MAX_DEW_POINT, MAX_WIND } from 'constants/constants';
+import { MAX_UV, MAX_PRESSURE, MAX_VISIBILITY, MAX_DEW_POINT } from 'constants/constants';
 import Spinner from 'components/Spinner/Spinner';
 import RightBottomContainer from 'components/RightBottomContainer/RightBottomContainer';
+import Wind from 'components/Wind/Wind';
 import WeatherInfo from './WeatherInfo/WeatherInfo';
 import styles from './TodayWeatherInfo.module.css';
 
@@ -24,15 +23,7 @@ const TodayWeatherInfo = props => {
     <Spinner />
   ) : (
     <RightBottomContainer>
-      <div className={styles.windContainer}>
-        <LabeledCircularProgress
-          labelFontSize={16}
-          progressValue={(maxWind / MAX_WIND) * 100}
-          progressText={String(Number(maxWind).toFixed(1))}
-        />
-        <WithSvg component={Humidity} size={20} className={styles.windIconContainer} />
-        <Typography variant="subtitle1">Max wind (m/s)</Typography>
-      </div>
+      <Wind maxWind={maxWind} />
       <div className={styles.otherContainer}>
         <WeatherInfo progressValue={humidity * 100} text="Humidity" withPercent>
           <WithSvg component={Humidity} size={20} />

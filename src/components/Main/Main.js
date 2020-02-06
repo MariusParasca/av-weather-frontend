@@ -239,7 +239,12 @@ const Main = () => {
               <Charts hourly={currentWeather.hourly} daily={weatherForecast} />
             </Route>
             <Route path={PageRoute.history}>
-              <History monthTemperature={february} />
+              <History
+                monthTemperature={february}
+                maxWind={todayWeather.maxWind}
+                humidity={todayWeather.humidity}
+                precipitation={todayWeather.precipitation}
+              />
             </Route>
             <Route path={PageRoute.favorites}>
               <Favorites />
