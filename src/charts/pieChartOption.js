@@ -15,13 +15,17 @@ const getPieChartOption = params => {
     },
     series: [
       {
-        name: '姓名',
         type: 'pie',
         radius: '55%',
         center: ['40%', '50%'],
-        data: [{ value: 33.33, selected: true }, { value: 33.33 }, { value: 33.33 }],
+        data: [
+          { value: 33.33, selected: true, name: 'Sunny' },
+          { value: 33.33, name: 'Cloudy' },
+          { value: 33.33, name: 'Rainy' },
+        ],
         label: {
-          show: false,
+          show: true,
+          position: 'inside',
         },
         emphasis: {
           itemStyle: {
