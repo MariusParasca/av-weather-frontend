@@ -9,6 +9,7 @@ import useHttp from 'hooks/useHttp';
 import { PageRoute, ChartsRoute } from 'utils/routes';
 
 import { createDateFromEpoch, getHourFromEpoch } from 'utils/dateTimeUtils';
+import { LOCATIONS } from 'constants/collections';
 import Spinner from 'components/Spinner/Spinner';
 import Home from 'routes/Home/Home';
 import Charts from 'routes/Charts/Charts';
@@ -18,6 +19,7 @@ import Map from 'routes/Map/Map';
 import AirGauge from 'components/AirGauge/AirGauge';
 import HomeAdditional from 'routes/Home/HomeAdditional/HomeAdditional';
 import HistoryAdditional from 'routes/History/HistoryAdditional/HistoryAdditional';
+import db from 'utils/firebaseFirestore';
 import CurrentWeather from './CurrentWeather/CurrentWeather';
 import styles from './Main.module.css';
 
@@ -117,16 +119,30 @@ const Main = () => {
     sendRequestIpStack(ipStackAxios, ['/check'], 'get');
   }, [sendRequestIpStack]);
 
+  const saveLocation = useCallback(async data => {
+    const locationRef = db.collection(LOCATIONS);
+    try {
+      const response = await locationRef.where('city', '==', data.city).get();
+      if (response.empty) {
+        locationRef.add({ ...data, utcOffset: new Date().getTimezoneOffset() });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
   useEffect(() => {
     if (ipStackHttp.data) {
-      setLocationData({
+      const data = {
         city: ipStackHttp.data.city,
         country: ipStackHttp.data.country_name,
         latitude: ipStackHttp.data.latitude,
         longitude: ipStackHttp.data.longitude,
-      });
+      };
+      saveLocation(data);
+      setLocationData(data);
     }
-  }, [ipStackHttp.data]);
+  }, [ipStackHttp.data, saveLocation]);
 
   const tackleCurrentWeather = useCallback(data => {
     setCurrentWeather({

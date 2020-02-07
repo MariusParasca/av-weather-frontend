@@ -20,7 +20,10 @@ const CurrentWeather = props => {
 
   useEffect(() => {
     startClock();
-    setInterval(startClock, 60 * 1000);
+    const interval = setInterval(startClock, 60 * 1000);
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   return (
