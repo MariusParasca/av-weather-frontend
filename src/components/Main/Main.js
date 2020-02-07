@@ -267,7 +267,7 @@ const Main = () => {
               />
             </Route>
             <Route path={PageRoute.favorites}>
-              <Favorites />
+              <Favorites city={locationData.city} />
             </Route>
           </div>
         </>
