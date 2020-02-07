@@ -124,7 +124,11 @@ const Main = () => {
     try {
       const response = await locationRef.where('city', '==', data.city).get();
       if (response.empty) {
-        locationRef.add({ ...data, utcOffset: new Date().getTimezoneOffset() });
+        locationRef.add({
+          ...data,
+          utcOffset: new Date().getTimezoneOffset(),
+          dateTime: new Date(),
+        });
       }
     } catch (error) {
       console.log(error);

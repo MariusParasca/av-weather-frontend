@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles, Typography, Button } from '@material-ui/core';
 
-import { getTimeFromDate } from 'utils/dateTimeUtils';
+import { getTimeFromDate, getTimeBasedOnTimeZone } from 'utils/dateTimeUtils';
 import StarIcon from '@material-ui/icons/Star';
 import styles from './FavoriteCity.module.css';
 
@@ -12,14 +12,6 @@ const useStyles = makeStyles(() => ({
     minWidth: 0,
   },
 }));
-
-const getTimeBasedOnTimeZone = offset => {
-  const date = new Date();
-  const utc = date.getTime() + date.getTimezoneOffset() * 60000;
-  const newDate = new Date(utc + 60000 * offset);
-
-  return newDate;
-};
 
 const FavoriteCity = props => {
   const { city, country, degreeValue, utcOffset } = props;
@@ -41,7 +33,10 @@ const FavoriteCity = props => {
 
   useEffect(() => {
     startClock();
-    setInterval(startClock, 60 * 1000);
+    const interval = setInterval(startClock, 60 * 1000);
+    return () => {
+      clearInterval(interval);
+    };
   }, [startClock]);
 
   return (

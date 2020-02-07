@@ -31,3 +31,5 @@ export const MONTHS = [
   'November',
   'December',
 ];
+
+export const ONE_MINUTE_IN_MILLISECONDS = 60000;
