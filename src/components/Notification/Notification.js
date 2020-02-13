@@ -25,7 +25,7 @@ Notification.propTypes = {
 
 Notification.defaultProps = {
   color: 'error',
-  text: 'Error getting the weather data!',
+  text: 'Error getting/deleting the data!',
 };
 
 export default Notification;

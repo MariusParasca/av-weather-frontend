@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const FavoriteCity = props => {
-  const { city, country, degreeValue, utcOffset } = props;
+  const { city, country, degreeValue, utcOffset, onClickIcon } = props;
 
   const classes = useStyles();
 
@@ -43,7 +43,7 @@ const FavoriteCity = props => {
     <div className={styles.container}>
       <div className={styles.localTimeContainer}>
         <Typography variant="h6">{utcOffset && `Local time: ${time}`}</Typography>
-        <Button classes={{ root: classes.starButtonRoot }}>
+        <Button classes={{ root: classes.starButtonRoot }} onClick={onClickIcon}>
           <StarIcon />
         </Button>
       </div>
@@ -65,6 +65,7 @@ FavoriteCity.propTypes = {
   country: PropTypes.string.isRequired,
   degreeValue: PropTypes.number.isRequired,
   utcOffset: PropTypes.number,
+  onClickIcon: PropTypes.func.isRequired,
 };
 
 FavoriteCity.defaultProps = {

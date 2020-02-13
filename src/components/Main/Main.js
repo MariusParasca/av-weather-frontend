@@ -197,7 +197,6 @@ const Main = props => {
     }
   }, [locationData.city, getWeatherForecast, locationData.latitude, locationData.longitude, getWeatherByDarkSky]);
 
-  console.log('props', props);
   return (
     <div className={styles.container}>
       <Notification isOpen={error} handleClose={handleCloseError} />
@@ -279,8 +278,8 @@ const Main = props => {
 };
 
 Main.propTypes = {
-  ipStackHttp: PropTypes.object.isRequired,
-  location: PropTypes.object.isRequired,
+  ipStackHttp: PropTypes.objectOf(PropTypes.any).isRequired,
+  location: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default withRouter(Main);

@@ -164,7 +164,7 @@ const SearchBox = props => {
 SearchBox.propTypes = {
   placeholder: PropTypes.string,
   className: PropTypes.string,
-  ipStackHttp: PropTypes.object.isRequired,
+  ipStackHttp: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 SearchBox.defaultProps = {
