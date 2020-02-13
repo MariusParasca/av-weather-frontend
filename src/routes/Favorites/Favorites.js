@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import db from 'utils/firebaseFirestore';
 import FavoriteCity from 'components/FavoriteCity/FavoriteCity';
+import { Typography } from '@material-ui/core';
 import styles from './Favorites.module.css';
 
 const Favorites = props => {
@@ -34,6 +35,7 @@ const Favorites = props => {
 
   return (
     <div className={styles.container}>
+      {favorites.length === 0 && <Typography variant="h2">No favorites places</Typography>}
       {favorites.map(favorite => (
         <FavoriteCity
           key={favorite.city}
@@ -43,9 +45,6 @@ const Favorites = props => {
           degreeValue={-2}
         />
       ))}
-      <FavoriteCity utcOffset={-480} city="Los Angeles" country="America" degreeValue={-2} />
-      <FavoriteCity city="Iasi" country="Romania" degreeValue={-2} />
-      <FavoriteCity city="IASI" country="Romania" degreeValue={-2} />
     </div>
   );
 };

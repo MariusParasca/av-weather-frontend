@@ -1,15 +1,14 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { Route } from 'react-router-dom';
 
 import darkSkyAxios from 'axios/darkSky';
 import hereWeatherAxios from 'axios/hereWeather';
-import ipStackAxios from 'axios/ipStack';
 import { DAY_NO_HOURS, WEEK_DAYS } from 'constants/constants';
 import useHttp from 'hooks/useHttp';
 import { PageRoute, ChartsRoute } from 'utils/routes';
 
 import { createDateFromEpoch, getHourFromEpoch } from 'utils/dateTimeUtils';
-import { LOCATIONS } from 'constants/collections';
 import Spinner from 'components/Spinner/Spinner';
 import Home from 'routes/Home/Home';
 import Charts from 'routes/Charts/Charts';
@@ -17,9 +16,9 @@ import History from 'routes/History/History';
 import Favorites from 'routes/Favorites/Favorites';
 import Map from 'routes/Map/Map';
 import AirGauge from 'components/AirGauge/AirGauge';
+import Notification from 'components/Notification/Notification';
 import HomeAdditional from 'routes/Home/HomeAdditional/HomeAdditional';
 import HistoryAdditional from 'routes/History/HistoryAdditional/HistoryAdditional';
-import db from 'utils/firebaseFirestore';
 import CurrentWeather from './CurrentWeather/CurrentWeather';
 import styles from './Main.module.css';
 
@@ -56,7 +55,14 @@ const february = [
   { dayTemperature: 2, nightTemperature: -3 },
 ];
 
-const Main = () => {
+const Main = props => {
+  const { ipStackHttp } = props;
+  const [error, setError] = useState(false);
+
+  const handleCloseError = () => {
+    setError(false);
+  };
+
   const [locationData, setLocationData] = useState({ latitude: 0, longitude: 0, city: '', country: '' });
 
   const [currentWeather, setCurrentWeather] = useState({
@@ -86,8 +92,6 @@ const Main = () => {
   const hereWeatherHttp = useHttp();
   const { sendRequest: sendRequestHereWeather } = hereWeatherHttp;
 
-  const ipStackHttp = useHttp();
-  const { sendRequest: sendRequestIpStack } = ipStackHttp;
   const darkSkyHttp = useHttp();
   const { sendRequest: sendRequestDarkSky } = darkSkyHttp;
 
@@ -115,25 +119,10 @@ const Main = () => {
   );
 
   useEffect(() => {
-    setIsLoading(true);
-    sendRequestIpStack(ipStackAxios, ['/check'], 'get');
-  }, [sendRequestIpStack]);
-
-  const saveLocation = useCallback(async data => {
-    const locationRef = db.collection(LOCATIONS);
-    try {
-      const response = await locationRef.where('city', '==', data.city).get();
-      if (response.empty) {
-        locationRef.add({
-          ...data,
-          utcOffset: new Date().getTimezoneOffset(),
-          dateTime: new Date(),
-        });
-      }
-    } catch (error) {
-      console.log(error);
+    if (ipStackHttp.error || darkSkyHttp.error) {
+      setError(true);
     }
-  }, []);
+  }, [darkSkyHttp.error, ipStackHttp.error]);
 
   useEffect(() => {
     if (ipStackHttp.data) {
@@ -143,10 +132,9 @@ const Main = () => {
         latitude: ipStackHttp.data.latitude,
         longitude: ipStackHttp.data.longitude,
       };
-      saveLocation(data);
       setLocationData(data);
     }
-  }, [ipStackHttp.data, saveLocation]);
+  }, [ipStackHttp.data]);
 
   const tackleCurrentWeather = useCallback(data => {
     setCurrentWeather({
@@ -207,6 +195,7 @@ const Main = () => {
 
   return (
     <div className={styles.container}>
+      <Notification isOpen={error} handleClose={handleCloseError} />
       {isLoading ? (
         <Spinner />
       ) : (
@@ -274,6 +263,10 @@ const Main = () => {
       )}
     </div>
   );
+};
+
+Main.propTypes = {
+  ipStackHttp: PropTypes.object.isRequired,
 };
 
 export default Main;
