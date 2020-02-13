@@ -21,19 +21,25 @@ const FavoriteCity = props => {
   const [time, setTime] = useState('00:00');
 
   const startClock = useCallback(() => {
-    if (city && country) {
-      let date;
-      if (utcOffset) date = getTimeBasedOnTimeZone(utcOffset);
+    if (utcOffset) {
+      const date = getTimeBasedOnTimeZone(utcOffset);
 
       if (date) {
         setTime(getTimeFromDate(date));
       }
+
+      return date.getSeconds();
     }
-  }, [city, country, utcOffset]);
+  }, [utcOffset]);
 
   useEffect(() => {
-    startClock();
-    const interval = setInterval(startClock, 60 * 1000);
+    const seconds = startClock();
+    const firstClockAfter = 60 - seconds;
+    let interval;
+    setTimeout(() => {
+      startClock();
+      interval = setInterval(startClock, 60 * 1000);
+    }, firstClockAfter * 1000);
     return () => {
       clearInterval(interval);
     };

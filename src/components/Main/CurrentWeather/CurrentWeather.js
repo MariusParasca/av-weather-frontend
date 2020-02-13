@@ -16,11 +16,17 @@ const CurrentWeather = props => {
     const currentDate = new Date();
 
     setCurrentTime(getTimeFromDate(currentDate));
+    return currentDate.getSeconds();
   };
 
   useEffect(() => {
-    startClock();
-    const interval = setInterval(startClock, 60 * 1000);
+    const seconds = startClock();
+    const firstClockAfter = 60 - seconds;
+    let interval;
+    setTimeout(() => {
+      startClock();
+      interval = setInterval(startClock, 60 * 1000);
+    }, firstClockAfter * 1000);
     return () => {
       clearInterval(interval);
     };
