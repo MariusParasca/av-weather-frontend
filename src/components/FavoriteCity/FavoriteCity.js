@@ -27,7 +27,7 @@ const FavoriteCity = props => {
       if (date) {
         setTime(getTimeFromDate(date));
       }
-      console.log(getTimeFromDate(date));
+
       return date.getSeconds();
     }
   }, [utcOffset]);
