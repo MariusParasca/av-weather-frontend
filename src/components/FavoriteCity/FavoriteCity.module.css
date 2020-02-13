@@ -13,6 +13,7 @@
 
 .degreeValue {
   align-self: flex-start;
+  flex: 1;
 }
 
 .imageContainer {

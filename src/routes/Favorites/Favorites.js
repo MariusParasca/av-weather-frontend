@@ -82,7 +82,8 @@ const Favorites = props => {
               utcOffset={favorite.utcOffset}
               city={favorite.city}
               country={favorite.country}
-              degreeValue={-2}
+              latitude={favorite.latitude}
+              longitude={favorite.longitude}
               onClickIcon={() => deleteFavorite(favorite.id)}
             />
           ))}

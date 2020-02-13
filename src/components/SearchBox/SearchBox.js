@@ -115,8 +115,8 @@ const SearchBox = props => {
       saveLocation({
         city: value.title,
         country: country.length > 1 ? country[country.length - 1] : country[0],
-        latitude: value.position[0],
-        longitude: value.position[1],
+        latitude: value.position[1],
+        longitude: value.position[0],
         utcOffset: time.utcOffset(),
       });
     },
