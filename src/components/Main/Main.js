@@ -191,11 +191,20 @@ const Main = props => {
   }, [darkSkyHttp.data, tackleForecastWeather, tackleCurrentWeather]);
 
   useEffect(() => {
-    if (locationData.city) {
+    const isOnTheCorrectRoute =
+      [PageRoute.home, PageRoute.history].includes(location.pathname) || location.pathname.includes(PageRoute.charts);
+    if (locationData.city && isOnTheCorrectRoute) {
       // getWeatherForecast(locationData.city);
       getWeatherByDarkSky(locationData.latitude, locationData.longitude);
     }
-  }, [locationData.city, getWeatherForecast, locationData.latitude, locationData.longitude, getWeatherByDarkSky]);
+  }, [
+    locationData.city,
+    getWeatherForecast,
+    locationData.latitude,
+    locationData.longitude,
+    getWeatherByDarkSky,
+    location.pathname,
+  ]);
 
   return (
     <div className={styles.container}>
