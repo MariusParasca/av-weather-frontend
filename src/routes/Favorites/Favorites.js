@@ -1,15 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { LOCATIONS } from 'constants/collections';
+import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
+import { LOCATIONS } from 'constants/collections';
 import db from 'utils/firebaseFirestore';
 import FavoriteCity from 'components/FavoriteCity/FavoriteCity';
-import { Typography } from '@material-ui/core';
+import Spinner from 'components/Spinner/Spinner';
 import styles from './Favorites.module.css';
 
 const Favorites = props => {
   const { city } = props;
+
   const [favorites, setFavorites] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getAllFavorites = useCallback(async () => {
     try {
@@ -23,6 +26,7 @@ const Favorites = props => {
           }
         }
         setFavorites(docs);
+        setIsLoading(false);
       }
     } catch (error) {
       console.log(error);
@@ -30,21 +34,28 @@ const Favorites = props => {
   }, [city]);
 
   useEffect(() => {
+    setIsLoading(true);
     getAllFavorites();
   }, [getAllFavorites]);
 
   return (
     <div className={styles.container}>
-      {favorites.length === 0 && <Typography variant="h2">No favorites places</Typography>}
-      {favorites.map(favorite => (
-        <FavoriteCity
-          key={favorite.city}
-          utcOffset={favorite.utcOffset}
-          city={favorite.city}
-          country={favorite.country}
-          degreeValue={-2}
-        />
-      ))}
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <>
+          {favorites.length === 0 && <Typography variant="h2">No favorites places</Typography>}
+          {favorites.map(favorite => (
+            <FavoriteCity
+              key={favorite.city}
+              utcOffset={favorite.utcOffset}
+              city={favorite.city}
+              country={favorite.country}
+              degreeValue={-2}
+            />
+          ))}
+        </>
+      )}
     </div>
   );
 };

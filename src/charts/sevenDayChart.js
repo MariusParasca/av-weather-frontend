@@ -52,14 +52,12 @@ const get7DaysChartOption = (xLabel, dayData, nightData) => {
       {
         name: 'Day',
         type: 'line',
-        stack: '总量',
         areaStyle: {},
         data: dayData,
       },
       {
         name: 'Night',
         type: 'line',
-        stack: '总量',
         areaStyle: {},
         data: nightData,
       },

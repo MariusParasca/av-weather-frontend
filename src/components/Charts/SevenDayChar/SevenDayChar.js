@@ -15,15 +15,15 @@ const SevenDayChar = props => {
 
   if (data.length > 0) {
     xLabel.push('Today');
-    dayData.push(Math.round(data[0].temperatureLow));
-    nightData.push(Math.round(data[0].temperatureHigh));
+    dayData.push(Math.round(data[0].temperatureHigh));
+    nightData.push(Math.round(data[0].temperatureLow));
   }
 
   for (let i = 1; i < data.length; i += 1) {
     const dataElement = data[i];
     xLabel.push(WEEK_DAYS[createDateFromEpoch(dataElement.time).getDay()]);
-    dayData.push(Math.round(dataElement.temperatureLow));
-    nightData.push(Math.round(dataElement.temperatureHigh));
+    dayData.push(Math.round(dataElement.temperatureHigh));
+    nightData.push(Math.round(dataElement.temperatureLow));
   }
 
   return <ReactEcharts option={get7DaysChartOption(xLabel, dayData, nightData)} />;

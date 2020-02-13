@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { Route } from 'react-router-dom';
+import { Route, withRouter } from 'react-router-dom';
 
 import darkSkyAxios from 'axios/darkSky';
 import hereWeatherAxios from 'axios/hereWeather';
@@ -56,7 +56,7 @@ const february = [
 ];
 
 const Main = props => {
-  const { ipStackHttp } = props;
+  const { ipStackHttp, location } = props;
   const [error, setError] = useState(false);
 
   const handleCloseError = () => {
@@ -197,6 +197,7 @@ const Main = props => {
     }
   }, [locationData.city, getWeatherForecast, locationData.latitude, locationData.longitude, getWeatherByDarkSky]);
 
+  console.log('props', props);
   return (
     <div className={styles.container}>
       <Notification isOpen={error} handleClose={handleCloseError} />
@@ -245,7 +246,7 @@ const Main = props => {
           </div>
         </Route>
         <div className={styles.bottomContainer}>
-          {isLoading ? (
+          {isLoading && !location.pathname.includes(PageRoute.favorites) ? (
             <Spinner />
           ) : (
             <>
@@ -279,6 +280,7 @@ const Main = props => {
 
 Main.propTypes = {
   ipStackHttp: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
 };
 
-export default Main;
+export default withRouter(Main);
