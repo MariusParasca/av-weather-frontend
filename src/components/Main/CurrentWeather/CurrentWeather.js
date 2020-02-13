@@ -22,11 +22,7 @@ const CurrentWeather = props => {
   useEffect(() => {
     const seconds = startClock();
     const firstClockAfter = 60 - seconds;
-    let interval;
-    setTimeout(() => {
-      startClock();
-      interval = setInterval(startClock, 60 * 1000);
-    }, firstClockAfter * 1000);
+    const interval = setTimeout(startClock, firstClockAfter * 1000);
     return () => {
       clearInterval(interval);
     };

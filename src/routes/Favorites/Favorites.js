@@ -44,9 +44,10 @@ const Favorites = props => {
   }, [city, setNotification]);
 
   const deleteFavorite = useCallback(
-    id => {
+    async id => {
       try {
-        db.collection(LOCATIONS)
+        await db
+          .collection(LOCATIONS)
           .doc(id)
           .delete();
         setFavorites(favorites.filter(favorite => favorite.id !== id));
