@@ -75,7 +75,6 @@ const Favorites = props => {
         <Spinner />
       ) : (
         <>
-          {favorites.length === 0 && <Typography variant="h2">No favorite places</Typography>}
           {favorites.map(favorite => (
             <FavoriteCity
               key={favorite.city}
@@ -86,6 +85,7 @@ const Favorites = props => {
               onClickIcon={() => deleteFavorite(favorite.id)}
             />
           ))}
+          {favorites.length === 0 && <Typography variant="h2">No favorite places</Typography>}
         </>
       )}
     </div>
