@@ -125,6 +125,10 @@ const Main = props => {
   }, [darkSkyHttp.error, ipStackHttp.error]);
 
   useEffect(() => {
+    setIsLoading(true);
+  }, [ipStackHttp.loading]);
+
+  useEffect(() => {
     if (ipStackHttp.data) {
       const data = {
         city: ipStackHttp.data.city,
@@ -196,71 +200,79 @@ const Main = props => {
   return (
     <div className={styles.container}>
       <Notification isOpen={error} handleClose={handleCloseError} />
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <>
-          <Route
-            exact
-            path={[
-              PageRoute.home,
-              PageRoute.map,
-              `${PageRoute.charts}${ChartsRoute.temperature}`,
-              `${PageRoute.charts}${ChartsRoute.precipitation}`,
-              `${PageRoute.charts}${ChartsRoute.humidity}`,
-              `${PageRoute.charts}${ChartsRoute.wind}`,
-              `${PageRoute.charts}${ChartsRoute.pressure}`,
-              PageRoute.history,
-            ]}
-          >
-            <div className={styles.topContainer}>
-              <div className={styles.todayContainer}>
-                <CurrentWeather
-                  className={styles.leftWeatherContainer}
-                  city={locationData.city}
-                  country={locationData.country}
-                  weatherData={currentWeather}
-                />
-                <Route exact path={PageRoute.home}>
-                  <AirGauge className={styles.rightWeatherContainer} airQuality={73} />
-                </Route>
-              </div>
-              <Route exact path={PageRoute.home}>
-                <div className={styles.additionalContainer}>
-                  <HomeAdditional sunsetTime={currentWeather.sunsetTime} sunriseTime={currentWeather.sunriseTime} />
+      <>
+        <Route
+          exact
+          path={[
+            PageRoute.home,
+            PageRoute.map,
+            `${PageRoute.charts}${ChartsRoute.temperature}`,
+            `${PageRoute.charts}${ChartsRoute.precipitation}`,
+            `${PageRoute.charts}${ChartsRoute.humidity}`,
+            `${PageRoute.charts}${ChartsRoute.wind}`,
+            `${PageRoute.charts}${ChartsRoute.pressure}`,
+            PageRoute.history,
+          ]}
+        >
+          <div className={styles.topContainer}>
+            {isLoading ? (
+              <Spinner />
+            ) : (
+              <>
+                <div className={styles.todayContainer}>
+                  <CurrentWeather
+                    className={styles.leftWeatherContainer}
+                    city={locationData.city}
+                    country={locationData.country}
+                    weatherData={currentWeather}
+                  />
+                  <Route exact path={PageRoute.home}>
+                    <AirGauge className={styles.rightWeatherContainer} airQuality={73} />
+                  </Route>
                 </div>
+                <Route exact path={PageRoute.home}>
+                  <div className={styles.additionalContainer}>
+                    <HomeAdditional sunsetTime={currentWeather.sunsetTime} sunriseTime={currentWeather.sunriseTime} />
+                  </div>
+                </Route>
+                <Route path={PageRoute.history}>
+                  <div className={styles.additionalContainer}>
+                    <HistoryAdditional />
+                  </div>
+                </Route>
+              </>
+            )}
+          </div>
+        </Route>
+        <div className={styles.bottomContainer}>
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            <>
+              <Route exact path={PageRoute.home}>
+                <Home weatherForecast={weatherForecast} todayWeather={todayWeather} />
+              </Route>
+              <Route path={PageRoute.charts}>
+                <Charts hourly={currentWeather.hourly} daily={weatherForecast} />
               </Route>
               <Route path={PageRoute.history}>
-                <div className={styles.additionalContainer}>
-                  <HistoryAdditional />
-                </div>
+                <History
+                  monthTemperature={february}
+                  maxWind={todayWeather.maxWind}
+                  humidity={todayWeather.humidity}
+                  precipitation={todayWeather.precipitation}
+                />
               </Route>
-            </div>
+            </>
+          )}
+          <Route path={PageRoute.favorites}>
+            <Favorites city={locationData.city} />
           </Route>
-          <div className={styles.bottomContainer}>
-            <Route exact path={PageRoute.home}>
-              <Home weatherForecast={weatherForecast} todayWeather={todayWeather} />
-            </Route>
-            <Route path={PageRoute.map}>
-              <Map />
-            </Route>
-            <Route path={PageRoute.charts}>
-              <Charts hourly={currentWeather.hourly} daily={weatherForecast} />
-            </Route>
-            <Route path={PageRoute.history}>
-              <History
-                monthTemperature={february}
-                maxWind={todayWeather.maxWind}
-                humidity={todayWeather.humidity}
-                precipitation={todayWeather.precipitation}
-              />
-            </Route>
-            <Route path={PageRoute.favorites}>
-              <Favorites city={locationData.city} />
-            </Route>
-          </div>
-        </>
-      )}
+          <Route path={PageRoute.map}>
+            <Map />
+          </Route>
+        </div>
+      </>
     </div>
   );
 };

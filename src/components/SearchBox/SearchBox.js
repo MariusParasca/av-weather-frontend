@@ -111,10 +111,10 @@ const SearchBox = props => {
     value => {
       const timestamp = Date.now();
       const time = ts.getFuzzyLocalTimeFromPoint(timestamp, value.position.reverse());
-      console.log(value);
+      const country = value.vicinity.split('<br/>');
       saveLocation({
         city: value.title,
-        country: value.vicinity,
+        country: country.length > 1 ? country[country.length - 1] : country[0],
         latitude: value.position[0],
         longitude: value.position[1],
         utcOffset: time.utcOffset(),
