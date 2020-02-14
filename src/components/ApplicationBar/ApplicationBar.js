@@ -14,6 +14,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { LEFT_DRAWER_WIDTH } from 'constants/constants';
 import { PageRoute, ChartsRoute } from 'utils/routes';
 import MenuButton from 'components/MenuButton/MenuButton';
+import { NavLink } from 'react-router-dom';
 import styles from './ApplicationBar.module.css';
 
 const useStyles = makeStyles(theme => ({
@@ -36,7 +37,9 @@ const ApplicationBar = () => {
   return (
     <nav className={classes.drawer}>
       <Drawer classes={{ paper: classes.paper }} variant="permanent">
-        <Avatar className={classes.small} />
+        <NavLink to={PageRoute.register}>
+          <Avatar className={classes.small} />
+        </NavLink>
         <div className={styles.mainOptionsContainer}>
           <MenuButton exact path={PageRoute.home}>
             <PinDropIcon />

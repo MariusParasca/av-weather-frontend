@@ -19,6 +19,7 @@ import AirGauge from 'components/AirGauge/AirGauge';
 import Notification from 'components/Notification/Notification';
 import HomeAdditional from 'routes/Home/HomeAdditional/HomeAdditional';
 import HistoryAdditional from 'routes/History/HistoryAdditional/HistoryAdditional';
+import Register from 'components/Register/Register';
 import CurrentWeather from './CurrentWeather/CurrentWeather';
 import styles from './Main.module.css';
 
@@ -254,31 +255,36 @@ const Main = props => {
           </div>
         </Route>
         <div className={styles.bottomContainer}>
-          {isLoading && !location.pathname.includes(PageRoute.favorites) ? (
-            <Spinner />
-          ) : (
-            <>
-              <Route exact path={PageRoute.home}>
-                <Home weatherForecast={weatherForecast} todayWeather={todayWeather} />
-              </Route>
-              <Route path={PageRoute.charts}>
-                <Charts hourly={currentWeather.hourly} daily={weatherForecast} />
-              </Route>
-              <Route path={PageRoute.history}>
-                <History
-                  monthTemperature={february}
-                  maxWind={todayWeather.maxWind}
-                  humidity={todayWeather.humidity}
-                  precipitation={todayWeather.precipitation}
-                />
-              </Route>
-            </>
-          )}
+          <Route exact path={[PageRoute.home, PageRoute.charts, PageRoute.history]}>
+            {isLoading ? (
+              <Spinner />
+            ) : (
+              <>
+                <Route exact path={PageRoute.home}>
+                  <Home weatherForecast={weatherForecast} todayWeather={todayWeather} />
+                </Route>
+                <Route path={PageRoute.charts}>
+                  <Charts hourly={currentWeather.hourly} daily={weatherForecast} />
+                </Route>
+                <Route path={PageRoute.history}>
+                  <History
+                    monthTemperature={february}
+                    maxWind={todayWeather.maxWind}
+                    humidity={todayWeather.humidity}
+                    precipitation={todayWeather.precipitation}
+                  />
+                </Route>
+              </>
+            )}
+          </Route>
           <Route path={PageRoute.favorites}>
             <Favorites city={locationData.city} />
           </Route>
           <Route path={PageRoute.map}>
             <Map />
+          </Route>
+          <Route path={PageRoute.register}>
+            <Register />
           </Route>
         </div>
       </>

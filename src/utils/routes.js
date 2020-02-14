@@ -4,6 +4,8 @@ export const PageRoute = {
   charts: '/charts',
   history: '/history',
   favorites: '/favorites',
+  register: '/register',
+  login: '/login',
 };
 
 export const ChartsRoute = {
