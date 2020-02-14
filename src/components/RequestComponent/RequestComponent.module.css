@@ -1,0 +1,11 @@
+.app {
+  display: flex;
+  height: 100%;
+}
+
+.searchBox {
+  position: fixed;
+  top: 20px;
+  right: 22px;
+  width: 270px;
+}

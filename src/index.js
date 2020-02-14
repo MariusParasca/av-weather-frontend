@@ -4,6 +4,8 @@ import './index.css';
 import { ThemeProvider } from '@material-ui/core';
 import { BrowserRouter } from 'react-router-dom';
 import { basename } from 'utils/routes';
+import { Provider } from 'react-redux';
+import store from 'store/store';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
@@ -12,7 +14,9 @@ import theme from './theme';
 ReactDOM.render(
   <BrowserRouter basename={basename}>
     <ThemeProvider theme={theme}>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </ThemeProvider>
   </BrowserRouter>,
   document.getElementById('root'),

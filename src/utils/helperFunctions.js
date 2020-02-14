@@ -33,4 +33,11 @@ export const createChartData = (array, { label, propName }, options) => {
   return [newXLabels, newDataArray, newFullBarArray];
 };
 
-export default createChartData;
+export const isCorrectRoute = (array, route) => {
+  for (const item of array) {
+    if (item.includes(route)) {
+      return true;
+    }
+  }
+  return false;
+};
