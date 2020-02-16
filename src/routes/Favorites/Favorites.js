@@ -1,17 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
-import { LOCATIONS } from 'constants/collections';
-import db from 'utils/firebaseFirestore';
+import { FETCH_FAVORITES_SEND, DELETE_FAVORITE_SEND } from 'store/actionTypes/favoritesActionTypes';
 import FavoriteCity from 'components/FavoriteCity/FavoriteCity';
 import Spinner from 'components/Spinner/Spinner';
 import Notification from 'components/Notification/Notification';
 import styles from './Favorites.module.css';
 
 const Favorites = props => {
-  const [favorites, setFavorites] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const { favorites, getFavorites, deleteFavorite } = props;
+  const { data, error, pending } = favorites;
+
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [notificationText, setNotificationText] = useState('');
   const [notificationColor, setNotificationColor] = useState('');
@@ -22,41 +23,17 @@ const Favorites = props => {
     setIsNotificationOpen(true);
   }, []);
 
-  const getAllFavorites = useCallback(async () => {
-    try {
-      const dbFavorites = await db.collection(LOCATIONS).get();
-      const docs = [];
-      for (const doc of dbFavorites.docs) {
-        const data = doc.data();
-        docs.push({ ...data, id: doc.id });
-      }
-      setFavorites(docs);
-      setIsLoading(false);
-    } catch (error) {
-      setNotification('Error getting the data', 'error');
-    }
-  }, [setNotification]);
-
-  const deleteFavorite = useCallback(
-    async id => {
-      try {
-        await db
-          .collection(LOCATIONS)
-          .doc(id)
-          .delete();
-        setFavorites(favorites.filter(favorite => favorite.id !== id));
-        setNotification('Successfully deleted', 'success');
-      } catch (error) {
-        setNotification('Error deleting the item', 'error');
-      }
-    },
-    [favorites, setNotification],
-  );
+  useEffect(() => {
+    getFavorites();
+  }, [getFavorites]);
 
   useEffect(() => {
-    setIsLoading(true);
-    getAllFavorites();
-  }, [getAllFavorites]);
+    if (favorites.error) {
+      setNotification(favorites.error.message, 'error');
+    } else if (favorites.message) {
+      setNotification(favorites.message, 'success');
+    }
+  }, [favorites, setNotification]);
 
   return (
     <div className={styles.container}>
@@ -66,11 +43,11 @@ const Favorites = props => {
         text={notificationText}
         color={notificationColor}
       />
-      {isLoading ? (
+      {pending ? (
         <Spinner />
       ) : (
         <>
-          {favorites.map(favorite => (
+          {favorites.data.map(favorite => (
             <FavoriteCity
               key={favorite.city}
               utcOffset={favorite.utcOffset}
@@ -90,4 +67,17 @@ const Favorites = props => {
 
 Favorites.propTypes = {};
 
-export default Favorites;
+const mapStateToProps = state => {
+  return {
+    favorites: state.favorites,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getFavorites: () => dispatch({ type: FETCH_FAVORITES_SEND }),
+    deleteFavorite: id => dispatch({ type: DELETE_FAVORITE_SEND, id }),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Favorites);
