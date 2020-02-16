@@ -11,7 +11,7 @@ import {
   DELETE_FAVORITE_FAILED,
 } from 'store/actionTypes/favoritesActionTypes';
 
-const getCurrentStateData = state => state.favorites.data;
+const getCurrentState = state => state.favorites;
 
 async function firestoreRequest() {
   try {
@@ -28,12 +28,18 @@ async function firestoreRequest() {
 }
 
 function* firestoreRequestSaga() {
-  const { data, error } = yield call(firestoreRequest);
+  const state = yield select(getCurrentState);
 
-  if (data) {
-    yield put({ type: FETCH_FAVORITES_SET_DATA, data });
+  if (state.dataLoaded) {
+    yield put({ type: FETCH_FAVORITES_SET_DATA, data: state.data });
   } else {
-    yield put({ type: FETCH_FAVORITES_FAILED, error });
+    const { data, error } = yield call(firestoreRequest);
+
+    if (data) {
+      yield put({ type: FETCH_FAVORITES_SET_DATA, data });
+    } else {
+      yield put({ type: FETCH_FAVORITES_FAILED, error });
+    }
   }
 }
 
@@ -51,9 +57,9 @@ async function deleteFavorite(favorites, id) {
 
 function* deleteFavoriteSaga(action) {
   const { id } = action;
-  const favoritesData = yield select(getCurrentStateData);
+  const state = yield select(getCurrentState);
 
-  const { data, error } = yield call(deleteFavorite, favoritesData, id);
+  const { data, error } = yield call(deleteFavorite, state.data, id);
 
   if (data) {
     yield put({ type: DELETE_FAVORITE_SUCCESS, data });

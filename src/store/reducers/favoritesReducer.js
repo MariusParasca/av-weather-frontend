@@ -10,6 +10,7 @@ const initialState = {
   pending: true,
   error: null,
   message: '',
+  dataLoaded: false,
 };
 
 const reducer = (state = initialState, action) => {
@@ -21,6 +22,7 @@ const reducer = (state = initialState, action) => {
     case FETCH_FAVORITES_SET_DATA:
       newState.data = action.data;
       newState.pending = false;
+      newState.dataLoaded = true;
       break;
     case FETCH_FAVORITES_FAILED:
       newState.error = action.error.message;

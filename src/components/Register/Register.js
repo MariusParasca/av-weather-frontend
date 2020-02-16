@@ -33,7 +33,6 @@ const Register = props => {
   };
 
   const onClickRegister = () => {
-    console.log(isEmailValid(value), value);
     if (isEmailValid(value)) {
       register(value);
     } else if (!value) {
@@ -42,7 +41,6 @@ const Register = props => {
   };
 
   useEffect(() => {
-    console.log(authData);
     if (authData.error) {
       setErrorMessage(authData.error.message);
     } else if (authData.email) {
@@ -86,6 +84,9 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-Register.propTypes = {};
+Register.propTypes = {
+  register: PropTypes.func.isRequired,
+  authData: PropTypes.objectOf(PropTypes.any).isRequired,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Register);

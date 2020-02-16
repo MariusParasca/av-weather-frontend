@@ -11,7 +11,7 @@ import styles from './Favorites.module.css';
 
 const Favorites = props => {
   const { favorites, getFavorites, deleteFavorite } = props;
-  const { data, error, pending } = favorites;
+  const { data, error, pending, message } = favorites;
 
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [notificationText, setNotificationText] = useState('');
@@ -28,12 +28,12 @@ const Favorites = props => {
   }, [getFavorites]);
 
   useEffect(() => {
-    if (favorites.error) {
-      setNotification(favorites.error.message, 'error');
-    } else if (favorites.message) {
-      setNotification(favorites.message, 'success');
+    if (error) {
+      setNotification(error.message, 'error');
+    } else if (message) {
+      setNotification(message, 'success');
     }
-  }, [favorites, setNotification]);
+  }, [error, message, setNotification]);
 
   return (
     <div className={styles.container}>
@@ -47,7 +47,7 @@ const Favorites = props => {
         <Spinner />
       ) : (
         <>
-          {favorites.data.map(favorite => (
+          {data.map(favorite => (
             <FavoriteCity
               key={favorite.city}
               utcOffset={favorite.utcOffset}
@@ -58,14 +58,18 @@ const Favorites = props => {
               onClickIcon={() => deleteFavorite(favorite.id)}
             />
           ))}
-          {favorites.length === 0 && <Typography variant="h2">No favorite places</Typography>}
+          {data.length === 0 && <Typography variant="h2">No favorite places</Typography>}
         </>
       )}
     </div>
   );
 };
 
-Favorites.propTypes = {};
+Favorites.propTypes = {
+  favorites: PropTypes.objectOf(PropTypes.any).isRequired,
+  getFavorites: PropTypes.func.isRequired,
+  deleteFavorite: PropTypes.func.isRequired,
+};
 
 const mapStateToProps = state => {
   return {
