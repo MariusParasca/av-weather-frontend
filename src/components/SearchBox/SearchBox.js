@@ -20,7 +20,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const SearchBox = props => {
-  const { placeholder, className, ipStackHttp } = props;
+  const { placeholder, className, locationData } = props;
 
   const hereAutosuggestHttp = useHttp();
   const { sendRequest: sendRequestHereAutosuggest } = hereAutosuggestHttp;
@@ -95,13 +95,13 @@ const SearchBox = props => {
   }, [location, searchString, sendRequestHereAutosuggest]);
 
   useEffect(() => {
-    if (ipStackHttp.data) {
+    if (locationData) {
       setLocation({
-        latitude: ipStackHttp.data.latitude,
-        longitude: ipStackHttp.data.longitude,
+        latitude: locationData.latitude,
+        longitude: locationData.longitude,
       });
     }
-  }, [ipStackHttp.data]);
+  }, [locationData]);
 
   const onChange = useCallback(event => {
     setSearchString(event.target.value);
@@ -164,7 +164,7 @@ const SearchBox = props => {
 SearchBox.propTypes = {
   placeholder: PropTypes.string,
   className: PropTypes.string,
-  ipStackHttp: PropTypes.objectOf(PropTypes.any).isRequired,
+  locationData: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 SearchBox.defaultProps = {

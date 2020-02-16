@@ -1,4 +1,8 @@
-import { WEATHER_SET_DATA, WEATHER_API_FAILED } from 'store/actionTypes/weatherAPIActionTypes';
+import {
+  WEATHER_SET_DATA,
+  WEATHER_API_FAILED,
+  WEATHER_DATA_ALREADY_FETCHED,
+} from 'store/actionTypes/weatherAPIActionTypes';
 import { DAY_NO_HOURS, WEEK_DAYS } from 'constants/constants';
 
 import { getHourFromEpoch, createDateFromEpoch } from 'utils/dateTimeUtils';
@@ -32,6 +36,7 @@ const initialState = {
   },
   error: null,
   pending: true,
+  dataLoaded: false,
 };
 
 const createCurrentlyWeather = data => {
@@ -84,9 +89,12 @@ const reducer = (state = initialState, action) => {
       newStateWeather.hourly = createHourlyWeather(action.data.weather.hourly);
       newStateWeather.daily = createDailyWeather(action.data.weather.daily);
       newState.pending = false;
+      newState.dataLoaded = true;
       break;
     case WEATHER_API_FAILED:
       newState.error = action.data.error;
+      break;
+    case WEATHER_DATA_ALREADY_FETCHED:
       break;
     default:
       break;

@@ -1,7 +1,14 @@
-import { takeEvery, put, call } from 'redux-saga/effects';
-import { WEATHER_API_SEND, WEATHER_SET_DATA, WEATHER_API_FAILED } from 'store/actionTypes/weatherAPIActionTypes';
+import { takeEvery, put, call, select } from 'redux-saga/effects';
+import {
+  WEATHER_API_SEND,
+  WEATHER_SET_DATA,
+  WEATHER_API_FAILED,
+  WEATHER_DATA_ALREADY_FETCHED,
+} from 'store/actionTypes/weatherAPIActionTypes';
 import ipStackAxios from 'axios/ipStack';
 import darkSkyAxios from 'axios/darkSky';
+
+const getCurrentStateData = state => state.data;
 
 async function makeWeatherRequest(latitude, longitude) {
   try {
@@ -33,12 +40,17 @@ async function makeRequest() {
 }
 
 function* apiRequest() {
-  const { data, error } = yield call(makeRequest);
+  const state = yield select(getCurrentStateData);
 
-  if (data) {
-    yield put({ type: WEATHER_SET_DATA, data });
+  if (!state.dataLoaded) {
+    const { data, error } = yield call(makeRequest);
+    if (data) {
+      yield put({ type: WEATHER_SET_DATA, data });
+    } else {
+      yield put({ type: WEATHER_API_FAILED, error });
+    }
   } else {
-    yield put({ type: WEATHER_API_FAILED, error });
+    yield put({ type: WEATHER_DATA_ALREADY_FETCHED });
   }
 }
 

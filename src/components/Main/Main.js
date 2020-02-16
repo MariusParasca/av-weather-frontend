@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Route } from 'react-router-dom';
 
-import { PageRoute, ChartsRoute } from 'utils/routes';
+import { PageRoute } from 'utils/routes';
+import { topContainerRoutes, bottomContainerRoutes } from 'constants/routes';
 import Spinner from 'components/Spinner/Spinner';
 import Home from 'routes/Home/Home';
 import Charts from 'routes/Charts/Charts';
@@ -53,28 +54,6 @@ const february = [
 const Main = props => {
   const { locationData, weatherData, pending } = props;
   const [error, setError] = useState(false);
-
-  const topContainerRoutes = [
-    PageRoute.home,
-    PageRoute.map,
-    `${PageRoute.charts}${ChartsRoute.temperature}`,
-    `${PageRoute.charts}${ChartsRoute.precipitation}`,
-    `${PageRoute.charts}${ChartsRoute.humidity}`,
-    `${PageRoute.charts}${ChartsRoute.wind}`,
-    `${PageRoute.charts}${ChartsRoute.pressure}`,
-    PageRoute.history,
-  ];
-
-  const bottomContainerRoutes = [
-    PageRoute.home,
-    PageRoute.charts,
-    PageRoute.history,
-    `${PageRoute.charts}${ChartsRoute.temperature}`,
-    `${PageRoute.charts}${ChartsRoute.precipitation}`,
-    `${PageRoute.charts}${ChartsRoute.humidity}`,
-    `${PageRoute.charts}${ChartsRoute.wind}`,
-    `${PageRoute.charts}${ChartsRoute.pressure}`,
-  ];
 
   const handleCloseError = () => {
     setError(false);
@@ -158,13 +137,11 @@ const Main = props => {
 
 Main.propTypes = {
   locationData: PropTypes.objectOf(PropTypes.any).isRequired,
-  weatherData: PropTypes.objectOf(
-    PropTypes.shape({
-      currently: PropTypes.objectOf([PropTypes.object, PropTypes.any]),
-      hourly: PropTypes.array,
-      daily: PropTypes.array,
-    }),
-  ).isRequired,
+  weatherData: PropTypes.shape({
+    currently: PropTypes.objectOf(PropTypes.any),
+    hourly: PropTypes.arrayOf(PropTypes.any),
+    daily: PropTypes.array,
+  }).isRequired,
   pending: PropTypes.bool.isRequired,
 };
 

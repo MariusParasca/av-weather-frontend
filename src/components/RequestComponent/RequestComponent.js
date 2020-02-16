@@ -4,7 +4,8 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { WEATHER_API_SEND } from 'store/actionTypes/weatherAPIActionTypes';
-
+import { topContainerRoutes } from 'constants/routes';
+import { isCorrectRoute } from 'utils/helperFunctions';
 import { PageRoute } from 'utils/routes';
 import ApplicationBar from 'components/ApplicationBar/ApplicationBar';
 import Main from 'components/Main/Main';
@@ -16,8 +17,8 @@ const RequestComponent = props => {
   const { location, locationData, getWeather, weatherData, pending } = props;
 
   useEffect(() => {
-    getWeather();
-  }, [getWeather]);
+    if (isCorrectRoute(topContainerRoutes, location.pathname)) getWeather();
+  }, [getWeather, location.pathname]);
 
   return (
     <>
@@ -25,8 +26,8 @@ const RequestComponent = props => {
         <ApplicationBar />
         <Main locationData={locationData} weatherData={weatherData} pending={pending} />
       </div>
-      {!location.pathname.includes(PageRoute.favorites) && (
-        <SearchBox ipStackHttp={{}} placeholder="City, postcode or place" className={styles.searchBox} />
+      {isCorrectRoute(topContainerRoutes, location.pathname) && (
+        <SearchBox locationData={locationData} placeholder="City, postcode or place" className={styles.searchBox} />
       )}
     </>
   );
