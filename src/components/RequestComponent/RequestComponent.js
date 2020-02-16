@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { WEATHER_API_SEND } from 'store/actionTypes/weatherAPIActionTypes';
 import { topContainerRoutes } from 'constants/routes';
 import { isCorrectRoute } from 'utils/helperFunctions';
-import { PageRoute } from 'utils/routes';
 import ApplicationBar from 'components/ApplicationBar/ApplicationBar';
 import Main from 'components/Main/Main';
 import SearchBox from 'components/SearchBox/SearchBox';

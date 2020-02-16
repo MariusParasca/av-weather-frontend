@@ -41,3 +41,10 @@ export const isCorrectRoute = (array, route) => {
   }
   return false;
 };
+
+export const updateTextField = (func, resetFunc, error) => ({ target: { value } }) => {
+  if (error) {
+    resetFunc();
+  }
+  func(value);
+};

@@ -13,6 +13,7 @@ const initialState = {
     longitude: 0,
     city: '',
     country: '',
+    ip: '',
   },
   weather: {
     currently: {
@@ -70,17 +71,24 @@ const createDailyWeather = data => {
   }));
 };
 
+const createIpStack = data => {
+  return {
+    latitude: data.latitude,
+    longitude: data.longitude,
+    city: data.city,
+    country: data.country_name,
+    ip: data.ip,
+  };
+};
+
 const reducer = (state = initialState, action) => {
   const newState = { ...state };
-  const newStateIpStack = { ...state.ipStack };
+  let newStateIpStack = { ...state.ipStack };
   const newStateWeather = { ...state.weather };
 
   switch (action.type) {
     case WEATHER_SET_DATA:
-      newStateIpStack.latitude = action.data.ipStack.latitude;
-      newStateIpStack.longitude = action.data.ipStack.longitude;
-      newStateIpStack.city = action.data.ipStack.city;
-      newStateIpStack.country = action.data.ipStack.country_name;
+      newStateIpStack = createIpStack(action.data.ipStack);
       newStateWeather.currently = createCurrentlyWeather({
         ...action.data.weather.currently,
         sunriseTime: action.data.weather.daily.data[0].sunriseTime,
