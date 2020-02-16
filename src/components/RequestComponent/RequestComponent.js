@@ -10,7 +10,7 @@ import ApplicationBar from 'components/ApplicationBar/ApplicationBar';
 import Main from 'components/Main/Main';
 import SearchBox from 'components/SearchBox/SearchBox';
 
-import { ADD_FAVORITE_SEND } from 'store/actionTypes/favoritesActionTypes';
+import { ADD_FAVORITE_SEND, CLEAR_NOTIFICATION } from 'store/actionTypes/favoritesActionTypes';
 import styles from './RequestComponent.module.css';
 
 const RequestComponent = props => {
