@@ -139,7 +139,7 @@ Main.propTypes = {
   locationData: PropTypes.objectOf(PropTypes.any).isRequired,
   weatherData: PropTypes.shape({
     currently: PropTypes.objectOf(PropTypes.any),
-    hourly: PropTypes.arrayOf(PropTypes.any),
+    hourly: PropTypes.array,
     daily: PropTypes.array,
   }).isRequired,
   pending: PropTypes.bool.isRequired,
