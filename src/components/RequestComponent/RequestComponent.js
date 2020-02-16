@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { IP_STACK_API_SEND } from 'store/actionTypes/ipStackActionTypes';
+import { WEATHER_API_SEND } from 'store/actionTypes/weatherAPIActionTypes';
 
 import { PageRoute } from 'utils/routes';
 import ApplicationBar from 'components/ApplicationBar/ApplicationBar';
@@ -13,17 +13,17 @@ import SearchBox from 'components/SearchBox/SearchBox';
 import styles from './RequestComponent.module.css';
 
 const RequestComponent = props => {
-  const { location, locationData, ipStackSend } = props;
+  const { location, locationData, getWeather, weatherData, pending } = props;
 
   useEffect(() => {
-    ipStackSend();
-  }, [ipStackSend]);
+    getWeather();
+  }, [getWeather]);
 
   return (
     <>
       <div className={styles.app}>
         <ApplicationBar />
-        <Main ipStackHttp={{}} locationData={locationData} />
+        <Main locationData={locationData} weatherData={weatherData} pending={pending} />
       </div>
       {!location.pathname.includes(PageRoute.favorites) && (
         <SearchBox ipStackHttp={{}} placeholder="City, postcode or place" className={styles.searchBox} />
@@ -32,17 +32,31 @@ const RequestComponent = props => {
   );
 };
 
-RequestComponent.propTypes = {};
+RequestComponent.propTypes = {
+  locationData: PropTypes.objectOf(PropTypes.any).isRequired,
+  location: PropTypes.objectOf(PropTypes.any).isRequired,
+  weatherData: PropTypes.objectOf(
+    PropTypes.shape({
+      currently: PropTypes.objectOf([PropTypes.object, PropTypes.any]),
+      hourly: PropTypes.array,
+      daily: PropTypes.array,
+    }),
+  ).isRequired,
+  pending: PropTypes.bool.isRequired,
+  getWeather: PropTypes.func.isRequired,
+};
 
 const mapStateToProps = state => {
   return {
-    locationData: state.location,
+    locationData: state.data.ipStack,
+    weatherData: state.data.weather,
+    pending: state.data.pending,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    ipStackSend: () => dispatch({ type: IP_STACK_API_SEND }),
+    getWeather: () => dispatch({ type: WEATHER_API_SEND }),
   };
 };
 

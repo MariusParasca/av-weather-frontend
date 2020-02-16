@@ -1,9 +1,7 @@
 import { combineReducers } from 'redux';
 
-import ipStackReducer from 'store/reducers/ipStackReducer';
-import darkSkyReducer from 'store/reducers/darkSkyReducer';
+import ipStackReducer from 'store/reducers/weatherAPIReducer';
 
 export default combineReducers({
-  location: ipStackReducer,
-  weatherData: darkSkyReducer,
+  data: ipStackReducer,
 });

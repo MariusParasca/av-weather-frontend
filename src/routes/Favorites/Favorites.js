@@ -10,8 +10,6 @@ import Notification from 'components/Notification/Notification';
 import styles from './Favorites.module.css';
 
 const Favorites = props => {
-  const { city } = props;
-
   const [favorites, setFavorites] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -26,22 +24,18 @@ const Favorites = props => {
 
   const getAllFavorites = useCallback(async () => {
     try {
-      if (city) {
-        const dbFavorites = await db.collection(LOCATIONS).get();
-        const docs = [];
-        for (const doc of dbFavorites.docs) {
-          const data = doc.data();
-          if (data.city !== city) {
-            docs.push({ ...data, id: doc.id });
-          }
-        }
-        setFavorites(docs);
-        setIsLoading(false);
+      const dbFavorites = await db.collection(LOCATIONS).get();
+      const docs = [];
+      for (const doc of dbFavorites.docs) {
+        const data = doc.data();
+        docs.push({ ...data, id: doc.id });
       }
+      setFavorites(docs);
+      setIsLoading(false);
     } catch (error) {
       setNotification('Error getting the data', 'error');
     }
-  }, [city, setNotification]);
+  }, [setNotification]);
 
   const deleteFavorite = useCallback(
     async id => {
@@ -94,8 +88,6 @@ const Favorites = props => {
   );
 };
 
-Favorites.propTypes = {
-  city: PropTypes.string.isRequired,
-};
+Favorites.propTypes = {};
 
 export default Favorites;

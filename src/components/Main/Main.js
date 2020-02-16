@@ -1,10 +1,8 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Route, withRouter } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
 import { PageRoute, ChartsRoute } from 'utils/routes';
-import { isCorrectRoute } from 'utils/helperFunctions';
 import Spinner from 'components/Spinner/Spinner';
 import Home from 'routes/Home/Home';
 import Charts from 'routes/Charts/Charts';
@@ -16,7 +14,6 @@ import Notification from 'components/Notification/Notification';
 import HomeAdditional from 'routes/Home/HomeAdditional/HomeAdditional';
 import HistoryAdditional from 'routes/History/HistoryAdditional/HistoryAdditional';
 import Register from 'components/Register/Register';
-import { DARK_SKY_API_SEND } from 'store/actionTypes/darkSkyActionTypes';
 import CurrentWeather from './CurrentWeather/CurrentWeather';
 import styles from './Main.module.css';
 
@@ -54,21 +51,8 @@ const february = [
 ];
 
 const Main = props => {
-  const { ipStackHttp, locationData, weatherData, darkSkySend, latitude, longitude } = props;
+  const { locationData, weatherData, pending } = props;
   const [error, setError] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    if (locationData.latitude && locationData.longitude) {
-      darkSkySend(locationData.latitude, locationData.longitude);
-    }
-  }, [darkSkySend, locationData.latitude, locationData.longitude]);
-
-  useEffect(() => {
-    if (!weatherData.pending) {
-      setIsLoading(false);
-    }
-  }, [weatherData.pending]);
 
   const topContainerRoutes = [
     PageRoute.home,
@@ -81,6 +65,17 @@ const Main = props => {
     PageRoute.history,
   ];
 
+  const bottomContainerRoutes = [
+    PageRoute.home,
+    PageRoute.charts,
+    PageRoute.history,
+    `${PageRoute.charts}${ChartsRoute.temperature}`,
+    `${PageRoute.charts}${ChartsRoute.precipitation}`,
+    `${PageRoute.charts}${ChartsRoute.humidity}`,
+    `${PageRoute.charts}${ChartsRoute.wind}`,
+    `${PageRoute.charts}${ChartsRoute.pressure}`,
+  ];
+
   const handleCloseError = () => {
     setError(false);
   };
@@ -91,7 +86,7 @@ const Main = props => {
       <>
         <Route exact path={topContainerRoutes}>
           <div className={styles.topContainer}>
-            {isLoading ? (
+            {pending ? (
               <Spinner />
             ) : (
               <>
@@ -124,8 +119,8 @@ const Main = props => {
           </div>
         </Route>
         <div className={styles.bottomContainer}>
-          <Route exact path={[PageRoute.home, PageRoute.charts, PageRoute.history]}>
-            {isLoading ? (
+          <Route exact path={bottomContainerRoutes}>
+            {pending ? (
               <Spinner />
             ) : (
               <>
@@ -161,21 +156,16 @@ const Main = props => {
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    weatherData: state.weatherData,
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    darkSkySend: (latitude, longitude) => dispatch({ type: DARK_SKY_API_SEND, latitude, longitude }),
-  };
-};
-
 Main.propTypes = {
-  // ipStackHttp: PropTypes.objectOf(PropTypes.any).isRequired,
-  // location: PropTypes.objectOf(PropTypes.any).isRequired,
+  locationData: PropTypes.objectOf(PropTypes.any).isRequired,
+  weatherData: PropTypes.objectOf(
+    PropTypes.shape({
+      currently: PropTypes.objectOf([PropTypes.object, PropTypes.any]),
+      hourly: PropTypes.array,
+      daily: PropTypes.array,
+    }),
+  ).isRequired,
+  pending: PropTypes.bool.isRequired,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Main);
+export default Main;
