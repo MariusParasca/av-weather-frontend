@@ -4,6 +4,7 @@ const initialState = {
   email: '',
   password: '',
   error: null,
+  pending: true,
 };
 
 const reducer = (state = initialState, action) => {
@@ -13,9 +14,11 @@ const reducer = (state = initialState, action) => {
     case REGISTER_SUCCESSFULLY:
       newState.email = action.email;
       newState.password = action.password;
+      newState.pending = false;
       break;
     case REGISTER_FAILED:
       newState.error = action.error;
+      newState.pending = false;
       break;
     default:
       break;

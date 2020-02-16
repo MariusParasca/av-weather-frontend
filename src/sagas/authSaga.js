@@ -1,4 +1,4 @@
-import { takeEvery, put, call, select } from 'redux-saga/effects';
+import { takeLatest, put, call, select } from 'redux-saga/effects';
 
 import { REGISTER, REGISTER_SUCCESSFULLY, REGISTER_FAILED } from 'store/actionTypes/authActionTypes';
 import firebase from 'utils/firebaseInstance';
@@ -53,7 +53,7 @@ function* registerSaga(action) {
 }
 
 function* watchRegister() {
-  yield takeEvery(REGISTER, registerSaga);
+  yield takeLatest(REGISTER, registerSaga);
 }
 
 export default watchRegister;

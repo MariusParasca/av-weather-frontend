@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { TextField, Button } from '@material-ui/core';
+import { TextField, Button, Typography } from '@material-ui/core';
 
 import { isEmailValid } from 'utils/validators';
 import { updateTextField } from 'utils/helperFunctions';
@@ -51,6 +51,9 @@ const Register = props => {
   return (
     <div className={styles.container}>
       <div className={styles.formContainer}>
+        <Typography variant="h3" gutterBottom align="center">
+          Register
+        </Typography>
         <div className={styles.textField}>
           <TextField
             variant="outlined"

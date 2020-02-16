@@ -5,8 +5,6 @@ import ts from '@mapbox/timespace';
 
 import useHttp from 'hooks/useHttp';
 import hereAutosuggestAxios from 'axios/hereAutosuggest';
-import { LOCATIONS } from 'constants/collections';
-import db from 'utils/firebaseFirestore';
 import SearchIcon from '@material-ui/icons/Search';
 import Notification from 'components/Notification/Notification';
 import styles from './SearchBox.module.css';
@@ -20,7 +18,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const SearchBox = props => {
-  const { placeholder, className, locationData } = props;
+  const { placeholder, className, locationData, addFavorite, favorites } = props;
 
   const hereAutosuggestHttp = useHttp();
   const { sendRequest: sendRequestHereAutosuggest } = hereAutosuggestHttp;
@@ -41,26 +39,14 @@ const SearchBox = props => {
     setIsNotificationOpen(true);
   }, []);
 
-  const saveLocation = useCallback(
-    async data => {
-      const locationRef = db.collection(LOCATIONS);
-      try {
-        const response = await locationRef.where('city', '==', data.city).get();
-        if (response.empty) {
-          locationRef.add({
-            ...data,
-            dateTime: new Date(),
-          });
-          setNotification('Successfully added to favorites!', 'info');
-        } else {
-          setNotification('City already exists!', 'warning');
-        }
-      } catch (error) {
-        setNotification('Error saving the city...', 'error');
-      }
-    },
-    [setNotification],
-  );
+  useEffect(() => {
+    console.log(favorites);
+    if (favorites.error) {
+      setNotification(favorites.error.message, 'error');
+    } else if (favorites.message) {
+      setNotification(favorites.message, favorites.messageType);
+    }
+  }, [favorites, favorites.error, favorites.message, favorites.messageType, setNotification]);
 
   const onBlur = useCallback(() => {
     // TO DO
@@ -112,7 +98,7 @@ const SearchBox = props => {
       const timestamp = Date.now();
       const time = ts.getFuzzyLocalTimeFromPoint(timestamp, value.position.reverse());
       const country = value.vicinity.split('<br/>');
-      saveLocation({
+      addFavorite({
         city: value.title,
         country: country.length > 1 ? country[country.length - 1] : country[0],
         latitude: value.position[1],
@@ -120,7 +106,7 @@ const SearchBox = props => {
         utcOffset: time.utcOffset(),
       });
     },
-    [saveLocation],
+    [addFavorite],
   );
 
   return (
@@ -162,9 +148,11 @@ const SearchBox = props => {
 };
 
 SearchBox.propTypes = {
+  favorites: PropTypes.objectOf(PropTypes.any).isRequired,
   placeholder: PropTypes.string,
   className: PropTypes.string,
   locationData: PropTypes.objectOf(PropTypes.any).isRequired,
+  addFavorite: PropTypes.func.isRequired,
 };
 
 SearchBox.defaultProps = {

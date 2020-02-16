@@ -3,6 +3,9 @@ import {
   FETCH_FAVORITES_FAILED,
   DELETE_FAVORITE_SUCCESS,
   DELETE_FAVORITE_FAILED,
+  ADD_FAVORITE_SUCCESS,
+  ADD_FAVORITE_FAILED,
+  ADD_FAVORITE_WARNING,
 } from 'store/actionTypes/favoritesActionTypes';
 
 const initialState = {
@@ -10,6 +13,7 @@ const initialState = {
   pending: true,
   error: null,
   message: '',
+  messageType: '',
   dataLoaded: false,
 };
 
@@ -30,9 +34,22 @@ const reducer = (state = initialState, action) => {
     case DELETE_FAVORITE_SUCCESS:
       newState.data = action.data;
       newState.message = 'Successfully deleted';
+      newState.messageType = 'success';
       break;
     case DELETE_FAVORITE_FAILED:
       newState.error = action.error.message;
+      break;
+    case ADD_FAVORITE_SUCCESS:
+      newState.data = action.data;
+      newState.message = 'Successfully added';
+      newState.messageType = 'success';
+      break;
+    case ADD_FAVORITE_FAILED:
+      newState.error = action.error;
+      break;
+    case ADD_FAVORITE_WARNING:
+      newState.message = 'City already exists';
+      newState.messageType = 'warning';
       break;
     default:
       break;
