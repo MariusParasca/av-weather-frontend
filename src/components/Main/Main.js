@@ -15,6 +15,7 @@ import Notification from 'components/Notification/Notification';
 import HomeAdditional from 'routes/Home/HomeAdditional/HomeAdditional';
 import HistoryAdditional from 'routes/History/HistoryAdditional/HistoryAdditional';
 import Register from 'components/Register/Register';
+import Account from 'routes/Account/Account';
 import CurrentWeather from './CurrentWeather/CurrentWeather';
 import styles from './Main.module.css';
 
@@ -126,8 +127,8 @@ const Main = props => {
           <Route path={PageRoute.map}>
             <Map />
           </Route>
-          <Route path={PageRoute.register}>
-            <Register />
+          <Route path={[PageRoute.account, PageRoute.register, PageRoute.login]}>
+            <Account />
           </Route>
         </div>
       </>

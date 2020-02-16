@@ -37,7 +37,7 @@ const ApplicationBar = () => {
   return (
     <nav className={classes.drawer}>
       <Drawer classes={{ paper: classes.paper }} variant="permanent">
-        <NavLink to={PageRoute.register}>
+        <NavLink to={PageRoute.account}>
           <Avatar className={classes.small} />
         </NavLink>
         <div className={styles.mainOptionsContainer}>

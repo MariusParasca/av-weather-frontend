@@ -1,8 +1,7 @@
 import { REGISTER_SUCCESSFULLY, REGISTER_FAILED } from 'store/actionTypes/authActionTypes';
 
 const initialState = {
-  email: '',
-  password: '',
+  user: null,
   error: null,
   pending: true,
 };
@@ -12,8 +11,7 @@ const reducer = (state = initialState, action) => {
 
   switch (action.type) {
     case REGISTER_SUCCESSFULLY:
-      newState.email = action.email;
-      newState.password = action.password;
+      newState.user = action.user;
       newState.pending = false;
       break;
     case REGISTER_FAILED:

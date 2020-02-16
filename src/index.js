@@ -5,7 +5,9 @@ import { ThemeProvider } from '@material-ui/core';
 import { BrowserRouter } from 'react-router-dom';
 import { basename } from 'utils/routes';
 import { Provider } from 'react-redux';
-import store from 'store/store';
+import { PersistGate } from 'redux-persist/integration/react';
+
+import store, { persistor } from 'store/store';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
@@ -15,7 +17,9 @@ ReactDOM.render(
   <BrowserRouter basename={basename}>
     <ThemeProvider theme={theme}>
       <Provider store={store}>
-        <App />
+        <PersistGate loading={null} persistor={persistor}>
+          <App />
+        </PersistGate>
       </Provider>
     </ThemeProvider>
   </BrowserRouter>,

@@ -9,8 +9,8 @@ const getCurrentStateData = state => state.data;
 async function register(email, password) {
   const auth = firebase.auth();
   try {
-    await auth.createUserWithEmailAndPassword(email, password);
-    return { status: true };
+    const data = await auth.createUserWithEmailAndPassword(email, password);
+    return { data };
   } catch (error) {
     return { error };
   }
@@ -43,10 +43,10 @@ function* registerSaga(action) {
     password = state.ipStack.ip;
   }
 
-  const { status, error } = yield call(register, email, password);
+  const { data, error } = yield call(register, email, password);
 
-  if (status) {
-    yield put({ type: REGISTER_SUCCESSFULLY, email, password });
+  if (data) {
+    yield put({ type: REGISTER_SUCCESSFULLY, user: data });
   } else {
     yield put({ type: REGISTER_FAILED, error });
   }
