@@ -1,5 +1,6 @@
-import { takeLatest, takeEvery, put, call, select, all, fork } from 'redux-saga/effects';
+import { takeLatest, takeEvery, put, call, select, all } from 'redux-saga/effects';
 
+import db from 'utils/firebaseFirestore';
 import {
   LOGIN,
   LOGIN_SUCCESSFULLY,
@@ -14,6 +15,7 @@ import { EMAIL_ALREADY_USED } from 'constants/constants';
 import firebase from 'utils/firebaseInstance';
 import ipStackAxios from 'axios/ipStack';
 import { DELETE_SYNCED_FAVORITES, SYNC_FAVORITES } from 'store/actionTypes/favoritesActionTypes';
+import { LOCATIONS } from 'constants/collections';
 
 const auth = firebase.auth();
 
@@ -22,6 +24,7 @@ const getCurrentStateData = state => state.data;
 async function register(email, password) {
   try {
     const data = await auth.createUserWithEmailAndPassword(email, password);
+    db.collection(LOCATIONS).add({ uid: data.user.uid });
     return { data };
   } catch (error) {
     return { error };

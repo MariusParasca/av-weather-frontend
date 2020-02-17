@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 
 import { LOGOUT } from 'store/actionTypes/authActionTypes';
 import Login from 'components/Login/Login';
-import { Redirect, Route } from 'react-router-dom';
-import { PageRoute } from 'utils/routes';
 import { Button } from '@material-ui/core';
 import styles from './Account.module.css';
 

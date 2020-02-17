@@ -31,6 +31,7 @@ const reducer = (state = initialState, action) => {
 
   switch (action.type) {
     case REHYDRATE:
+      console.log(action);
       return { ...state, dataLocally: action.payload.favorites.dataLocally };
     case FETCH_FAVORITES_ALREADY_FETCHED:
       break;

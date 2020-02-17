@@ -14,7 +14,6 @@ import AirGauge from 'components/AirGauge/AirGauge';
 import Notification from 'components/Notification/Notification';
 import HomeAdditional from 'routes/Home/HomeAdditional/HomeAdditional';
 import HistoryAdditional from 'routes/History/HistoryAdditional/HistoryAdditional';
-import Register from 'components/Login/Login';
 import Account from 'routes/Account/Account';
 import CurrentWeather from './CurrentWeather/CurrentWeather';
 import styles from './Main.module.css';
