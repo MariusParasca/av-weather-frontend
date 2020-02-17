@@ -4,6 +4,9 @@ import {
   AUTO_LOGIN_FAILED,
   LOGOUT_SUCCESSFULLY,
   LOGOUT_FAILED,
+  LOGIN,
+  LOGOUT,
+  LOGIN_CHECK,
 } from 'store/actionTypes/authActionTypes';
 
 const initialState = {
@@ -17,6 +20,9 @@ const reducer = (state = initialState, action) => {
   let newState = { ...state };
 
   switch (action.type) {
+    case LOGIN:
+      newState.pending = true;
+      break;
     case LOGIN_SUCCESSFULLY:
       newState.user = action.user;
       newState.error = null;
@@ -32,6 +38,9 @@ const reducer = (state = initialState, action) => {
       newState.error = null;
       newState.isLoggedIn = false;
       newState.pending = false;
+      break;
+    case LOGOUT:
+      newState.pending = true;
       break;
     case LOGOUT_SUCCESSFULLY:
       newState = initialState;
