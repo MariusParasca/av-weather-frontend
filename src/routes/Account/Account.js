@@ -2,35 +2,53 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import Register from 'components/Login/Login';
-import Login from 'components/Login(old)/Login';
+import { LOGOUT } from 'store/actionTypes/authActionTypes';
+import Login from 'components/Login/Login';
 import { Redirect, Route } from 'react-router-dom';
 import { PageRoute } from 'utils/routes';
+import { Button } from '@material-ui/core';
 import styles from './Account.module.css';
 
 const Account = props => {
-  const { user } = props;
+  const { isLoggedIn, logout } = props;
 
-  console.log(user);
+  const onClickLogout = () => {
+    logout();
+  };
 
   return (
     <div className={styles.container}>
       <div className={styles.formContainer}>
-        {!user ? <Redirect to={PageRoute.login} /> : null}
-        <Route exact path={PageRoute.login}>
-          <Register />
-        </Route>
+        {!isLoggedIn ? (
+          <Login />
+        ) : (
+          <div>
+            <div>Account page</div>
+            <Button variant="contained" onClick={onClickLogout}>
+              Logout
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-Account.propTypes = {};
+Account.propTypes = {
+  isLoggedIn: PropTypes.bool.isRequired,
+  logout: PropTypes.func.isRequired,
+};
 
 const mapStateToProps = state => {
   return {
-    user: state.authData.user,
+    isLoggedIn: state.authData.isLoggedIn,
   };
 };
 
-export default connect(mapStateToProps)(Account);
+const mapDispatchToProps = dispatch => {
+  return {
+    logout: () => dispatch({ type: LOGOUT }),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Account);

@@ -24,7 +24,7 @@ const Favorites = props => {
   }, []);
 
   useEffect(() => {
-    getFavorites();
+    // getFavorites();
   }, [getFavorites]);
 
   useEffect(() => {
@@ -43,24 +43,20 @@ const Favorites = props => {
         text={notificationText}
         color={notificationColor}
       />
-      {pending ? (
-        <Spinner />
-      ) : (
-        <>
-          {data.map(favorite => (
-            <FavoriteCity
-              key={favorite.city}
-              utcOffset={favorite.utcOffset}
-              city={favorite.city}
-              country={favorite.country}
-              latitude={favorite.latitude}
-              longitude={favorite.longitude}
-              onClickIcon={() => deleteFavorite(favorite.id)}
-            />
-          ))}
-          {data.length === 0 && <Typography variant="h2">No favorite places</Typography>}
-        </>
-      )}
+      <>
+        {data.map(favorite => (
+          <FavoriteCity
+            key={favorite.city}
+            utcOffset={favorite.utcOffset}
+            city={favorite.city}
+            country={favorite.country}
+            latitude={favorite.latitude}
+            longitude={favorite.longitude}
+            onClickIcon={() => deleteFavorite(favorite.id)}
+          />
+        ))}
+        {data.length === 0 && <Typography variant="h2">No favorite places</Typography>}
+      </>
     </div>
   );
 };

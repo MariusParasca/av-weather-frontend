@@ -1,6 +1,15 @@
-import { takeLatest, put, call, select } from 'redux-saga/effects';
+import { takeLatest, takeEvery, put, call, select, all, fork } from 'redux-saga/effects';
 
-import { LOGIN, LOGIN_SUCCESSFULLY, LOGIN_FAILED } from 'store/actionTypes/authActionTypes';
+import {
+  LOGIN,
+  LOGIN_SUCCESSFULLY,
+  LOGIN_FAILED,
+  LOGIN_CHECK,
+  AUTO_LOGIN_FAILED,
+  LOGOUT,
+  LOGOUT_SUCCESSFULLY,
+  LOGOUT_FAILED,
+} from 'store/actionTypes/authActionTypes';
 import { EMAIL_ALREADY_USED } from 'constants/constants';
 import firebase from 'utils/firebaseInstance';
 import ipStackAxios from 'axios/ipStack';
@@ -21,7 +30,6 @@ async function register(email, password) {
 async function login(email, password) {
   try {
     const data = await auth.signInWithEmailAndPassword(email, password);
-    console.log('data', data);
     return { data };
   } catch (error) {
     return { error };
@@ -71,8 +79,60 @@ function* loginSaga(action) {
   }
 }
 
+function loginCheckPromise() {
+  return new Promise((resolve, reject) => {
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        resolve(user);
+      } else {
+        reject(new Error());
+      }
+    });
+  });
+}
+
+async function checkLogin() {
+  try {
+    const data = await loginCheckPromise();
+    return { data };
+  } catch (error) {
+    return { error };
+  }
+}
+
+function* checkLoginSaga() {
+  const { data } = yield call(checkLogin);
+  if (data) {
+    yield put({ type: LOGIN_SUCCESSFULLY, user: data });
+  } else {
+    yield put({ type: AUTO_LOGIN_FAILED });
+  }
+}
+
+async function logout() {
+  try {
+    await auth.signOut();
+    return { status: true };
+  } catch (error) {
+    return { status: false };
+  }
+}
+
+function* logoutSaga() {
+  const { status } = yield call(logout);
+  if (status) {
+    yield put({ type: LOGOUT_SUCCESSFULLY });
+  } else {
+    yield put({ type: LOGOUT_FAILED });
+  }
+}
+
 function* watchLogin() {
-  yield takeLatest(LOGIN, loginSaga);
+  yield all([
+    yield takeLatest(LOGIN, loginSaga),
+    yield takeEvery(LOGIN_CHECK, checkLoginSaga),
+    yield takeLatest(LOGOUT, logoutSaga),
+  ]);
 }
 
 export default watchLogin;

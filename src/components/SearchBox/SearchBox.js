@@ -40,7 +40,6 @@ const SearchBox = props => {
   }, []);
 
   useEffect(() => {
-    console.log(favorites);
     if (favorites.error) {
       setNotification(favorites.error.message, 'error');
     } else if (favorites.message) {

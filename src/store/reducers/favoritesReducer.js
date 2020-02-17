@@ -10,6 +10,7 @@ import {
 
 const initialState = {
   data: [],
+  dataLocally: [],
   pending: true,
   error: null,
   message: '',
