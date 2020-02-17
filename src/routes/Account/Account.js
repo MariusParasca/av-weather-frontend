@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import Register from 'components/Register/Register';
-import Login from 'components/Login/Login';
+import Register from 'components/Login/Login';
+import Login from 'components/Login(old)/Login';
 import { Redirect, Route } from 'react-router-dom';
 import { PageRoute } from 'utils/routes';
 import styles from './Account.module.css';
@@ -17,11 +17,8 @@ const Account = props => {
     <div className={styles.container}>
       <div className={styles.formContainer}>
         {!user ? <Redirect to={PageRoute.login} /> : null}
-        <Route exact path={PageRoute.register}>
-          <Register />
-        </Route>
         <Route exact path={PageRoute.login}>
-          <Login />
+          <Register />
         </Route>
       </div>
     </div>

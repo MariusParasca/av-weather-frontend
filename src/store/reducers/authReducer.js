@@ -1,4 +1,4 @@
-import { REGISTER_SUCCESSFULLY, REGISTER_FAILED } from 'store/actionTypes/authActionTypes';
+import { LOGIN_SUCCESSFULLY, LOGIN_FAILED } from 'store/actionTypes/authActionTypes';
 
 const initialState = {
   user: null,
@@ -10,11 +10,11 @@ const reducer = (state = initialState, action) => {
   const newState = { ...state };
 
   switch (action.type) {
-    case REGISTER_SUCCESSFULLY:
+    case LOGIN_SUCCESSFULLY:
       newState.user = action.user;
       newState.pending = false;
       break;
-    case REGISTER_FAILED:
+    case LOGIN_FAILED:
       newState.error = action.error;
       newState.pending = false;
       break;

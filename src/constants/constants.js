@@ -33,3 +33,5 @@ export const MONTHS = [
 ];
 
 export const ONE_MINUTE_IN_MILLISECONDS = 60000;
+
+export const EMAIL_ALREADY_USED = 'auth/email-already-in-use';

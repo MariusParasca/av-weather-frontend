@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-
-import { TextField, Button, Typography, Link } from '@material-ui/core';
+import { connect } from 'react-redux';
+import { TextField, Button, Typography } from '@material-ui/core';
 
 import { isEmailValid } from 'utils/validators';
 import { updateTextField } from 'utils/helperFunctions';
-import { PageRoute } from 'utils/routes';
-import { NavLink } from 'react-router-dom';
+import { LOGIN } from 'store/actionTypes/authActionTypes';
+import Spinner from 'components/Spinner/Spinner';
 import styles from './Login.module.css';
 
 const Login = props => {
+  const { register, authData } = props;
+
   const [value, setValue] = useState('');
   const [error, setError] = useState(false);
   const [helperText, setHelperText] = useState('');
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const resetError = () => {
     setError(false);
@@ -31,17 +35,27 @@ const Login = props => {
   };
 
   const onClickRegister = () => {
+    setIsLoading(true);
     if (isEmailValid(value)) {
-      // register(value);
+      register(value);
     } else if (!value) {
       setErrorMessage('Invalid email! Please provide a valid one');
     }
   };
 
+  useEffect(() => {
+    if (authData.error) {
+      setErrorMessage(authData.error.message);
+    }
+    if (!authData.pending) {
+      setIsLoading(false);
+    }
+  }, [authData]);
+
   return (
     <>
       <Typography variant="h3" gutterBottom align="center">
-        Login
+        Login/Register
       </Typography>
       <div className={styles.textField}>
         <TextField
@@ -54,18 +68,31 @@ const Login = props => {
           helperText={helperText}
         />
       </div>
-      <Typography variant="body1">
-        Don't you have a account? Please <NavLink to={PageRoute.register}>register</NavLink>
-      </Typography>
       <div className={styles.button}>
         <Button variant="contained" onClick={onClickRegister}>
           Login
         </Button>
       </div>
+      {isLoading ? <Spinner /> : null}
     </>
   );
 };
 
-Login.propTypes = {};
+const mapStateToProps = state => {
+  return {
+    authData: state.authData,
+  };
+};
 
-export default Login;
+const mapDispatchToProps = dispatch => {
+  return {
+    register: email => dispatch({ type: LOGIN, email }),
+  };
+};
+
+Login.propTypes = {
+  register: PropTypes.func.isRequired,
+  authData: PropTypes.objectOf(PropTypes.any).isRequired,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
