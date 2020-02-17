@@ -13,6 +13,7 @@ import {
 import { EMAIL_ALREADY_USED } from 'constants/constants';
 import firebase from 'utils/firebaseInstance';
 import ipStackAxios from 'axios/ipStack';
+import { DELETE_SYNCED_FAVORITES } from 'store/actionTypes/favoritesActionTypes';
 
 const auth = firebase.auth();
 
@@ -121,6 +122,7 @@ async function logout() {
 function* logoutSaga() {
   const { status } = yield call(logout);
   if (status) {
+    yield put({ type: DELETE_SYNCED_FAVORITES });
     yield put({ type: LOGOUT_SUCCESSFULLY });
   } else {
     yield put({ type: LOGOUT_FAILED });

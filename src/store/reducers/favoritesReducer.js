@@ -10,6 +10,7 @@ import {
   ADD_FAVORITE_WARNING,
   ADD_FAVORITE_LOCALLY,
   DELETE_FAVORITE_LOCALLY,
+  DELETE_SYNCED_FAVORITES,
 } from 'store/actionTypes/favoritesActionTypes';
 
 const initialState = {
@@ -64,6 +65,9 @@ const reducer = (state = initialState, action) => {
       break;
     case DELETE_FAVORITE_LOCALLY:
       newState.dataLocally.splice(action.index, 1);
+      break;
+    case DELETE_SYNCED_FAVORITES:
+      newState.data = [];
       break;
     default:
       break;
