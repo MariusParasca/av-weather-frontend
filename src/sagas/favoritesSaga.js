@@ -13,6 +13,10 @@ import {
   ADD_FAVORITE_SUCCESS,
   ADD_FAVORITE_WARNING,
   ADD_FAVORITE_FAILED,
+  FETCH_FAVORITES_ALREADY_FETCHED,
+  SYNC_FAVORITES,
+  SYNC_FAILED,
+  SYNC_SUCCESSFULLY,
 } from 'store/actionTypes/favoritesActionTypes';
 
 const getCurrentState = state => state.favorites;
@@ -35,7 +39,7 @@ function* firestoreRequestSaga() {
   const state = yield select(getCurrentState);
 
   if (state.dataLoaded) {
-    yield put({ type: FETCH_FAVORITES_SET_DATA, data: state.data });
+    yield put({ type: FETCH_FAVORITES_ALREADY_FETCHED });
   } else {
     const { data, error } = yield call(firestoreRequest);
 
@@ -77,10 +81,7 @@ async function addFavorite(data) {
   try {
     const response = await locationRef.where('city', '==', data.city).get();
     if (response.empty) {
-      locationRef.add({
-        ...data,
-        dateTime: new Date(),
-      });
+      await locationRef.add(data);
       return { status: true };
     }
     return { status: false };
@@ -105,6 +106,40 @@ function* addFavoriteSaga(action) {
   }
 }
 
+async function simpleAddFavorite(favorite) {
+  const locationRef = db.collection(LOCATIONS);
+  locationRef.add(favorite);
+}
+
+function getNewFavoritesPromises(data, dataLocally) {
+  const newFavoritesPromises = [];
+
+  for (const favorite of dataLocally) {
+    if (!data.some(el => el.city === favorite.city)) {
+      newFavoritesPromises.push(simpleAddFavorite(favorite));
+    }
+  }
+
+  return newFavoritesPromises;
+}
+
+function* syncFavoritesSaga() {
+  const state = yield select(getCurrentState);
+  const { data, error } = yield call(firestoreRequest);
+
+  if (data) {
+    const promises = getNewFavoritesPromises(data, state.dataLocally);
+    try {
+      yield call(() => Promise.all(promises));
+      yield put({ type: SYNC_SUCCESSFULLY });
+    } catch (errorSecond) {
+      yield put({ type: SYNC_FAILED, errorSecond });
+    }
+  } else {
+    yield put({ type: SYNC_FAILED, error });
+  }
+}
+
 function* watchFetchFavorites() {
   yield takeEvery(FETCH_FAVORITES_SEND, firestoreRequestSaga);
 }
@@ -117,8 +152,12 @@ function* watchAddFavorite() {
   yield takeEvery(ADD_FAVORITE_SEND, addFavoriteSaga);
 }
 
+function* watchSync() {
+  yield takeEvery(SYNC_FAVORITES, syncFavoritesSaga);
+}
+
 function* favoritesRootSaga() {
-  yield all([fork(watchFetchFavorites), fork(watchDeleteFavorite), fork(watchAddFavorite)]);
+  yield all([fork(watchFetchFavorites), fork(watchDeleteFavorite), fork(watchAddFavorite), fork(watchSync)]);
 }
 
 export default favoritesRootSaga;

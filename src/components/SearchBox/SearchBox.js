@@ -97,12 +97,14 @@ const SearchBox = props => {
       const timestamp = Date.now();
       const time = ts.getFuzzyLocalTimeFromPoint(timestamp, value.position.reverse());
       const country = value.vicinity.split('<br/>');
+      const city = value.title.split(' ');
       const favorite = {
-        city: value.title,
+        city: city[0],
         country: country.length > 1 ? country[country.length - 1] : country[0],
         latitude: value.position[1],
         longitude: value.position[0],
         utcOffset: time.utcOffset(),
+        dateTime: new Date(),
       };
       if (isLoggedIn) {
         addFavorite(favorite);

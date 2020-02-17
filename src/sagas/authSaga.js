@@ -13,7 +13,7 @@ import {
 import { EMAIL_ALREADY_USED } from 'constants/constants';
 import firebase from 'utils/firebaseInstance';
 import ipStackAxios from 'axios/ipStack';
-import { DELETE_SYNCED_FAVORITES } from 'store/actionTypes/favoritesActionTypes';
+import { DELETE_SYNCED_FAVORITES, SYNC_FAVORITES } from 'store/actionTypes/favoritesActionTypes';
 
 const auth = firebase.auth();
 
@@ -68,10 +68,12 @@ function* loginSaga(action) {
 
   if (data) {
     yield put({ type: LOGIN_SUCCESSFULLY, user: data });
+    yield put({ type: SYNC_FAVORITES });
   } else if (error.code === EMAIL_ALREADY_USED) {
     const { data: dataLogin, error: errorLogin } = yield call(login, email, password);
     if (dataLogin) {
       yield put({ type: LOGIN_SUCCESSFULLY, user: dataLogin });
+      yield put({ type: SYNC_FAVORITES });
     } else {
       yield put({ type: LOGIN_FAILED, error: errorLogin });
     }

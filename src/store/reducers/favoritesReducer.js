@@ -11,6 +11,7 @@ import {
   ADD_FAVORITE_LOCALLY,
   DELETE_FAVORITE_LOCALLY,
   DELETE_SYNCED_FAVORITES,
+  FETCH_FAVORITES_ALREADY_FETCHED,
 } from 'store/actionTypes/favoritesActionTypes';
 
 const initialState = {
@@ -30,8 +31,9 @@ const reducer = (state = initialState, action) => {
 
   switch (action.type) {
     case REHYDRATE:
-      console.log(action.payload);
       return { ...state, dataLocally: action.payload.favorites.dataLocally };
+    case FETCH_FAVORITES_ALREADY_FETCHED:
+      break;
     case FETCH_FAVORITES_SET_DATA:
       newState.data = action.data;
       newState.pending = false;
@@ -39,6 +41,7 @@ const reducer = (state = initialState, action) => {
       break;
     case FETCH_FAVORITES_FAILED:
       newState.error = action.error.message;
+      newState.dataLoaded = false;
       break;
     case DELETE_FAVORITE_SUCCESS:
       newState.data = action.data;
@@ -68,6 +71,7 @@ const reducer = (state = initialState, action) => {
       break;
     case DELETE_SYNCED_FAVORITES:
       newState.data = [];
+      newState.dataLoaded = false;
       break;
     default:
       break;
