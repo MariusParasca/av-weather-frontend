@@ -1,3 +1,5 @@
+import { REHYDRATE } from 'redux-persist/lib/constants';
+
 import {
   FETCH_FAVORITES_SET_DATA,
   FETCH_FAVORITES_FAILED,
@@ -6,6 +8,8 @@ import {
   ADD_FAVORITE_SUCCESS,
   ADD_FAVORITE_FAILED,
   ADD_FAVORITE_WARNING,
+  ADD_FAVORITE_LOCALLY,
+  DELETE_FAVORITE_LOCALLY,
 } from 'store/actionTypes/favoritesActionTypes';
 
 const initialState = {
@@ -24,6 +28,9 @@ const reducer = (state = initialState, action) => {
   newState.error = null;
 
   switch (action.type) {
+    case REHYDRATE:
+      console.log(action.payload);
+      return { ...state, dataLocally: action.payload.favorites.dataLocally };
     case FETCH_FAVORITES_SET_DATA:
       newState.data = action.data;
       newState.pending = false;
@@ -51,6 +58,12 @@ const reducer = (state = initialState, action) => {
     case ADD_FAVORITE_WARNING:
       newState.message = 'City already exists';
       newState.messageType = 'warning';
+      break;
+    case ADD_FAVORITE_LOCALLY:
+      newState.dataLocally.push(action.favoriteCity);
+      break;
+    case DELETE_FAVORITE_LOCALLY:
+      newState.dataLocally.splice(action.index, 1);
       break;
     default:
       break;

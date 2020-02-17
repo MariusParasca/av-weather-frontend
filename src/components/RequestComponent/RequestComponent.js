@@ -11,11 +11,22 @@ import ApplicationBar from 'components/ApplicationBar/ApplicationBar';
 import Main from 'components/Main/Main';
 import SearchBox from 'components/SearchBox/SearchBox';
 
-import { ADD_FAVORITE_SEND } from 'store/actionTypes/favoritesActionTypes';
+import { ADD_FAVORITE_SEND, ADD_FAVORITE_LOCALLY } from 'store/actionTypes/favoritesActionTypes';
 import styles from './RequestComponent.module.css';
 
 const RequestComponent = props => {
-  const { location, locationData, getWeather, weatherData, pending, favorites, addFavorite, checkLogin } = props;
+  const {
+    location,
+    locationData,
+    getWeather,
+    weatherData,
+    pending,
+    favorites,
+    addFavorite,
+    checkLogin,
+    isLoggedIn,
+    addFavoriteLocally,
+  } = props;
 
   useEffect(() => {
     if (isCorrectRoute(topContainerRoutes, location.pathname)) getWeather();
@@ -38,6 +49,8 @@ const RequestComponent = props => {
           locationData={locationData}
           placeholder="City, postcode or place"
           className={styles.searchBox}
+          isLoggedIn={isLoggedIn}
+          addFavoriteLocally={addFavoriteLocally}
         />
       )}
     </>
@@ -57,6 +70,8 @@ RequestComponent.propTypes = {
   getWeather: PropTypes.func.isRequired,
   addFavorite: PropTypes.func.isRequired,
   checkLogin: PropTypes.func.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
+  addFavoriteLocally: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => {
@@ -65,6 +80,7 @@ const mapStateToProps = state => {
     weatherData: state.data.weather,
     pending: state.data.pending,
     favorites: state.favorites,
+    isLoggedIn: state.authData.isLoggedIn,
   };
 };
 
@@ -72,6 +88,7 @@ const mapDispatchToProps = dispatch => {
   return {
     getWeather: () => dispatch({ type: WEATHER_API_SEND }),
     addFavorite: data => dispatch({ type: ADD_FAVORITE_SEND, data }),
+    addFavoriteLocally: favoriteCity => dispatch({ type: ADD_FAVORITE_LOCALLY, favoriteCity }),
     checkLogin: () => dispatch({ type: LOGIN_CHECK }),
   };
 };

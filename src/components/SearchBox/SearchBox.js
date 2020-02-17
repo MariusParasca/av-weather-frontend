@@ -18,7 +18,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const SearchBox = props => {
-  const { placeholder, className, locationData, addFavorite, favorites } = props;
+  const { placeholder, className, locationData, addFavorite, favorites, addFavoriteLocally, isLoggedIn } = props;
 
   const hereAutosuggestHttp = useHttp();
   const { sendRequest: sendRequestHereAutosuggest } = hereAutosuggestHttp;
@@ -97,15 +97,20 @@ const SearchBox = props => {
       const timestamp = Date.now();
       const time = ts.getFuzzyLocalTimeFromPoint(timestamp, value.position.reverse());
       const country = value.vicinity.split('<br/>');
-      addFavorite({
+      const favorite = {
         city: value.title,
         country: country.length > 1 ? country[country.length - 1] : country[0],
         latitude: value.position[1],
         longitude: value.position[0],
         utcOffset: time.utcOffset(),
-      });
+      };
+      if (isLoggedIn) {
+        addFavorite(favorite);
+      } else {
+        addFavoriteLocally(favorite);
+      }
     },
-    [addFavorite],
+    [addFavorite, addFavoriteLocally, isLoggedIn],
   );
 
   return (
@@ -152,6 +157,8 @@ SearchBox.propTypes = {
   className: PropTypes.string,
   locationData: PropTypes.objectOf(PropTypes.any).isRequired,
   addFavorite: PropTypes.func.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
+  addFavoriteLocally: PropTypes.func.isRequired,
 };
 
 SearchBox.defaultProps = {

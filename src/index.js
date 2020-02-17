@@ -7,11 +7,14 @@ import { basename } from 'utils/routes';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
-import store, { persistor } from 'store/store';
+import sagaRoot from 'sagas';
+import { store, persistor, sagaMiddleware } from 'store/store';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 import theme from './theme';
+
+sagaMiddleware.run(sagaRoot);
 
 ReactDOM.render(
   <BrowserRouter basename={basename}>

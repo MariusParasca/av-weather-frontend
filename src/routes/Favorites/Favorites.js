@@ -10,12 +10,24 @@ import Notification from 'components/Notification/Notification';
 import styles from './Favorites.module.css';
 
 const Favorites = props => {
-  const { favorites, getFavorites, deleteFavorite } = props;
-  const { data, error, pending, message } = favorites;
+  const { favorites, getFavorites, deleteFavorite, isLoggedIn } = props;
+  const { data, dataLocally, error, pending, message } = favorites;
 
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [notificationText, setNotificationText] = useState('');
   const [notificationColor, setNotificationColor] = useState('');
+
+  const mapFunction = favorite => (
+    <FavoriteCity
+      key={favorite.city}
+      utcOffset={favorite.utcOffset}
+      city={favorite.city}
+      country={favorite.country}
+      latitude={favorite.latitude}
+      longitude={favorite.longitude}
+      onClickIcon={() => deleteFavorite(favorite.id)}
+    />
+  );
 
   const setNotification = useCallback((text, color) => {
     setNotificationText(text);
@@ -24,8 +36,8 @@ const Favorites = props => {
   }, []);
 
   useEffect(() => {
-    // getFavorites();
-  }, [getFavorites]);
+    if (isLoggedIn) getFavorites();
+  }, [getFavorites, isLoggedIn]);
 
   useEffect(() => {
     if (error) {
@@ -43,20 +55,15 @@ const Favorites = props => {
         text={notificationText}
         color={notificationColor}
       />
-      <>
-        {data.map(favorite => (
-          <FavoriteCity
-            key={favorite.city}
-            utcOffset={favorite.utcOffset}
-            city={favorite.city}
-            country={favorite.country}
-            latitude={favorite.latitude}
-            longitude={favorite.longitude}
-            onClickIcon={() => deleteFavorite(favorite.id)}
-          />
-        ))}
-        {data.length === 0 && <Typography variant="h2">No favorite places</Typography>}
-      </>
+      {!isLoggedIn && dataLocally.map(mapFunction)}
+      {pending && isLoggedIn ? (
+        <Spinner />
+      ) : (
+        <>
+          {data.map(mapFunction)}
+          {data.length === 0 && dataLocally.length === 0 && <Typography variant="h2">No favorite places</Typography>}
+        </>
+      )}
     </div>
   );
 };
@@ -65,11 +72,13 @@ Favorites.propTypes = {
   favorites: PropTypes.objectOf(PropTypes.any).isRequired,
   getFavorites: PropTypes.func.isRequired,
   deleteFavorite: PropTypes.func.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => {
   return {
     favorites: state.favorites,
+    isLoggedIn: state.authData.isLoggedIn,
   };
 };
 
