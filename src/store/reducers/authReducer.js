@@ -43,6 +43,7 @@ const reducer = (state = initialState, action) => {
       break;
     case LOGOUT_SUCCESSFULLY:
       newState = initialState;
+      newState.pending = false;
       break;
     case LOGOUT_FAILED:
       break;

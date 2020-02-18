@@ -8,7 +8,7 @@ import { Button } from '@material-ui/core';
 import styles from './Account.module.css';
 
 const Account = props => {
-  const { isLoggedIn, logout } = props;
+  const { isLoggedIn, logout, user } = props;
 
   const onClickLogout = () => {
     logout();
@@ -21,7 +21,7 @@ const Account = props => {
           <Login />
         ) : (
           <div>
-            <div>Account page</div>
+            <div>Account page: {user.email}</div>
             <Button variant="contained" onClick={onClickLogout}>
               Logout
             </Button>
@@ -35,11 +35,13 @@ const Account = props => {
 Account.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired,
   logout: PropTypes.func.isRequired,
+  user: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 const mapStateToProps = state => {
   return {
     isLoggedIn: state.authData.isLoggedIn,
+    user: state.authData.user,
   };
 };
 

@@ -12,6 +12,7 @@ import Main from 'components/Main/Main';
 import SearchBox from 'components/SearchBox/SearchBox';
 
 import { ADD_FAVORITE_SEND, ADD_FAVORITE_LOCALLY_SEND } from 'store/actionTypes/favoritesActionTypes';
+import Spinner from 'components/Spinner/Spinner';
 import styles from './RequestComponent.module.css';
 
 const RequestComponent = props => {
@@ -26,6 +27,7 @@ const RequestComponent = props => {
     checkLogin,
     isLoggedIn,
     addFavoriteLocally,
+    pendingCheckLogin,
   } = props;
 
   useEffect(() => {
@@ -38,20 +40,26 @@ const RequestComponent = props => {
 
   return (
     <>
-      <div className={styles.app}>
-        <ApplicationBar />
-        <Main locationData={locationData} weatherData={weatherData} pending={pending} />
-      </div>
-      {isCorrectRoute(topContainerRoutes, location.pathname) && (
-        <SearchBox
-          favorites={favorites}
-          addFavorite={addFavorite}
-          locationData={locationData}
-          placeholder="City, postcode or place"
-          className={styles.searchBox}
-          isLoggedIn={isLoggedIn}
-          addFavoriteLocally={addFavoriteLocally}
-        />
+      {pendingCheckLogin ? (
+        <Spinner />
+      ) : (
+        <>
+          <div className={styles.app}>
+            <ApplicationBar />
+            <Main locationData={locationData} weatherData={weatherData} pending={pending} />
+          </div>
+          {isCorrectRoute(topContainerRoutes, location.pathname) && (
+            <SearchBox
+              favorites={favorites}
+              addFavorite={addFavorite}
+              locationData={locationData}
+              placeholder="City, postcode or place"
+              className={styles.searchBox}
+              isLoggedIn={isLoggedIn}
+              addFavoriteLocally={addFavoriteLocally}
+            />
+          )}
+        </>
       )}
     </>
   );
@@ -72,6 +80,7 @@ RequestComponent.propTypes = {
   checkLogin: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
   addFavoriteLocally: PropTypes.func.isRequired,
+  pendingCheckLogin: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => {
@@ -79,6 +88,7 @@ const mapStateToProps = state => {
     locationData: state.data.ipStack,
     weatherData: state.data.weather,
     pending: state.data.pending,
+    pendingCheckLogin: state.authData.pending,
     favorites: state.favorites,
     isLoggedIn: state.authData.isLoggedIn,
   };
