@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles, TextField, InputAdornment, MenuItem } from '@material-ui/core';
 import ts from '@mapbox/timespace';
@@ -6,6 +6,7 @@ import ts from '@mapbox/timespace';
 import useHttp from 'hooks/useHttp';
 import hereAutosuggestAxios from 'axios/hereAutosuggest';
 import SearchIcon from '@material-ui/icons/Search';
+import Spinner from 'components/Spinner/Spinner';
 import styles from './SearchBox.module.css';
 
 const useStyles = makeStyles(() => ({
@@ -21,28 +22,48 @@ const SearchBox = props => {
 
   const hereAutosuggestHttp = useHttp();
   const { sendRequest: sendRequestHereAutosuggest } = hereAutosuggestHttp;
+  const wrapperRef = useRef(null);
 
   const [location, setLocation] = useState({});
   const [searchString, setSearchString] = useState('');
   const [autoCompleteOptions, setAutoCompleteOptions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const classes = useStyles();
 
-  const onBlur = useCallback(() => {
-    // TO DO
+  const disableAutocomplete = useCallback(() => {
     setAutoCompleteOptions([]);
     setSearchString('');
   }, []);
 
+  const handleClickOutside = useCallback(
+    event => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target) && autoCompleteOptions.length > 0) {
+        disableAutocomplete();
+      }
+    },
+    [autoCompleteOptions.length, disableAutocomplete],
+  );
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  });
+
   useEffect(() => {
     const regex = new RegExp('City|Town|Village', 'i');
-    if (hereAutosuggestHttp.data)
+    if (hereAutosuggestHttp.data) {
+      setIsLoading(false);
       setAutoCompleteOptions(hereAutosuggestHttp.data.results.filter(result => regex.test(result.categoryTitle)));
+    }
   }, [hereAutosuggestHttp.data]);
 
   useEffect(() => {
     let intervalId;
     if (searchString && location.latitude) {
+      setIsLoading(true);
       intervalId = setTimeout(() => {
         sendRequestHereAutosuggest(
           hereAutosuggestAxios,
@@ -92,39 +113,42 @@ const SearchBox = props => {
       } else {
         addFavoriteLocally(favorite);
       }
+      disableAutocomplete();
     },
-    [addFavorite, addFavoriteLocally, isLoggedIn],
+    [addFavorite, addFavoriteLocally, disableAutocomplete, isLoggedIn],
   );
 
   return (
-    <div className={className}>
-      <TextField
-        variant="outlined"
-        margin="none"
-        placeholder={placeholder}
-        // onBlur={onBlur}
-        fullWidth
-        value={searchString}
-        onChange={onChange}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon />
-            </InputAdornment>
-          ),
-          classes: { root: classes.searchRoot },
-        }}
-      />
-      {autoCompleteOptions.length > 0 && (
-        <div className={styles.autoCompleteContainer}>
-          {autoCompleteOptions.map((el, index) => (
-            <MenuItem key={`${el.title}${index}`} onClick={() => onClickMenuItem(el)}>
-              {el.title}
-            </MenuItem>
-          ))}
-        </div>
-      )}
-    </div>
+    <>
+      <div className={styles.spinner}>{isLoading ? <Spinner size={18} /> : null}</div>
+      <div className={className} ref={wrapperRef}>
+        <TextField
+          variant="outlined"
+          margin="none"
+          placeholder={placeholder}
+          fullWidth
+          value={searchString}
+          onChange={onChange}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+            classes: { root: classes.searchRoot },
+          }}
+        />
+        {autoCompleteOptions.length > 0 && (
+          <div className={styles.autoCompleteContainer}>
+            {autoCompleteOptions.map((el, index) => (
+              <MenuItem key={`${el.title}${index}`} onClick={() => onClickMenuItem(el)}>
+                {el.title}
+              </MenuItem>
+            ))}
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

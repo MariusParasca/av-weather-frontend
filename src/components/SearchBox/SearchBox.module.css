@@ -4,3 +4,12 @@
   max-height: 300px;
   overflow: auto;
 }
+
+.spinner {
+  position: fixed;
+  top: 40px;
+  right: 35px;
+  width: 20px;
+  margin-left: auto;
+  z-index: 10;
+}
