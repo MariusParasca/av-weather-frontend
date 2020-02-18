@@ -64,10 +64,12 @@ function* firestoreRequestSaga() {
   }
 }
 
-async function deleteFavorite(favorites, id) {
+async function deleteFavorite(favorites, uid, id) {
   try {
     await db
       .collection(LOCATIONS)
+      .doc(uid)
+      .collection(LOCATION)
       .doc(id)
       .delete();
     return { data: favorites.filter(favorite => favorite.id !== id) };
@@ -79,8 +81,9 @@ async function deleteFavorite(favorites, id) {
 function* deleteFavoriteSaga(action) {
   const { id } = action;
   const state = yield select(getCurrentState);
+  const auth = yield select(getCurrentStateAuth);
 
-  const { data, error } = yield call(deleteFavorite, state.data, id);
+  const { data, error } = yield call(deleteFavorite, state.data, auth.user.uid, id);
 
   if (data) {
     yield put({ type: DELETE_FAVORITE_SUCCESS, data });
@@ -91,8 +94,11 @@ function* deleteFavoriteSaga(action) {
   }
 }
 
-async function addFavorite(data) {
-  const locationRef = db.collection(LOCATIONS);
+async function addFavorite(data, uid) {
+  const locationRef = db
+    .collection(LOCATIONS)
+    .doc(uid)
+    .collection(LOCATION);
   try {
     const response = await locationRef.where('city', '==', data.city).get();
     if (response.empty) {
@@ -108,7 +114,8 @@ async function addFavorite(data) {
 function* addFavoriteSaga(action) {
   const { data } = action;
   const state = yield select(getCurrentState);
-  const { status, error } = yield call(addFavorite, data);
+  const auth = yield select(getCurrentStateAuth);
+  const { status, error } = yield call(addFavorite, data, auth.user.uid);
 
   if (error) {
     yield put({ type: ADD_FAVORITE_FAILED, error });
@@ -183,7 +190,7 @@ function* watchAddFavoriteLocallySaga(action) {
   for (const item of newDataLocally) {
     if (item.city === action.favoriteCity.city) {
       yield put({ type: SEND_NOTIFICATIONS, notificationType: 'warning', message: 'City already exists!' });
-      break;
+      return;
     }
   }
   newDataLocally.push(action.favoriteCity);

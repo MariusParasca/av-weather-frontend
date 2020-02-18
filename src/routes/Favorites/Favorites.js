@@ -3,13 +3,17 @@ import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { FETCH_FAVORITES_SEND, DELETE_FAVORITE_LOCALLY_SEND } from 'store/actionTypes/favoritesActionTypes';
+import {
+  FETCH_FAVORITES_SEND,
+  DELETE_FAVORITE_LOCALLY_SEND,
+  DELETE_FAVORITE_SEND,
+} from 'store/actionTypes/favoritesActionTypes';
 import FavoriteCity from 'components/FavoriteCity/FavoriteCity';
 import Spinner from 'components/Spinner/Spinner';
 import styles from './Favorites.module.css';
 
 const Favorites = props => {
-  const { favorites, getFavorites, deleteFavorite, isLoggedIn } = props;
+  const { favorites, getFavorites, deleteFavorite, deleteFavoriteLocally, isLoggedIn } = props;
   const { data, dataLocally, pending } = favorites;
 
   const mapFunction = favorite => (
@@ -20,7 +24,7 @@ const Favorites = props => {
       country={favorite.country}
       latitude={favorite.latitude}
       longitude={favorite.longitude}
-      onClickIcon={() => deleteFavorite(favorite.id)}
+      onClickIcon={isLoggedIn ? () => deleteFavorite(favorite.id) : () => deleteFavoriteLocally(favorite.id)}
     />
   );
 
@@ -47,6 +51,7 @@ Favorites.propTypes = {
   favorites: PropTypes.objectOf(PropTypes.any).isRequired,
   getFavorites: PropTypes.func.isRequired,
   deleteFavorite: PropTypes.func.isRequired,
+  deleteFavoriteLocally: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired,
 };
 
@@ -60,7 +65,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getFavorites: () => dispatch({ type: FETCH_FAVORITES_SEND }),
-    deleteFavorite: id => dispatch({ type: DELETE_FAVORITE_LOCALLY_SEND, id }),
+    deleteFavorite: id => dispatch({ type: DELETE_FAVORITE_SEND, id }),
+    deleteFavoriteLocally: id => dispatch({ type: DELETE_FAVORITE_LOCALLY_SEND, id }),
   };
 };
 
