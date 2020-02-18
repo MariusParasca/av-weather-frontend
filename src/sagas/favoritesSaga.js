@@ -34,6 +34,7 @@ async function firestoreRequest(uid) {
       .collection(LOCATIONS)
       .doc(uid)
       .collection(LOCATION)
+      .orderBy('dateTime', 'desc')
       .get();
 
     const docs = [];
