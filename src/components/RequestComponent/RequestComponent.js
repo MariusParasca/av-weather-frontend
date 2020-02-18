@@ -26,6 +26,7 @@ const RequestComponent = props => {
     checkLogin,
     isLoggedIn,
     addFavoriteLocally,
+    notificaiton,
   } = props;
 
   useEffect(() => {

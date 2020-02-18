@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Route } from 'react-router-dom';
 
@@ -15,6 +15,7 @@ import Notification from 'components/Notification/Notification';
 import HomeAdditional from 'routes/Home/HomeAdditional/HomeAdditional';
 import HistoryAdditional from 'routes/History/HistoryAdditional/HistoryAdditional';
 import Account from 'routes/Account/Account';
+import { toastr } from 'react-redux-toastr';
 import CurrentWeather from './CurrentWeather/CurrentWeather';
 import styles from './Main.module.css';
 
@@ -58,6 +59,10 @@ const Main = props => {
   const handleCloseError = () => {
     setError(false);
   };
+
+  useEffect(() => {
+    toastr.success('Smecher', 'ok SmecherSmecherSmecherSmecherSmecherSmecherSmecherSmecherSmecher');
+  }, []);
 
   return (
     <div className={styles.container}>

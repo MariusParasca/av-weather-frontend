@@ -6,7 +6,6 @@ import ts from '@mapbox/timespace';
 import useHttp from 'hooks/useHttp';
 import hereAutosuggestAxios from 'axios/hereAutosuggest';
 import SearchIcon from '@material-ui/icons/Search';
-import Notification from 'components/Notification/Notification';
 import styles from './SearchBox.module.css';
 
 const useStyles = makeStyles(() => ({
@@ -18,7 +17,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const SearchBox = props => {
-  const { placeholder, className, locationData, addFavorite, favorites, addFavoriteLocally, isLoggedIn } = props;
+  const { placeholder, className, locationData, addFavorite, addFavoriteLocally, isLoggedIn } = props;
 
   const hereAutosuggestHttp = useHttp();
   const { sendRequest: sendRequestHereAutosuggest } = hereAutosuggestHttp;
@@ -27,25 +26,7 @@ const SearchBox = props => {
   const [searchString, setSearchString] = useState('');
   const [autoCompleteOptions, setAutoCompleteOptions] = useState([]);
 
-  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-  const [notificationText, setNotificationText] = useState('');
-  const [notificationColor, setNotificationColor] = useState('');
-
   const classes = useStyles();
-
-  const setNotification = useCallback((text, color) => {
-    setNotificationText(text);
-    setNotificationColor(color);
-    setIsNotificationOpen(true);
-  }, []);
-
-  useEffect(() => {
-    if (favorites.error) {
-      setNotification(favorites.error.message, 'error');
-    } else if (favorites.message) {
-      setNotification(favorites.message, favorites.messageType);
-    }
-  }, [favorites, favorites.error, favorites.message, favorites.messageType, setNotification]);
 
   const onBlur = useCallback(() => {
     // TO DO
@@ -117,12 +98,6 @@ const SearchBox = props => {
 
   return (
     <div className={className}>
-      <Notification
-        isOpen={isNotificationOpen}
-        handleClose={() => setIsNotificationOpen(false)}
-        text={notificationText}
-        color={notificationColor}
-      />
       <TextField
         variant="outlined"
         margin="none"
@@ -154,7 +129,6 @@ const SearchBox = props => {
 };
 
 SearchBox.propTypes = {
-  favorites: PropTypes.objectOf(PropTypes.any).isRequired,
   placeholder: PropTypes.string,
   className: PropTypes.string,
   locationData: PropTypes.objectOf(PropTypes.any).isRequired,

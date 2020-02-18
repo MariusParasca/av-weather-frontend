@@ -6,7 +6,9 @@ import { BrowserRouter } from 'react-router-dom';
 import { basename } from 'utils/routes';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import ReactNotification from 'react-notifications-component';
 
+import 'react-notifications-component/dist/theme.css';
 import sagaRoot from 'sagas';
 import { store, persistor, sagaMiddleware } from 'store/store';
 import App from './App';
@@ -21,6 +23,7 @@ ReactDOM.render(
     <ThemeProvider theme={theme}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
+          <ReactNotification />
           <App />
         </PersistGate>
       </Provider>

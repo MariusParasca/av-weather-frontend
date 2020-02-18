@@ -48,3 +48,7 @@ export const updateTextField = (func, resetFunc, error) => ({ target: { value } 
   }
   func(value);
 };
+
+export const capitalizeFirstLetter = string => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};

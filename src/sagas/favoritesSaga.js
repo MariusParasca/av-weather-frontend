@@ -11,13 +11,14 @@ import {
   DELETE_FAVORITE_FAILED,
   ADD_FAVORITE_SEND,
   ADD_FAVORITE_SUCCESS,
-  ADD_FAVORITE_WARNING,
   ADD_FAVORITE_FAILED,
   FETCH_FAVORITES_ALREADY_FETCHED,
   SYNC_FAVORITES,
   SYNC_FAILED,
   SYNC_SUCCESSFULLY,
 } from 'store/actionTypes/favoritesActionTypes';
+
+import { SEND_NOTIFICATIONS } from 'store/actionTypes/notificationActionTypes';
 
 const getCurrentState = state => state.favorites;
 
@@ -71,8 +72,10 @@ function* deleteFavoriteSaga(action) {
 
   if (data) {
     yield put({ type: DELETE_FAVORITE_SUCCESS, data });
+    yield put({ type: SEND_NOTIFICATIONS, notificationType: 'success', message: 'City deleted!' });
   } else {
     yield put({ type: DELETE_FAVORITE_FAILED, error });
+    yield put({ type: SEND_NOTIFICATIONS, notificationType: 'error', message: 'Something went wrong!' });
   }
 }
 
@@ -97,12 +100,14 @@ function* addFavoriteSaga(action) {
 
   if (error) {
     yield put({ type: ADD_FAVORITE_FAILED, error });
+    yield put({ type: SEND_NOTIFICATIONS, notificationType: 'error', message: 'Error adding a new city!' });
   } else if (status) {
     const newData = state.data;
     newData.push(data);
     yield put({ type: ADD_FAVORITE_SUCCESS, data: newData });
+    yield put({ type: SEND_NOTIFICATIONS, notificationType: 'success', message: 'City added!' });
   } else {
-    yield put({ type: ADD_FAVORITE_WARNING, error });
+    yield put({ type: SEND_NOTIFICATIONS, notificationType: 'warning', message: 'City already exists!' });
   }
 }
 

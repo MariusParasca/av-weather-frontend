@@ -7,7 +7,6 @@ import {
   DELETE_FAVORITE_FAILED,
   ADD_FAVORITE_SUCCESS,
   ADD_FAVORITE_FAILED,
-  ADD_FAVORITE_WARNING,
   ADD_FAVORITE_LOCALLY,
   DELETE_FAVORITE_LOCALLY,
   DELETE_SYNCED_FAVORITES,
@@ -19,8 +18,6 @@ const initialState = {
   dataLocally: [],
   pending: true,
   error: null,
-  message: '',
-  messageType: '',
   dataLoaded: false,
 };
 
@@ -46,23 +43,15 @@ const reducer = (state = initialState, action) => {
       break;
     case DELETE_FAVORITE_SUCCESS:
       newState.data = action.data;
-      newState.message = 'Successfully deleted';
-      newState.messageType = 'success';
       break;
     case DELETE_FAVORITE_FAILED:
       newState.error = action.error.message;
       break;
     case ADD_FAVORITE_SUCCESS:
       newState.data = action.data;
-      newState.message = 'Successfully added';
-      newState.messageType = 'success';
       break;
     case ADD_FAVORITE_FAILED:
       newState.error = action.error;
-      break;
-    case ADD_FAVORITE_WARNING:
-      newState.message = 'City already exists';
-      newState.messageType = 'warning';
       break;
     case ADD_FAVORITE_LOCALLY:
       newState.dataLocally.push(action.favoriteCity);
