@@ -35,7 +35,11 @@ const Account = props => {
 Account.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired,
   logout: PropTypes.func.isRequired,
-  user: PropTypes.objectOf(PropTypes.any).isRequired,
+  user: PropTypes.objectOf(PropTypes.any),
+};
+
+Account.defaultProps = {
+  user: null,
 };
 
 const mapStateToProps = state => {
