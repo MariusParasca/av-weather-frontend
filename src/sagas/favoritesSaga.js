@@ -28,6 +28,37 @@ const getCurrentState = state => state.favorites;
 
 const getCurrentStateAuth = state => state.authData;
 
+function getDate(newData) {
+  let date;
+
+  if (typeof newData.dateTime === 'string') {
+    date = new Date(newData.dateTime);
+  } else if (typeof newData.dateTime.getMonth === 'function') {
+    date = newData.dateTime;
+  } else {
+    date = new Date(1970, 0, 1);
+    date.setSeconds(newData.dateTime.seconds);
+  }
+  return date;
+}
+
+function addToFavoritesCorrectly(dataArray, newData) {
+  if (dataArray.length === 0) {
+    dataArray.push(newData);
+  }
+  const newDate = getDate(newData);
+  for (let i = 0; i < dataArray.length; i += 1) {
+    const data = dataArray[i];
+    const currentDate = getDate(data);
+    if (currentDate < newDate) {
+      dataArray.splice(i, 0, newData);
+      return dataArray;
+    }
+  }
+
+  return dataArray;
+}
+
 async function firestoreRequest(uid) {
   try {
     const dbFavorites = await db
@@ -121,8 +152,7 @@ function* addFavoriteSaga(action) {
     yield put({ type: ADD_FAVORITE_FAILED, error });
     yield put({ type: SEND_NOTIFICATIONS, notificationType: 'error', message: 'Error adding a new city!' });
   } else if (status) {
-    const newData = [...state.data];
-    newData.push({ ...data, id });
+    const newData = addToFavoritesCorrectly([...state.data], { ...data, id });
     yield put({ type: ADD_FAVORITE_SUCCESS, data: newData });
     yield put({ type: SEND_NOTIFICATIONS, notificationType: 'success', message: 'City added!' });
   } else {
@@ -186,14 +216,15 @@ function* watchSync() {
 
 function* watchAddFavoriteLocallySaga(action) {
   const state = yield select(getCurrentState);
-  const newDataLocally = [...state.dataLocally];
+  let newDataLocally = [...state.dataLocally];
+
   for (const item of newDataLocally) {
     if (item.city === action.favoriteCity.city) {
       yield put({ type: SEND_NOTIFICATIONS, notificationType: 'warning', message: 'City already exists!' });
       return;
     }
   }
-  newDataLocally.push(action.favoriteCity);
+  newDataLocally = addToFavoritesCorrectly(newDataLocally, action.favoriteCity);
 
   yield put({ type: ADD_FAVORITE_LOCALLY, dataLocally: newDataLocally });
   yield put({ type: SEND_NOTIFICATIONS, notificationType: 'success', message: 'City added!' });
