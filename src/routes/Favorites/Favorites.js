@@ -1,21 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { FETCH_FAVORITES_SEND, DELETE_FAVORITE_SEND } from 'store/actionTypes/favoritesActionTypes';
+import { FETCH_FAVORITES_SEND, DELETE_FAVORITE_LOCALLY_SEND } from 'store/actionTypes/favoritesActionTypes';
 import FavoriteCity from 'components/FavoriteCity/FavoriteCity';
 import Spinner from 'components/Spinner/Spinner';
-import Notification from 'components/Notification/Notification';
 import styles from './Favorites.module.css';
 
 const Favorites = props => {
   const { favorites, getFavorites, deleteFavorite, isLoggedIn } = props;
-  const { data, dataLocally, error, pending, message } = favorites;
-
-  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-  const [notificationText, setNotificationText] = useState('');
-  const [notificationColor, setNotificationColor] = useState('');
+  const { data, dataLocally, pending } = favorites;
 
   const mapFunction = favorite => (
     <FavoriteCity
@@ -29,32 +24,12 @@ const Favorites = props => {
     />
   );
 
-  const setNotification = useCallback((text, color) => {
-    setNotificationText(text);
-    setNotificationColor(color);
-    setIsNotificationOpen(true);
-  }, []);
-
   useEffect(() => {
     if (isLoggedIn) getFavorites();
   }, [getFavorites, isLoggedIn]);
 
-  useEffect(() => {
-    if (error) {
-      setNotification(error.message, 'error');
-    } else if (message) {
-      setNotification(message, 'success');
-    }
-  }, [error, message, setNotification]);
-
   return (
     <div className={styles.container}>
-      <Notification
-        isOpen={isNotificationOpen}
-        handleClose={() => setIsNotificationOpen(false)}
-        text={notificationText}
-        color={notificationColor}
-      />
       {!isLoggedIn && dataLocally.map(mapFunction)}
       {pending && isLoggedIn ? (
         <Spinner />
@@ -85,7 +60,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getFavorites: () => dispatch({ type: FETCH_FAVORITES_SEND }),
-    deleteFavorite: id => dispatch({ type: DELETE_FAVORITE_SEND, id }),
+    deleteFavorite: id => dispatch({ type: DELETE_FAVORITE_LOCALLY_SEND, id }),
   };
 };
 

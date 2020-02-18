@@ -16,6 +16,10 @@ import {
   SYNC_FAVORITES,
   SYNC_FAILED,
   SYNC_SUCCESSFULLY,
+  ADD_FAVORITE_LOCALLY,
+  ADD_FAVORITE_LOCALLY_SEND,
+  DELETE_FAVORITE_LOCALLY_SEND,
+  DELETE_FAVORITE_LOCALLY,
 } from 'store/actionTypes/favoritesActionTypes';
 
 import { SEND_NOTIFICATIONS } from 'store/actionTypes/notificationActionTypes';
@@ -161,8 +165,46 @@ function* watchSync() {
   yield takeEvery(SYNC_FAVORITES, syncFavoritesSaga);
 }
 
+function* watchAddFavoriteLocallySaga(action) {
+  const state = yield select(getCurrentState);
+  const newDataLocally = [...state.dataLocally];
+  for (const item of newDataLocally) {
+    if (item.city === action.favoriteCity.city) {
+      yield put({ type: SEND_NOTIFICATIONS, notificationType: 'warning', message: 'City already exists!' });
+      break;
+    }
+  }
+  newDataLocally.push(action.favoriteCity);
+
+  yield put({ type: ADD_FAVORITE_LOCALLY, dataLocally: newDataLocally });
+  yield put({ type: SEND_NOTIFICATIONS, notificationType: 'success', message: 'City added!' });
+}
+
+function* watchDeleteFavoriteLocallySaga(action) {
+  const state = yield select(getCurrentState);
+  const newDataLocally = [...state.dataLocally];
+  newDataLocally.splice(action.index, 1);
+  yield put({ type: DELETE_FAVORITE_LOCALLY, dataLocally: newDataLocally });
+  yield put({ type: SEND_NOTIFICATIONS, notificationType: 'success', message: 'City deleted!' });
+}
+
+function* watchDeleteFavoriteLocally() {
+  yield takeEvery(DELETE_FAVORITE_LOCALLY_SEND, watchDeleteFavoriteLocallySaga);
+}
+
+function* watchAddFavoriteLocally() {
+  yield takeEvery(ADD_FAVORITE_LOCALLY_SEND, watchAddFavoriteLocallySaga);
+}
+
 function* favoritesRootSaga() {
-  yield all([fork(watchFetchFavorites), fork(watchDeleteFavorite), fork(watchAddFavorite), fork(watchSync)]);
+  yield all([
+    yield fork(watchDeleteFavorite),
+    yield fork(watchFetchFavorites),
+    yield fork(watchAddFavorite),
+    yield fork(watchSync),
+    yield fork(watchAddFavoriteLocally),
+    yield fork(watchDeleteFavoriteLocally),
+  ]);
 }
 
 export default favoritesRootSaga;

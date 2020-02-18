@@ -6,7 +6,6 @@ import {
   LOGOUT_FAILED,
   LOGIN,
   LOGOUT,
-  LOGIN_CHECK,
 } from 'store/actionTypes/authActionTypes';
 
 const initialState = {

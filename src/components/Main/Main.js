@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Route } from 'react-router-dom';
 
@@ -11,11 +11,9 @@ import History from 'routes/History/History';
 import Favorites from 'routes/Favorites/Favorites';
 import Map from 'routes/Map/Map';
 import AirGauge from 'components/AirGauge/AirGauge';
-import Notification from 'components/Notification/Notification';
 import HomeAdditional from 'routes/Home/HomeAdditional/HomeAdditional';
 import HistoryAdditional from 'routes/History/HistoryAdditional/HistoryAdditional';
 import Account from 'routes/Account/Account';
-import { toastr } from 'react-redux-toastr';
 import CurrentWeather from './CurrentWeather/CurrentWeather';
 import styles from './Main.module.css';
 
@@ -54,19 +52,9 @@ const february = [
 
 const Main = props => {
   const { locationData, weatherData, pending } = props;
-  const [error, setError] = useState(false);
-
-  const handleCloseError = () => {
-    setError(false);
-  };
-
-  useEffect(() => {
-    toastr.success('Smecher', 'ok SmecherSmecherSmecherSmecherSmecherSmecherSmecherSmecherSmecher');
-  }, []);
 
   return (
     <div className={styles.container}>
-      <Notification isOpen={error} handleClose={handleCloseError} />
       <>
         <Route exact path={topContainerRoutes}>
           <div className={styles.topContainer}>

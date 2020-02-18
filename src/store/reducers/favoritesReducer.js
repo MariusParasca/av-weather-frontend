@@ -28,8 +28,10 @@ const reducer = (state = initialState, action) => {
 
   switch (action.type) {
     case REHYDRATE:
-      console.log(action);
-      return { ...state, dataLocally: action.payload.favorites.dataLocally };
+      return {
+        ...state,
+        dataLocally: action.payload.favorites.dataLocally ? action.payload.favorites.dataLocally : [],
+      };
     case FETCH_FAVORITES_ALREADY_FETCHED:
       break;
     case FETCH_FAVORITES_SET_DATA:
@@ -38,14 +40,14 @@ const reducer = (state = initialState, action) => {
       newState.dataLoaded = true;
       break;
     case FETCH_FAVORITES_FAILED:
-      newState.error = action.error.message;
+      newState.error = action.error;
       newState.dataLoaded = false;
       break;
     case DELETE_FAVORITE_SUCCESS:
       newState.data = action.data;
       break;
     case DELETE_FAVORITE_FAILED:
-      newState.error = action.error.message;
+      newState.error = action.error;
       break;
     case ADD_FAVORITE_SUCCESS:
       newState.data = action.data;
@@ -54,10 +56,10 @@ const reducer = (state = initialState, action) => {
       newState.error = action.error;
       break;
     case ADD_FAVORITE_LOCALLY:
-      newState.dataLocally.push(action.favoriteCity);
+      newState.dataLocally = action.dataLocally;
       break;
     case DELETE_FAVORITE_LOCALLY:
-      newState.dataLocally.splice(action.index, 1);
+      newState.dataLocally = action.dataLocally;
       break;
     case DELETE_SYNCED_FAVORITES:
       newState.data = [];

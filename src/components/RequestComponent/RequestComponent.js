@@ -11,7 +11,7 @@ import ApplicationBar from 'components/ApplicationBar/ApplicationBar';
 import Main from 'components/Main/Main';
 import SearchBox from 'components/SearchBox/SearchBox';
 
-import { ADD_FAVORITE_SEND, ADD_FAVORITE_LOCALLY } from 'store/actionTypes/favoritesActionTypes';
+import { ADD_FAVORITE_SEND, ADD_FAVORITE_LOCALLY_SEND } from 'store/actionTypes/favoritesActionTypes';
 import styles from './RequestComponent.module.css';
 
 const RequestComponent = props => {
@@ -26,7 +26,6 @@ const RequestComponent = props => {
     checkLogin,
     isLoggedIn,
     addFavoriteLocally,
-    notificaiton,
   } = props;
 
   useEffect(() => {
@@ -89,7 +88,7 @@ const mapDispatchToProps = dispatch => {
   return {
     getWeather: () => dispatch({ type: WEATHER_API_SEND }),
     addFavorite: data => dispatch({ type: ADD_FAVORITE_SEND, data }),
-    addFavoriteLocally: favoriteCity => dispatch({ type: ADD_FAVORITE_LOCALLY, favoriteCity }),
+    addFavoriteLocally: favoriteCity => dispatch({ type: ADD_FAVORITE_LOCALLY_SEND, favoriteCity }),
     checkLogin: () => dispatch({ type: LOGIN_CHECK }),
   };
 };
