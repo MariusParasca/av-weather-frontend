@@ -51,15 +51,12 @@ const FavoriteCity = props => {
   }, [darkSkyHttp.data]);
 
   const startClock = useCallback(() => {
-    if (utcOffset) {
-      const date = getTimeBasedOnTimeZone(utcOffset);
-
-      if (date) {
-        setTime(getTimeFromDate(date));
-      }
-
-      return date.getSeconds();
+    const date = getTimeBasedOnTimeZone(utcOffset);
+    if (date) {
+      setTime(getTimeFromDate(date));
     }
+
+    return date.getSeconds();
   }, [utcOffset]);
 
   useEffect(() => {
@@ -75,7 +72,7 @@ const FavoriteCity = props => {
   return (
     <div className={styles.container}>
       <div className={styles.localTimeContainer}>
-        <Typography variant="h6">{utcOffset && `Local time: ${time}`}</Typography>
+        <Typography variant="h6">Local time: {time}</Typography>
         <Button classes={{ root: classes.starButtonRoot }} onClick={onClickIcon}>
           <StarIcon />
         </Button>
