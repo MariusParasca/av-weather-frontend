@@ -24,7 +24,7 @@ const getCurrentStateData = state => state.data;
 async function register(email, password) {
   try {
     const data = await auth.createUserWithEmailAndPassword(email, password);
-    db.collection(LOCATIONS).add({ uid: data.user.uid });
+    db.collection(LOCATIONS).add({ id: data.user.uid });
     return { data };
   } catch (error) {
     return { error };
@@ -70,12 +70,12 @@ function* loginSaga(action) {
   const { data, error } = yield call(register, email, password);
 
   if (data) {
-    yield put({ type: LOGIN_SUCCESSFULLY, user: data });
+    yield put({ type: LOGIN_SUCCESSFULLY, user: data.user });
     yield put({ type: SYNC_FAVORITES });
   } else if (error.code === EMAIL_ALREADY_USED) {
     const { data: dataLogin, error: errorLogin } = yield call(login, email, password);
     if (dataLogin) {
-      yield put({ type: LOGIN_SUCCESSFULLY, user: dataLogin });
+      yield put({ type: LOGIN_SUCCESSFULLY, user: dataLogin.user });
       yield put({ type: SYNC_FAVORITES });
     } else {
       yield put({ type: LOGIN_FAILED, error: errorLogin });

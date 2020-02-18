@@ -78,7 +78,7 @@ const SearchBox = props => {
       const timestamp = Date.now();
       const time = ts.getFuzzyLocalTimeFromPoint(timestamp, value.position.reverse());
       const country = value.vicinity.split('<br/>');
-      const city = value.title.split(' ');
+      const city = value.title.split('(');
       const favorite = {
         city: city[0],
         country: country.length > 1 ? country[country.length - 1] : country[0],

@@ -1,6 +1,6 @@
 import { takeEvery, put, call, select, all, fork } from 'redux-saga/effects';
 
-import { LOCATIONS } from 'constants/collections';
+import { LOCATIONS, LOCATION } from 'constants/collections';
 import db from 'utils/firebaseFirestore';
 import {
   FETCH_FAVORITES_SEND,
@@ -26,9 +26,16 @@ import { SEND_NOTIFICATIONS } from 'store/actionTypes/notificationActionTypes';
 
 const getCurrentState = state => state.favorites;
 
-async function firestoreRequest() {
+const getCurrentStateAuth = state => state.authData;
+
+async function firestoreRequest(uid) {
   try {
-    const dbFavorites = await db.collection(LOCATIONS).get();
+    const dbFavorites = await db
+      .collection(LOCATIONS)
+      .doc(uid)
+      .collection(LOCATION)
+      .get();
+
     const docs = [];
     for (const doc of dbFavorites.docs) {
       const data = doc.data();
@@ -42,11 +49,12 @@ async function firestoreRequest() {
 
 function* firestoreRequestSaga() {
   const state = yield select(getCurrentState);
+  const auth = yield select(getCurrentStateAuth);
 
   if (state.dataLoaded) {
     yield put({ type: FETCH_FAVORITES_ALREADY_FETCHED });
   } else {
-    const { data, error } = yield call(firestoreRequest);
+    const { data, error } = yield call(firestoreRequest, auth.user.uid);
 
     if (data) {
       yield put({ type: FETCH_FAVORITES_SET_DATA, data });
@@ -115,17 +123,20 @@ function* addFavoriteSaga(action) {
   }
 }
 
-async function simpleAddFavorite(favorite) {
-  const locationRef = db.collection(LOCATIONS);
+async function simpleAddFavorite(favorite, uid) {
+  const locationRef = db
+    .collection(LOCATIONS)
+    .doc(uid)
+    .collection(LOCATION);
   locationRef.add(favorite);
 }
 
-function getNewFavoritesPromises(data, dataLocally) {
+function getNewFavoritesPromises(data, dataLocally, uid) {
   const newFavoritesPromises = [];
 
   for (const favorite of dataLocally) {
     if (!data.some(el => el.city === favorite.city)) {
-      newFavoritesPromises.push(simpleAddFavorite(favorite));
+      newFavoritesPromises.push(simpleAddFavorite(favorite, uid));
     }
   }
 
@@ -134,10 +145,11 @@ function getNewFavoritesPromises(data, dataLocally) {
 
 function* syncFavoritesSaga() {
   const state = yield select(getCurrentState);
-  const { data, error } = yield call(firestoreRequest);
+  const auth = yield select(getCurrentStateAuth);
+  const { data, error } = yield call(firestoreRequest, auth.user.uid);
 
   if (data) {
-    const promises = getNewFavoritesPromises(data, state.dataLocally);
+    const promises = getNewFavoritesPromises(data, state.dataLocally, auth.user.uid);
     try {
       yield call(() => Promise.all(promises));
       yield put({ type: SYNC_SUCCESSFULLY });
