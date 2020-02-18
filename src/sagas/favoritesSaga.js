@@ -84,7 +84,6 @@ function* deleteFavoriteSaga(action) {
   const auth = yield select(getCurrentStateAuth);
 
   const { data, error } = yield call(deleteFavorite, state.data, auth.user.uid, id);
-
   if (data) {
     yield put({ type: DELETE_FAVORITE_SUCCESS, data });
     yield put({ type: SEND_NOTIFICATIONS, notificationType: 'success', message: 'City deleted!' });
@@ -102,8 +101,8 @@ async function addFavorite(data, uid) {
   try {
     const response = await locationRef.where('city', '==', data.city).get();
     if (response.empty) {
-      await locationRef.add(data);
-      return { status: true };
+      const newData = await locationRef.add(data);
+      return { status: true, id: newData.id };
     }
     return { status: false };
   } catch (error) {
@@ -115,14 +114,14 @@ function* addFavoriteSaga(action) {
   const { data } = action;
   const state = yield select(getCurrentState);
   const auth = yield select(getCurrentStateAuth);
-  const { status, error } = yield call(addFavorite, data, auth.user.uid);
+  const { status, id, error } = yield call(addFavorite, data, auth.user.uid);
 
   if (error) {
     yield put({ type: ADD_FAVORITE_FAILED, error });
     yield put({ type: SEND_NOTIFICATIONS, notificationType: 'error', message: 'Error adding a new city!' });
   } else if (status) {
-    const newData = state.data;
-    newData.push(data);
+    const newData = [...state.data];
+    newData.push({ ...data, id });
     yield put({ type: ADD_FAVORITE_SUCCESS, data: newData });
     yield put({ type: SEND_NOTIFICATIONS, notificationType: 'success', message: 'City added!' });
   } else {
