@@ -24,7 +24,7 @@ const getCurrentStateData = state => state.data;
 async function register(email, password) {
   try {
     const data = await auth.createUserWithEmailAndPassword(email, password);
-    db.collection(LOCATIONS).add({ id: data.user.uid });
+    db.collection(LOCATIONS).doc(data.user.uid);
     return { data };
   } catch (error) {
     return { error };
