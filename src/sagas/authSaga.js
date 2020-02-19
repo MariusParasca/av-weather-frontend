@@ -42,7 +42,7 @@ async function login(email, password) {
 
 async function makeIpRequest() {
   try {
-    const response = await ipStackAxios.get('/check');
+    const response = await ipStackAxios.get();
 
     return { ip: response.data.ip };
   } catch (error) {

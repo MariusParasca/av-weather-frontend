@@ -28,13 +28,27 @@ async function makeWeatherRequest(latitude, longitude) {
 
 async function makeRequest() {
   try {
-    const response = await ipStackAxios.get('/check');
-    const weatherResponse = await makeWeatherRequest(response.data.latitude, response.data.longitude);
+    const response = await ipStackAxios.get();
+    const location = response.data.loc.split(',');
+    const latitude = Number(location[0]);
+    const longitude = Number(location[1]);
+    const weatherResponse = await makeWeatherRequest(latitude, longitude);
     if (weatherResponse.error) {
       return { error: weatherResponse.error };
     }
 
-    return { data: { ipStack: response.data, weather: weatherResponse.data } };
+    return {
+      data: {
+        ipStack: {
+          latitude,
+          longitude,
+          city: response.data.city,
+          country_name: response.data.country,
+          ip: response.data.ip,
+        },
+        weather: weatherResponse.data,
+      },
+    };
   } catch (error) {
     return { error };
   }

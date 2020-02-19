@@ -1,13 +1,13 @@
 import axios from 'axios';
 
 const ipStackInstance = axios.create({
-  baseURL: 'http://api.ipstack.com',
+  baseURL: 'https://ipinfo.io/',
 });
 
 ipStackInstance.interceptors.request.use(config => ({
   ...config,
   params: {
-    access_key: '7c48ea439ebc8085863649684b81cfe0',
+    token: '65ecef81a3501e',
     ...config.params,
   },
 }));
