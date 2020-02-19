@@ -5,6 +5,7 @@ import {
   WEATHER_SET_DATA,
   WEATHER_API_FAILED,
   WEATHER_DATA_ALREADY_FETCHED,
+  ONLY_WEATHER_SET_DATA,
 } from 'store/actionTypes/weatherAPIActionTypes';
 import ipStackAxios from 'axios/ipStack';
 import darkSkyAxios from 'axios/darkSky';
@@ -32,10 +33,6 @@ async function makeRequest() {
     const location = response.data.loc.split(',');
     const latitude = Number(location[0]);
     const longitude = Number(location[1]);
-    const weatherResponse = await makeWeatherRequest(latitude, longitude);
-    if (weatherResponse.error) {
-      return { error: weatherResponse.error };
-    }
 
     return {
       data: {
@@ -43,10 +40,9 @@ async function makeRequest() {
           latitude,
           longitude,
           city: response.data.city,
-          country_name: response.data.country,
+          country: response.data.country,
           ip: response.data.ip,
         },
-        weather: weatherResponse.data,
       },
     };
   } catch (error) {
@@ -54,18 +50,37 @@ async function makeRequest() {
   }
 }
 
-function* apiRequest() {
+function* weatherRequestGenerator(latitude, longitude, ipStack = {}) {
+  const { data, error } = yield call(makeWeatherRequest, latitude, longitude);
+  if (data) {
+    yield put({ type: WEATHER_SET_DATA, data: { weather: data, ipStack } });
+  } else {
+    yield put({ type: WEATHER_API_FAILED, error });
+  }
+}
+
+function* apiRequest(action) {
   const state = yield select(getCurrentStateData);
 
-  if (!state.dataLoaded) {
-    const { data, error } = yield call(makeRequest);
-    if (data) {
-      yield put({ type: WEATHER_SET_DATA, data });
-    } else {
-      yield put({ type: WEATHER_API_FAILED, error });
+  if (action.payload) {
+    console.log(action.payload);
+    console.log('o', {
+      ...state.ipStack,
+      city: action.payload.city,
+      country: action.payload.country,
+    });
+    yield call(weatherRequestGenerator, action.payload.latitude, action.payload.longitude, {
+      ...state.ipStack,
+      city: action.payload.city,
+      country: action.payload.country,
+    });
+  } else if (!state.ipStack.dataLoaded) {
+    const { data: ipData, error: ipError } = yield call(makeRequest);
+    if (ipError) {
+      yield put({ type: WEATHER_API_FAILED, ipError });
+      return;
     }
-  } else {
-    yield put({ type: WEATHER_DATA_ALREADY_FETCHED });
+    yield call(weatherRequestGenerator, ipData.ipStack.latitude, ipData.ipStack.longitude, ipData.ipStack);
   }
 }
 

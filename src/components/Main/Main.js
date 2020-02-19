@@ -10,7 +10,6 @@ import Charts from 'routes/Charts/Charts';
 import History from 'routes/History/History';
 import Favorites from 'routes/Favorites/Favorites';
 import Map from 'routes/Map/Map';
-import AirGauge from 'components/AirGauge/AirGauge';
 import HomeAdditional from 'routes/Home/HomeAdditional/HomeAdditional';
 import HistoryAdditional from 'routes/History/HistoryAdditional/HistoryAdditional';
 import Account from 'routes/Account/Account';

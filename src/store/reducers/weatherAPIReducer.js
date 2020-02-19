@@ -2,6 +2,7 @@ import {
   WEATHER_SET_DATA,
   WEATHER_API_FAILED,
   WEATHER_DATA_ALREADY_FETCHED,
+  WEATHER_API_SEND,
 } from 'store/actionTypes/weatherAPIActionTypes';
 import { DAY_NO_HOURS, WEEK_DAYS } from 'constants/constants';
 
@@ -14,6 +15,7 @@ const initialState = {
     city: '',
     country: '',
     ip: '',
+    dataLoaded: false,
   },
   weather: {
     currently: {
@@ -31,13 +33,13 @@ const initialState = {
       feelsLike: 0,
       description: '',
       airQuality: 0,
+      dataLoaded: false,
     },
     hourly: [],
     daily: [],
   },
   error: null,
   pending: true,
-  dataLoaded: false,
 };
 
 const createCurrentlyWeather = data => {
@@ -76,7 +78,7 @@ const createIpStack = data => {
     latitude: data.latitude,
     longitude: data.longitude,
     city: data.city,
-    country: data.country_name,
+    country: data.country,
     ip: data.ip,
   };
 };
@@ -87,6 +89,9 @@ const reducer = (state = initialState, action) => {
   const newStateWeather = { ...state.weather };
 
   switch (action.type) {
+    case WEATHER_API_SEND:
+      newState.pending = true;
+      break;
     case WEATHER_SET_DATA:
       newStateIpStack = createIpStack(action.data.ipStack);
       newStateWeather.currently = createCurrentlyWeather({
@@ -97,7 +102,7 @@ const reducer = (state = initialState, action) => {
       newStateWeather.hourly = createHourlyWeather(action.data.weather.hourly);
       newStateWeather.daily = createDailyWeather(action.data.weather.daily);
       newState.pending = false;
-      newState.dataLoaded = true;
+      newState.ipStack.dataLoaded = true;
       break;
     case WEATHER_API_FAILED:
       newState.error = action.data.error;
