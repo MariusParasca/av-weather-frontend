@@ -16,8 +16,6 @@ const Login = props => {
   const [error, setError] = useState(false);
   const [helperText, setHelperText] = useState('');
 
-  const [isLoading, setIsLoading] = useState(false);
-
   const resetError = () => {
     setError(false);
     setHelperText('');
@@ -35,7 +33,6 @@ const Login = props => {
   };
 
   const onClickRegister = () => {
-    setIsLoading(true);
     if (isEmailValid(value)) {
       register(value);
     } else if (!value) {
@@ -46,9 +43,6 @@ const Login = props => {
   useEffect(() => {
     if (authData.error) {
       setErrorMessage(authData.error.message);
-    }
-    if (!authData.pending) {
-      setIsLoading(false);
     }
   }, [authData]);
 
@@ -73,7 +67,7 @@ const Login = props => {
           Login
         </Button>
       </div>
-      {isLoading ? <Spinner /> : null}
+      {authData.pending ? <Spinner /> : null}
     </>
   );
 };
