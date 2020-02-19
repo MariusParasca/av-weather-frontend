@@ -12,23 +12,13 @@ import Main from 'components/Main/Main';
 import SearchBox from 'components/SearchBox/SearchBox';
 
 import { ADD_FAVORITE_SEND, ADD_FAVORITE_LOCALLY_SEND } from 'store/actionTypes/favoritesActionTypes';
+import { SEARCH_PLACEHOLDER } from 'constants/constants';
 import Spinner from 'components/Spinner/Spinner';
+import { PageRoute } from 'utils/routes';
 import styles from './RequestComponent.module.css';
 
 const RequestComponent = props => {
-  const {
-    location,
-    locationData,
-    getWeather,
-    weatherData,
-    pending,
-    favorites,
-    addFavorite,
-    checkLogin,
-    isLoggedIn,
-    addFavoriteLocally,
-    pendingCheckLogin,
-  } = props;
+  const { location, locationData, getWeather, weatherData, pending, checkLogin, pendingCheckLogin } = props;
 
   useEffect(() => {
     if (isCorrectRoute(topContainerRoutes, location.pathname)) getWeather();
@@ -48,16 +38,8 @@ const RequestComponent = props => {
             <ApplicationBar />
             <Main locationData={locationData} weatherData={weatherData} pending={pending} />
           </div>
-          {isCorrectRoute(topContainerRoutes, location.pathname) && (
-            <SearchBox
-              favorites={favorites}
-              addFavorite={addFavorite}
-              locationData={locationData}
-              placeholder="City, postcode or place"
-              className={styles.searchBox}
-              isLoggedIn={isLoggedIn}
-              addFavoriteLocally={addFavoriteLocally}
-            />
+          {isCorrectRoute(topContainerRoutes, location.pathname) && location.pathname !== PageRoute.home && (
+            <SearchBox placeholder={SEARCH_PLACEHOLDER} className={styles.searchBox} />
           )}
         </>
       )}
@@ -67,7 +49,6 @@ const RequestComponent = props => {
 
 RequestComponent.propTypes = {
   locationData: PropTypes.objectOf(PropTypes.any).isRequired,
-  favorites: PropTypes.objectOf(PropTypes.any).isRequired,
   location: PropTypes.objectOf(PropTypes.any).isRequired,
   weatherData: PropTypes.shape({
     currently: PropTypes.objectOf(PropTypes.any),
@@ -76,10 +57,7 @@ RequestComponent.propTypes = {
   }).isRequired,
   pending: PropTypes.bool.isRequired,
   getWeather: PropTypes.func.isRequired,
-  addFavorite: PropTypes.func.isRequired,
   checkLogin: PropTypes.func.isRequired,
-  isLoggedIn: PropTypes.bool.isRequired,
-  addFavoriteLocally: PropTypes.func.isRequired,
   pendingCheckLogin: PropTypes.bool.isRequired,
 };
 
@@ -89,7 +67,6 @@ const mapStateToProps = state => {
     weatherData: state.data.weather,
     pending: state.data.pending,
     pendingCheckLogin: state.authData.pending,
-    favorites: state.favorites,
     isLoggedIn: state.authData.isLoggedIn,
   };
 };

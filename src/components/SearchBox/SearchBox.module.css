@@ -6,10 +6,14 @@
 }
 
 .spinner {
-  position: fixed;
-  top: 40px;
-  right: 35px;
+  position: absolute;
+  top: 19px;
+  right: 20px;
   width: 20px;
   margin-left: auto;
   z-index: 10;
+}
+
+.subContainer {
+  position: relative;
 }

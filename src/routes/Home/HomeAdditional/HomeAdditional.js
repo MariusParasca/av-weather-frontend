@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { makeStyles, Divider } from '@material-ui/core';
 import SunInfo from 'components/SunInfo/SunInfo';
 
+import AirGauge from 'components/AirGauge/AirGauge';
 import styles from './HomeAdditional.module.css';
 
 const useStyles = makeStyles(() => ({
@@ -17,7 +18,10 @@ const HomeAdditional = props => {
   const classes = useStyles();
 
   return (
-    <div className={styles.container}>
+    <div>
+      <div className={styles.airGaugeContainer}>
+        <AirGauge className={styles.rightWeatherContainer} airQuality={73} />
+      </div>
       <SunInfo sunriseTime={sunriseTime} sunsetTime={sunsetTime} />
       <Divider variant="middle" classes={{ root: classes.dividerRoot }} />
     </div>

@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import { makeStyles, TextField, InputAdornment, MenuItem } from '@material-ui/core';
 import ts from '@mapbox/timespace';
 
+import { ADD_FAVORITE_SEND, ADD_FAVORITE_LOCALLY_SEND } from 'store/actionTypes/favoritesActionTypes';
 import useHttp from 'hooks/useHttp';
 import hereAutosuggestAxios from 'axios/hereAutosuggest';
 import SearchIcon from '@material-ui/icons/Search';
 import Spinner from 'components/Spinner/Spinner';
+import { connect } from 'react-redux';
 import styles from './SearchBox.module.css';
 
 const useStyles = makeStyles(() => ({
@@ -120,33 +122,35 @@ const SearchBox = props => {
 
   return (
     <>
-      <div className={styles.spinner}>{isLoading ? <Spinner size={18} /> : null}</div>
       <div className={className} ref={wrapperRef}>
-        <TextField
-          variant="outlined"
-          margin="none"
-          placeholder={placeholder}
-          fullWidth
-          value={searchString}
-          onChange={onChange}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-            classes: { root: classes.searchRoot },
-          }}
-        />
-        {autoCompleteOptions.length > 0 && (
-          <div className={styles.autoCompleteContainer}>
-            {autoCompleteOptions.map((el, index) => (
-              <MenuItem key={`${el.title}${index}`} onClick={() => onClickMenuItem(el)}>
-                {el.title}
-              </MenuItem>
-            ))}
-          </div>
-        )}
+        <div className={styles.subContainer}>
+          <div className={styles.spinner}>{isLoading ? <Spinner size={18} /> : null}</div>
+          <TextField
+            variant="outlined"
+            margin="none"
+            placeholder={placeholder}
+            fullWidth
+            value={searchString}
+            onChange={onChange}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+              classes: { root: classes.searchRoot },
+            }}
+          />
+          {autoCompleteOptions.length > 0 && (
+            <div className={styles.autoCompleteContainer}>
+              {autoCompleteOptions.map((el, index) => (
+                <MenuItem key={`${el.title}${index}`} onClick={() => onClickMenuItem(el)}>
+                  {el.title}
+                </MenuItem>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </>
   );
@@ -166,4 +170,18 @@ SearchBox.defaultProps = {
   className: '',
 };
 
-export default SearchBox;
+const mapStateToProps = state => {
+  return {
+    locationData: state.data.ipStack,
+    isLoggedIn: state.authData.isLoggedIn,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addFavorite: data => dispatch({ type: ADD_FAVORITE_SEND, data }),
+    addFavoriteLocally: favoriteCity => dispatch({ type: ADD_FAVORITE_LOCALLY_SEND, favoriteCity }),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchBox);

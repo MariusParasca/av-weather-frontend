@@ -14,6 +14,8 @@ import AirGauge from 'components/AirGauge/AirGauge';
 import HomeAdditional from 'routes/Home/HomeAdditional/HomeAdditional';
 import HistoryAdditional from 'routes/History/HistoryAdditional/HistoryAdditional';
 import Account from 'routes/Account/Account';
+import SearchBox from 'components/SearchBox/SearchBox';
+import { SEARCH_PLACEHOLDER } from 'constants/constants';
 import CurrentWeather from './CurrentWeather/CurrentWeather';
 import styles from './Main.module.css';
 
@@ -70,7 +72,9 @@ const Main = props => {
                     weatherData={weatherData.currently}
                   />
                   <Route exact path={PageRoute.home}>
-                    <AirGauge className={styles.rightWeatherContainer} airQuality={73} />
+                    <div className={styles.rightWeatherContainer}>
+                      <SearchBox placeholder={SEARCH_PLACEHOLDER} />
+                    </div>
                   </Route>
                 </div>
                 <Route exact path={PageRoute.home}>

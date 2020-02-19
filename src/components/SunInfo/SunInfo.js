@@ -40,9 +40,6 @@ const SunInfo = props => {
           <span className={styles.sunText}>{screenSunsetTime}</span>
         </div>
       </div>
-      <div>
-        <img alt="weather type" src="https://via.placeholder.com/200x150.jpg" />
-      </div>
     </div>
   );
 };
