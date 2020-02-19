@@ -12,7 +12,7 @@ const reducer = (state = initialState, action) => {
         title: capitalizeFirstLetter(action.notificationType),
         message: action.message,
         type: action.notificationType,
-        container: 'top-right',
+        container: 'bottom-right',
         dismiss: {
           duration: 3000,
         },

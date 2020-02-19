@@ -30,7 +30,7 @@ const reducer = (state = initialState, action) => {
     case REHYDRATE:
       return {
         ...state,
-        dataLocally: action.payload.favorites.dataLocally ? action.payload.favorites.dataLocally : [],
+        dataLocally: action.payload ? action.payload.favorites.dataLocally : [],
       };
     case FETCH_FAVORITES_ALREADY_FETCHED:
       break;
