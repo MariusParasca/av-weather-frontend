@@ -63,12 +63,6 @@ function* apiRequest(action) {
   const state = yield select(getCurrentStateData);
 
   if (action.payload) {
-    console.log(action.payload);
-    console.log('o', {
-      ...state.ipStack,
-      city: action.payload.city,
-      country: action.payload.country,
-    });
     yield call(weatherRequestGenerator, action.payload.latitude, action.payload.longitude, {
       ...state.ipStack,
       city: action.payload.city,
@@ -81,6 +75,8 @@ function* apiRequest(action) {
       return;
     }
     yield call(weatherRequestGenerator, ipData.ipStack.latitude, ipData.ipStack.longitude, ipData.ipStack);
+  } else {
+    yield put({ type: WEATHER_DATA_ALREADY_FETCHED });
   }
 }
 

@@ -102,12 +102,13 @@ const reducer = (state = initialState, action) => {
       newStateWeather.hourly = createHourlyWeather(action.data.weather.hourly);
       newStateWeather.daily = createDailyWeather(action.data.weather.daily);
       newState.pending = false;
-      newState.ipStack.dataLoaded = true;
+      newStateIpStack.dataLoaded = true;
       break;
     case WEATHER_API_FAILED:
       newState.error = action.data.error;
       break;
     case WEATHER_DATA_ALREADY_FETCHED:
+      newState.pending = false;
       break;
     default:
       break;
