@@ -2,7 +2,6 @@ import { PageRoute, ChartsRoute } from 'utils/routes';
 
 export const topContainerRoutes = [
   PageRoute.home,
-  PageRoute.map,
   `${PageRoute.charts}${ChartsRoute.temperature}`,
   `${PageRoute.charts}${ChartsRoute.precipitation}`,
   `${PageRoute.charts}${ChartsRoute.humidity}`,

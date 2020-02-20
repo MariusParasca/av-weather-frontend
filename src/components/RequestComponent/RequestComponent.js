@@ -17,11 +17,14 @@ import Spinner from 'components/Spinner/Spinner';
 import { PageRoute } from 'utils/routes';
 import styles from './RequestComponent.module.css';
 
+const searchTopContainers = [...topContainerRoutes];
+searchTopContainers.push(PageRoute.map);
+
 const RequestComponent = props => {
   const { location, locationData, getWeather, weatherData, pending, checkLogin, pendingCheckLogin } = props;
 
   useEffect(() => {
-    if (isCorrectRoute(topContainerRoutes, location.pathname)) getWeather();
+    if (isCorrectRoute(searchTopContainers, location.pathname)) getWeather();
   }, [getWeather, location.pathname]);
 
   useEffect(() => {
@@ -38,7 +41,7 @@ const RequestComponent = props => {
             <ApplicationBar />
             <Main locationData={locationData} weatherData={weatherData} pending={pending} />
           </div>
-          {isCorrectRoute(topContainerRoutes, location.pathname) && location.pathname !== PageRoute.home && (
+          {isCorrectRoute(searchTopContainers, location.pathname) && location.pathname !== PageRoute.home && (
             <SearchBox placeholder={SEARCH_PLACEHOLDER} className={styles.searchBox} />
           )}
         </>
