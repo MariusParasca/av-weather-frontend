@@ -5,7 +5,6 @@ import {
   WEATHER_SET_DATA,
   WEATHER_API_FAILED,
   WEATHER_DATA_ALREADY_FETCHED,
-  ONLY_WEATHER_SET_DATA,
 } from 'store/actionTypes/weatherAPIActionTypes';
 import ipStackAxios from 'axios/ipStack';
 import darkSkyAxios from 'axios/darkSky';

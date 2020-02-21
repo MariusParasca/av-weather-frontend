@@ -36,17 +36,23 @@ const Map = props => {
       const markers = [];
 
       for (const favorite of favoritesArray) {
-        markers.push(new window.H.map.Marker({ lat: favorite.latitude, lng: favorite.longitude }));
+        const marker = new window.H.map.Marker({ lat: favorite.latitude, lng: favorite.longitude });
+        marker.setData(favorite.city);
+        markers.push(marker);
       }
 
-      const group = new window.H.map.Group();
+      const group = new window.H.map.Group({ objects: markers });
 
-      group.addObjects(markers);
-      currentMap.addObject(group);
+      group.addEventListener('tap', function(evt) {
+        // Now lets log the event
+        console.log(evt);
+      });
 
       currentMap.getViewModel().setLookAtData({
         bounds: group.getBoundingBox(),
       });
+
+      currentMap.addObject(group);
     },
     [currentMap],
   );
