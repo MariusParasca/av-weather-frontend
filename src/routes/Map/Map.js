@@ -18,12 +18,9 @@ const Map = props => {
       const layer = HereMaps.createDefaultLayers();
       const container = document.getElementById('here-map');
 
-      // const berlinMarker = new window.H.map.Marker({ lat: 52.5166, lng: 13.3833 });
-      // const parisMarker = new window.H.map.Marker({ lat: 48.8567, lng: 2.3508 });
-      // const madridMarker = new window.H.map.Marker({ lat: 40.4, lng: -3.6833 });
-
       const map = new window.H.Map(container, layer.vector.normal.map, {
         zoom: 1,
+        padding: { top: 80, left: 80, bottom: 80, right: 80 },
       });
 
       setCurrentMap(map);
@@ -50,8 +47,6 @@ const Map = props => {
       currentMap.getViewModel().setLookAtData({
         bounds: group.getBoundingBox(),
       });
-
-      console.log('group.getBoundingBox()', group.getBoundingBox());
     },
     [currentMap],
   );
