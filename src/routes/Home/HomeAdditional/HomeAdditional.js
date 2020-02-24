@@ -17,8 +17,6 @@ const HomeAdditional = props => {
   const { sunriseTime, sunsetTime, airQuality } = props;
   const classes = useStyles();
 
-  console.log('airQuality', airQuality);
-
   return (
     <div>
       <div className={styles.airGaugeContainer}>
