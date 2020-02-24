@@ -17,7 +17,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const FavoriteCity = props => {
-  const { city, country, utcOffset, latitude, longitude, onClickIcon } = props;
+  const { city, country, utcOffset, latitude, longitude, onClickIcon, isOnMap } = props;
 
   const classes = useStyles();
 
@@ -70,7 +70,7 @@ const FavoriteCity = props => {
   }, [time, startClock]);
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${isOnMap ? styles.forMapContainer : ''}`}>
       <div className={styles.localTimeContainer}>
         <Typography variant="h6">Local time: {time}</Typography>
         {onClickIcon && (
@@ -99,11 +99,13 @@ FavoriteCity.propTypes = {
   onClickIcon: PropTypes.func,
   latitude: PropTypes.number.isRequired,
   longitude: PropTypes.number.isRequired,
+  isOnMap: PropTypes.bool,
 };
 
 FavoriteCity.defaultProps = {
   utcOffset: undefined,
   onClickIcon: undefined,
+  isOnMap: false,
 };
 
 export default FavoriteCity;

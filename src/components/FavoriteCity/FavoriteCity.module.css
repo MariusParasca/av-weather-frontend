@@ -5,6 +5,11 @@
   padding: 20px 30px;
 }
 
+.forMapContainer {
+  background: white;
+  opacity: 0.85;
+}
+
 .localTimeContainer {
   display: flex;
   justify-content: space-between;

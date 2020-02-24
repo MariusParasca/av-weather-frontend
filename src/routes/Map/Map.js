@@ -74,29 +74,31 @@ const Map = props => {
 
   const setFavoritesMarkers = useCallback(
     favoritesArray => {
-      const markers = [];
+      if (favoritesArray.length > 0) {
+        const markers = [];
 
-      for (const favorite of favoritesArray) {
-        const marker = new window.H.map.Marker({ lat: favorite.latitude, lng: favorite.longitude });
-        marker.setData(favorite.city);
-        markers.push(marker);
-      }
-
-      const group = new window.H.map.Group({ objects: markers });
-
-      group.addEventListener('tap', evt => {
-        if (isLoggedIn) {
-          setFavoriteClicked(findByCity(data, evt.target.getData()));
-        } else {
-          setFavoriteClicked(findByCity(dataLocally, evt.target.getData()));
+        for (const favorite of favoritesArray) {
+          const marker = new window.H.map.Marker({ lat: favorite.latitude, lng: favorite.longitude });
+          marker.setData(favorite.city);
+          markers.push(marker);
         }
-      });
 
-      currentMap.getViewModel().setLookAtData({
-        bounds: group.getBoundingBox(),
-      });
+        const group = new window.H.map.Group({ objects: markers });
 
-      currentMap.addObject(group);
+        group.addEventListener('tap', evt => {
+          if (isLoggedIn) {
+            setFavoriteClicked(findByCity(data, evt.target.getData()));
+          } else {
+            setFavoriteClicked(findByCity(dataLocally, evt.target.getData()));
+          }
+        });
+
+        currentMap.getViewModel().setLookAtData({
+          bounds: group.getBoundingBox(),
+        });
+
+        currentMap.addObject(group);
+      }
     },
     [currentMap, data, dataLocally, isLoggedIn],
   );
@@ -123,6 +125,7 @@ const Map = props => {
             country={favoriteClicked.country}
             latitude={favoriteClicked.latitude}
             longitude={favoriteClicked.longitude}
+            isOnMap
           />
         </div>
       )}

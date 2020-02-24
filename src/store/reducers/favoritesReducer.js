@@ -1,6 +1,7 @@
 import { REHYDRATE } from 'redux-persist/lib/constants';
 
 import {
+  FETCH_FAVORITES_SEND,
   FETCH_FAVORITES_SET_DATA,
   FETCH_FAVORITES_FAILED,
   DELETE_FAVORITE_SUCCESS,
@@ -16,7 +17,7 @@ import {
 const initialState = {
   data: [],
   dataLocally: [],
-  pending: true,
+  pending: false,
   error: null,
   dataLoaded: false,
 };
@@ -32,7 +33,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         dataLocally: action.payload ? action.payload.favorites.dataLocally : [],
       };
+    case FETCH_FAVORITES_SEND:
+      newState.pending = true;
+      break;
     case FETCH_FAVORITES_ALREADY_FETCHED:
+      newState.pending = false;
       break;
     case FETCH_FAVORITES_SET_DATA:
       newState.data = action.data;
