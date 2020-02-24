@@ -73,9 +73,11 @@ const FavoriteCity = props => {
     <div className={styles.container}>
       <div className={styles.localTimeContainer}>
         <Typography variant="h6">Local time: {time}</Typography>
-        <Button classes={{ root: classes.starButtonRoot }} onClick={onClickIcon}>
-          <StarIcon />
-        </Button>
+        {onClickIcon && (
+          <Button classes={{ root: classes.starButtonRoot }} onClick={onClickIcon}>
+            <StarIcon />
+          </Button>
+        )}
       </div>
       <Typography variant="h4">{`${city}, ${country}`}</Typography>
       <div className={styles.valueContainer}>
@@ -94,13 +96,14 @@ FavoriteCity.propTypes = {
   city: PropTypes.string.isRequired,
   country: PropTypes.string.isRequired,
   utcOffset: PropTypes.number,
-  onClickIcon: PropTypes.func.isRequired,
+  onClickIcon: PropTypes.func,
   latitude: PropTypes.number.isRequired,
   longitude: PropTypes.number.isRequired,
 };
 
 FavoriteCity.defaultProps = {
   utcOffset: undefined,
+  onClickIcon: undefined,
 };
 
 export default FavoriteCity;
