@@ -8,19 +8,31 @@ import {
 } from 'store/actionTypes/weatherAPIActionTypes';
 import ipStackAxios from 'axios/ipStack';
 import darkSkyAxios from 'axios/darkSky';
+import airQualityInstance from 'axios/airQuality';
+import { replaceDiacritics } from 'utils/helperFunctions';
 
 const getCurrentStateData = state => state.data;
 
-async function makeWeatherRequest(latitude, longitude) {
+async function makeWeatherRequest(latitude, longitude, city) {
   try {
-    const response = await darkSkyAxios.get(`/${latitude},${longitude}`, {
+    const darkSkyPromise = await darkSkyAxios.get(`/${latitude},${longitude}`, {
       params: {
         units: 'si',
-        exclude: '[minutely]',
+        exclude: '[minutely, alerts, flags]',
       },
     });
 
-    return { data: response.data };
+    const ariQualityPromise = airQualityInstance.get(`/${replaceDiacritics(city)}/`);
+
+    const responses = await Promise.all([darkSkyPromise, ariQualityPromise]);
+
+    return {
+      data: {
+        currently: { ...responses[0].data.currently, airQuality: responses[1].data.data.aqi },
+        hourly: responses[0].data.hourly,
+        daily: responses[0].data.daily,
+      },
+    };
   } catch (error) {
     return { error };
   }
@@ -49,8 +61,8 @@ async function makeRequest() {
   }
 }
 
-function* weatherRequestGenerator(latitude, longitude, ipStack = {}) {
-  const { data, error } = yield call(makeWeatherRequest, latitude, longitude);
+function* weatherRequestGenerator(latitude, longitude, city, ipStack = {}) {
+  const { data, error } = yield call(makeWeatherRequest, latitude, longitude, city);
   if (data) {
     yield put({ type: WEATHER_SET_DATA, data: { weather: data, ipStack } });
   } else {
@@ -62,7 +74,7 @@ function* apiRequest(action) {
   const state = yield select(getCurrentStateData);
 
   if (action.payload) {
-    yield call(weatherRequestGenerator, action.payload.latitude, action.payload.longitude, {
+    yield call(weatherRequestGenerator, action.payload.latitude, action.payload.longitude, action.payload.city, {
       ...state.ipStack,
       city: action.payload.city,
       country: action.payload.country,
@@ -73,7 +85,13 @@ function* apiRequest(action) {
       yield put({ type: WEATHER_API_FAILED, ipError });
       return;
     }
-    yield call(weatherRequestGenerator, ipData.ipStack.latitude, ipData.ipStack.longitude, ipData.ipStack);
+    yield call(
+      weatherRequestGenerator,
+      ipData.ipStack.latitude,
+      ipData.ipStack.longitude,
+      ipData.ipStack.city,
+      ipData.ipStack,
+    );
   } else {
     yield put({ type: WEATHER_DATA_ALREADY_FETCHED });
   }

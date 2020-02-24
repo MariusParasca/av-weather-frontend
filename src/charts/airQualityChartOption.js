@@ -1,4 +1,6 @@
-const getAirQualityChartOption = value => ({
+import { MAX_AIQ } from 'constants/constants';
+
+const getAirQualityChartOption = valueAir => ({
   grid: {
     left: '0%',
     right: '0%',
@@ -12,14 +14,14 @@ const getAirQualityChartOption = value => ({
       radius: '80%',
       startAngle: 180,
       endAngle: 0,
-      detail: { formatter: '{value} AQI', color: 'black' },
-      data: [{ value }],
+      detail: { formatter: `${valueAir} AQI`, color: 'black' },
+      data: [{ value: (valueAir * 100) / MAX_AIQ }],
       axisLine: {
         show: true,
         lineStyle: {
           width: 0,
           color: [
-            [value / 100, '#FF9F1E'],
+            [valueAir / MAX_AIQ, '#FF9F1E'],
             [1, '#E6E6E6'],
           ],
         },

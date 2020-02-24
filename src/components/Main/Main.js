@@ -79,6 +79,7 @@ const Main = props => {
                 <Route exact path={PageRoute.home}>
                   <div className={styles.additionalContainer}>
                     <HomeAdditional
+                      airQuality={weatherData.currently.airQuality}
                       sunsetTime={weatherData.currently.sunsetTime}
                       sunriseTime={weatherData.currently.sunriseTime}
                     />

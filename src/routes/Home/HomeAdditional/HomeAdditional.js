@@ -14,13 +14,15 @@ const useStyles = makeStyles(() => ({
 }));
 
 const HomeAdditional = props => {
-  const { sunriseTime, sunsetTime } = props;
+  const { sunriseTime, sunsetTime, airQuality } = props;
   const classes = useStyles();
+
+  console.log('airQuality', airQuality);
 
   return (
     <div>
       <div className={styles.airGaugeContainer}>
-        <AirGauge className={styles.rightWeatherContainer} airQuality={73} />
+        <AirGauge className={styles.rightWeatherContainer} airQuality={airQuality} />
       </div>
       <SunInfo sunriseTime={sunriseTime} sunsetTime={sunsetTime} />
       <Divider variant="middle" classes={{ root: classes.dividerRoot }} />
@@ -29,6 +31,7 @@ const HomeAdditional = props => {
 };
 
 HomeAdditional.propTypes = {
+  airQuality: PropTypes.number.isRequired,
   sunriseTime: PropTypes.number.isRequired,
   sunsetTime: PropTypes.number.isRequired,
 };

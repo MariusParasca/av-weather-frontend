@@ -57,6 +57,7 @@ const createCurrentlyWeather = data => {
     temperature: data.temperature,
     description: data.summary,
     feelsLike: data.apparentTemperature,
+    airQuality: data.airQuality,
   };
 };
 

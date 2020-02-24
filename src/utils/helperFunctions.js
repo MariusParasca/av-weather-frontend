@@ -52,3 +52,7 @@ export const updateTextField = (func, resetFunc, error) => ({ target: { value } 
 export const capitalizeFirstLetter = string => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
+
+export const replaceDiacritics = text => {
+  return text.normalize('NFKD').replace(/[^\w]/g, '');
+};
