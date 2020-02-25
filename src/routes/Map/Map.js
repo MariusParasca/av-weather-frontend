@@ -76,6 +76,21 @@ const Map = props => {
     if (isLoggedIn) getFavorites();
   }, [getFavorites, isLoggedIn]);
 
+  const makerGroupEventListener = useCallback(
+    evt => {
+      if (isLoggedIn) {
+        const city = findByCity(data, evt.target.getData());
+        setFavoriteClicked(city);
+        currentMap.setCenter({ lat: city.latitude, lng: city.longitude });
+      } else {
+        const city = findByCity(dataLocally, evt.target.getData());
+        setFavoriteClicked(city);
+        currentMap.setCenter({ lat: city.latitude, lng: city.longitude });
+      }
+    },
+    [currentMap, data, dataLocally, isLoggedIn],
+  );
+
   const setFavoritesMarkers = useCallback(
     async favoritesArray => {
       if (favoritesArray.length > 0) {
@@ -103,13 +118,7 @@ const Map = props => {
 
         const group = new window.H.map.Group({ objects: markers });
 
-        group.addEventListener('tap', evt => {
-          if (isLoggedIn) {
-            setFavoriteClicked(findByCity(data, evt.target.getData()));
-          } else {
-            setFavoriteClicked(findByCity(dataLocally, evt.target.getData()));
-          }
-        });
+        group.addEventListener('tap', makerGroupEventListener);
 
         currentMap.getViewModel().setLookAtData({
           bounds: group.getBoundingBox(),
@@ -118,7 +127,7 @@ const Map = props => {
         currentMap.addObject(group);
       }
     },
-    [currentMap, data, dataLocally, isLoggedIn],
+    [currentMap, makerGroupEventListener],
   );
 
   useEffect(() => {
