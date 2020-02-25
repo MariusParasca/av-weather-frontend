@@ -17,6 +17,7 @@ import SearchBox from 'components/SearchBox/SearchBox';
 import { SEARCH_PLACEHOLDER } from 'constants/constants';
 import CurrentWeather from './CurrentWeather/CurrentWeather';
 import styles from './Main.module.css';
+import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
 
 // Calendar dumb data
 const february = [
@@ -59,39 +60,41 @@ const Main = props => {
       <>
         <Route exact path={topContainerRoutes}>
           <div className={styles.topContainer}>
-            {pending ? (
-              <Spinner />
-            ) : (
-              <>
-                <div className={styles.todayContainer}>
-                  <CurrentWeather
-                    className={styles.leftWeatherContainer}
-                    city={locationData.city}
-                    country={locationData.country}
-                    weatherData={weatherData.currently}
-                  />
+            <ErrorBoundary>
+              {pending ? (
+                <Spinner />
+              ) : (
+                <>
+                  <div className={styles.todayContainer}>
+                    <CurrentWeather
+                      className={styles.leftWeatherContainer}
+                      city={locationData.city}
+                      country={locationData.country}
+                      weatherData={weatherData.currently}
+                    />
+                    <Route exact path={PageRoute.home}>
+                      <div className={styles.rightWeatherContainer}>
+                        <SearchBox placeholder={SEARCH_PLACEHOLDER} />
+                      </div>
+                    </Route>
+                  </div>
                   <Route exact path={PageRoute.home}>
-                    <div className={styles.rightWeatherContainer}>
-                      <SearchBox placeholder={SEARCH_PLACEHOLDER} />
+                    <div className={styles.additionalContainer}>
+                      <HomeAdditional
+                        airQuality={weatherData.currently.airQuality}
+                        sunsetTime={weatherData.currently.sunsetTime}
+                        sunriseTime={weatherData.currently.sunriseTime}
+                      />
                     </div>
                   </Route>
-                </div>
-                <Route exact path={PageRoute.home}>
-                  <div className={styles.additionalContainer}>
-                    <HomeAdditional
-                      airQuality={weatherData.currently.airQuality}
-                      sunsetTime={weatherData.currently.sunsetTime}
-                      sunriseTime={weatherData.currently.sunriseTime}
-                    />
-                  </div>
-                </Route>
-                <Route path={PageRoute.history}>
-                  <div className={styles.additionalContainer}>
-                    <HistoryAdditional />
-                  </div>
-                </Route>
-              </>
-            )}
+                  <Route path={PageRoute.history}>
+                    <div className={styles.additionalContainer}>
+                      <HistoryAdditional />
+                    </div>
+                  </Route>
+                </>
+              )}
+            </ErrorBoundary>
           </div>
         </Route>
         <div className={styles.bottomContainer}>
@@ -101,30 +104,42 @@ const Main = props => {
             ) : (
               <>
                 <Route exact path={PageRoute.home}>
-                  <Home weatherForecast={weatherData.daily} todayWeather={weatherData.currently} />
+                  <ErrorBoundary>
+                    <Home weatherForecast={weatherData.daily} todayWeather={weatherData.currently} />
+                  </ErrorBoundary>
                 </Route>
                 <Route path={PageRoute.charts}>
-                  <Charts hourly={weatherData.hourly} daily={weatherData.daily} />
+                  <ErrorBoundary>
+                    <Charts hourly={weatherData.hourly} daily={weatherData.daily} />
+                  </ErrorBoundary>
                 </Route>
                 <Route path={PageRoute.history}>
-                  <History
-                    monthTemperature={february}
-                    maxWind={weatherData.currently.maxWind}
-                    humidity={weatherData.currently.humidity}
-                    precipitation={weatherData.currently.precipitation}
-                  />
+                  <ErrorBoundary>
+                    <History
+                      monthTemperature={february}
+                      maxWind={weatherData.currently.maxWind}
+                      humidity={weatherData.currently.humidity}
+                      precipitation={weatherData.currently.precipitation}
+                    />
+                  </ErrorBoundary>
                 </Route>
               </>
             )}
           </Route>
           <Route path={PageRoute.favorites}>
-            <Favorites />
+            <ErrorBoundary>
+              <Favorites />
+            </ErrorBoundary>
           </Route>
           <Route path={PageRoute.map}>
-            <Map />
+            <ErrorBoundary>
+              <Map />
+            </ErrorBoundary>
           </Route>
           <Route path={[PageRoute.account, PageRoute.register, PageRoute.login]}>
-            <Account />
+            <ErrorBoundary>
+              <Account />
+            </ErrorBoundary>
           </Route>
         </div>
       </>
