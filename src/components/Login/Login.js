@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { TextField, Button, Typography } from '@material-ui/core';
 
 import { isEmailValid } from 'utils/validators';
@@ -9,12 +8,14 @@ import { LOGIN } from 'store/actionTypes/authActionTypes';
 import Spinner from 'components/Spinner/Spinner';
 import styles from './Login.module.css';
 
-const Login = props => {
-  const { register, authData } = props;
+const Login = () => {
+  const authData = useSelector(state => state.authData);
 
   const [value, setValue] = useState('');
   const [error, setError] = useState(false);
   const [helperText, setHelperText] = useState('');
+
+  const dispatch = useDispatch();
 
   const resetError = () => {
     setError(false);
@@ -34,7 +35,7 @@ const Login = props => {
 
   const onClickRegister = () => {
     if (isEmailValid(value)) {
-      register(value);
+      dispatch({ type: LOGIN, email: value });
     } else if (!value) {
       setErrorMessage('Invalid email! Please provide a valid one');
     }
@@ -72,21 +73,4 @@ const Login = props => {
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    authData: state.authData,
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    register: email => dispatch({ type: LOGIN, email }),
-  };
-};
-
-Login.propTypes = {
-  register: PropTypes.func.isRequired,
-  authData: PropTypes.objectOf(PropTypes.any).isRequired,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default Login;

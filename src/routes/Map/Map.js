@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import HereMaps from 'utils/HereMapsInstance';
 import { FETCH_FAVORITES_SEND } from 'store/actionTypes/favoritesActionTypes';
@@ -21,13 +20,16 @@ const findByCity = (favorites, city) => {
   return null;
 };
 
-const Map = props => {
-  const { favorites, getFavorites, isLoggedIn } = props;
+const Map = () => {
+  const favorites = useSelector(state => state.favorites);
+  const isLoggedIn = useSelector(state => state.authData.isLoggedIn);
   const { data, dataLocally, pending } = favorites;
 
   const [currentMap, setCurrentMap] = useState(null);
   const [favoriteClicked, setFavoriteClicked] = useState(null);
   const wrapperRef = useRef(null);
+
+  const dispatch = useDispatch();
 
   const handleClickOutside = useCallback(event => {
     if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
@@ -73,8 +75,8 @@ const Map = props => {
   }, [pending]);
 
   useEffect(() => {
-    if (isLoggedIn) getFavorites();
-  }, [getFavorites, isLoggedIn]);
+    if (isLoggedIn) dispatch({ type: FETCH_FAVORITES_SEND });
+  }, [dispatch, isLoggedIn]);
 
   const makerGroupEventListener = useCallback(
     evt => {
@@ -165,23 +167,4 @@ const Map = props => {
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    favorites: state.favorites,
-    isLoggedIn: state.authData.isLoggedIn,
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    getFavorites: () => dispatch({ type: FETCH_FAVORITES_SEND }),
-  };
-};
-
-Map.propTypes = {
-  favorites: PropTypes.objectOf(PropTypes.any).isRequired,
-  getFavorites: PropTypes.func.isRequired,
-  isLoggedIn: PropTypes.bool.isRequired,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Map);
+export default Map;

@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Typography } from '@material-ui/core';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import {
   FETCH_FAVORITES_SEND,
@@ -12,9 +11,12 @@ import FavoriteCity from 'components/FavoriteCity/FavoriteCity';
 import Spinner from 'components/Spinner/Spinner';
 import styles from './Favorites.module.css';
 
-const Favorites = props => {
-  const { favorites, getFavorites, deleteFavorite, deleteFavoriteLocally, isLoggedIn } = props;
+const Favorites = () => {
+  const favorites = useSelector(state => state.favorites);
+  const isLoggedIn = useSelector(state => state.authData.isLoggedIn);
   const { data, dataLocally, pending } = favorites;
+
+  const dispatch = useDispatch();
 
   const mapFunction = favorite => (
     <FavoriteCity
@@ -24,13 +26,17 @@ const Favorites = props => {
       country={favorite.country}
       latitude={favorite.latitude}
       longitude={favorite.longitude}
-      onClickIcon={isLoggedIn ? () => deleteFavorite(favorite.id) : () => deleteFavoriteLocally(favorite.id)}
+      onClickIcon={
+        isLoggedIn
+          ? () => dispatch({ type: DELETE_FAVORITE_SEND, id: favorite.id })
+          : () => dispatch({ type: DELETE_FAVORITE_LOCALLY_SEND, id: favorite.id })
+      }
     />
   );
 
   useEffect(() => {
-    if (isLoggedIn) getFavorites();
-  }, [getFavorites, isLoggedIn]);
+    if (isLoggedIn) dispatch({ type: FETCH_FAVORITES_SEND });
+  }, [dispatch, isLoggedIn]);
 
   return (
     <div className={styles.container}>
@@ -47,27 +53,4 @@ const Favorites = props => {
   );
 };
 
-Favorites.propTypes = {
-  favorites: PropTypes.objectOf(PropTypes.any).isRequired,
-  getFavorites: PropTypes.func.isRequired,
-  deleteFavorite: PropTypes.func.isRequired,
-  deleteFavoriteLocally: PropTypes.func.isRequired,
-  isLoggedIn: PropTypes.bool.isRequired,
-};
-
-const mapStateToProps = state => {
-  return {
-    favorites: state.favorites,
-    isLoggedIn: state.authData.isLoggedIn,
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    getFavorites: () => dispatch({ type: FETCH_FAVORITES_SEND }),
-    deleteFavorite: id => dispatch({ type: DELETE_FAVORITE_SEND, id }),
-    deleteFavoriteLocally: id => dispatch({ type: DELETE_FAVORITE_LOCALLY_SEND, id }),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Favorites);
+export default Favorites;

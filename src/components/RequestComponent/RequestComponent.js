@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { connect, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { WEATHER_API_SEND } from 'store/actionTypes/weatherAPIActionTypes';
 import { LOGIN_CHECK } from 'store/actionTypes/authActionTypes';
@@ -11,7 +11,6 @@ import ApplicationBar from 'components/ApplicationBar/ApplicationBar';
 import Main from 'components/Main/Main';
 import SearchBox from 'components/SearchBox/SearchBox';
 
-import { ADD_FAVORITE_SEND, ADD_FAVORITE_LOCALLY_SEND } from 'store/actionTypes/favoritesActionTypes';
 import { SEARCH_PLACEHOLDER } from 'constants/constants';
 import Spinner from 'components/Spinner/Spinner';
 import { PageRoute } from 'utils/routes';
@@ -21,15 +20,23 @@ const searchTopContainers = [...topContainerRoutes];
 searchTopContainers.push(PageRoute.map);
 
 const RequestComponent = props => {
-  const { location, locationData, getWeather, weatherData, pending, checkLogin, pendingCheckLogin } = props;
+  const { location } = props;
+
+  const dispatch = useDispatch();
+  const locationData = useSelector(state => state.data.ipStack);
+  const weatherData = useSelector(state => state.data.weather);
+  const pending = useSelector(state => state.data.pending);
+  const pendingCheckLogin = useSelector(state => state.authData.pending);
 
   useEffect(() => {
-    if (isCorrectRoute(searchTopContainers, location.pathname) && !pendingCheckLogin) getWeather();
-  }, [getWeather, location.pathname, pendingCheckLogin]);
+    if (isCorrectRoute(searchTopContainers, location.pathname) && !pendingCheckLogin) {
+      dispatch({ type: WEATHER_API_SEND });
+    }
+  }, [dispatch, location.pathname, pendingCheckLogin]);
 
   useEffect(() => {
-    checkLogin();
-  }, [checkLogin]);
+    dispatch({ type: LOGIN_CHECK });
+  }, [dispatch]);
 
   return (
     <>
@@ -51,35 +58,7 @@ const RequestComponent = props => {
 };
 
 RequestComponent.propTypes = {
-  locationData: PropTypes.objectOf(PropTypes.any).isRequired,
   location: PropTypes.objectOf(PropTypes.any).isRequired,
-  weatherData: PropTypes.shape({
-    currently: PropTypes.objectOf(PropTypes.any),
-    hourly: PropTypes.array,
-    daily: PropTypes.array,
-  }).isRequired,
-  pending: PropTypes.bool.isRequired,
-  getWeather: PropTypes.func.isRequired,
-  checkLogin: PropTypes.func.isRequired,
-  pendingCheckLogin: PropTypes.bool.isRequired,
 };
 
-const mapStateToProps = state => {
-  return {
-    locationData: state.data.ipStack,
-    weatherData: state.data.weather,
-    pending: state.data.pending,
-    pendingCheckLogin: state.authData.pending,
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    getWeather: () => dispatch({ type: WEATHER_API_SEND }),
-    addFavorite: data => dispatch({ type: ADD_FAVORITE_SEND, data }),
-    addFavoriteLocally: favoriteCity => dispatch({ type: ADD_FAVORITE_LOCALLY_SEND, favoriteCity }),
-    checkLogin: () => dispatch({ type: LOGIN_CHECK }),
-  };
-};
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(RequestComponent));
+export default withRouter(RequestComponent);

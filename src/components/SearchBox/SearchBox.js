@@ -7,7 +7,7 @@ import useHttp from 'hooks/useHttp';
 import hereAutosuggestAxios from 'axios/hereAutosuggest';
 import SearchIcon from '@material-ui/icons/Search';
 import Spinner from 'components/Spinner/Spinner';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { WEATHER_API_SEND } from 'store/actionTypes/weatherAPIActionTypes';
 import { getUtcOffsetByCoordinates } from 'utils/helperFunctions';
 import styles from './SearchBox.module.css';
@@ -21,7 +21,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const SearchBox = props => {
-  const { placeholder, className, locationData, addFavorite, addFavoriteLocally, isLoggedIn, getWeather } = props;
+  const { placeholder, className } = props;
 
   const hereAutosuggestHttp = useHttp();
   const { sendRequest: sendRequestHereAutosuggest } = hereAutosuggestHttp;
@@ -31,6 +31,11 @@ const SearchBox = props => {
   const [searchString, setSearchString] = useState('');
   const [autoCompleteOptions, setAutoCompleteOptions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const locationData = useSelector(state => state.data.ipStack);
+  const isLoggedIn = useSelector(state => state.authData.isLoggedIn);
 
   const classes = useStyles();
 
@@ -110,15 +115,23 @@ const SearchBox = props => {
         dateTime: new Date(),
       };
       if (isLoggedIn) {
-        addFavorite(favorite);
+        dispatch({ type: ADD_FAVORITE_SEND, data: favorite });
       } else {
-        addFavoriteLocally(favorite);
+        dispatch({ type: ADD_FAVORITE_LOCALLY_SEND, favoriteCity: favorite });
       }
 
-      getWeather(favorite.latitude, favorite.longitude, favorite.city, favorite.country);
+      dispatch({
+        type: WEATHER_API_SEND,
+        payload: {
+          latitude: favorite.latitude,
+          longitude: favorite.longitude,
+          city: favorite.city,
+          country: favorite.country,
+        },
+      });
       disableAutocomplete();
     },
-    [addFavorite, addFavoriteLocally, disableAutocomplete, getWeather, isLoggedIn],
+    [disableAutocomplete, dispatch, isLoggedIn],
   );
 
   return (
@@ -160,11 +173,6 @@ const SearchBox = props => {
 SearchBox.propTypes = {
   placeholder: PropTypes.string,
   className: PropTypes.string,
-  locationData: PropTypes.objectOf(PropTypes.any).isRequired,
-  addFavorite: PropTypes.func.isRequired,
-  isLoggedIn: PropTypes.bool.isRequired,
-  addFavoriteLocally: PropTypes.func.isRequired,
-  getWeather: PropTypes.func.isRequired,
 };
 
 SearchBox.defaultProps = {
@@ -172,20 +180,4 @@ SearchBox.defaultProps = {
   className: '',
 };
 
-const mapStateToProps = state => {
-  return {
-    locationData: state.data.ipStack,
-    isLoggedIn: state.authData.isLoggedIn,
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    getWeather: (latitude, longitude, city, country) =>
-      dispatch({ type: WEATHER_API_SEND, payload: { latitude, longitude, city, country } }),
-    addFavorite: data => dispatch({ type: ADD_FAVORITE_SEND, data }),
-    addFavoriteLocally: favoriteCity => dispatch({ type: ADD_FAVORITE_LOCALLY_SEND, favoriteCity }),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(SearchBox);
+export default SearchBox;
