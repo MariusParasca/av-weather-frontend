@@ -23,6 +23,8 @@ const findByCity = (favorites, city) => {
 const Map = () => {
   const favorites = useSelector(state => state.favorites);
   const isLoggedIn = useSelector(state => state.authData.isLoggedIn);
+  const currentLocation = useSelector(state => state.data.ipStack);
+
   const { data, dataLocally, pending } = favorites;
 
   const [currentMap, setCurrentMap] = useState(null);
@@ -95,7 +97,7 @@ const Map = () => {
 
   const setFavoritesMarkers = useCallback(
     async favoritesArray => {
-      if (favoritesArray.length > 0) {
+      if (favoritesArray.length > 0 && currentLocation) {
         const markers = [];
         const promises = [];
 
@@ -127,9 +129,10 @@ const Map = () => {
         });
 
         currentMap.addObject(group);
+        currentMap.setCenter({ lat: currentLocation.latitude, lng: currentLocation.longitude });
       }
     },
-    [currentMap, makerGroupEventListener],
+    [currentLocation, currentMap, makerGroupEventListener],
   );
 
   useEffect(() => {
