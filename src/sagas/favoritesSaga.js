@@ -156,7 +156,7 @@ function* addFavoriteSaga(action) {
     yield put({ type: ADD_FAVORITE_SUCCESS, data: newData });
     yield put({ type: SEND_NOTIFICATIONS, notificationType: 'success', message: 'City added!' });
   } else {
-    yield put({ type: SEND_NOTIFICATIONS, notificationType: 'warning', message: 'City already exists!' });
+    // yield put({ type: SEND_NOTIFICATIONS, notificationType: 'warning', message: 'City already exists!' });
   }
 }
 
@@ -220,7 +220,7 @@ function* watchAddFavoriteLocallySaga(action) {
 
   for (const item of newDataLocally) {
     if (item.city === action.favoriteCity.city) {
-      yield put({ type: SEND_NOTIFICATIONS, notificationType: 'warning', message: 'City already exists!' });
+      // yield put({ type: SEND_NOTIFICATIONS, notificationType: 'warning', message: 'City already exists!' });
       return;
     }
   }

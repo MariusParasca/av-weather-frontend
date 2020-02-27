@@ -109,8 +109,8 @@ const SearchBox = props => {
       const favorite = {
         city: city[0],
         country: country.length > 1 ? country[country.length - 1] : country[0],
-        latitude: value.position[1],
-        longitude: value.position[0],
+        latitude: value.position[0],
+        longitude: value.position[1],
         utcOffset: getUtcOffsetByCoordinates(value.position[0], value.position[1]),
         dateTime: new Date(),
       };
