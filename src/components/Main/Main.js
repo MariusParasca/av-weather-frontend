@@ -15,9 +15,9 @@ import HistoryAdditional from 'routes/History/HistoryAdditional/HistoryAdditiona
 import Account from 'routes/Account/Account';
 import SearchBox from 'components/SearchBox/SearchBox';
 import { SEARCH_PLACEHOLDER } from 'constants/constants';
+import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
 import CurrentWeather from './CurrentWeather/CurrentWeather';
 import styles from './Main.module.css';
-import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
 
 // Calendar dumb data
 const february = [

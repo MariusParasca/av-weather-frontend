@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 
 import { WEATHER_API_SEND } from 'store/actionTypes/weatherAPIActionTypes';
 import { LOGIN_CHECK } from 'store/actionTypes/authActionTypes';
@@ -24,8 +24,8 @@ const RequestComponent = props => {
   const { location, locationData, getWeather, weatherData, pending, checkLogin, pendingCheckLogin } = props;
 
   useEffect(() => {
-    if (isCorrectRoute(searchTopContainers, location.pathname)) getWeather();
-  }, [getWeather, location.pathname]);
+    if (isCorrectRoute(searchTopContainers, location.pathname) && !pendingCheckLogin) getWeather();
+  }, [getWeather, location.pathname, pendingCheckLogin]);
 
   useEffect(() => {
     checkLogin();
@@ -70,7 +70,6 @@ const mapStateToProps = state => {
     weatherData: state.data.weather,
     pending: state.data.pending,
     pendingCheckLogin: state.authData.pending,
-    isLoggedIn: state.authData.isLoggedIn,
   };
 };
 

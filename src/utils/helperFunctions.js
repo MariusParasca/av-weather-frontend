@@ -1,3 +1,5 @@
+import ts from '@mapbox/timespace';
+
 export const createChartData = (array, { label, propName }, options) => {
   let currentOptions;
   if (!options) {
@@ -55,4 +57,10 @@ export const capitalizeFirstLetter = string => {
 
 export const replaceDiacritics = text => {
   return text.normalize('NFKD').replace(/[^\w]/g, '');
+};
+
+export const getUtcOffsetByCoordinates = (latitude, longitude) => {
+  const timestamp = Date.now();
+  const time = ts.getFuzzyLocalTimeFromPoint(timestamp, [longitude, latitude]);
+  return time.utcOffset();
 };

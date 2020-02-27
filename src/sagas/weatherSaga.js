@@ -9,9 +9,12 @@ import {
 import ipStackAxios from 'axios/ipStack';
 import darkSkyAxios from 'axios/darkSky';
 import airQualityInstance from 'axios/airQuality';
-import { replaceDiacritics } from 'utils/helperFunctions';
+import { replaceDiacritics, getUtcOffsetByCoordinates } from 'utils/helperFunctions';
+import { ADD_FAVORITE_SEND, ADD_FAVORITE_LOCALLY_SEND } from 'store/actionTypes/favoritesActionTypes';
 
 const getCurrentStateData = state => state.data;
+
+const getIsLoggedState = state => state.authData.isLoggedIn;
 
 async function makeWeatherRequest(latitude, longitude, city) {
   try {
@@ -62,9 +65,23 @@ async function makeRequest() {
 }
 
 function* weatherRequestGenerator(latitude, longitude, city, ipStack = {}) {
+  const isLoggedIn = yield select(getIsLoggedState);
   const { data, error } = yield call(makeWeatherRequest, latitude, longitude, city);
   if (data) {
     yield put({ type: WEATHER_SET_DATA, data: { weather: data, ipStack } });
+    const favorite = {
+      city: ipStack.city,
+      country: ipStack.country,
+      latitude: ipStack.latitude,
+      longitude: ipStack.longitude,
+      utcOffset: getUtcOffsetByCoordinates(ipStack.latitude, ipStack.longitude),
+      dateTime: new Date(),
+    };
+    if (isLoggedIn) {
+      yield put({ type: ADD_FAVORITE_SEND, data: favorite });
+    } else {
+      yield put({ type: ADD_FAVORITE_LOCALLY_SEND, favoriteCity: favorite });
+    }
   } else {
     yield put({ type: WEATHER_API_FAILED, error });
   }

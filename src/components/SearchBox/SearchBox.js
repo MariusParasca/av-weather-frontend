@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles, TextField, InputAdornment, MenuItem } from '@material-ui/core';
-import ts from '@mapbox/timespace';
 
 import { ADD_FAVORITE_SEND, ADD_FAVORITE_LOCALLY_SEND } from 'store/actionTypes/favoritesActionTypes';
 import useHttp from 'hooks/useHttp';
@@ -10,6 +9,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import Spinner from 'components/Spinner/Spinner';
 import { connect } from 'react-redux';
 import { WEATHER_API_SEND } from 'store/actionTypes/weatherAPIActionTypes';
+import { getUtcOffsetByCoordinates } from 'utils/helperFunctions';
 import styles from './SearchBox.module.css';
 
 const useStyles = makeStyles(() => ({
@@ -99,8 +99,6 @@ const SearchBox = props => {
 
   const onClickMenuItem = useCallback(
     value => {
-      const timestamp = Date.now();
-      const time = ts.getFuzzyLocalTimeFromPoint(timestamp, value.position.reverse());
       const country = value.vicinity.split('<br/>');
       const city = value.title.split('(');
       const favorite = {
@@ -108,7 +106,7 @@ const SearchBox = props => {
         country: country.length > 1 ? country[country.length - 1] : country[0],
         latitude: value.position[1],
         longitude: value.position[0],
-        utcOffset: time.utcOffset(),
+        utcOffset: getUtcOffsetByCoordinates(value.position[0], value.position[1]),
         dateTime: new Date(),
       };
       if (isLoggedIn) {
