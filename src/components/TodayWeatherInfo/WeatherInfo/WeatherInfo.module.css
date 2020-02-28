@@ -5,6 +5,11 @@
   align-items: center;
 }
 
+.weatherInfoContainer:hover {
+  cursor: pointer;
+  background: #f7f7f7;
+}
+
 .weatherInfoContainer:last-child {
   margin-bottom: 20px;
 }
@@ -20,11 +25,20 @@
 }
 
 .weatherIconContainer {
-  margin-left: 32px;
   margin-right: 10px;
 }
 
 .textContainer {
   display: flex;
   align-items: center;
+  margin-left: 32px;
+}
+
+.weatherInfoContainerFavorite {
+  flex-direction: column;
+}
+
+.textContainerFavorite {
+  margin-left: 0;
+  margin-top: 10px;
 }

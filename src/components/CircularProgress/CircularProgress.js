@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import styles from './CircularProgress.module.css';
 
 const CircularProgress = props => {
-  const { size, strokeWidth, percent, activeColor, inactiveColor, text, className } = props;
+  const { size, strokeWidth, percent, activeColor, inactiveColor, text, className, isOnFavorite } = props;
+
+  console.log(isOnFavorite);
 
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
@@ -27,7 +29,7 @@ const CircularProgress = props => {
         />
       </svg>
       <div className={styles.textContainer} style={{ width: size, height: size }}>
-        <span>{text}</span>
+        <span className={`${isOnFavorite ? styles.biggerFont : ''}`}>{text}</span>
       </div>
     </div>
   );
@@ -41,6 +43,7 @@ CircularProgress.propTypes = {
   percent: PropTypes.number,
   text: PropTypes.string,
   className: PropTypes.string,
+  isOnFavorite: PropTypes.bool,
 };
 
 CircularProgress.defaultProps = {
@@ -51,6 +54,7 @@ CircularProgress.defaultProps = {
   percent: 0,
   text: '',
   className: '',
+  isOnFavorite: false,
 };
 
 export default CircularProgress;
