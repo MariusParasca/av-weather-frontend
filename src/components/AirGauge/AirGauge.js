@@ -14,11 +14,12 @@ const AirGauge = props => {
 
 AirGauge.propTypes = {
   className: PropTypes.string,
-  airQuality: PropTypes.number.isRequired,
+  airQuality: PropTypes.number,
 };
 
 AirGauge.defaultProps = {
   className: '',
+  airQuality: 0,
 };
 
 export default AirGauge;

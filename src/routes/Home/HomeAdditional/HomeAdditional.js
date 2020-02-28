@@ -29,9 +29,13 @@ const HomeAdditional = props => {
 };
 
 HomeAdditional.propTypes = {
-  airQuality: PropTypes.number.isRequired,
+  airQuality: PropTypes.number,
   sunriseTime: PropTypes.number.isRequired,
   sunsetTime: PropTypes.number.isRequired,
+};
+
+HomeAdditional.defaultProps = {
+  airQuality: 0,
 };
 
 export default HomeAdditional;

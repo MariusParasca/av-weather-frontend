@@ -25,7 +25,7 @@ async function makeWeatherRequest(latitude, longitude, city) {
       },
     });
 
-    const ariQualityPromise = airQualityInstance.get(`/${replaceDiacritics(city)}/`);
+    const ariQualityPromise = airQualityInstance.get(`/${replaceDiacritics(encodeURI(city.toLowerCase()))}/`);
 
     const responses = await Promise.all([darkSkyPromise, ariQualityPromise]);
 

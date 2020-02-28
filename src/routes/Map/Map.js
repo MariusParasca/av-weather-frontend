@@ -52,13 +52,16 @@ const Map = () => {
       const container = document.getElementById('here-map');
 
       const map = new window.H.Map(container, layer.vector.normal.map, {
-        zoom: 1,
+        zoom: 5,
         padding: { top: 80, left: 80, bottom: 80, right: 80 },
         pixelRatio: window.devicePixelRatio || 1,
       });
 
       // eslint-disable-next-line no-unused-vars
       const behavior = new window.H.mapevents.Behavior(new window.H.mapevents.MapEvents(map));
+
+      // eslint-disable-next-line no-unused-vars
+      // const ui = window.H.ui.UI.createDefault(map, layer);
 
       map.addEventListener(
         'pointermove',
@@ -120,7 +123,9 @@ const Map = () => {
           markers.push(marker);
         }
 
-        const group = new window.H.map.Group({ objects: markers });
+        const group = new window.H.map.Group({
+          objects: markers,
+        });
 
         group.addEventListener('tap', makerGroupEventListener);
 
