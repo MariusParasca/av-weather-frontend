@@ -1,21 +1,21 @@
 import { MAX_AIQ } from 'constants/constants';
 
-const getAirQualityChartOption = valueAir => ({
+const getAirQualityChartOption = (valueAir, stroke = 18, pointerWidth = 8, showDetail = true) => ({
   grid: {
     left: '0%',
     right: '0%',
     bottom: '0%',
-    containLabel: true,
+    containLabel: false,
   },
   series: [
     {
       name: '',
       type: 'gauge',
-      radius: '80%',
+      radius: `80%`,
       startAngle: 180,
       endAngle: 0,
-      detail: { formatter: `${valueAir} AQI`, color: 'black' },
       data: [{ value: (valueAir * 100) / MAX_AIQ }],
+      detail: { formatter: `${valueAir} AIQ`, color: 'black', show: showDetail },
       axisLine: {
         show: true,
         lineStyle: {
@@ -27,14 +27,14 @@ const getAirQualityChartOption = valueAir => ({
         },
       },
       splitLine: {
-        length: 18,
+        length: stroke,
         lineStyle: {
           width: 2,
           color: 'auto',
         },
       },
       axisTick: {
-        length: 18,
+        length: stroke,
         splitNumber: 7,
         lineStyle: {
           width: 2,
@@ -46,6 +46,7 @@ const getAirQualityChartOption = valueAir => ({
       },
       pointer: {
         length: '70%',
+        width: pointerWidth,
       },
       itemStyle: {
         color: '#FF9F1E',

@@ -5,7 +5,7 @@ import { SET_FAVORITE_WEATHER_INFO, SET_FAVORITE_WEATHER_INFO_SEND } from 'store
 function* watchSetFavoriteWeatherInfo(action) {
   yield put({
     type: SET_FAVORITE_WEATHER_INFO,
-    value: action.value,
+    progressValue: action.progressValue,
     text: action.text,
     svg: action.svg,
     progressText: action.progressText,

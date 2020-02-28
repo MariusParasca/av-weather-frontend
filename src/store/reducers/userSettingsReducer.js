@@ -2,7 +2,7 @@ import { SET_FAVORITE_WEATHER_INFO } from 'store/actionTypes/userSettingsActionT
 
 const initialState = {
   favoriteWeatherInfo: {
-    value: '',
+    progressValue: '',
     text: '',
     svg: '',
     progressText: '',
@@ -15,7 +15,7 @@ const reducer = (state = initialState, action) => {
 
   switch (action.type) {
     case SET_FAVORITE_WEATHER_INFO:
-      newState.favoriteWeatherInfo.value = action.value;
+      newState.favoriteWeatherInfo.progressValue = action.progressValue;
       newState.favoriteWeatherInfo.text = action.text;
       newState.favoriteWeatherInfo.svg = action.svg;
       newState.favoriteWeatherInfo.progressText = action.progressText;

@@ -1,3 +1,21 @@
 .otherContainer {
   margin-left: 25px;
 }
+
+.airGauge {
+  margin-left: -4px;
+  display: flex;
+  margin-top: 25px;
+  align-items: center;
+  height: 60px;
+}
+
+.airGauge:hover {
+  cursor: pointer;
+  background: #f7f7f7;
+}
+
+.typoAirGauge {
+  margin-left: 30px !important;
+  margin-bottom: 25px !important;
+}

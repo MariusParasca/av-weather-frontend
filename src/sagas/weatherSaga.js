@@ -11,6 +11,7 @@ import darkSkyAxios from 'axios/darkSky';
 import airQualityInstance from 'axios/airQuality';
 import { replaceDiacritics, getUtcOffsetByCoordinates } from 'utils/helperFunctions';
 import { ADD_FAVORITE_SEND, ADD_FAVORITE_LOCALLY_SEND } from 'store/actionTypes/favoritesActionTypes';
+import { SET_FAVORITE_WEATHER_INFO } from 'store/actionTypes/userSettingsActionTypes';
 
 const getCurrentStateData = state => state.data;
 
@@ -69,6 +70,7 @@ function* weatherRequestGenerator(latitude, longitude, city, ipStack = {}) {
   const { data, error } = yield call(makeWeatherRequest, latitude, longitude, city);
   if (data) {
     yield put({ type: WEATHER_SET_DATA, data: { weather: data, ipStack } });
+    yield put({ type: SET_FAVORITE_WEATHER_INFO, progressValue: data.currently.airQuality || 0 });
     const favorite = {
       city: ipStack.city,
       country: ipStack.country,

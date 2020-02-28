@@ -22,17 +22,15 @@ const HomeAdditional = props => {
 
   const userFavoriteWeatherInfo = useSelector(state => state.userSettings.favoriteWeatherInfo);
 
-  console.log(userFavoriteWeatherInfo);
-
   return (
     <div>
       <div className={styles.airGaugeContainer}>
-        {userFavoriteWeatherInfo.value ? (
+        {userFavoriteWeatherInfo.progressValue || userFavoriteWeatherInfo.text ? (
           <WeatherInfo
             isOnFavorite
             circularSize={150}
             circularStrokeWidth={16}
-            progressValue={userFavoriteWeatherInfo.value}
+            progressValue={userFavoriteWeatherInfo.progressValue}
             text={userFavoriteWeatherInfo.text}
             withPercent={userFavoriteWeatherInfo.withPercent}
             progressText={userFavoriteWeatherInfo.progressText}

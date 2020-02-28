@@ -27,8 +27,6 @@ const WeatherInfo = props => {
 
   const classes = useStyles();
 
-  console.log('weather', isOnFavorite);
-
   const percentChar = withPercent ? '%' : '';
   const actualProgressValue = withPercent ? Math.round(progressValue) : progressValue;
 
@@ -41,7 +39,7 @@ const WeatherInfo = props => {
       className={`${styles.weatherInfoContainer} ${isOnFavorite ? styles.weatherInfoContainerFavorite : ''}`}
     >
       <CircularProgress
-        isOnFavorite
+        isOnFavorite={isOnFavorite}
         size={circularSize}
         strokeWidth={circularStrokeWidth}
         percent={actualProgressValue}
@@ -63,7 +61,7 @@ WeatherInfo.propTypes = {
   text: PropTypes.string.isRequired,
   withPercent: PropTypes.bool,
   progressText: PropTypes.string,
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
   circularSize: PropTypes.number,
   circularStrokeWidth: PropTypes.number,
   isOnFavorite: PropTypes.bool,
@@ -75,6 +73,7 @@ WeatherInfo.defaultProps = {
   circularSize: 70,
   circularStrokeWidth: 9,
   isOnFavorite: false,
+  onClick: () => {},
 };
 
 export default WeatherInfo;
