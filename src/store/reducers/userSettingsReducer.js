@@ -7,6 +7,7 @@ const initialState = {
     svg: '',
     progressText: '',
     withPercent: false,
+    weatherType: '',
   },
 };
 
@@ -20,6 +21,7 @@ const reducer = (state = initialState, action) => {
       newState.favoriteWeatherInfo.svg = action.svg;
       newState.favoriteWeatherInfo.progressText = action.progressText;
       newState.favoriteWeatherInfo.withPercent = action.withPercent;
+      newState.favoriteWeatherInfo.weatherType = action.weatherType;
       break;
     default:
       break;

@@ -7,7 +7,15 @@ import styles from './LabeledCircularProgress.module.css';
 const EXTRA_SIZE = 6;
 
 const LabeledCircularProgress = props => {
-  const { progressValue, progressText, circularProgressSize, labelFontSize, activeColor } = props;
+  const {
+    progressValue,
+    progressText,
+    circularProgressSize,
+    labelFontSize,
+    activeColor,
+    strokeWidth,
+    isOnFavorite,
+  } = props;
 
   const containerSize = 2 * labelFontSize + circularProgressSize;
 
@@ -32,7 +40,9 @@ const LabeledCircularProgress = props => {
       </div>
       <div style={{ position: 'absolute', top: labelFontSize + EXTRA_SIZE / 2, left: labelFontSize + EXTRA_SIZE / 2 }}>
         <CircularProgress
+          isOnFavorite={isOnFavorite}
           size={circularProgressSize}
+          strokeWidth={strokeWidth}
           percent={progressValue}
           text={!progressText ? String(progressValue) : progressText}
         />
@@ -49,6 +59,8 @@ LabeledCircularProgress.propTypes = {
   circularProgressSize: PropTypes.number,
   labelFontSize: PropTypes.number,
   activeColor: PropTypes.string,
+  strokeWidth: PropTypes.number,
+  isOnFavorite: PropTypes.bool,
 };
 
 LabeledCircularProgress.defaultProps = {
@@ -56,6 +68,8 @@ LabeledCircularProgress.defaultProps = {
   circularProgressSize: 70,
   labelFontSize: 16,
   activeColor: '#FF9F1E',
+  strokeWidth: undefined,
+  isOnFavorite: false,
 };
 
 export default LabeledCircularProgress;

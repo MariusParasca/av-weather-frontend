@@ -27,7 +27,7 @@ AirQualityChart.propTypes = {
 AirQualityChart.defaultProps = {
   height: 300,
   stroke: 18,
-  width: undefined,
+  width: 299,
   pointerWidth: undefined,
   showDetail: true,
 };

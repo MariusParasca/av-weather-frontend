@@ -7,15 +7,23 @@ import { ReactComponent as UvIndex } from 'svgs/uvIndex.svg';
 import { ReactComponent as Cloud } from 'svgs/cloud.svg';
 
 import WithSvg from 'components/WithSvg/WithSvg';
-import { MAX_UV, MAX_PRESSURE, MAX_VISIBILITY, MAX_DEW_POINT } from 'constants/constants';
+import {
+  MAX_UV,
+  MAX_PRESSURE,
+  MAX_VISIBILITY,
+  MAX_DEW_POINT,
+  AIR_WEATHER_TYPE,
+  STANDARD_WEATHER_TYPE,
+  WIND_WEATHER_TYPE,
+} from 'constants/constants';
 import Spinner from 'components/Spinner/Spinner';
 import RightBottomContainer from 'components/RightBottomContainer/RightBottomContainer';
 import Wind from 'components/Wind/Wind';
 import { SET_FAVORITE_WEATHER_INFO } from 'store/actionTypes/userSettingsActionTypes';
 import { useDispatch, useSelector } from 'react-redux';
+import AirGauge from 'components/AirGauge/AirGauge';
 import WeatherInfo from './WeatherInfo/WeatherInfo';
 import styles from './TodayWeatherInfo.module.css';
-import AirGauge from 'components/AirGauge/AirGauge';
 
 const TodayWeatherInfo = props => {
   const { weatherInfo, isLoading } = props;
@@ -29,11 +37,11 @@ const TodayWeatherInfo = props => {
   const userFavoriteWeatherInfo = useSelector(state => state.userSettings.favoriteWeatherInfo);
 
   const onClickItem = useCallback(
-    (index, progressValue, text, svg, withPercent, progressText) => {
+    (index, progressValue, text, svg, withPercent, progressText, weatherType) => {
       const newItems = [...items];
       newItems[index] = { ...userFavoriteWeatherInfo };
       setItems(newItems);
-      dispatch({ type: SET_FAVORITE_WEATHER_INFO, progressValue, text, svg, withPercent, progressText });
+      dispatch({ type: SET_FAVORITE_WEATHER_INFO, progressValue, text, svg, withPercent, progressText, weatherType });
     },
     [dispatch, items, userFavoriteWeatherInfo],
   );
@@ -42,63 +50,127 @@ const TodayWeatherInfo = props => {
     if (weatherInfo) {
       setItems([
         {
+          progressValue: maxWind,
+          weatherType: WIND_WEATHER_TYPE,
+        },
+        {
           progressValue: humidity * 100,
           text: 'Humidity',
           svg: Humidity,
           withPercent: true,
+          weatherType: STANDARD_WEATHER_TYPE,
         },
         {
           progressValue: precipitation * 100,
           text: 'Precipitation',
           svg: Precipitation,
           withPercent: true,
+          weatherType: STANDARD_WEATHER_TYPE,
         },
         {
           progressValue: (uvIndex / MAX_UV) * 100,
           progressText: String(uvIndex),
           text: 'UV index',
           svg: UvIndex,
+          weatherType: STANDARD_WEATHER_TYPE,
         },
         {
           progressValue: cloudCover * 100,
           text: 'Cloud cover',
           svg: Cloud,
           withPercent: true,
+          weatherType: STANDARD_WEATHER_TYPE,
         },
         {
           progressValue: (pressure / MAX_PRESSURE) * 100,
           progressText: String(Math.round(pressure)),
           text: 'Pressure',
           svg: UvIndex,
+          weatherType: STANDARD_WEATHER_TYPE,
         },
         {
           progressValue: (visibility / MAX_VISIBILITY) * 100,
           progressText: `${Math.round(visibility)}km`,
           text: 'Visibility',
           svg: Precipitation,
+          weatherType: STANDARD_WEATHER_TYPE,
         },
         {
           progressValue: (dewPoint < 0 ? -1 : 1) * (dewPoint / MAX_DEW_POINT) * 100,
           progressText: `${Number(dewPoint).toFixed(2)}°`,
           text: 'Dew Point',
           svg: Precipitation,
+          weatherType: STANDARD_WEATHER_TYPE,
         },
       ]);
     }
-  }, [cloudCover, dewPoint, humidity, precipitation, pressure, uvIndex, visibility, weatherInfo]);
+  }, [cloudCover, dewPoint, maxWind, humidity, precipitation, pressure, uvIndex, visibility, weatherInfo]);
 
   return isLoading ? (
     <Spinner />
   ) : (
     <RightBottomContainer>
-      <Wind maxWind={maxWind} />
       <div className={styles.otherContainer}>
-        {items.map((item, index) =>
-          item.progressValue || item.text ? (
+        {items.map((item, index) => {
+          if (item.weatherType === AIR_WEATHER_TYPE) {
+            return (
+              <AirGauge
+                key="airGauge"
+                onClick={() =>
+                  onClickItem(
+                    index,
+                    item.progressValue,
+                    item.text,
+                    item.svg,
+                    item.withPercent,
+                    item.progressText,
+                    item.weatherType,
+                  )
+                }
+                className={styles.airGauge}
+                classNameTypo={styles.typoAirGauge}
+                pointerWidth={2}
+                stroke={9}
+                width={80}
+                height={90}
+                showDetail={false}
+                airQuality={item.progressValue}
+                showCustomLabel
+              />
+            );
+          }
+          if (item.weatherType === WIND_WEATHER_TYPE) {
+            return (
+              <Wind
+                key="wind"
+                onClick={() =>
+                  onClickItem(
+                    index,
+                    item.progressValue,
+                    item.text,
+                    item.svg,
+                    item.withPercent,
+                    item.progressText,
+                    item.weatherType,
+                  )
+                }
+                maxWind={item.progressValue}
+              />
+            );
+          }
+          return (
             <WeatherInfo
               key={item.text}
               onClick={() =>
-                onClickItem(index, item.progressValue, item.text, item.svg, item.withPercent, item.progressText)
+                onClickItem(
+                  index,
+                  item.progressValue,
+                  item.text,
+                  item.svg,
+                  item.withPercent,
+                  item.progressText,
+                  item.weatherType,
+                )
               }
               progressValue={item.progressValue}
               text={item.text}
@@ -107,24 +179,8 @@ const TodayWeatherInfo = props => {
             >
               <WithSvg component={item.svg} size={20} />
             </WeatherInfo>
-          ) : (
-            <AirGauge
-              key="airGauge"
-              onClick={() =>
-                onClickItem(index, item.progressValue, item.text, item.svg, item.withPercent, item.progressText)
-              }
-              className={styles.airGauge}
-              classNameTypo={styles.typoAirGauge}
-              pointerWidth={2}
-              stroke={9}
-              width={80}
-              height={90}
-              showDetail={false}
-              airQuality={item.progressValue}
-              showCustomLabel
-            />
-          ),
-        )}
+          );
+        })}
       </div>
     </RightBottomContainer>
   );

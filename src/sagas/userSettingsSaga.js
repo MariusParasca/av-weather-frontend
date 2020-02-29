@@ -10,6 +10,7 @@ function* watchSetFavoriteWeatherInfo(action) {
     svg: action.svg,
     progressText: action.progressText,
     withPercent: action.withPercent,
+    weatherType: action.weatherType,
   });
 }
 

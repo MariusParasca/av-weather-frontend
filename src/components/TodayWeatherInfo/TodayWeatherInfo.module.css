@@ -1,9 +1,5 @@
-.otherContainer {
-  margin-left: 25px;
-}
-
 .airGauge {
-  margin-left: -4px;
+  margin-left: 25px;
   display: flex;
   margin-top: 25px;
   align-items: center;

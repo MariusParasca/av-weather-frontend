@@ -1,5 +1,4 @@
 .windIconContainer {
-  margin-left: 16px;
   margin-right: 10px;
 }
 
@@ -7,4 +6,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.windContainer:not(:first-child) {
+  margin-top: 20px;
+}
+
+.windContainer:hover {
+  cursor: pointer;
+  background: #f7f7f7;
+}
+
+.textContainer {
+  display: flex;
+  align-items: center;
+  margin-left: 16px;
+}
+
+.windContainerFavorite {
+  flex-direction: column;
+}
+
+.textContainerFavorite {
+  margin-left: 0;
+  margin-top: 10px;
 }

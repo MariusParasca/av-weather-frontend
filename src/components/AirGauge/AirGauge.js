@@ -55,7 +55,7 @@ AirGauge.defaultProps = {
   airQuality: 0,
   height: 300,
   stroke: 18,
-  width: undefined,
+  width: 299,
   pointerWidth: undefined,
   onClick: () => {},
   showDetail: true,

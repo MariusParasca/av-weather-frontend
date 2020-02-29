@@ -38,3 +38,7 @@ export const ONE_MINUTE_IN_MILLISECONDS = 60000;
 export const EMAIL_ALREADY_USED = 'auth/email-already-in-use';
 
 export const SEARCH_PLACEHOLDER = 'City, postcode or place';
+
+export const AIR_WEATHER_TYPE = 'air';
+export const STANDARD_WEATHER_TYPE = 'standard';
+export const WIND_WEATHER_TYPE = 'wind';

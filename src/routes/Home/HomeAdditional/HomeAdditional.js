@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import { makeStyles, Divider } from '@material-ui/core';
 import SunInfo from 'components/SunInfo/SunInfo';
 
+import { AIR_WEATHER_TYPE, STANDARD_WEATHER_TYPE, WIND_WEATHER_TYPE } from 'constants/constants';
 import AirGauge from 'components/AirGauge/AirGauge';
 import { useSelector } from 'react-redux';
 import WeatherInfo from 'components/TodayWeatherInfo/WeatherInfo/WeatherInfo';
 import WithSvg from 'components/WithSvg/WithSvg';
+import Wind from 'components/Wind/Wind';
 import styles from './HomeAdditional.module.css';
 
 const useStyles = makeStyles(() => ({
@@ -17,30 +19,40 @@ const useStyles = makeStyles(() => ({
 }));
 
 const HomeAdditional = props => {
-  const { sunriseTime, sunsetTime, airQuality } = props;
+  const { sunriseTime, sunsetTime } = props;
   const classes = useStyles();
 
   const userFavoriteWeatherInfo = useSelector(state => state.userSettings.favoriteWeatherInfo);
 
+  let weatherComponent;
+
+  if (userFavoriteWeatherInfo.weatherType === AIR_WEATHER_TYPE) {
+    weatherComponent = (
+      <AirGauge className={styles.rightWeatherContainer} airQuality={userFavoriteWeatherInfo.progressValue} />
+    );
+  } else if (userFavoriteWeatherInfo.weatherType === STANDARD_WEATHER_TYPE) {
+    weatherComponent = (
+      <WeatherInfo
+        isOnFavorite
+        circularSize={150}
+        circularStrokeWidth={16}
+        progressValue={userFavoriteWeatherInfo.progressValue}
+        text={userFavoriteWeatherInfo.text}
+        withPercent={userFavoriteWeatherInfo.withPercent}
+        progressText={userFavoriteWeatherInfo.progressText}
+      >
+        <WithSvg component={userFavoriteWeatherInfo.svg} size={20} />
+      </WeatherInfo>
+    );
+  } else if (userFavoriteWeatherInfo.weatherType === WIND_WEATHER_TYPE) {
+    weatherComponent = (
+      <Wind isOnFavorite strokeWidth={18} circularProgressSize={150} maxWind={userFavoriteWeatherInfo.progressValue} />
+    );
+  }
+
   return (
     <div>
-      <div className={styles.airGaugeContainer}>
-        {userFavoriteWeatherInfo.progressValue || userFavoriteWeatherInfo.text ? (
-          <WeatherInfo
-            isOnFavorite
-            circularSize={150}
-            circularStrokeWidth={16}
-            progressValue={userFavoriteWeatherInfo.progressValue}
-            text={userFavoriteWeatherInfo.text}
-            withPercent={userFavoriteWeatherInfo.withPercent}
-            progressText={userFavoriteWeatherInfo.progressText}
-          >
-            <WithSvg component={userFavoriteWeatherInfo.svg} size={20} />
-          </WeatherInfo>
-        ) : (
-          <AirGauge className={styles.rightWeatherContainer} airQuality={airQuality} />
-        )}
-      </div>
+      <div className={styles.airGaugeContainer}>{weatherComponent}</div>
       <SunInfo sunriseTime={sunriseTime} sunsetTime={sunsetTime} />
       <Divider variant="middle" classes={{ root: classes.dividerRoot }} />
     </div>
@@ -48,13 +60,8 @@ const HomeAdditional = props => {
 };
 
 HomeAdditional.propTypes = {
-  airQuality: PropTypes.number,
   sunriseTime: PropTypes.number.isRequired,
   sunsetTime: PropTypes.number.isRequired,
-};
-
-HomeAdditional.defaultProps = {
-  airQuality: 0,
 };
 
 export default HomeAdditional;
