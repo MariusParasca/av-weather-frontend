@@ -18,6 +18,8 @@ const getCurrentStateData = state => state.data;
 
 const getIsLoggedState = state => state.authData.isLoggedIn;
 
+const getUserSettings = state => state.userSettings;
+
 async function makeWeatherRequest(latitude, longitude, city) {
   try {
     const darkSkyPromise = await darkSkyAxios.get(`/${latitude},${longitude}`, {
@@ -68,14 +70,19 @@ async function makeRequest() {
 
 function* weatherRequestGenerator(latitude, longitude, city, ipStack = {}) {
   const isLoggedIn = yield select(getIsLoggedState);
+  const userSettings = yield select(getUserSettings);
   const { data, error } = yield call(makeWeatherRequest, latitude, longitude, city);
   if (data) {
     yield put({ type: WEATHER_SET_DATA, data: { weather: data, ipStack } });
-    yield put({
-      type: SET_FAVORITE_WEATHER_INFO,
-      progressValue: data.currently.airQuality || 0,
-      weatherType: AIR_WEATHER_TYPE,
-    });
+
+    console.log(userSettings);
+    if (!userSettings.favoriteWeatherInfoLocally.progressValue) {
+      yield put({
+        type: SET_FAVORITE_WEATHER_INFO,
+        progressValue: data.currently.airQuality || 0,
+        weatherType: AIR_WEATHER_TYPE,
+      });
+    }
     const favorite = {
       city: ipStack.city,
       country: ipStack.country,

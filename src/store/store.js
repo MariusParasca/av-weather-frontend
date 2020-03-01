@@ -9,7 +9,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 const persistConfig = {
   key: 'v1',
   storage,
-  whitelist: ['favorites'],
+  whitelist: ['favorites', 'userSettings'],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);

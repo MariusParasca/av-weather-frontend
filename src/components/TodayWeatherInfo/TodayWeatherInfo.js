@@ -34,7 +34,7 @@ const TodayWeatherInfo = props => {
 
   const [items, setItems] = useState([]);
 
-  const userFavoriteWeatherInfo = useSelector(state => state.userSettings.favoriteWeatherInfo);
+  const userFavoriteWeatherInfo = useSelector(state => state.userSettings.favoriteWeatherInfoLocally);
 
   const onClickItem = useCallback(
     (index, progressValue, text, svg, withPercent, progressText, weatherType) => {

@@ -22,7 +22,7 @@ const HomeAdditional = props => {
   const { sunriseTime, sunsetTime } = props;
   const classes = useStyles();
 
-  const userFavoriteWeatherInfo = useSelector(state => state.userSettings.favoriteWeatherInfo);
+  const userFavoriteWeatherInfo = useSelector(state => state.userSettings.favoriteWeatherInfoLocally);
 
   let weatherComponent;
 

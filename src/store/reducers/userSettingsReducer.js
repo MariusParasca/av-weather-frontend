@@ -1,7 +1,17 @@
+import { REHYDRATE } from 'redux-persist/lib/constants';
+
 import { SET_FAVORITE_WEATHER_INFO } from 'store/actionTypes/userSettingsActionTypes';
 
 const initialState = {
   favoriteWeatherInfo: {
+    progressValue: '',
+    text: '',
+    svg: '',
+    progressText: '',
+    withPercent: false,
+    weatherType: '',
+  },
+  favoriteWeatherInfoLocally: {
     progressValue: '',
     text: '',
     svg: '',
@@ -15,13 +25,20 @@ const reducer = (state = initialState, action) => {
   const newState = { ...state };
 
   switch (action.type) {
+    case REHYDRATE:
+      return {
+        ...state,
+        favoriteWeatherInfoLocally: action.payload
+          ? action.payload.userSettings.favoriteWeatherInfoLocally
+          : initialState.favoriteWeatherInfoLocally,
+      };
     case SET_FAVORITE_WEATHER_INFO:
-      newState.favoriteWeatherInfo.progressValue = action.progressValue;
-      newState.favoriteWeatherInfo.text = action.text;
-      newState.favoriteWeatherInfo.svg = action.svg;
-      newState.favoriteWeatherInfo.progressText = action.progressText;
-      newState.favoriteWeatherInfo.withPercent = action.withPercent;
-      newState.favoriteWeatherInfo.weatherType = action.weatherType;
+      newState.favoriteWeatherInfoLocally.progressValue = action.progressValue;
+      newState.favoriteWeatherInfoLocally.text = action.text;
+      newState.favoriteWeatherInfoLocally.svg = action.svg;
+      newState.favoriteWeatherInfoLocally.progressText = action.progressText;
+      newState.favoriteWeatherInfoLocally.withPercent = action.withPercent;
+      newState.favoriteWeatherInfoLocally.weatherType = action.weatherType;
       break;
     default:
       break;
