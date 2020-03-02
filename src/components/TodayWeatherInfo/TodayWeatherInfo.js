@@ -19,99 +19,37 @@ import {
 import Spinner from 'components/Spinner/Spinner';
 import RightBottomContainer from 'components/RightBottomContainer/RightBottomContainer';
 import Wind from 'components/Wind/Wind';
-import { SET_FAVORITE_WEATHER_INFO } from 'store/actionTypes/userSettingsActionTypes';
+import { SET_FAVORITE_WEATHER_INFO, SET_FAVORITE_WEATHER_INFO_DATA } from 'store/actionTypes/userSettingsActionTypes';
 import { useDispatch, useSelector } from 'react-redux';
 import AirGauge from 'components/AirGauge/AirGauge';
 import WeatherInfo from './WeatherInfo/WeatherInfo';
 import styles from './TodayWeatherInfo.module.css';
 
 const TodayWeatherInfo = props => {
-  const { weatherInfo, isLoading } = props;
-
-  const { maxWind, humidity, precipitation, uvIndex, cloudCover, pressure, visibility, dewPoint } = weatherInfo;
+  const { isLoading } = props;
 
   const dispatch = useDispatch();
 
-  const [items, setItems] = useState([]);
-
-  const userFavoriteWeatherInfo = useSelector(state => state.userSettings.favoriteWeatherInfoLocally);
+  const userSettings = useSelector(state => state.userSettings);
+  const userFavoriteWeatherInfo = userSettings.favoriteWeatherInfoLocally;
+  const userWeatherData = userSettings.data;
 
   const onClickItem = useCallback(
     (index, progressValue, text, svg, withPercent, progressText, weatherType) => {
-      const newItems = [...items];
+      const newItems = [...userWeatherData];
       newItems[index] = { ...userFavoriteWeatherInfo };
-      setItems(newItems);
       dispatch({ type: SET_FAVORITE_WEATHER_INFO, progressValue, text, svg, withPercent, progressText, weatherType });
+      dispatch({ type: SET_FAVORITE_WEATHER_INFO_DATA, data: newItems });
     },
-    [dispatch, items, userFavoriteWeatherInfo],
+    [dispatch, userFavoriteWeatherInfo, userWeatherData],
   );
-
-  useEffect(() => {
-    if (weatherInfo) {
-      setItems([
-        {
-          progressValue: maxWind,
-          weatherType: WIND_WEATHER_TYPE,
-        },
-        {
-          progressValue: humidity * 100,
-          text: 'Humidity',
-          svg: Humidity,
-          withPercent: true,
-          weatherType: STANDARD_WEATHER_TYPE,
-        },
-        {
-          progressValue: precipitation * 100,
-          text: 'Precipitation',
-          svg: Precipitation,
-          withPercent: true,
-          weatherType: STANDARD_WEATHER_TYPE,
-        },
-        {
-          progressValue: (uvIndex / MAX_UV) * 100,
-          progressText: String(uvIndex),
-          text: 'UV index',
-          svg: UvIndex,
-          weatherType: STANDARD_WEATHER_TYPE,
-        },
-        {
-          progressValue: cloudCover * 100,
-          text: 'Cloud cover',
-          svg: Cloud,
-          withPercent: true,
-          weatherType: STANDARD_WEATHER_TYPE,
-        },
-        {
-          progressValue: (pressure / MAX_PRESSURE) * 100,
-          progressText: String(Math.round(pressure)),
-          text: 'Pressure',
-          svg: UvIndex,
-          weatherType: STANDARD_WEATHER_TYPE,
-        },
-        {
-          progressValue: (visibility / MAX_VISIBILITY) * 100,
-          progressText: `${Math.round(visibility)}km`,
-          text: 'Visibility',
-          svg: Precipitation,
-          weatherType: STANDARD_WEATHER_TYPE,
-        },
-        {
-          progressValue: (dewPoint < 0 ? -1 : 1) * (dewPoint / MAX_DEW_POINT) * 100,
-          progressText: `${Number(dewPoint).toFixed(2)}°`,
-          text: 'Dew Point',
-          svg: Precipitation,
-          weatherType: STANDARD_WEATHER_TYPE,
-        },
-      ]);
-    }
-  }, [cloudCover, dewPoint, maxWind, humidity, precipitation, pressure, uvIndex, visibility, weatherInfo]);
 
   return isLoading ? (
     <Spinner />
   ) : (
     <RightBottomContainer>
       <div className={styles.otherContainer}>
-        {items.map((item, index) => {
+        {userWeatherData.map((item, index) => {
           if (item.weatherType === AIR_WEATHER_TYPE) {
             return (
               <AirGauge
@@ -196,6 +134,7 @@ TodayWeatherInfo.propTypes = {
     pressure: PropTypes.number,
     visibility: PropTypes.number,
     dewPoint: PropTypes.number,
+    airQuality: PropTypes.number,
   }).isRequired,
   isLoading: PropTypes.bool.isRequired,
 };

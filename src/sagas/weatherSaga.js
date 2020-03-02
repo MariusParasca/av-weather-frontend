@@ -6,13 +6,21 @@ import {
   WEATHER_API_FAILED,
   WEATHER_DATA_ALREADY_FETCHED,
 } from 'store/actionTypes/weatherAPIActionTypes';
+import {
+  MAX_UV,
+  MAX_PRESSURE,
+  MAX_VISIBILITY,
+  MAX_DEW_POINT,
+  AIR_WEATHER_TYPE,
+  STANDARD_WEATHER_TYPE,
+  WIND_WEATHER_TYPE,
+} from 'constants/constants';
 import ipStackAxios from 'axios/ipStack';
 import darkSkyAxios from 'axios/darkSky';
 import airQualityInstance from 'axios/airQuality';
-import { replaceDiacritics, getUtcOffsetByCoordinates } from 'utils/helperFunctions';
+import { replaceDiacritics, getUtcOffsetByCoordinates, createCurrentlyWeather } from 'utils/helperFunctions';
 import { ADD_FAVORITE_SEND, ADD_FAVORITE_LOCALLY_SEND } from 'store/actionTypes/favoritesActionTypes';
-import { SET_FAVORITE_WEATHER_INFO } from 'store/actionTypes/userSettingsActionTypes';
-import { AIR_WEATHER_TYPE } from 'constants/constants';
+import { SET_FAVORITE_WEATHER_INFO, SET_FAVORITE_WEATHER_INFO_DATA } from 'store/actionTypes/userSettingsActionTypes';
 
 const getCurrentStateData = state => state.data;
 
@@ -68,21 +76,114 @@ async function makeRequest() {
   }
 }
 
+function getWeatherArray(data) {
+  const { maxWind, humidity, precipitation, uvIndex, cloudCover, pressure, visibility, dewPoint, airQuality } = data;
+
+  return [
+    {
+      progressValue: airQuality,
+      test: 'Air',
+      weatherType: AIR_WEATHER_TYPE,
+    },
+    {
+      text: 'wind',
+      progressValue: maxWind,
+      weatherType: WIND_WEATHER_TYPE,
+    },
+    {
+      progressValue: humidity * 100,
+      text: 'Humidity',
+      svg: 'svgs/humidity.svg',
+      withPercent: true,
+      weatherType: STANDARD_WEATHER_TYPE,
+    },
+    {
+      progressValue: precipitation * 100,
+      text: 'Precipitation',
+      svg: 'svgs/precipitation.svg',
+      withPercent: true,
+      weatherType: STANDARD_WEATHER_TYPE,
+    },
+    {
+      progressValue: (uvIndex / MAX_UV) * 100,
+      progressText: String(uvIndex),
+      text: 'UV index',
+      svg: 'svgs/uvIndex.svg',
+      weatherType: STANDARD_WEATHER_TYPE,
+    },
+    {
+      progressValue: cloudCover * 100,
+      text: 'Cloud cover',
+      svg: 'svgs/cloud.svg',
+      withPercent: true,
+      weatherType: STANDARD_WEATHER_TYPE,
+    },
+    {
+      progressValue: (pressure / MAX_PRESSURE) * 100,
+      progressText: String(Math.round(pressure)),
+      text: 'Pressure',
+      svg: 'svgs/uvIndex.svg',
+      weatherType: STANDARD_WEATHER_TYPE,
+    },
+    {
+      progressValue: (visibility / MAX_VISIBILITY) * 100,
+      progressText: `${Math.round(visibility)}km`,
+      text: 'Visibility',
+      svg: 'svgs/precipitation.svg',
+      weatherType: STANDARD_WEATHER_TYPE,
+    },
+    {
+      progressValue: (dewPoint < 0 ? -1 : 1) * (dewPoint / MAX_DEW_POINT) * 100,
+      progressText: `${Number(dewPoint).toFixed(2)}°`,
+      text: 'Dew Point',
+      svg: 'svgs/precipitation.svg',
+      weatherType: STANDARD_WEATHER_TYPE,
+    },
+  ];
+}
+
+function* setWeatherData(data) {
+  const userSettings = yield select(getUserSettings);
+
+  const weatherData = [];
+  let favoriteYieldObj = null;
+
+  for (const item of getWeatherArray(data)) {
+    if (item.text === userSettings.favoriteWeatherInfoLocally.text && userSettings.favoriteWeatherInfoLocally.text) {
+      favoriteYieldObj = {
+        type: SET_FAVORITE_WEATHER_INFO,
+        progressValue: item.progressValue,
+        text: item.text,
+        svg: item.svg,
+        withPercent: item.withPercent,
+        progressText: item.progressText,
+        weatherType: item.weatherType,
+      };
+    } else {
+      weatherData.push(item);
+    }
+  }
+
+  if (!favoriteYieldObj) {
+    yield put({
+      type: SET_FAVORITE_WEATHER_INFO,
+      progressValue: data.currently.airQuality || 0,
+      weatherType: AIR_WEATHER_TYPE,
+    });
+    yield put({ type: SET_FAVORITE_WEATHER_INFO_DATA, data: weatherData.slice(1, weatherData.length) });
+  } else {
+    yield put(favoriteYieldObj);
+    yield put({ type: SET_FAVORITE_WEATHER_INFO_DATA, data: weatherData });
+  }
+}
+
 function* weatherRequestGenerator(latitude, longitude, city, ipStack = {}) {
   const isLoggedIn = yield select(getIsLoggedState);
-  const userSettings = yield select(getUserSettings);
+
   const { data, error } = yield call(makeWeatherRequest, latitude, longitude, city);
   if (data) {
     yield put({ type: WEATHER_SET_DATA, data: { weather: data, ipStack } });
-
-    console.log(userSettings);
-    if (!userSettings.favoriteWeatherInfoLocally.progressValue) {
-      yield put({
-        type: SET_FAVORITE_WEATHER_INFO,
-        progressValue: data.currently.airQuality || 0,
-        weatherType: AIR_WEATHER_TYPE,
-      });
-    }
+    yield setWeatherData(createCurrentlyWeather(data.currently));
     const favorite = {
       city: ipStack.city,
       country: ipStack.country,

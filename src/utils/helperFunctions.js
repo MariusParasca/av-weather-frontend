@@ -64,3 +64,22 @@ export const getUtcOffsetByCoordinates = (latitude, longitude) => {
   const time = ts.getFuzzyLocalTimeFromPoint(timestamp, [longitude, latitude]);
   return time.utcOffset();
 };
+
+export const createCurrentlyWeather = data => {
+  return {
+    maxWind: data.windSpeed,
+    humidity: data.humidity,
+    precipitation: data.precipProbability,
+    uvIndex: data.uvIndex,
+    cloudCover: data.cloudCover,
+    pressure: data.pressure,
+    dewPoint: data.dewPoint,
+    sunriseTime: data.sunriseTime,
+    sunsetTime: data.sunsetTime,
+    visibility: data.visibility,
+    temperature: data.temperature,
+    description: data.summary,
+    feelsLike: data.apparentTemperature,
+    airQuality: data.airQuality,
+  };
+};

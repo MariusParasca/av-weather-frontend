@@ -1,6 +1,6 @@
 import { REHYDRATE } from 'redux-persist/lib/constants';
 
-import { SET_FAVORITE_WEATHER_INFO } from 'store/actionTypes/userSettingsActionTypes';
+import { SET_FAVORITE_WEATHER_INFO, SET_FAVORITE_WEATHER_INFO_DATA } from 'store/actionTypes/userSettingsActionTypes';
 
 const initialState = {
   favoriteWeatherInfo: {
@@ -19,6 +19,7 @@ const initialState = {
     withPercent: false,
     weatherType: '',
   },
+  data: [],
 };
 
 const reducer = (state = initialState, action) => {
@@ -39,6 +40,9 @@ const reducer = (state = initialState, action) => {
       newState.favoriteWeatherInfoLocally.progressText = action.progressText;
       newState.favoriteWeatherInfoLocally.withPercent = action.withPercent;
       newState.favoriteWeatherInfoLocally.weatherType = action.weatherType;
+      break;
+    case SET_FAVORITE_WEATHER_INFO_DATA:
+      newState.data = action.data;
       break;
     default:
       break;

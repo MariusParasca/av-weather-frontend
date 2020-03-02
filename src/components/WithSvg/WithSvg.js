@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 const WithSvg = ({ component: Svg, size, className, width, height }) => {
+  const [svgImported, setSvgImported] = useState('');
+
   let actualWidth = width;
   let actualHeight = height;
   if (size && !width && !height) {
@@ -9,7 +11,28 @@ const WithSvg = ({ component: Svg, size, className, width, height }) => {
     actualHeight = size;
   }
 
+  useEffect(() => {
+    const getSvg = async () => {
+      const svg = await import(`../../${Svg}`);
+      setSvgImported(svg.default);
+    };
+    if (typeof Svg === 'string') {
+      getSvg();
+    }
+  }, []);
+
   const SvgIcon = () => {
+    if (typeof Svg === 'string') {
+      return (
+        <img
+          src={svgImported}
+          style={{
+            width: actualWidth,
+            height: actualHeight,
+          }}
+        />
+      );
+    }
     return <Svg width={actualWidth} height={actualHeight} className={className} />;
   };
 

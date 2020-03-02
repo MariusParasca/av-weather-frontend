@@ -7,6 +7,7 @@ import {
 import { DAY_NO_HOURS, WEEK_DAYS } from 'constants/constants';
 
 import { getHourFromEpoch, createDateFromEpoch } from 'utils/dateTimeUtils';
+import { createCurrentlyWeather } from 'utils/helperFunctions';
 
 const initialState = {
   ipStack: {
@@ -40,25 +41,6 @@ const initialState = {
   },
   error: null,
   pending: true,
-};
-
-const createCurrentlyWeather = data => {
-  return {
-    maxWind: data.windSpeed,
-    humidity: data.humidity,
-    precipitation: data.precipProbability,
-    uvIndex: data.uvIndex,
-    cloudCover: data.cloudCover,
-    pressure: data.pressure,
-    dewPoint: data.dewPoint,
-    sunriseTime: data.sunriseTime,
-    sunsetTime: data.sunsetTime,
-    visibility: data.visibility,
-    temperature: data.temperature,
-    description: data.summary,
-    feelsLike: data.apparentTemperature,
-    airQuality: data.airQuality,
-  };
 };
 
 const createHourlyWeather = data => {
