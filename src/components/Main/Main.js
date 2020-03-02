@@ -16,7 +16,6 @@ import Account from 'routes/Account/Account';
 import SearchBox from 'components/SearchBox/SearchBox';
 import { SEARCH_PLACEHOLDER } from 'constants/constants';
 import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
-import WithSvg from 'components/WithSvg/WithSvg';
 import CurrentWeather from './CurrentWeather/CurrentWeather';
 import styles from './Main.module.css';
 

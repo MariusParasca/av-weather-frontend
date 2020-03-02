@@ -30,7 +30,7 @@ const Home = props => {
         </div>
         <Forecast forecastTemperature={modifiedWeatherForecast} />
       </div>
-      <TodayWeatherInfo isLoading={false} weatherInfo={todayWeather} />
+      <TodayWeatherInfo isLoading={false} />
     </div>
   );
 };

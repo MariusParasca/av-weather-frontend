@@ -82,7 +82,7 @@ function getWeatherArray(data) {
   return [
     {
       progressValue: airQuality,
-      test: 'Air',
+      text: 'Air',
       weatherType: AIR_WEATHER_TYPE,
     },
     {
@@ -148,7 +148,7 @@ function* setWeatherData(data) {
   const weatherData = [];
   let favoriteYieldObj = null;
 
-  for (const item of getWeatherArray(data)) {
+  for (const item of getWeatherArray(createCurrentlyWeather(data.currently))) {
     if (item.text === userSettings.favoriteWeatherInfoLocally.text && userSettings.favoriteWeatherInfoLocally.text) {
       favoriteYieldObj = {
         type: SET_FAVORITE_WEATHER_INFO,
@@ -183,7 +183,7 @@ function* weatherRequestGenerator(latitude, longitude, city, ipStack = {}) {
   const { data, error } = yield call(makeWeatherRequest, latitude, longitude, city);
   if (data) {
     yield put({ type: WEATHER_SET_DATA, data: { weather: data, ipStack } });
-    yield setWeatherData(createCurrentlyWeather(data.currently));
+    yield setWeatherData(data);
     const favorite = {
       city: ipStack.city,
       country: ipStack.country,

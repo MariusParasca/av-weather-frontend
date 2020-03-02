@@ -1,21 +1,8 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 
-import { ReactComponent as Humidity } from 'svgs/humidity.svg';
-import { ReactComponent as Precipitation } from 'svgs/precipitation.svg';
-import { ReactComponent as UvIndex } from 'svgs/uvIndex.svg';
-import { ReactComponent as Cloud } from 'svgs/cloud.svg';
+import { AIR_WEATHER_TYPE, WIND_WEATHER_TYPE } from 'constants/constants';
 
-import WithSvg from 'components/WithSvg/WithSvg';
-import {
-  MAX_UV,
-  MAX_PRESSURE,
-  MAX_VISIBILITY,
-  MAX_DEW_POINT,
-  AIR_WEATHER_TYPE,
-  STANDARD_WEATHER_TYPE,
-  WIND_WEATHER_TYPE,
-} from 'constants/constants';
 import Spinner from 'components/Spinner/Spinner';
 import RightBottomContainer from 'components/RightBottomContainer/RightBottomContainer';
 import Wind from 'components/Wind/Wind';
@@ -24,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import AirGauge from 'components/AirGauge/AirGauge';
 import WeatherInfo from './WeatherInfo/WeatherInfo';
 import styles from './TodayWeatherInfo.module.css';
+import WithSvg from 'components/WithSvg/WithSvg';
 
 const TodayWeatherInfo = props => {
   const { isLoading } = props;
@@ -125,17 +113,6 @@ const TodayWeatherInfo = props => {
 };
 
 TodayWeatherInfo.propTypes = {
-  weatherInfo: PropTypes.shape({
-    maxWind: PropTypes.number,
-    humidity: PropTypes.number,
-    precipitation: PropTypes.number,
-    uvIndex: PropTypes.number,
-    cloudCover: PropTypes.number,
-    pressure: PropTypes.number,
-    visibility: PropTypes.number,
-    dewPoint: PropTypes.number,
-    airQuality: PropTypes.number,
-  }).isRequired,
   isLoading: PropTypes.bool.isRequired,
 };
 
