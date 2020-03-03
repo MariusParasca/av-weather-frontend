@@ -29,7 +29,7 @@ const reducer = (state = initialState, action) => {
     case REHYDRATE:
       return {
         ...state,
-        favoriteWeatherInfoLocally: action.payload.userSettings
+        favoriteWeatherInfoLocally: action.payload
           ? action.payload.userSettings.favoriteWeatherInfoLocally
           : initialState.favoriteWeatherInfoLocally,
       };
