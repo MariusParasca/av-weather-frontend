@@ -7,7 +7,7 @@ import useHttp from 'hooks/useHttp';
 import hereAutosuggestAxios from 'axios/hereAutosuggest';
 import SearchIcon from '@material-ui/icons/Search';
 import Spinner from 'components/Spinner/Spinner';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, connect } from 'react-redux';
 import { WEATHER_API_SEND } from 'store/actionTypes/weatherAPIActionTypes';
 import { getUtcOffsetByCoordinates } from 'utils/helperFunctions';
 import styles from './SearchBox.module.css';
@@ -21,7 +21,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const SearchBox = props => {
-  const { placeholder, className } = props;
+  const { placeholder, className, locationData, isLoggedIn } = props;
 
   const hereAutosuggestHttp = useHttp();
   const { sendRequest: sendRequestHereAutosuggest } = hereAutosuggestHttp;
@@ -34,8 +34,8 @@ const SearchBox = props => {
 
   const dispatch = useDispatch();
 
-  const locationData = useSelector(state => state.data.ipStack);
-  const isLoggedIn = useSelector(state => state.authData.isLoggedIn);
+  // const locationData = useSelector(state => state.data.ipStack);
+  // const isLoggedIn = useSelector(state => state.authData.isLoggedIn);
 
   const classes = useStyles();
 
@@ -170,9 +170,18 @@ const SearchBox = props => {
   );
 };
 
+const mapStateToProps = state => {
+  return {
+    locationData: state.data.ipStack,
+    isLoggedIn: state.authData.isLoggedIn,
+  };
+};
+
 SearchBox.propTypes = {
   placeholder: PropTypes.string,
   className: PropTypes.string,
+  locationData: PropTypes.objectOf(PropTypes.any).isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
 };
 
 SearchBox.defaultProps = {
@@ -180,4 +189,4 @@ SearchBox.defaultProps = {
   className: '',
 };
 
-export default SearchBox;
+export default connect(mapStateToProps)(SearchBox);
