@@ -118,10 +118,10 @@ function* deleteFavoriteSaga(action) {
   const { data, error } = yield call(deleteFavorite, state.data, auth.user.uid, id);
   if (data) {
     yield put({ type: DELETE_FAVORITE_SUCCESS, data });
-    yield put({ type: SEND_NOTIFICATIONS, notificationType: 'success', message: 'City deleted!' });
+    // yield put({ type: SEND_NOTIFICATIONS, notificationType: 'success', message: 'City deleted!' });
   } else {
     yield put({ type: DELETE_FAVORITE_FAILED, error });
-    yield put({ type: SEND_NOTIFICATIONS, notificationType: 'error', message: 'Something went wrong!' });
+    // yield put({ type: SEND_NOTIFICATIONS, notificationType: 'error', message: 'Something went wrong!' });
   }
 }
 
@@ -150,11 +150,11 @@ function* addFavoriteSaga(action) {
 
   if (error) {
     yield put({ type: ADD_FAVORITE_FAILED, error });
-    yield put({ type: SEND_NOTIFICATIONS, notificationType: 'error', message: 'Error adding a new city!' });
+    // yield put({ type: SEND_NOTIFICATIONS, notificationType: 'error', message: 'Error adding a new city!' });
   } else if (status) {
     const newData = addToFavoritesCorrectly([...state.data], { ...data, id });
     yield put({ type: ADD_FAVORITE_SUCCESS, data: newData });
-    yield put({ type: SEND_NOTIFICATIONS, notificationType: 'success', message: 'City added!' });
+    // yield put({ type: SEND_NOTIFICATIONS, notificationType: 'success', message: 'City added!' });
   } else {
     // yield put({ type: SEND_NOTIFICATIONS, notificationType: 'warning', message: 'City already exists!' });
   }
@@ -227,7 +227,7 @@ function* watchAddFavoriteLocallySaga(action) {
   newDataLocally = addToFavoritesCorrectly(newDataLocally, action.favoriteCity);
 
   yield put({ type: ADD_FAVORITE_LOCALLY, dataLocally: newDataLocally });
-  yield put({ type: SEND_NOTIFICATIONS, notificationType: 'success', message: 'City added!' });
+  // yield put({ type: SEND_NOTIFICATIONS, notificationType: 'success', message: 'City added!' });
 }
 
 function* watchDeleteFavoriteLocallySaga(action) {
@@ -235,7 +235,7 @@ function* watchDeleteFavoriteLocallySaga(action) {
   const newDataLocally = [...state.dataLocally];
   newDataLocally.splice(action.index, 1);
   yield put({ type: DELETE_FAVORITE_LOCALLY, dataLocally: newDataLocally });
-  yield put({ type: SEND_NOTIFICATIONS, notificationType: 'success', message: 'City deleted!' });
+  // yield put({ type: SEND_NOTIFICATIONS, notificationType: 'success', message: 'City deleted!' });
 }
 
 function* watchDeleteFavoriteLocally() {
