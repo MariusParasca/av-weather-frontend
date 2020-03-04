@@ -3,16 +3,13 @@ import PropTypes from 'prop-types';
 
 import Forecast from 'components/Forecast/Forecast';
 import TodayWeatherInfo from 'components/TodayWeatherInfo/TodayWeatherInfo';
-
-import SevenDayChar from 'components/Charts/SevenDayChar/SevenDayChar';
+import HomeChart from 'components/Charts/HomeChart/HomeChart';
 import styles from './Home.module.css';
 
 const Home = props => {
-  const { weatherForecast, todayWeather } = props;
+  const { weatherForecast, weatherHourly } = props;
 
   const [modifiedWeatherForecast, setModifiedWeatherForecast] = useState([]);
-
-  console.log('weatherForecast', weatherForecast);
 
   useEffect(() => {
     setModifiedWeatherForecast(
@@ -27,10 +24,10 @@ const Home = props => {
   return (
     <div className={styles.container}>
       <div className={styles.forecastContainer}>
-        <Forecast forecastTemperature={modifiedWeatherForecast} />
         <div className={styles.chartContainer}>
-          <SevenDayChar data={weatherForecast} />
+          <HomeChart data={weatherHourly} />
         </div>
+        <Forecast forecastTemperature={modifiedWeatherForecast} />
       </div>
       <TodayWeatherInfo isLoading={false} />
     </div>
@@ -38,16 +35,16 @@ const Home = props => {
 };
 
 Home.propTypes = {
-  todayWeather: PropTypes.shape({
-    maxWind: PropTypes.number,
-    humidity: PropTypes.number,
-    precipitation: PropTypes.number,
-    uvIndex: PropTypes.number,
-    cloudCover: PropTypes.number,
-    pressure: PropTypes.number,
-    visibility: PropTypes.number,
-    dewPoint: PropTypes.number,
-  }).isRequired,
+  // todayWeather: PropTypes.shape({
+  //   maxWind: PropTypes.number,
+  //   humidity: PropTypes.number,
+  //   precipitation: PropTypes.number,
+  //   uvIndex: PropTypes.number,
+  //   cloudCover: PropTypes.number,
+  //   pressure: PropTypes.number,
+  //   visibility: PropTypes.number,
+  //   dewPoint: PropTypes.number,
+  // }).isRequired,
   weatherForecast: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
@@ -55,6 +52,7 @@ Home.propTypes = {
       temperatureDay: PropTypes.number,
     }),
   ).isRequired,
+  weatherHourly: PropTypes.arrayOf(PropTypes.any).isRequired,
 };
 
 export default Home;

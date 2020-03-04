@@ -13,9 +13,8 @@ import Map from 'routes/Map/Map';
 import HomeAdditional from 'routes/Home/HomeAdditional/HomeAdditional';
 import HistoryAdditional from 'routes/History/HistoryAdditional/HistoryAdditional';
 import Account from 'routes/Account/Account';
-import SearchBox from 'components/SearchBox/SearchBox';
-import { SEARCH_PLACEHOLDER } from 'constants/constants';
 import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
+import HomeSearchBox from 'components/HomeSearchBox/HomeSearchBox';
 import CurrentWeather from './CurrentWeather/CurrentWeather';
 import styles from './Main.module.css';
 
@@ -73,9 +72,7 @@ const Main = props => {
                       weatherData={weatherData.currently}
                     />
                     <Route exact path={PageRoute.home}>
-                      <div className={styles.rightWeatherContainer}>
-                        <SearchBox placeholder={SEARCH_PLACEHOLDER} />
-                      </div>
+                      <HomeSearchBox />
                     </Route>
                   </div>
                   <Route exact path={PageRoute.home}>
@@ -105,7 +102,7 @@ const Main = props => {
               <>
                 <Route exact path={PageRoute.home}>
                   <ErrorBoundary>
-                    <Home weatherForecast={weatherData.daily} todayWeather={weatherData.currently} />
+                    <Home weatherForecast={weatherData.daily} weatherHourly={weatherData.sevenDayHourly} />
                   </ErrorBoundary>
                 </Route>
                 <Route path={PageRoute.charts}>

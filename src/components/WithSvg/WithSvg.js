@@ -19,12 +19,13 @@ const WithSvg = ({ component: Svg, size, className, width, height }) => {
     if (typeof Svg === 'string') {
       getSvg();
     }
-  }, []);
+  }, [Svg]);
 
   const SvgIcon = () => {
     if (typeof Svg === 'string') {
       return (
         <img
+          alt="svgIcon"
           src={svgImported}
           style={{
             width: actualWidth,

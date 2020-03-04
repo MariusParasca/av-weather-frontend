@@ -7,7 +7,7 @@ import useHttp from 'hooks/useHttp';
 import hereAutosuggestAxios from 'axios/hereAutosuggest';
 import SearchIcon from '@material-ui/icons/Search';
 import Spinner from 'components/Spinner/Spinner';
-import { useDispatch, useSelector, connect } from 'react-redux';
+import { useDispatch, connect } from 'react-redux';
 import { WEATHER_API_SEND } from 'store/actionTypes/weatherAPIActionTypes';
 import { getUtcOffsetByCoordinates } from 'utils/helperFunctions';
 import styles from './SearchBox.module.css';

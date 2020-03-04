@@ -39,12 +39,12 @@ const CurrentWeather = props => {
           <Typography variant="h1">{`${Math.round(weatherData.temperature)}°C`}</Typography>
           <WithSvg component={PartlyCloudyDaySvg} size={78} className={styles.icon} />
         </div>
-        <div className={styles.descriptionContainer}>
+        {/* <div className={styles.descriptionContainer}>
           <Typography variant="h5">{weatherData.description} </Typography>
         </div>
         <div className={styles.feelsLikeContainer}>
           <Typography variant="h5">Feels like {Math.round(weatherData.feelsLike)}°</Typography>
-        </div>
+        </div> */}
       </div>
     </div>
   );

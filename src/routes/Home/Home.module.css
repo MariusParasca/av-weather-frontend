@@ -13,3 +13,7 @@
   flex-direction: column;
   justify-content: flex-end;
 }
+
+.chartContainer {
+  height: 100%;
+}

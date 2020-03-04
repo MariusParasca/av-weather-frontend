@@ -37,6 +37,7 @@ const initialState = {
       dataLoaded: false,
     },
     hourly: [],
+    sevenDayHourly: [],
     daily: [],
   },
   error: null,
@@ -44,9 +45,11 @@ const initialState = {
 };
 
 const createHourlyWeather = data => {
-  return data.data
-    .slice(0, DAY_NO_HOURS + 1)
-    .map(el => ({ ...el, hour: `${getHourFromEpoch(el.time)}:00`, temperature: Math.round(el.temperature) }));
+  return data.data.map(el => ({
+    ...el,
+    hour: `${getHourFromEpoch(el.time)}:00`,
+    temperature: Math.round(el.temperature),
+  }));
 };
 
 const createDailyWeather = data => {
@@ -82,7 +85,8 @@ const reducer = (state = initialState, action) => {
         sunriseTime: action.data.weather.daily.data[0].sunriseTime,
         sunsetTime: action.data.weather.daily.data[0].sunsetTime,
       });
-      newStateWeather.hourly = createHourlyWeather(action.data.weather.hourly);
+      newStateWeather.hourly = createHourlyWeather(action.data.weather.hourly).slice(0, DAY_NO_HOURS + 1);
+      newStateWeather.sevenDayHourly = createHourlyWeather(action.data.weather.hourly);
       newStateWeather.daily = createDailyWeather(action.data.weather.daily);
       newState.pending = false;
       newStateIpStack.dataLoaded = true;

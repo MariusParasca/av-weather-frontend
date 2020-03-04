@@ -1,4 +1,4 @@
-const get7DaysChartOption = (xLabel, dayData, nightData) => {
+const get7DaysChartOption = (xLabel, actualTemp, apparentTemperature) => {
   const option = {
     tooltip: {
       trigger: 'axis',
@@ -41,13 +41,19 @@ const get7DaysChartOption = (xLabel, dayData, nightData) => {
       {
         type: 'category',
         data: xLabel,
-        boundaryGap: false,
-        axisLine: { lineStyle: { color: '#777' } },
+        boundaryGap: true,
         min: 'dataMin',
         max: 'dataMax',
         axisPointer: {
           show: true,
         },
+        axisLabel: {
+          show: true,
+        },
+        axisTick: {
+          show: false,
+        },
+        axisLine: { show: true },
       },
       // {
       //   type: 'category',
@@ -68,13 +74,13 @@ const get7DaysChartOption = (xLabel, dayData, nightData) => {
           show: true,
         },
         axisTick: {
-          show: false,
+          show: true,
         },
         splitLine: {
           show: false,
         },
         axisLabel: {
-          show: false,
+          show: true,
           textStyle: {
             color: '#999',
           },
@@ -83,16 +89,16 @@ const get7DaysChartOption = (xLabel, dayData, nightData) => {
     ],
     series: [
       {
-        name: 'Day',
-        type: 'line',
+        name: 'Temperature',
+        type: 'bar',
         areaStyle: {},
-        data: dayData,
+        data: actualTemp,
       },
       {
-        name: 'Night',
-        type: 'line',
+        name: 'Feels like',
+        type: 'bar',
         areaStyle: {},
-        data: nightData,
+        data: apparentTemperature,
       },
     ],
   };

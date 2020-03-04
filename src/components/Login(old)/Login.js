@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+// import PropTypes from 'prop-types';
 
-import { TextField, Button, Typography, Link } from '@material-ui/core';
+import { TextField, Button, Typography } from '@material-ui/core';
 
 import { isEmailValid } from 'utils/validators';
 import { updateTextField } from 'utils/helperFunctions';
@@ -55,7 +55,7 @@ const Login = props => {
         />
       </div>
       <Typography variant="body1">
-        Don't you have a account? Please <NavLink to={PageRoute.register}>register</NavLink>
+        Don&apos;t you have a account? Please <NavLink to={PageRoute.register}>register</NavLink>
       </Typography>
       <div className={styles.button}>
         <Button variant="contained" onClick={onClickRegister}>
