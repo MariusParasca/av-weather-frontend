@@ -69,14 +69,18 @@ function* loginSaga(action) {
 
   const { data, error } = yield call(register, email, password);
 
+  function* sync() {
+    yield put({ type: SYNC_FAVORITES });
+  }
+
   if (data) {
     yield put({ type: LOGIN_SUCCESSFULLY, user: data.user });
-    yield put({ type: SYNC_FAVORITES });
+    yield sync();
   } else if (error.code === EMAIL_ALREADY_USED) {
     const { data: dataLogin, error: errorLogin } = yield call(login, email, password);
     if (dataLogin) {
       yield put({ type: LOGIN_SUCCESSFULLY, user: dataLogin.user });
-      yield put({ type: SYNC_FAVORITES });
+      yield sync();
     } else {
       yield put({ type: LOGIN_FAILED, error: errorLogin });
     }

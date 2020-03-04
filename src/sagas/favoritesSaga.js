@@ -22,7 +22,7 @@ import {
   DELETE_FAVORITE_LOCALLY,
 } from 'store/actionTypes/favoritesActionTypes';
 
-import { SEND_NOTIFICATIONS } from 'store/actionTypes/notificationActionTypes';
+// import { SEND_NOTIFICATIONS } from 'store/actionTypes/notificationActionTypes';
 
 const getCurrentState = state => state.favorites;
 

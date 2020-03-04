@@ -12,6 +12,8 @@ const Home = props => {
 
   const [modifiedWeatherForecast, setModifiedWeatherForecast] = useState([]);
 
+  console.log('weatherForecast', weatherForecast);
+
   useEffect(() => {
     setModifiedWeatherForecast(
       weatherForecast.map(el => ({
@@ -25,10 +27,10 @@ const Home = props => {
   return (
     <div className={styles.container}>
       <div className={styles.forecastContainer}>
+        <Forecast forecastTemperature={modifiedWeatherForecast} />
         <div className={styles.chartContainer}>
           <SevenDayChar data={weatherForecast} />
         </div>
-        <Forecast forecastTemperature={modifiedWeatherForecast} />
       </div>
       <TodayWeatherInfo isLoading={false} />
     </div>

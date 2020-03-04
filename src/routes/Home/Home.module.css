@@ -8,6 +8,7 @@
 }
 
 .forecastContainer {
+  width: calc(100% - 380px);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
