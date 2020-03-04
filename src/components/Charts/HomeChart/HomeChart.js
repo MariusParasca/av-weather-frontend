@@ -21,9 +21,7 @@ const HomeChart = props => {
   return (
     <ReactEcharts
       style={{
-        height: '100%',
-        display: 'flex',
-        alignItems: 'flex-end',
+        height: '120%',
       }}
       option={getHomeChartOption(xLabel, actualTemp, feelsLike)}
     />
