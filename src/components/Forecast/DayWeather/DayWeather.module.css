@@ -5,6 +5,10 @@
   flex-direction: column;
 }
 
+.highlight {
+  background: #f7f7f7;
+}
+
 .weatherContainer {
   display: flex;
   flex-direction: column;

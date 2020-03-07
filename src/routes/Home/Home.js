@@ -10,6 +10,9 @@ const Home = props => {
   const { weatherForecast, weatherHourly } = props;
 
   const [modifiedWeatherForecast, setModifiedWeatherForecast] = useState([]);
+  // const dispatch = useDispatch();
+
+  // const weekDaysHighLight = useSelector(state => state.userSettings.weekDaysHighLight);
 
   useEffect(() => {
     setModifiedWeatherForecast(

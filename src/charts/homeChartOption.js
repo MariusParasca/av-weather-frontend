@@ -2,96 +2,46 @@ const get7DaysChartOption = (xLabel, actualTemp, apparentTemperature) => {
   const option = {
     tooltip: {
       trigger: 'axis',
-      formatter: '{a0}: {c0}° C<br />{a1}: {c1}° C',
+      axisPointer: {
+        type: 'shadow',
+        label: {
+          show: true,
+        },
+      },
     },
-    // legend: {
-    //   data: ['Day', 'Night'],
-    //   orient: 'vertical',
-    //   left: 20,
-    // },
+    calculable: true,
     grid: {
-      left: '0',
-      right: '0',
-      bottom: '20',
+      top: '12%',
+      left: '1%',
+      right: '10%',
       containLabel: true,
     },
     // dataZoom: [
     //   {
-    //     type: 'slider',
-    //     xAxisIndex: [0, 1],
-    //     realtime: false,
-    //     start: 20,
-    //     end: 70,
-    //     top: 65,
-    //     height: 20,
-    //     handleIcon:
-    //       'M10.7,11.9H9.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4h1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
-    //     handleSize: '120%',
-    //   },
-    //   {
-    //     type: 'inside',
-    //     xAxisIndex: [0, 1],
-    //     start: 40,
-    //     end: 70,
-    //     top: 30,
-    //     height: 20,
+    //     show: true,
     //   },
     // ],
-    dataZoom: [
-      {
-        type: 'slider',
-        xAxisIndex: [0, 1],
-        realtime: false,
-        start: 0,
-        end: 100,
-        bottom: 0,
-        height: 20,
-        handleIcon:
-          'M10.7,11.9H9.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4h1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
-        handleSize: '120%',
-      },
-      // {
-      //   type: 'inside',
-      //   xAxisIndex: [0, 1],
-      //   start: 40,
-      //   end: 70,
-      //   top: 30,
-      //   height: 20,
-      // },
-    ],
     xAxis: [
       {
         type: 'category',
         data: xLabel,
         boundaryGap: true,
-        min: 'dataMin',
-        max: 'dataMax',
         axisPointer: {
           show: true,
         },
         axisLabel: {
-          show: true,
+          show: false,
         },
         axisTick: {
           show: false,
         },
         axisLine: { show: true },
       },
-      {
-        type: 'category',
-        boundaryGap: true,
-        data: xLabel,
-        axisTick: {
-          show: false,
-        },
-        axisLine: {
-          show: false,
-        },
-      },
     ],
     yAxis: [
       {
         type: 'value',
+        name: '°C',
         axisLine: {
           show: true,
         },
@@ -101,25 +51,17 @@ const get7DaysChartOption = (xLabel, actualTemp, apparentTemperature) => {
         splitLine: {
           show: false,
         },
-        axisLabel: {
-          show: true,
-          textStyle: {
-            color: '#999',
-          },
-        },
       },
     ],
     series: [
       {
         name: 'Temperature',
         type: 'bar',
-        areaStyle: {},
         data: actualTemp,
       },
       {
         name: 'Feels like',
         type: 'bar',
-        areaStyle: {},
         data: apparentTemperature,
       },
     ],

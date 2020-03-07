@@ -83,3 +83,11 @@ export const createCurrentlyWeather = data => {
     airQuality: data.airQuality,
   };
 };
+
+export const compareArrays = (firstArray, secondArray) => {
+  const result = firstArray.every(x => {
+    return secondArray.includes(x);
+  });
+
+  return result;
+};

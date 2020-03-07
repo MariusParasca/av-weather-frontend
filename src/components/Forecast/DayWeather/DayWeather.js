@@ -7,10 +7,10 @@ import { ReactComponent as PartlyCloudyDaySvg } from 'svgs/weatherTypes/partly-c
 import styles from './DayWeather.module.css';
 
 const DayWeather = props => {
-  const { label, temperatureDay, temperatureNight } = props;
+  const { highlight, label, temperatureDay, temperatureNight } = props;
 
   return (
-    <div className={styles.mainContainer} key={label}>
+    <div className={`${styles.mainContainer} ${highlight ? styles.highlight : ''}`} key={label}>
       <Typography variant="h5" align="center">
         {label}
       </Typography>
@@ -33,6 +33,11 @@ DayWeather.propTypes = {
   label: PropTypes.string.isRequired,
   temperatureNight: PropTypes.number.isRequired,
   temperatureDay: PropTypes.number.isRequired,
+  highlight: PropTypes.bool,
+};
+
+DayWeather.defaultProps = {
+  highlight: false,
 };
 
 export default DayWeather;
