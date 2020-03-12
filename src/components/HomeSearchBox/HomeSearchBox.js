@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 // import PropTypes from 'prop-types';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import { useSelector, useDispatch } from 'react-redux';
@@ -10,15 +10,39 @@ import {
   DELETE_FAVORITE_SEND,
   DELETE_FAVORITE_LOCALLY_SEND,
 } from 'store/actionTypes/favoritesActionTypes';
-import { IconButton, Typography } from '@material-ui/core';
+import { IconButton, Typography, makeStyles } from '@material-ui/core';
+import { WEATHER_API_SEND } from 'store/actionTypes/weatherAPIActionTypes';
 import styles from './HomeSearchBox.module.css';
 
+const useStyles = makeStyles(() => ({
+  typoRoot: {
+    cursor: 'pointer',
+  },
+}));
+
 const HomeSearchBox = props => {
+  const classes = useStyles();
+
   const dispatch = useDispatch();
 
   const favorites = useSelector(state => state.favorites);
   const { data, dataLocally } = favorites;
   const isLoggedIn = useSelector(state => state.authData.isLoggedIn);
+
+  const onClickCity = useCallback(
+    favorite => {
+      dispatch({
+        type: WEATHER_API_SEND,
+        payload: {
+          latitude: favorite.latitude,
+          longitude: favorite.longitude,
+          city: favorite.city,
+          country: favorite.country,
+        },
+      });
+    },
+    [dispatch],
+  );
 
   const mapFunction = favorite => (
     <div className={styles.favoriteContainer} key={`${favorite.city}${favorite.country}`}>
@@ -32,7 +56,9 @@ const HomeSearchBox = props => {
       >
         <HighlightOffIcon />
       </IconButton>
-      <Typography variant="h5">{favorite.city}</Typography>
+      <Typography variant="h5" onClick={() => onClickCity(favorite)} classes={{ root: classes.typoRoot }}>
+        {favorite.city}
+      </Typography>
     </div>
   );
 

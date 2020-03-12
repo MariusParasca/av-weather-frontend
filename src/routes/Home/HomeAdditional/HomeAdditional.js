@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { makeStyles, Divider } from '@material-ui/core';
 import SunInfo from 'components/SunInfo/SunInfo';
 
-import { AIR_WEATHER_TYPE, STANDARD_WEATHER_TYPE, WIND_WEATHER_TYPE } from 'constants/constants';
-import AirGauge from 'components/AirGauge/AirGauge';
+import { STANDARD_WEATHER_TYPE, WIND_WEATHER_TYPE } from 'constants/constants';
 import { useSelector } from 'react-redux';
 import WeatherInfo from 'components/TodayWeatherInfo/WeatherInfo/WeatherInfo';
 import WithSvg from 'components/WithSvg/WithSvg';
@@ -26,11 +25,7 @@ const HomeAdditional = props => {
 
   let weatherComponent;
 
-  if (userFavoriteWeatherInfo.weatherType === AIR_WEATHER_TYPE) {
-    weatherComponent = (
-      <AirGauge className={styles.rightWeatherContainer} airQuality={userFavoriteWeatherInfo.progressValue} />
-    );
-  } else if (userFavoriteWeatherInfo.weatherType === STANDARD_WEATHER_TYPE) {
+  if (userFavoriteWeatherInfo.weatherType === STANDARD_WEATHER_TYPE) {
     weatherComponent = (
       <WeatherInfo
         isOnFavorite

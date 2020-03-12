@@ -11,6 +11,7 @@ import {
   MAX_PRESSURE,
   MAX_VISIBILITY,
   MAX_DEW_POINT,
+  MAX_AIQ,
   AIR_WEATHER_TYPE,
   STANDARD_WEATHER_TYPE,
   WIND_WEATHER_TYPE,
@@ -79,11 +80,15 @@ async function makeRequest() {
 function getWeatherArray(data) {
   const { maxWind, humidity, precipitation, uvIndex, cloudCover, pressure, visibility, dewPoint, airQuality } = data;
 
+  const tempAir = airQuality || 0;
+
   return [
     {
-      progressValue: airQuality,
-      text: 'Air',
-      weatherType: AIR_WEATHER_TYPE,
+      progressValue: (tempAir / MAX_AIQ) * 100,
+      progressText: String(tempAir),
+      text: 'Air Quality',
+      svg: 'svgs/humidity.svg',
+      weatherType: STANDARD_WEATHER_TYPE,
     },
     {
       text: 'wind',
