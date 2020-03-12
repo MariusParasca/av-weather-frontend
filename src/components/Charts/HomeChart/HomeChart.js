@@ -10,7 +10,7 @@ const HomeChart = props => {
   return (
     <ReactEcharts
       style={{
-        height: 'calc(120% - 20px)',
+        height: 'calc(120% - 40px)',
       }}
       option={getHomeChartOption(xLabel, actualTemp, feelsLike)}
     />
