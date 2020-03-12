@@ -43,7 +43,7 @@ const Pressure = props => {
     chart = <LineChart xLabels={xLabelsHourly} dataArray={dataArrayHourly} />;
   }
 
-  return <div>{chart}</div>;
+  return chart;
 };
 
 Pressure.propTypes = {

@@ -7,7 +7,7 @@ import { WEEK_DAYS } from 'constants/constants';
 import { createDateFromEpoch } from 'utils/dateTimeUtils';
 
 const SevenDayChar = props => {
-  const { data } = props;
+  const { data, style } = props;
 
   const xLabel = [];
   const dayData = [];
@@ -26,11 +26,18 @@ const SevenDayChar = props => {
     nightData.push(Math.round(dataElement.temperatureLow));
   }
 
-  return <ReactEcharts option={get7DaysChartOption(xLabel, dayData, nightData)} />;
+  return <ReactEcharts style={style} option={get7DaysChartOption(xLabel, dayData, nightData)} />;
 };
 
 SevenDayChar.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  style: PropTypes.objectOf(PropTypes.any),
+};
+
+SevenDayChar.defaultProps = {
+  style: {
+    height: '100%',
+  },
 };
 
 export default SevenDayChar;

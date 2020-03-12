@@ -81,7 +81,7 @@ async function firestoreRequest(uid) {
 
 function* firestoreRequestSaga() {
   const state = yield select(getCurrentState);
-  const auth = yield select(getCurrentStateAuth);
+  const auth = yield select(getCurrentStateAuth); 
 
   if (state.dataLoaded) {
     yield put({ type: FETCH_FAVORITES_ALREADY_FETCHED });

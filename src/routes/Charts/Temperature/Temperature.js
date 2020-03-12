@@ -32,7 +32,7 @@ const Temperature = props => {
     chart = <HourlyChart timeline={timeline} hourly={hourlyState} />;
   }
 
-  return <div>{chart}</div>;
+  return chart;
 };
 
 Temperature.propTypes = {

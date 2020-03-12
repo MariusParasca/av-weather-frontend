@@ -9,6 +9,10 @@
   flex-grow: 1;
 }
 
+.chartContainer {
+  height: 100%;
+}
+
 .container {
   padding-top: 20px;
   width: 100%;

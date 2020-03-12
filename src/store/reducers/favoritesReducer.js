@@ -46,6 +46,7 @@ const reducer = (state = initialState, action) => {
       break;
     case FETCH_FAVORITES_FAILED:
       newState.error = action.error;
+      newState.pending = false;
       newState.dataLoaded = false;
       break;
     case DELETE_FAVORITE_SUCCESS:

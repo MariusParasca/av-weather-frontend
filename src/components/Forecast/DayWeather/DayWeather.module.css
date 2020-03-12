@@ -1,8 +1,9 @@
 .mainContainer {
   min-height: 175px;
-  margin: 0 20px;
+  padding: 0 20px;
   display: flex;
   flex-direction: column;
+  flex-basis: 100%;
 }
 
 .highlight {

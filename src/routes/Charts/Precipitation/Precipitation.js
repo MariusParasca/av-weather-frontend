@@ -47,7 +47,7 @@ const Precipitation = props => {
     chart = <BarChart xLabels={xLabelsHourly} dataArray={dataArrayHourly} fullBarArray={fullBarArrayHourly} />;
   }
 
-  return <div>{chart}</div>;
+  return chart;
 };
 
 Precipitation.propTypes = {

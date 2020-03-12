@@ -1,4 +1,4 @@
-import { takeLatest, takeEvery, put, select, all, fork } from 'redux-saga/effects';
+import { takeLatest, takeEvery, put, select, all, fork, call } from 'redux-saga/effects';
 
 import {
   SET_FAVORITE_WEATHER_INFO,
@@ -29,7 +29,9 @@ async function syncSettings(obj, uid) {
   const ref = db
     .collection(LOCATIONS)
     .doc(uid)
-    .collection(USER_SETTINGS);
+    .collection(USER_SETTINGS)
+    .doc('favoriteWeatherInfo');
+
   try {
     await ref.set(obj);
     return { status: true };
@@ -41,7 +43,7 @@ async function syncSettings(obj, uid) {
 function* syncSettingsSaga() {
   const auth = yield select(getCurrentStateAuth);
   const userSettings = yield select(getCurrentStateUserSettings);
-  const { status, error } = yield select(syncSettings, userSettings.favoriteWeatherInfoLocally, auth.user.uid);
+  const { status, error } = yield call(syncSettings, userSettings.favoriteWeatherInfoLocally, auth.user.uid);
   if (status) {
     yield put({
       type: SYNC_USER_SETTINGS_SUCCESS,

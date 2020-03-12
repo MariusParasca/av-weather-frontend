@@ -35,7 +35,7 @@ const Wind = props => {
     chart = <LineChart xLabels={xLabelsHourly} dataArray={dataArrayHourly} />;
   }
 
-  return <div>{chart}</div>;
+  return chart;
 };
 
 Wind.propTypes = {

@@ -16,6 +16,7 @@ import firebase from 'utils/firebaseInstance';
 import ipStackAxios from 'axios/ipStack';
 import { DELETE_SYNCED_FAVORITES, SYNC_FAVORITES } from 'store/actionTypes/favoritesActionTypes';
 import { LOCATIONS } from 'constants/collections';
+import { SYNC_USER_SETTINGS } from 'store/actionTypes/userSettingsActionTypes';
 
 const auth = firebase.auth();
 
@@ -71,6 +72,7 @@ function* loginSaga(action) {
 
   function* sync() {
     yield put({ type: SYNC_FAVORITES });
+    yield put({ type: SYNC_USER_SETTINGS });
   }
 
   if (data) {
