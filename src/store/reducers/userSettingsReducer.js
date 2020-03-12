@@ -1,10 +1,6 @@
 import { REHYDRATE } from 'redux-persist/lib/constants';
 
-import {
-  SET_FAVORITE_WEATHER_INFO,
-  SET_FAVORITE_WEATHER_INFO_DATA,
-  SET_DAYS_HIGHLIGHT,
-} from 'store/actionTypes/userSettingsActionTypes';
+import { SET_FAVORITE_WEATHER_INFO, SET_FAVORITE_WEATHER_INFO_DATA } from 'store/actionTypes/userSettingsActionTypes';
 
 const initialState = {
   favoriteWeatherInfo: {
@@ -24,7 +20,6 @@ const initialState = {
     weatherType: '',
   },
   data: [],
-  weekDaysHighLight: [false, false, false, false, false, false, false],
 };
 
 const reducer = (state = initialState, action) => {
@@ -48,9 +43,6 @@ const reducer = (state = initialState, action) => {
       break;
     case SET_FAVORITE_WEATHER_INFO_DATA:
       newState.data = action.data;
-      break;
-    case SET_DAYS_HIGHLIGHT:
-      newState.weekDaysHighLight = action.weekDaysHighLight;
       break;
     default:
       break;

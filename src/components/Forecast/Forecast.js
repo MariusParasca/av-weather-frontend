@@ -6,7 +6,7 @@ import styles from './Forecast.module.css';
 import DayWeather from './DayWeather/DayWeather';
 
 const Forecast = props => {
-  const { forecastTemperature } = props;
+  const { forecastTemperature, weekDaysHighLight } = props;
 
   return (
     <div className={styles.container}>
@@ -14,7 +14,7 @@ const Forecast = props => {
       <Divider orientation="vertical" variant="middle" /> */}
       {forecastTemperature.map((day, index) => (
         <DayWeather
-          // highlight={weekDaysHighLight[index]}
+          highlight={weekDaysHighLight[index]}
           key={day.label}
           label={day.label}
           temperatureDay={day.temperatureDay}
@@ -29,7 +29,7 @@ Forecast.propTypes = {
   forecastTemperature: PropTypes.arrayOf(
     PropTypes.shape({ label: PropTypes.string, temperatureNight: PropTypes.number, temperatureDay: PropTypes.number }),
   ).isRequired,
-  // weekDaysHighLight: PropTypes.arrayOf(PropTypes.bool).isRequired,
+  weekDaysHighLight: PropTypes.arrayOf(PropTypes.bool).isRequired,
 };
 
 export default Forecast;

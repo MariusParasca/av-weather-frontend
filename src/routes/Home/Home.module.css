@@ -17,3 +17,8 @@
 .chartContainer {
   height: 100%;
 }
+
+.sliderContainer {
+  margin-right: 100px;
+  margin-left: 5px;
+}
