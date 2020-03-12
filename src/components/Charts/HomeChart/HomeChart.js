@@ -61,7 +61,7 @@ const HomeChart = props => {
         },
       }}
       style={{
-        height: '120%',
+        height: 'calc(120% - 20px)',
       }}
       onChartReady={object => {
         if (!chart) {
