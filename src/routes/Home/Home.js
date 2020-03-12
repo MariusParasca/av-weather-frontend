@@ -67,7 +67,7 @@ const getToday = (weatherHourly, indexFirstDay) => {
 
   for (let i = 0; i < indexFirstDay; i += 1) {
     const dataElement = weatherHourly[i];
-    xLabelCurrent.push('Today');
+    xLabelCurrent.push(`Today (${dataElement.hour})`);
     actualTempCurrent.push(Math.round(dataElement.temperature));
     feelsLikeCurrent.push(Math.round(dataElement.apparentTemperature));
   }
@@ -154,7 +154,7 @@ const Home = props => {
       } else {
         counter += 1;
       }
-      xLabelCurrent.push(label);
+      xLabelCurrent.push(`${label} (${dataElement.hour})`);
       actualTempCurrent.push(Math.round(dataElement.temperature));
       feelsLikeCurrent.push(Math.round(dataElement.apparentTemperature));
     }
@@ -195,7 +195,6 @@ const Home = props => {
           <AirbnbSlider
             onChange={handleChange}
             ThumbComponent={AirbnbThumbComponent}
-            // marks={marks}
             step={2}
             min={0}
             max={16}
@@ -210,16 +209,6 @@ const Home = props => {
 };
 
 Home.propTypes = {
-  // todayWeather: PropTypes.shape({
-  //   maxWind: PropTypes.number,
-  //   humidity: PropTypes.number,
-  //   precipitation: PropTypes.number,
-  //   uvIndex: PropTypes.number,
-  //   cloudCover: PropTypes.number,
-  //   pressure: PropTypes.number,
-  //   visibility: PropTypes.number,
-  //   dewPoint: PropTypes.number,
-  // }).isRequired,
   weatherForecast: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
