@@ -17,7 +17,7 @@ import Pressure from './Pressure/Pressure';
 
 const Charts = props => {
   const { hourly, daily } = props;
-  const [currentOption, setCurrentOption] = useState(0);
+  const [currentOption, setCurrentOption] = useState(1);
 
   const changeOption = event => {
     setCurrentOption(event.target.value);

@@ -1,3 +1,5 @@
+import echarts from 'echarts/lib/echarts';
+
 const get7DaysChartOption = (xLabel, dayData, nightData) => {
   const option = {
     tooltip: {
@@ -84,16 +86,27 @@ const get7DaysChartOption = (xLabel, dayData, nightData) => {
     series: [
       {
         name: 'Day',
-        type: 'line',
-        areaStyle: {},
+        type: 'bar',
+        // areaStyle: {
+        //   color: new echarts.graphic.LinearGradient(0, 0, 0, 5, [
+        //     {
+        //       offset: 0,
+        //       color: '#ffffff',
+        //     },
+        //     {
+        //       offset: 1,
+        //       color: '#28c9fa',
+        //     },
+        //   ]),
+        // },
         data: dayData,
       },
-      {
-        name: 'Night',
-        type: 'line',
-        areaStyle: {},
-        data: nightData,
-      },
+      // {
+      //   name: 'Night',
+      //   type: 'line',
+      //   areaStyle: {},
+      //   data: nightData,
+      // },
     ],
   };
 

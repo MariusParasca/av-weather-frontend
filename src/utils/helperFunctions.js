@@ -97,3 +97,37 @@ export const flatten = arr => {
     return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
   }, []);
 };
+
+export const getChartColor = value => {
+  if (value >= -50 && value < -40) {
+    return '#FFFFFF';
+  }
+  if (value >= -40 && value < -30) {
+    return '#E9F2FF';
+  }
+  if (value >= -30 && value < -20) {
+    return '#D3E4FF';
+  }
+  if (value >= -20 && value < -10) {
+    return '#BED7FF';
+  }
+  if (value >= -10 && value < 0) {
+    return '#A8C9FF';
+  }
+  if (value >= 0 && value < 10) {
+    return '#92BCFF';
+  }
+  if (value >= 10 && value < 20) {
+    return '#7CAEFF';
+  }
+  if (value >= 20 && value < 30) {
+    return '#66A1FF';
+  }
+  if (value >= 30 && value < 40) {
+    return '#5093FF';
+  }
+  if (value >= 30 && value < 40) {
+    return '#3B86FF';
+  }
+  return '#2578FF';
+};
