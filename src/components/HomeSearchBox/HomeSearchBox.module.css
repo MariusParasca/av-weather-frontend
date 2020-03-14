@@ -6,6 +6,7 @@
 
 .favoritesContainer {
   display: flex;
+  justify-content: flex-end;
   margin-top: 10px;
 }
 
@@ -16,4 +17,8 @@
 
 .favoriteContainer:first-child {
   margin-left: 0px;
+}
+
+.searchBoxContainer {
+  width: 480px;
 }

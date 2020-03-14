@@ -44,12 +44,34 @@ const getHourlyChartOption = (timeline, hourly, feelsLike, colorHot, colorCool) 
         },
       },
     ],
+    markLine: {
+      lineStyle: {
+        color: {
+          type: 'linear',
+          x: 0,
+          y: 0,
+          x2: 0,
+          y2: 1,
+          colorStops: [
+            {
+              offset: 0,
+              color: 'red', // color at 0% position
+            },
+            {
+              offset: 1,
+              color: 'blue', // color at 100% position
+            },
+          ],
+          global: false, // false by default
+        },
+      },
+    },
     series: [
       {
         name: 'Temperature',
         type: 'bar',
         itemStyle: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 2, [
             {
               offset: 0,
               color: colorHot,
@@ -76,7 +98,7 @@ const getHourlyChartOption = (timeline, hourly, feelsLike, colorHot, colorCool) 
               color: colorCool,
             },
           ]),
-          opacity: 0.55,
+          opacity: 0.75,
         },
         // itemStyle: {
         //   color: new echarts.graphic.LinearGradient(0, 0, 0, 5, [

@@ -3,15 +3,23 @@ import PropTypes from 'prop-types';
 import ReactEcharts from 'echarts-for-react';
 
 import getHourlyChartOption from 'charts/hourlyChart';
-import { getChartColor } from 'utils/helperFunctions';
+import { getChartColor, increaseBrightness } from 'utils/helperFunctions';
 
 const HourlyChart = props => {
   const { timeline, hourly, feelsLike, style, min, max } = props;
 
+  console.log(increaseBrightness(getChartColor(max), 50));
+
   return (
     <ReactEcharts
       style={style}
-      option={getHourlyChartOption(timeline, hourly, feelsLike, getChartColor(max), getChartColor(min > 0 ? -1 : min))}
+      option={getHourlyChartOption(
+        timeline,
+        hourly,
+        feelsLike,
+        increaseBrightness(getChartColor(max), -30),
+        getChartColor(min > 0 ? -1 : min),
+      )}
     />
   );
 };
