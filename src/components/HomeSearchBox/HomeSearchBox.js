@@ -70,7 +70,7 @@ const HomeSearchBox = props => {
     <div className={styles.rightWeatherContainer}>
       <SearchBox className={styles.searchBoxContainer} placeholder={SEARCH_PLACEHOLDER} />
       <div className={styles.favoritesContainer}>
-        {!isLoggedIn ? dataLocally.slice(0, 3).map(mapFunction) : data.slice(0, 3).map(mapFunction)}
+        {!isLoggedIn ? dataLocally.slice(0, 4).map(mapFunction) : data.slice(0, 4).map(mapFunction)}
       </div>
     </div>
   );

@@ -35,7 +35,7 @@ const TodayWeatherInfo = props => {
   return isLoading ? (
     <Spinner />
   ) : (
-    <RightBottomContainer>
+    <RightBottomContainer className={styles.mainContainer}>
       <div className={styles.otherContainer}>
         {userWeatherData.map((item, index) => {
           // if (item.weatherType === AIR_WEATHER_TYPE) {

@@ -8,7 +8,7 @@
   justify-content: center;
 }
 .windContainer:not(:first-child) {
-  margin-top: 20px;
+  /* margin-top: 20px; */
 }
 
 .windContainer:hover {

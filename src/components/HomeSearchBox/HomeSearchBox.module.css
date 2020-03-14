@@ -6,13 +6,25 @@
 
 .favoritesContainer {
   display: flex;
-  justify-content: flex-end;
+  /* justify-content: space-between; */
   margin-top: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.75);
 }
 
 .favoriteContainer {
   display: flex;
-  margin-left: 10px;
+  padding: 0 10px;
+  border-right: 1px solid #bfbfbf;
+  /* margin-left: 10px; */
+}
+
+.favoriteContainer:hover {
+  background: #f7f7f7;
+}
+
+.favoriteContainer:last-child {
+  border-right: none;
 }
 
 .favoriteContainer:first-child {
@@ -20,5 +32,5 @@
 }
 
 .searchBoxContainer {
-  width: 480px;
+  width: 540px;
 }

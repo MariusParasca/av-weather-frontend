@@ -1,6 +1,6 @@
 .weatherInfoContainer {
-  margin-left: 25px;
-  margin-top: 20px;
+  padding: 10px 0;
+  padding-left: 35px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
