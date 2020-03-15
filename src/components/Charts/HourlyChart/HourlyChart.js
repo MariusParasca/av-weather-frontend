@@ -19,11 +19,15 @@ const HourlyChart = props => {
   for (let i = 0; i < hourly.length; i += 1) {
     const hourTemp = hourly[i];
     const feelLike = feelsLike[i];
-    const hourValue = normalizeVar(hourTemp, min, max, -50, 50) * 0.01;
-    const feelsLikeValue = normalizeVar(feelLike, minFeelsTemp, maxFeelsTemp, -50, 50) * 0.01;
+    const hourValue = normalizeVar(hourTemp, min, max, -40, 40) * 0.01;
+    const feelsLikeValue = normalizeVar(feelLike, minFeelsTemp, maxFeelsTemp, -40, 40) * 0.01;
     hourlyData.push({
       value: hourTemp,
       itemStyle: {
+        shadowColor: 'rgba(0, 0, 0, 0.5)',
+        shadowBlur: 2,
+        shadowOffsetX: 0,
+        shadowOffsetY: 0,
         color: new echarts.graphic.LinearGradient(0, 0, 0, 2, [
           {
             offset: 0,
@@ -39,6 +43,10 @@ const HourlyChart = props => {
     feelsLikeData.push({
       value: feelLike,
       itemStyle: {
+        shadowColor: 'rgba(0, 0, 0, 0.5)',
+        shadowBlur: 1,
+        shadowOffsetX: 0,
+        shadowOffsetY: 0,
         color: new echarts.graphic.LinearGradient(0, 0, 0, 2, [
           {
             offset: 0,
