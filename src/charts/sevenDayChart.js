@@ -1,5 +1,3 @@
-import echarts from 'echarts/lib/echarts';
-
 const get7DaysChartOption = (xLabel, dayData, nightData) => {
   const option = {
     tooltip: {

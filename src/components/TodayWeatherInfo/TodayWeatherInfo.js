@@ -1,17 +1,16 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 
-import { AIR_WEATHER_TYPE, WIND_WEATHER_TYPE } from 'constants/constants';
+import { WIND_WEATHER_TYPE } from 'constants/constants';
 
 import Spinner from 'components/Spinner/Spinner';
 import RightBottomContainer from 'components/RightBottomContainer/RightBottomContainer';
 import Wind from 'components/Wind/Wind';
+import WithSvg from 'components/WithSvg/WithSvg';
 import { SET_FAVORITE_WEATHER_INFO, SET_FAVORITE_WEATHER_INFO_DATA } from 'store/actionTypes/userSettingsActionTypes';
 import { useDispatch, useSelector } from 'react-redux';
-import AirGauge from 'components/AirGauge/AirGauge';
 import WeatherInfo from './WeatherInfo/WeatherInfo';
 import styles from './TodayWeatherInfo.module.css';
-import WithSvg from 'components/WithSvg/WithSvg';
 
 const TodayWeatherInfo = props => {
   const { isLoading } = props;
