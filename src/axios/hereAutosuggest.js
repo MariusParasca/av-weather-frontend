@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const hereAutosuggestInstance = axios.create({
-  baseURL: 'https://cors-anywhere.herokuapp.com/https://places.sit.ls.hereapi.com/places/v1/autosuggest',
+  baseURL: 'http://localhost:8080/https://places.sit.ls.hereapi.com/places/v1/autosuggest',
 });
 
 hereAutosuggestInstance.interceptors.request.use(config => ({

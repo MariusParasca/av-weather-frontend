@@ -70,48 +70,27 @@ const getHourlyChartOption = (timeline, hourly, feelsLike, colorHot, colorCool) 
       {
         name: 'Temperature',
         type: 'bar',
-        itemStyle: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 2, [
-            {
-              offset: 0,
-              color: colorHot,
-            },
-            {
-              offset: 1,
-              color: colorCool,
-            },
-          ]),
-        },
+        // itemStyle: {
+        //   shadowBlur: 1,
+        //   shadowColor: 'rgba(0, 0, 0, 0.6)',
+        //   shadowOffsetX: 1,
+        //   shadowOffsetY: 1,
+        //   color: new echarts.graphic.LinearGradient(0, 0, 0, 2, [
+        //     {
+        //       offset: 0,
+        //       color: colorHot,
+        //     },
+        //     {
+        //       offset: 1,
+        //       color: colorCool,
+        //     },
+        //   ]),
+        // },
         data: hourly,
       },
       {
         name: 'Feels like',
         type: 'bar',
-        itemStyle: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 2, [
-            {
-              offset: 0,
-              color: colorHot,
-            },
-            {
-              offset: 1,
-              color: colorCool,
-            },
-          ]),
-          opacity: 0.75,
-        },
-        // itemStyle: {
-        //   color: new echarts.graphic.LinearGradient(0, 0, 0, 5, [
-        //     {
-        //       offset: 0,
-        //       color: '#ffffff',
-        //     },
-        //     {
-        //       offset: 1,
-        //       color: '#28c9fa',
-        //     },
-        //   ]),
-        // },
         data: feelsLike,
       },
     ],
