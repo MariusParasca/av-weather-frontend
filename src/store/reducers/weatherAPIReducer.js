@@ -92,7 +92,7 @@ const reducer = (state = initialState, action) => {
       newStateIpStack.dataLoaded = true;
       break;
     case WEATHER_API_FAILED:
-      newState.error = action.data.error;
+      newState.error = action.error;
       break;
     case WEATHER_DATA_ALREADY_FETCHED:
       newState.pending = false;
