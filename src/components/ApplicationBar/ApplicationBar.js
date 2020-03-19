@@ -4,17 +4,17 @@ import Drawer from '@material-ui/core/Drawer';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 
-import PinDropIcon from '@material-ui/icons/PinDrop';
-import MapIcon from '@material-ui/icons/Map';
-import ShowChartIcon from '@material-ui/icons/ShowChart';
-import StarBorderIcon from '@material-ui/icons/StarBorder';
-import RestoreIcon from '@material-ui/icons/Restore';
-import SettingsIcon from '@material-ui/icons/Settings';
-
+import { ReactComponent as LocationSvg } from 'svgs/Appbar/location.svg';
+import { ReactComponent as GraphSvg } from 'svgs/Appbar/graph.svg';
+import { ReactComponent as HistorySvg } from 'svgs/Appbar/history.svg';
+import { ReactComponent as MapSvg } from 'svgs/Appbar/map.svg';
+import { ReactComponent as SettingsSvg } from 'svgs/Appbar/settings.svg';
+import { ReactComponent as StarSvg } from 'svgs/Appbar/star.svg';
 import { LEFT_DRAWER_WIDTH } from 'constants/constants';
 import { PageRoute, ChartsRoute } from 'utils/routes';
 import MenuButton from 'components/MenuButton/MenuButton';
 import { NavLink } from 'react-router-dom';
+import WithSvg from 'components/WithSvg/WithSvg';
 import styles from './ApplicationBar.module.css';
 
 const useStyles = makeStyles(theme => ({
@@ -42,24 +42,24 @@ const ApplicationBar = () => {
         </NavLink>
         <div className={styles.mainOptionsContainer}>
           <MenuButton exact path={PageRoute.home}>
-            <PinDropIcon />
+            <WithSvg component={LocationSvg} size={22} />
           </MenuButton>
           <MenuButton path={PageRoute.map}>
-            <MapIcon />
+            <WithSvg component={MapSvg} size={20} />
           </MenuButton>
           <MenuButton path={`${PageRoute.charts}${ChartsRoute.temperature}`}>
-            <ShowChartIcon />
+            <WithSvg component={GraphSvg} size={20} />
           </MenuButton>
           <MenuButton path={PageRoute.favorites}>
-            <StarBorderIcon />
+            <WithSvg component={StarSvg} size={20} />
           </MenuButton>
           <MenuButton path={PageRoute.history}>
-            <RestoreIcon />
+            <WithSvg component={HistorySvg} size={20} />
           </MenuButton>
         </div>
         <div className={styles.settingsContainer}>
           <Button fullWidth>
-            <SettingsIcon />
+            <WithSvg component={SettingsSvg} size={20} />
           </Button>
         </div>
       </Drawer>
