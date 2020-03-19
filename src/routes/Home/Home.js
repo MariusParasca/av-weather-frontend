@@ -186,8 +186,6 @@ const Home = props => {
     );
   }, [weatherForecast]);
 
-  console.log('weatherForecast', weatherForecast);
-
   return (
     <div className={styles.container}>
       <div className={styles.forecastContainer}>

@@ -7,13 +7,8 @@ import DayWeather from './DayWeather/DayWeather';
 
 const Forecast = props => {
   const { forecastTemperature, weekDaysHighLight } = props;
-
-  console.log('forecastTemperature', forecastTemperature);
-
   return (
     <div className={styles.container}>
-      {/* <DayWeather key="Yesterday" label="Yesterday" temperatureDay={3} temperatureNight={-1} />
-      <Divider orientation="vertical" variant="middle" /> */}
       {forecastTemperature.map((day, index) => (
         <DayWeather
           highlight={weekDaysHighLight[index]}

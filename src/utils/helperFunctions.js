@@ -81,6 +81,7 @@ export const createCurrentlyWeather = data => {
     temperature: data.temperature,
     description: data.summary,
     feelsLike: data.apparentTemperature,
+    imageName: data.icon,
     airQuality: data.airQuality,
   };
 };

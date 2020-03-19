@@ -11,12 +11,11 @@ import { useSelector } from 'react-redux';
 import iconTest from './icon.png';
 
 const CurrentWeather = props => {
-  const { city, country, weatherData, className, sunriseTime, sunsetTime } = props;
+  const { city, country, weatherData, className, sunriseTime, sunsetTime, imageName } = props;
 
   const currentLocation = useSelector(state => state.data.ipStack);
   const [isMapCreated, setIsMapCreated] = useState(false);
-
-  console.log('currentLocation', currentLocation);
+  const [image, setImage] = useState('');
 
   const [currentTime, setCurrentTime] = useState('00:00');
 
@@ -55,6 +54,14 @@ const CurrentWeather = props => {
     };
   }, []);
 
+  useEffect(() => {
+    const getImage = async image => {
+      const imageImported = await import(`../../../images/TypeOfWeather/${image}.png`);
+      setImage(imageImported);
+    };
+    if (imageName) getImage(imageName);
+  }, [imageName]);
+
   return (
     <div className={`${styles.container} ${className}`}>
       <div />
@@ -75,7 +82,7 @@ const CurrentWeather = props => {
           <SunInfo sunriseTime={sunriseTime} sunsetTime={sunsetTime} />
         </div>
         <div className={styles.imageContainer}>
-          <img className={styles.imageResponsive} alt="weather icon" src={iconTest} />
+          {image && <img className={styles.imageResponsive} alt="weather icon" src={image} />}
         </div>
       </div>
     </div>
@@ -94,6 +101,7 @@ CurrentWeather.propTypes = {
     sunriseTime: PropTypes.number.isRequired,
     sunsetTime: PropTypes.number.isRequired,
   }).isRequired,
+  imageName: PropTypes.string.isRequired,
 };
 
 CurrentWeather.defaultProps = {
