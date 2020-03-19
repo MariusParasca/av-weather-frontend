@@ -3,17 +3,18 @@ import PropTypes from 'prop-types';
 
 import { getTimeFromDate } from 'utils/dateTimeUtils';
 import { Typography } from '@material-ui/core';
-import WithSvg from 'components/WithSvg/WithSvg';
 import HereMaps from 'utils/HereMapsInstance';
 import styles from './CurrentWeather.module.css';
 import './CurrentWeatherMapStyle.css';
 import SunInfo from 'components/SunInfo/SunInfo';
 import { useSelector } from 'react-redux';
+import iconTest from './icon.png';
 
 const CurrentWeather = props => {
   const { city, country, weatherData, className, sunriseTime, sunsetTime } = props;
 
   const currentLocation = useSelector(state => state.data.ipStack);
+  const [isMapCreated, setIsMapCreated] = useState(false);
 
   console.log('currentLocation', currentLocation);
 
@@ -27,17 +28,23 @@ const CurrentWeather = props => {
   };
 
   useEffect(() => {
-    const layer = HereMaps.createDefaultLayers();
-    const container = document.getElementById('home-here-map');
+    if (!isMapCreated) {
+      const layer = HereMaps.createDefaultLayers();
+      const container = document.getElementById('home-here-map');
 
-    console.log('container', container);
-
-    const map = new window.H.Map(container, layer.vector.normal.map, {
-      zoom: 5,
-      padding: { top: 80, left: 80, bottom: 80, right: 80 },
-      pixelRatio: window.devicePixelRatio || 1,
-    });
-  }, []);
+      // eslint-disable-next-line no-unused-vars
+      const map = new window.H.Map(container, layer.vector.normal.map, {
+        zoom: 13,
+        center: { lat: currentLocation.latitude, lng: currentLocation.longitude },
+        pixelRatio: window.devicePixelRatio || 1,
+      });
+      map.getViewPort().resize();
+      window.addEventListener('resize', function() {
+        map.getViewPort().resize();
+      });
+      setIsMapCreated(true);
+    }
+  }, [currentLocation, isMapCreated]);
 
   useEffect(() => {
     const seconds = startClock();
@@ -54,17 +61,22 @@ const CurrentWeather = props => {
       <div
         id="home-here-map"
         className={styles.mapContainer}
-        style={{ width: '100%', height: '100%', background: 'grey', borderRadius: '20px' }}
+        style={{ width: '100%', height: '100%', background: 'rgba(0, 0, 0, 0.2)', borderRadius: '20px' }}
       />
-      <div className={styles.infoContainer}>
-        <Typography variant="subtitle1">Local Time: {currentTime}</Typography>
-        <div className={styles.locationContainer}>
-          <Typography variant="h4">{`${city}, ${country}`.toUpperCase()}</Typography>
+      <div className={styles.mainInfoContainer}>
+        <div className={styles.infoContainer}>
+          <Typography variant="subtitle1">Local Time: {currentTime}</Typography>
+          <div className={styles.locationContainer}>
+            <Typography variant="h4">{`${city}, ${country}`.toUpperCase()}</Typography>
+          </div>
+          <div className={styles.temperatureContainer}>
+            <Typography variant="h1">{`${Math.round(weatherData.temperature)}°C`}</Typography>
+          </div>
+          <SunInfo sunriseTime={sunriseTime} sunsetTime={sunsetTime} />
         </div>
-        <div className={styles.temperatureContainer}>
-          <Typography variant="h1">{`${Math.round(weatherData.temperature)}°C`}</Typography>
+        <div className={styles.imageContainer}>
+          <img className={styles.image} alt="weather icon" src={iconTest} />
         </div>
-        <SunInfo sunriseTime={sunriseTime} sunsetTime={sunsetTime} />
       </div>
     </div>
   );

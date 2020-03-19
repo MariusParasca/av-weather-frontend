@@ -19,6 +19,26 @@ const theme = createMuiTheme({
         },
       },
     },
+    MuiOutlinedInput: {
+      root: {
+        '&:hover $notchedOutline': {
+          borderColor: 'none',
+        },
+      },
+      notchedOutline: {
+        borderWidth: '2px',
+        borderColor: '#33325D',
+      },
+      input: {
+        '&::placeholder': {
+          color: '#575696',
+          fontWeight: 600,
+        },
+        '&': {
+          color: '#6C66FA',
+        },
+      },
+    },
   },
 });
 

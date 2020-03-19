@@ -14,9 +14,12 @@ import styles from './SearchBox.module.css';
 
 const useStyles = makeStyles(() => ({
   searchRoot: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: '6px',
-    fontSize: '1.1em',
+    '&': {
+      backgroundColor: '#2A2951',
+      borderRadius: '6px',
+      fontSize: '1.1em',
+      // border: '1px solid #33325D',
+    },
   },
 }));
 
@@ -149,7 +152,7 @@ const SearchBox = props => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <SearchIcon />
+                  <SearchIcon style={{ fill: '#6C66FA' }} />
                 </InputAdornment>
               ),
               classes: { root: classes.searchRoot },
