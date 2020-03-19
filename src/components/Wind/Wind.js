@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Typography, makeStyles } from '@material-ui/core';
 
-import { ReactComponent as Humidity } from 'svgs/humidity.svg';
+import { ReactComponent as WindSvg } from 'svgs/WeatherInfo/wind.svg';
 import LabeledCircularProgress from 'components/LabeledCircularProgress/LabeledCircularProgress';
 import { MAX_WIND } from 'constants/constants';
 import WithSvg from 'components/WithSvg/WithSvg';
@@ -36,7 +36,7 @@ const Wind = props => {
         progressText={String(Number(maxWind).toFixed(1))}
       />
       <div className={`${styles.textContainer} ${isOnFavorite ? styles.textContainerFavorite : ''}`}>
-        <WithSvg component={Humidity} size={20} className={styles.windIconContainer} />
+        <WithSvg component={WindSvg} size={20} className={styles.windIconContainer} />
         <Typography variant="subtitle1" classes={{ root: isOnFavorite ? classes.typo : '' }}>
           Max wind (m/s)
         </Typography>
