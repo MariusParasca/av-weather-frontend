@@ -1,13 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Typography } from '@material-ui/core';
+import { Typography, makeStyles } from '@material-ui/core';
 
 import WithSvg from 'components/WithSvg/WithSvg';
 import { ReactComponent as PartlyCloudyDaySvg } from 'svgs/weatherTypes/partly-cloudy-day.svg';
 import styles from './DayWeather.module.css';
 
+const useStyles = makeStyles(() => ({
+  nightStyle: {
+    color: '#34317C',
+  },
+}));
+
 const DayWeather = props => {
-  const { highlight, label, temperatureDay, temperatureNight } = props;
+  const { highlight, label, temperatureDay, temperatureNight, svg } = props;
+
+  const classes = useStyles();
 
   return (
     <div className={`${styles.mainContainer} ${highlight ? styles.highlight : ''}`} key={label}>
@@ -15,15 +23,15 @@ const DayWeather = props => {
         {label}
       </Typography>
       <div className={styles.iconContainer}>
-        <WithSvg component={PartlyCloudyDaySvg} size={55} />
+        <WithSvg component={svg} size={40} />
       </div>
       <div className={styles.dayContainer}>
-        <Typography variant="h5">{Math.round(temperatureDay)}°</Typography>
-        <Typography variant="subtitle1"> Day</Typography>
-      </div>
-      <div className={styles.nightContainer}>
-        <Typography variant="subtitle1">{Math.round(temperatureNight)}°</Typography>
-        <Typography variant="subtitle1"> Night</Typography>
+        <Typography variant="h5" display="inline">
+          {Math.round(temperatureDay)}°
+        </Typography>
+        <Typography variant="subtitle1" display="inline" classes={{ root: classes.nightStyle }}>
+          /{Math.round(temperatureNight)}°
+        </Typography>
       </div>
     </div>
   );
@@ -34,6 +42,7 @@ DayWeather.propTypes = {
   temperatureNight: PropTypes.number.isRequired,
   temperatureDay: PropTypes.number.isRequired,
   highlight: PropTypes.bool,
+  svg: PropTypes.string.isRequired,
 };
 
 DayWeather.defaultProps = {

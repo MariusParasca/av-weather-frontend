@@ -8,6 +8,10 @@ import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
 import { createDateFromEpoch, getTimeFromDate } from 'utils/dateTimeUtils';
+import { ReactComponent as RiseSvg } from 'svgs/SunInfo/rise.svg';
+import { ReactComponent as SetSvg } from 'svgs/SunInfo/set.svg';
+import { ReactComponent as SunrisesetSvg } from 'svgs/SunInfo/sunriseset.svg';
+import WithSvg from 'components/WithSvg/WithSvg';
 import styles from './SunInfo.module.css';
 
 const useStyles = makeStyles(() => ({
@@ -27,15 +31,15 @@ const SunInfo = props => {
   return (
     <div className={styles.sunInfoContainer}>
       <div className={styles.sunInfoMiniContainer}>
-        <WbSunnyIcon classes={{ root: classes.iconRoot }} />
+        <WithSvg component={SunrisesetSvg} size={18} />
         <span className={styles.sunText}>Sun</span>
       </div>
       <div className={styles.sunInfoMiniContainer}>
-        <ArrowUpwardIcon />
+        <WithSvg component={RiseSvg} width={12} height={16} />
         <span className={styles.sunText}>{screenSunriseTime}</span>
       </div>
       <div className={styles.sunInfoMiniContainer}>
-        <ArrowDownwardIcon />
+        <WithSvg component={SetSvg} width={12} height={16} />
         <span className={styles.sunText}>{screenSunsetTime}</span>
       </div>
     </div>

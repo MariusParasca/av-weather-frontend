@@ -181,9 +181,12 @@ const Home = props => {
         label: el.label,
         temperatureNight: el.temperatureLow,
         temperatureDay: el.temperatureHigh,
+        svg: `svgs/TypeOfWeather/Forecast/${el.icon}.svg`,
       })),
     );
   }, [weatherForecast]);
+
+  console.log('weatherForecast', weatherForecast);
 
   return (
     <div className={styles.container}>

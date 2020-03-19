@@ -75,7 +75,7 @@ const CurrentWeather = props => {
           <SunInfo sunriseTime={sunriseTime} sunsetTime={sunsetTime} />
         </div>
         <div className={styles.imageContainer}>
-          <img className={styles.image} alt="weather icon" src={iconTest} />
+          <img className={styles.imageResponsive} alt="weather icon" src={iconTest} />
         </div>
       </div>
     </div>

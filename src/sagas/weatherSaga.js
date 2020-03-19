@@ -88,7 +88,7 @@ function getWeatherArray(data) {
       progressValue: (tempAir / MAX_AIQ) * 100,
       progressText: String(tempAir),
       text: 'Air Quality',
-      svg: '',
+      svg: 'svgs/WeatherInfo/air.svg',
       weatherType: STANDARD_WEATHER_TYPE,
     },
     {

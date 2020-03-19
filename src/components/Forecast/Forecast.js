@@ -8,6 +8,8 @@ import DayWeather from './DayWeather/DayWeather';
 const Forecast = props => {
   const { forecastTemperature, weekDaysHighLight } = props;
 
+  console.log('forecastTemperature', forecastTemperature);
+
   return (
     <div className={styles.container}>
       {/* <DayWeather key="Yesterday" label="Yesterday" temperatureDay={3} temperatureNight={-1} />
@@ -17,6 +19,7 @@ const Forecast = props => {
           highlight={weekDaysHighLight[index]}
           key={day.label}
           label={day.label}
+          svg={day.svg}
           temperatureDay={day.temperatureDay}
           temperatureNight={day.temperatureNight}
         />
