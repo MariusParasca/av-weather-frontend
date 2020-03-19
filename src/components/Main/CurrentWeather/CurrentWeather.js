@@ -17,6 +17,8 @@ const CurrentWeather = props => {
   const [isMapCreated, setIsMapCreated] = useState(false);
   const [image, setImage] = useState('');
 
+  console.log('image', image);
+
   const [currentTime, setCurrentTime] = useState('00:00');
 
   const startClock = () => {
@@ -82,7 +84,7 @@ const CurrentWeather = props => {
           <SunInfo sunriseTime={sunriseTime} sunsetTime={sunsetTime} />
         </div>
         <div className={styles.imageContainer}>
-          {image && <img className={styles.imageResponsive} alt="weather icon" src={image} />}
+          {image && <img className={styles.imageResponsive} alt="weather icon" src={image.default} />}
         </div>
       </div>
     </div>

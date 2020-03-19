@@ -69,6 +69,7 @@ const Main = props => {
                       className={styles.leftWeatherContainer}
                       city={locationData.city}
                       country={locationData.country}
+                      imageName={weatherData.currently.imageName}
                       weatherData={weatherData.currently}
                       sunsetTime={weatherData.currently.sunsetTime}
                       sunriseTime={weatherData.currently.sunriseTime}
