@@ -5,7 +5,7 @@
 .windContainer {
   display: flex;
   align-items: center;
-  justify-content: center;
+  padding-left: 16px;
 }
 .windContainer:not(:first-child) {
   /* margin-top: 20px; */
@@ -13,7 +13,7 @@
 
 .windContainer:hover {
   cursor: pointer;
-  background: #f7f7f7;
+  background: #3a3966;
 }
 
 .textContainer {
@@ -24,6 +24,11 @@
 
 .windContainerFavorite {
   flex-direction: column;
+}
+
+.windContainerFavorite:hover {
+  cursor: default;
+  background: none;
 }
 
 .textContainerFavorite {

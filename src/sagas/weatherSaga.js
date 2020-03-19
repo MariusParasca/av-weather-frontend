@@ -35,6 +35,7 @@ async function makeWeatherRequest(latitude, longitude, city) {
       params: {
         units: 'si',
         exclude: '[minutely, alerts, flags]',
+        extend: 'hourly',
       },
     });
 

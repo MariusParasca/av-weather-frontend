@@ -25,20 +25,18 @@ const SunInfo = props => {
   const screenSunriseTime = getTimeFromDate(createDateFromEpoch(sunriseTime));
   const screenSunsetTime = getTimeFromDate(createDateFromEpoch(sunsetTime));
   return (
-    <div>
-      <div className={styles.sunInfoContainer}>
-        <div className={styles.sunInfoMiniContainer}>
-          <WbSunnyIcon classes={{ root: classes.iconRoot }} />
-          <span className={styles.sunText}>Sun</span>
-        </div>
-        <div className={styles.sunInfoMiniContainer}>
-          <ArrowUpwardIcon />
-          <span className={styles.sunText}>{screenSunriseTime}</span>
-        </div>
-        <div className={styles.sunInfoMiniContainer}>
-          <ArrowDownwardIcon />
-          <span className={styles.sunText}>{screenSunsetTime}</span>
-        </div>
+    <div className={styles.sunInfoContainer}>
+      <div className={styles.sunInfoMiniContainer}>
+        <WbSunnyIcon classes={{ root: classes.iconRoot }} />
+        <span className={styles.sunText}>Sun</span>
+      </div>
+      <div className={styles.sunInfoMiniContainer}>
+        <ArrowUpwardIcon />
+        <span className={styles.sunText}>{screenSunriseTime}</span>
+      </div>
+      <div className={styles.sunInfoMiniContainer}>
+        <ArrowDownwardIcon />
+        <span className={styles.sunText}>{screenSunsetTime}</span>
       </div>
     </div>
   );

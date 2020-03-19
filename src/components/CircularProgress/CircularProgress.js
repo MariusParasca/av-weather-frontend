@@ -13,7 +13,13 @@ const CircularProgress = props => {
 
   return (
     <div className={`${styles.container} ${className}`} style={{ width: size, height: size }}>
-      <svg className={styles.svg} width={size} height={size} version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <svg
+        className={isOnFavorite ? styles.svgMirror : styles.svg}
+        width={size}
+        height={size}
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <circle r={radius} cx={size / 2} cy={size / 2} fill="none" stroke={inactiveColor} strokeWidth={strokeWidth} />
         <circle
           r={radius}
@@ -47,8 +53,8 @@ CircularProgress.propTypes = {
 CircularProgress.defaultProps = {
   size: 70,
   strokeWidth: 9,
-  activeColor: '#FF9F1E',
-  inactiveColor: '#e6e6e6',
+  activeColor: '#6C66FA',
+  inactiveColor: '#29294E',
   percent: 0,
   text: '',
   className: '',

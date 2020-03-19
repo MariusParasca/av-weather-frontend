@@ -1,3 +1,7 @@
 .airGaugeContainer {
   height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #6c66fa;
 }

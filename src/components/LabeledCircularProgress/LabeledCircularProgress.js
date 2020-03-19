@@ -67,7 +67,7 @@ LabeledCircularProgress.defaultProps = {
   progressText: undefined,
   circularProgressSize: 70,
   labelFontSize: 16,
-  activeColor: '#FF9F1E',
+  activeColor: '#5651C8',
   strokeWidth: undefined,
   isOnFavorite: false,
 };

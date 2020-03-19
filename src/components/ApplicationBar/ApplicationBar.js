@@ -18,7 +18,7 @@ import { NavLink } from 'react-router-dom';
 import styles from './ApplicationBar.module.css';
 
 const useStyles = makeStyles(theme => ({
-  paper: { width: LEFT_DRAWER_WIDTH },
+  paper: { width: LEFT_DRAWER_WIDTH, background: '#131231' },
   drawer: {
     [theme.breakpoints.up('sm')]: {
       width: LEFT_DRAWER_WIDTH,

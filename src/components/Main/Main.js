@@ -70,6 +70,8 @@ const Main = props => {
                       city={locationData.city}
                       country={locationData.country}
                       weatherData={weatherData.currently}
+                      sunsetTime={weatherData.currently.sunsetTime}
+                      sunriseTime={weatherData.currently.sunriseTime}
                     />
                     <Route exact path={PageRoute.home}>
                       <HomeSearchBox />
@@ -77,11 +79,7 @@ const Main = props => {
                   </div>
                   <Route exact path={PageRoute.home}>
                     <div className={styles.additionalContainer}>
-                      <HomeAdditional
-                        airQuality={weatherData.currently.airQuality}
-                        sunsetTime={weatherData.currently.sunsetTime}
-                        sunriseTime={weatherData.currently.sunriseTime}
-                      />
+                      <HomeAdditional airQuality={weatherData.currently.airQuality} />
                     </div>
                   </Route>
                   <Route path={PageRoute.history}>

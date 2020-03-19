@@ -19,14 +19,17 @@
 .mainContainer {
   width: 315px;
   padding-left: 0;
-  border-left: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 .otherContainer {
-  /* border-left: 1px solid rgba(0, 0, 0, 0.12); */
+  background: #131231;
+  height: 100%;
 }
 
 .otherContainer > div {
-  background: #fdfdfd;
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  border-top: 2px solid #222145;
+}
+
+.otherContainer > div:focus {
+  outline: none;
 }

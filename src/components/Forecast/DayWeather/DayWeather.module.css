@@ -1,17 +1,16 @@
 .mainContainer {
-  min-height: 175px;
+  min-height: 135px;
   /* padding: 0 20px; */
   display: flex;
   flex-direction: column;
   flex-basis: 100%;
-  border-right: 1px solid #e6e6e6;
-  background: #f9f9f9;
+  background: #3a3966;
+  border-radius: 18px;
+  margin: 0 5px;
 }
 
 .highlight {
-  background: #efefef;
-  /* box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.75); */
-  border: 1px solid #b1b1b1;
+  background: #6c66fa;
 }
 
 .weatherContainer {

@@ -43,6 +43,8 @@ const WeatherInfo = props => {
         size={circularSize}
         strokeWidth={circularStrokeWidth}
         percent={actualProgressValue}
+        activeColor="#504BCA"
+        inactiveColor={isOnFavorite ? '#131231' : '#29294E'}
         text={`${!progressText ? actualProgressValue : progressText}${percentChar}`}
       />
       <div className={`${styles.textContainer} ${isOnFavorite ? styles.textContainerFavorite : ''}`}>

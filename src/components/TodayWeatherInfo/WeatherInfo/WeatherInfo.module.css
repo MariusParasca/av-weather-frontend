@@ -8,11 +8,7 @@
 
 .weatherInfoContainer:hover {
   cursor: pointer;
-  background: #f7f7f7;
-}
-
-.weatherInfoContainer:last-child {
-  margin-bottom: 20px;
+  background: #3a3966;
 }
 
 .circularProgressContainer {
@@ -37,6 +33,12 @@
 
 .weatherInfoContainerFavorite {
   flex-direction: column;
+  padding: 0;
+}
+
+.weatherInfoContainerFavorite:hover {
+  background: none;
+  cursor: default;
 }
 
 .textContainerFavorite {
