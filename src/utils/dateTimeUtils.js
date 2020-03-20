@@ -6,12 +6,24 @@ export const createDateFromEpoch = utcSeconds => {
   return dateTime;
 };
 
+const formatAMPM = date => {
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours %= 12;
+  hours = hours || 12;
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+  const strTime = `${hours}:${minutes} ${ampm}`;
+  return strTime;
+};
+
 export const zeroPadTime = number => {
   return `0${number}`.slice(-2);
 };
 
-export const getTimeFromDate = date => {
-  return `${zeroPadTime(date.getHours())}:${zeroPadTime(date.getMinutes())}`;
+export const getTimeFromDate = (date, isAmPm = true) => {
+  if (!isAmPm) return `${zeroPadTime(date.getHours())}:${zeroPadTime(date.getMinutes())}`;
+  return formatAMPM(date);
 };
 
 export const getHourFromEpoch = utcSeconds => {

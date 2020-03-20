@@ -3,6 +3,7 @@ import React, { useEffect, useCallback } from 'react';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import { useSelector, useDispatch } from 'react-redux';
 
+import { ReactComponent as SettingsSvg } from 'svgs/Appbar/settings.svg';
 import SearchBox from 'components/SearchBox/SearchBox';
 import { SEARCH_PLACEHOLDER } from 'constants/constants';
 import {
@@ -10,8 +11,10 @@ import {
   DELETE_FAVORITE_SEND,
   DELETE_FAVORITE_LOCALLY_SEND,
 } from 'store/actionTypes/favoritesActionTypes';
-import { IconButton, Typography, makeStyles } from '@material-ui/core';
+import { IconButton, Typography, makeStyles, Grid } from '@material-ui/core';
 import { WEATHER_API_SEND } from 'store/actionTypes/weatherAPIActionTypes';
+import WithSvg from 'components/WithSvg/WithSvg';
+import HomeFavorite from 'components/HomeFavorite/HomeFavorite';
 import styles from './HomeSearchBox.module.css';
 
 const useStyles = makeStyles(() => ({
@@ -26,7 +29,7 @@ const HomeSearchBox = props => {
   const dispatch = useDispatch();
 
   const favorites = useSelector(state => state.favorites);
-  const { data, dataLocally } = favorites;
+  const { dataLocally } = favorites;
   const isLoggedIn = useSelector(state => state.authData.isLoggedIn);
 
   const onClickCity = useCallback(
@@ -69,8 +72,25 @@ const HomeSearchBox = props => {
   return (
     <div className={styles.rightWeatherContainer}>
       <SearchBox className={styles.searchBoxContainer} placeholder={SEARCH_PLACEHOLDER} />
-      <div className={styles.favoritesContainer}>
-        {!isLoggedIn ? dataLocally.slice(0, 4).map(mapFunction) : data.slice(0, 4).map(mapFunction)}
+      <div className={styles.favoriteContainer}>
+        <div className={styles.textContainer}>
+          <Typography variant="subtitle1">Frequent locations</Typography>
+          <WithSvg component={SettingsSvg} size={15} className={styles.icon} />
+        </div>
+        <div className={styles.favorites}>
+          <Grid container spacing={2}>
+            {dataLocally.map(fav => (
+              <Grid item>
+                <HomeFavorite
+                  city={fav.city}
+                  latitude={fav.latitude}
+                  longitude={fav.longitude}
+                  utcOffset={fav.utcOffset}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </div>
       </div>
     </div>
   );

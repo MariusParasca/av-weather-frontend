@@ -1,25 +1,32 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles, Typography, Button } from '@material-ui/core';
+import { Typography, makeStyles } from '@material-ui/core';
 
 import darkSkyAxios from 'axios/darkSky';
 import useHttp from 'hooks/useHttp';
 import { getTimeFromDate, getTimeBasedOnTimeZone } from 'utils/dateTimeUtils';
-import StarIcon from '@material-ui/icons/Star';
-import Spinner from 'components/Spinner/Spinner';
-import styles from './FavoriteCity.module.css';
+import { ReactComponent as StarFilledSvg } from 'svgs/Favorites/star_filled.svg';
+import WithSvg from 'components/WithSvg/WithSvg';
+import rain from 'images/TypeOfWeather/rain.png';
+import { useSelector } from 'react-redux';
+import styles from './HomeFavorite.module.css';
 
 const useStyles = makeStyles(() => ({
-  starButtonRoot: {
-    padding: 0,
-    minWidth: 0,
+  timeTypo: {
+    fontSize: '0.7rem',
+  },
+  cityTypo: {
+    fontSize: '1.2rem',
+  },
+  tempTypo: {
+    fontSize: '2.4rem',
   },
 }));
 
-const FavoriteCity = props => {
-  const { city, country, utcOffset, latitude, longitude, onClickIcon, isOnMap } = props;
+const HomeFavorite = props => {
+  const { utcOffset, latitude, longitude, city, onClickIcon, className } = props;
 
-  const classes = useStyles();
+  const favorites = useSelector(state => state.favorites);
 
   const darkSkyHttp = useHttp();
   const { sendRequest: sendRequestDarkSky } = darkSkyHttp;
@@ -69,43 +76,46 @@ const FavoriteCity = props => {
     };
   }, [time, startClock]);
 
+  console.log('favorites', favorites);
+
+  const classes = useStyles();
+
   return (
-    <div className={`${styles.container} ${isOnMap ? styles.forMapContainer : ''}`}>
-      <div className={styles.localTimeContainer}>
-        <Typography variant="h6">Local time: {time}</Typography>
-        {onClickIcon && (
-          <Button classes={{ root: classes.starButtonRoot }} onClick={onClickIcon}>
-            <StarIcon />
-          </Button>
-        )}
-      </div>
-      <Typography variant="h4">{`${city}, ${country}`}</Typography>
-      <div className={styles.valueContainer}>
-        <div className={styles.degreeValue}>
-          {darkSkyHttp.isLoading ? <Spinner /> : <Typography variant="h1">{degreeValue}°C</Typography>}
+    <div className={`${styles.container} ${className}`}>
+      <div className={styles.timeContainer}>
+        <Typography variant="caption" color="primary" classes={{ root: classes.timeTypo }}>
+          {time}
+        </Typography>
+        <div onClick={onClickIcon}>
+          <WithSvg component={StarFilledSvg} size={13} />
         </div>
+      </div>
+      <Typography variant="subtitle1" classes={{ root: classes.cityTypo }}>
+        {city}
+      </Typography>
+      <div className={styles.temperatureContainer}>
+        <Typography variant="h2" classes={{ root: classes.tempTypo }}>
+          {darkSkyHttp.isLoading ? <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> : degreeValue}°
+        </Typography>
         <div className={styles.imageContainer}>
-          <img className={styles.image} alt="weather type" src="https://via.placeholder.com/200x150.jpg" />
+          <img className={styles.imageResponsive} alt="weather icon" src={rain} />
         </div>
       </div>
     </div>
   );
 };
 
-FavoriteCity.propTypes = {
-  city: PropTypes.string.isRequired,
-  country: PropTypes.string.isRequired,
-  onClickIcon: PropTypes.func,
-  utcOffset: PropTypes.number,
+HomeFavorite.propTypes = {
+  utcOffset: PropTypes.number.isRequired,
   latitude: PropTypes.number.isRequired,
   longitude: PropTypes.number.isRequired,
-  isOnMap: PropTypes.bool,
+  city: PropTypes.string.isRequired,
+  onClickIcon: PropTypes.func.isRequired,
+  className: PropTypes.string,
 };
 
-FavoriteCity.defaultProps = {
-  utcOffset: undefined,
-  onClickIcon: undefined,
-  isOnMap: false,
+HomeFavorite.defaultProps = {
+  className: '',
 };
 
-export default FavoriteCity;
+export default HomeFavorite;
