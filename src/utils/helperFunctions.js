@@ -52,6 +52,16 @@ export const updateTextField = (func, resetFunc, error) => ({ target: { value } 
   func(value);
 };
 
+export const resetTextFieldError = (errorSetState, helperTextSetState) => {
+  errorSetState(false);
+  helperTextSetState('');
+};
+
+export const setTextFieldError = (errorSetState, helperTextSetState, text) => {
+  errorSetState(true);
+  helperTextSetState(text);
+};
+
 export const capitalizeFirstLetter = string => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };

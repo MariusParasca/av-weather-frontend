@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles, TextField, InputAdornment, MenuItem } from '@material-ui/core';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import { ADD_FAVORITE_SEND, ADD_FAVORITE_LOCALLY_SEND } from 'store/actionTypes/favoritesActionTypes';
 import useHttp from 'hooks/useHttp';
@@ -9,7 +10,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import Spinner from 'components/Spinner/Spinner';
 import { useDispatch, connect } from 'react-redux';
 import { WEATHER_API_SEND } from 'store/actionTypes/weatherAPIActionTypes';
-import { getUtcOffsetByCoordinates } from 'utils/helperFunctions';
+import { getUtcOffsetByCoordinates, updateTextField } from 'utils/helperFunctions';
 import styles from './SearchBox.module.css';
 
 const useStyles = makeStyles(() => ({
@@ -18,8 +19,17 @@ const useStyles = makeStyles(() => ({
       backgroundColor: '#2A2951',
       borderRadius: '6px',
       fontSize: '1.1em',
-      // border: '1px solid #33325D',
     },
+  },
+  endAdornment: {
+    display: 'none',
+  },
+  autocompletePaper: {
+    margin: '0',
+    borderTop: 'none',
+    background: '#131231',
+    borderTopRightRadius: 0,
+    borderTopLeftRadius: 0,
   },
 }));
 
@@ -37,31 +47,12 @@ const SearchBox = props => {
 
   const dispatch = useDispatch();
 
-  // const locationData = useSelector(state => state.data.ipStack);
-  // const isLoggedIn = useSelector(state => state.authData.isLoggedIn);
-
   const classes = useStyles();
 
   const disableAutocomplete = useCallback(() => {
     setAutoCompleteOptions([]);
     setSearchString('');
   }, []);
-
-  const handleClickOutside = useCallback(
-    event => {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target) && autoCompleteOptions.length > 0) {
-        disableAutocomplete();
-      }
-    },
-    [autoCompleteOptions.length, disableAutocomplete],
-  );
-
-  useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  });
 
   useEffect(() => {
     const regex = new RegExp('City|Town|Village', 'i');
@@ -84,7 +75,7 @@ const SearchBox = props => {
           ],
           'get',
         );
-      }, 200);
+      }, 500);
     }
 
     return () => {
@@ -100,10 +91,6 @@ const SearchBox = props => {
       });
     }
   }, [locationData]);
-
-  const onChange = useCallback(event => {
-    setSearchString(event.target.value);
-  }, []);
 
   const onClickMenuItem = useCallback(
     value => {
@@ -137,36 +124,49 @@ const SearchBox = props => {
     [disableAutocomplete, dispatch, isLoggedIn],
   );
 
+  console.log('autoCompleteOptions', autoCompleteOptions);
+
   return (
     <>
       <div className={className} ref={wrapperRef}>
         <div className={styles.subContainer}>
           <div className={styles.spinner}>{isLoading ? <Spinner size={18} /> : null}</div>
-          <TextField
-            variant="outlined"
-            margin="none"
-            placeholder={placeholder}
-            fullWidth
-            value={searchString}
-            onChange={onChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon style={{ fill: '#6C66FA' }} />
-                </InputAdornment>
-              ),
-              classes: { root: classes.searchRoot },
+          <Autocomplete
+            options={autoCompleteOptions}
+            getOptionLabel={option => option.title}
+            onChange={(event, value) => {
+              onClickMenuItem(value);
             }}
+            noOptionsText={autoCompleteOptions.length === 0 ? 'Type to find a city' : 'No city found'}
+            style={{ width: '100%' }}
+            classes={{
+              endAdornment: classes.endAdornment,
+              popupIndicator: classes.popupIndicator,
+              root: classes.autocompleteRoot,
+              inputRoot: classes.inputRoot,
+              paper: classes.autocompletePaper,
+            }}
+            renderInput={params => (
+              <TextField
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                {...params}
+                value={searchString}
+                onClick={() => setAutoCompleteOptions([])}
+                onChange={updateTextField(setSearchString)}
+                placeholder={placeholder}
+                // InputProps={{
+                //   startAdornment: (
+                //     <InputAdornment position="start">
+                //       <SearchIcon style={{ fill: '#6C66FA' }} />
+                //     </InputAdornment>
+                //   ),
+                //   classes: { root: classes.searchRoot },
+                // }}
+                variant="outlined"
+                fullWidth
+              />
+            )}
           />
-          {autoCompleteOptions.length > 0 && (
-            <div className={styles.autoCompleteContainer}>
-              {autoCompleteOptions.map((el, index) => (
-                <MenuItem key={`${el.title}${index}`} onClick={() => onClickMenuItem(el)}>
-                  {el.title}
-                </MenuItem>
-              ))}
-            </div>
-          )}
         </div>
       </div>
     </>
