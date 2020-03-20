@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Typography, makeStyles } from '@material-ui/core';
 
 import WithSvg from 'components/WithSvg/WithSvg';
-import { ReactComponent as PartlyCloudyDaySvg } from 'svgs/weatherTypes/partly-cloudy-day.svg';
 import styles from './DayWeather.module.css';
 
 const useStyles = makeStyles(() => ({

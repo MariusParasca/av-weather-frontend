@@ -23,7 +23,7 @@ const WithSvg = ({ component: Svg, size, className, width, height }) => {
 
   const SvgIcon = () => {
     if (typeof Svg === 'string') {
-      return (
+      return svgImported ? (
         <img
           alt="svgIcon"
           src={svgImported}
@@ -32,6 +32,13 @@ const WithSvg = ({ component: Svg, size, className, width, height }) => {
             height: actualHeight,
           }}
         />
+      ) : (
+        <div
+          style={{
+            width: actualWidth,
+            height: actualHeight,
+          }}
+        ></div>
       );
     }
     return <Svg width={actualWidth} height={actualHeight} className={className} />;

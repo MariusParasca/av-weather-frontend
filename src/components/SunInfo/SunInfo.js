@@ -3,10 +3,6 @@ import PropTypes from 'prop-types';
 
 import { makeStyles, Typography } from '@material-ui/core';
 
-import WbSunnyIcon from '@material-ui/icons/WbSunny';
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-
 import { createDateFromEpoch, getTimeFromDate } from 'utils/dateTimeUtils';
 import { ReactComponent as RiseSvg } from 'svgs/SunInfo/rise.svg';
 import { ReactComponent as SetSvg } from 'svgs/SunInfo/set.svg';

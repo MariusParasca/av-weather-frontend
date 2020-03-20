@@ -27,7 +27,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const HomeFavorite = props => {
-  const { utcOffset, latitude, longitude, city, onClickIcon, className } = props;
+  const { utcOffset, latitude, longitude, city, onClickIcon, className, onClickContainer } = props;
 
   const darkSkyHttp = useHttp();
   const { sendRequest: sendRequestDarkSky } = darkSkyHttp;
@@ -80,7 +80,13 @@ const HomeFavorite = props => {
   const classes = useStyles();
 
   return (
-    <div className={`${styles.container} ${className}`}>
+    <div
+      onKeyPress={onClickContainer}
+      role="button"
+      tabIndex="0"
+      className={`${styles.container} ${className}`}
+      onClick={onClickContainer}
+    >
       <div className={styles.timeContainer}>
         <Typography variant="caption" color="primary" classes={{ root: classes.timeTypo }}>
           {time}
@@ -110,6 +116,7 @@ HomeFavorite.propTypes = {
   longitude: PropTypes.number.isRequired,
   city: PropTypes.string.isRequired,
   onClickIcon: PropTypes.func.isRequired,
+  onClickContainer: PropTypes.func.isRequired,
   className: PropTypes.string,
 };
 

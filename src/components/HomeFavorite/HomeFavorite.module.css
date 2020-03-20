@@ -5,6 +5,10 @@
   border-radius: 10px;
 }
 
+.container:hover {
+  cursor: pointer;
+}
+
 /* .container:not(:last-child) {
   margin-right: 13px;
 } */
