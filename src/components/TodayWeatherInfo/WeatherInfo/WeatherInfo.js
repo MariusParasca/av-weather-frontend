@@ -3,14 +3,7 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
 import CircularProgress from 'components/CircularProgress/CircularProgress';
-import { makeStyles } from '@material-ui/core';
 import styles from './WeatherInfo.module.css';
-
-const useStyles = makeStyles(() => ({
-  typo: {
-    fontSize: '1.5rem',
-  },
-}));
 
 const WeatherInfo = props => {
   const {
@@ -24,8 +17,6 @@ const WeatherInfo = props => {
     circularStrokeWidth,
     isOnFavorite,
   } = props;
-
-  const classes = useStyles();
 
   const percentChar = withPercent ? '%' : '';
   const actualProgressValue = withPercent ? Math.round(progressValue) : progressValue;
@@ -47,11 +38,9 @@ const WeatherInfo = props => {
         inactiveColor={isOnFavorite ? '#131231' : '#29294E'}
         text={`${!progressText ? actualProgressValue : progressText}${percentChar}`}
       />
-      <div className={`${styles.textContainer} ${isOnFavorite ? styles.textContainerFavorite : ''}`}>
+      <div className={`${styles.textContainer}`}>
         <div className={styles.weatherIconContainer}>{children}</div>
-        <Typography variant="subtitle1" classes={{ root: isOnFavorite ? classes.typo : '' }}>
-          {text}
-        </Typography>
+        <Typography variant={isOnFavorite ? 'subtitle2' : 'caption'}>{text}</Typography>
       </div>
     </div>
   );

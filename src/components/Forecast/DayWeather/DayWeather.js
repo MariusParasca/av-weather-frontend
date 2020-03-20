@@ -10,6 +10,9 @@ const useStyles = makeStyles(() => ({
   nightStyle: {
     color: '#34317C',
   },
+  labelTypo: {
+    fontWeight: '600',
+  },
 }));
 
 const DayWeather = props => {
@@ -19,18 +22,18 @@ const DayWeather = props => {
 
   return (
     <div className={`${styles.mainContainer} ${highlight ? styles.highlight : ''}`} key={label}>
-      <Typography variant="h5" align="center">
+      <Typography variant="subtitle2" align="center" classes={{ root: classes.labelTypo }}>
         {label}
       </Typography>
       <div className={styles.iconContainer}>
         <WithSvg component={svg} size={40} />
       </div>
       <div className={styles.dayContainer}>
-        <Typography variant="h5" display="inline">
+        <Typography variant="h3" display="inline">
           {Math.round(temperatureDay)}°
         </Typography>
-        <Typography variant="subtitle1" display="inline" classes={{ root: classes.nightStyle }}>
-          /{Math.round(temperatureNight)}°
+        <Typography variant="subtitle2" display="inline" classes={{ root: classes.nightStyle }}>
+          / {Math.round(temperatureNight)}°
         </Typography>
       </div>
     </div>

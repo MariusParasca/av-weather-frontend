@@ -37,7 +37,7 @@ const Wind = props => {
       />
       <div className={`${styles.textContainer} ${isOnFavorite ? styles.textContainerFavorite : ''}`}>
         <WithSvg component={WindSvg} size={20} className={styles.windIconContainer} />
-        <Typography variant="subtitle1" classes={{ root: isOnFavorite ? classes.typo : '' }}>
+        <Typography variant="caption" classes={{ root: isOnFavorite ? classes.typo : '' }}>
           Max wind (m/s)
         </Typography>
       </div>

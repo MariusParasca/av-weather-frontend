@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { getTimeFromDate } from 'utils/dateTimeUtils';
-import { Typography } from '@material-ui/core';
+import { Typography, makeStyles } from '@material-ui/core';
 import HereMaps from 'utils/HereMapsInstance';
 import styles from './CurrentWeather.module.css';
 import './CurrentWeatherMapStyle.css';
@@ -10,8 +10,16 @@ import SunInfo from 'components/SunInfo/SunInfo';
 import { useSelector } from 'react-redux';
 import iconTest from './icon.png';
 
+const useStyles = makeStyles(() => ({
+  timeTypo: {
+    fontSize: '1.3rem',
+  },
+}));
+
 const CurrentWeather = props => {
   const { city, country, weatherData, className, sunriseTime, sunsetTime, imageName } = props;
+
+  const classes = useStyles();
 
   const currentLocation = useSelector(state => state.data.ipStack);
   const [isMapCreated, setIsMapCreated] = useState(false);
@@ -74,9 +82,11 @@ const CurrentWeather = props => {
       />
       <div className={styles.mainInfoContainer}>
         <div className={styles.infoContainer}>
-          <Typography variant="subtitle1">Local Time: {currentTime}</Typography>
+          <Typography variant="subtitle1" classes={{ root: classes.timeTypo }}>
+            Local Time: {currentTime}
+          </Typography>
           <div className={styles.locationContainer}>
-            <Typography variant="h4">{`${city}, ${country}`.toUpperCase()}</Typography>
+            <Typography variant="h2">{`${city}, ${country.toUpperCase()}`}</Typography>
           </div>
           <div className={styles.temperatureContainer}>
             <Typography variant="h1">{`${Math.round(weatherData.temperature)}°C`}</Typography>
