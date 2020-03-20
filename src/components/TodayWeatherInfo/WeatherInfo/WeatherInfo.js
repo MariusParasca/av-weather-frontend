@@ -38,7 +38,7 @@ const WeatherInfo = props => {
         inactiveColor={isOnFavorite ? '#131231' : '#29294E'}
         text={`${!progressText ? actualProgressValue : progressText}${percentChar}`}
       />
-      <div className={`${styles.textContainer}`}>
+      <div className={`${styles.textContainer} ${isOnFavorite ? styles.marginTop : styles.marginLeft}`}>
         <div className={styles.weatherIconContainer}>{children}</div>
         <Typography variant={isOnFavorite ? 'subtitle2' : 'caption'}>{text}</Typography>
       </div>

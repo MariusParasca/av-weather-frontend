@@ -32,7 +32,7 @@ const HomeAdditional = () => {
     );
   }
 
-  return <div className={styles.airGaugeContainer}>{weatherComponent}</div>;
+  return <div className={styles.container}>{weatherComponent}</div>;
 };
 
 HomeAdditional.propTypes = {};

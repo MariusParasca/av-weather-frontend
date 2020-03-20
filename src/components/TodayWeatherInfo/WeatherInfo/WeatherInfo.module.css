@@ -28,7 +28,14 @@
 .textContainer {
   display: flex;
   align-items: center;
+}
+
+.marginLeft {
   margin-left: 32px;
+}
+
+.marginTop {
+  margin-top: 15px;
 }
 
 .weatherInfoContainerFavorite {

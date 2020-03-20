@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Typography, makeStyles } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 
 import { ReactComponent as WindSvg } from 'svgs/WeatherInfo/wind.svg';
 import LabeledCircularProgress from 'components/LabeledCircularProgress/LabeledCircularProgress';
@@ -8,16 +8,8 @@ import { MAX_WIND } from 'constants/constants';
 import WithSvg from 'components/WithSvg/WithSvg';
 import styles from './Wind.module.css';
 
-const useStyles = makeStyles(() => ({
-  typo: {
-    fontSize: '1.5rem',
-  },
-}));
-
 const Wind = props => {
   const { maxWind, onClick, circularProgressSize, strokeWidth, isOnFavorite } = props;
-
-  const classes = useStyles();
 
   return (
     <div
@@ -37,9 +29,7 @@ const Wind = props => {
       />
       <div className={`${styles.textContainer} ${isOnFavorite ? styles.textContainerFavorite : ''}`}>
         <WithSvg component={WindSvg} size={20} className={styles.windIconContainer} />
-        <Typography variant="caption" classes={{ root: isOnFavorite ? classes.typo : '' }}>
-          Max wind (m/s)
-        </Typography>
+        <Typography variant={isOnFavorite ? 'subtitle2' : 'caption'}>Max wind (m/s)</Typography>
       </div>
     </div>
   );
