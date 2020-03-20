@@ -1,13 +1,15 @@
 .mainInfoContainer {
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 20px;
+  padding: 18px 0px 10px 22px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.mainInfoContainerOverlay {
   position: absolute;
   top: 0;
   width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  border-radius: 20px;
-  padding: 18px 0px 18px 22px;
-  display: flex;
-  justify-content: space-between;
 }
 
 .imageResponsive {
@@ -22,7 +24,6 @@
 
 .container {
   position: relative;
-  height: 100%;
 }
 
 .locationContainer {

@@ -8,7 +8,6 @@ import styles from './CurrentWeather.module.css';
 import './CurrentWeatherMapStyle.css';
 import SunInfo from 'components/SunInfo/SunInfo';
 import { useSelector } from 'react-redux';
-import iconTest from './icon.png';
 
 const useStyles = makeStyles(() => ({
   timeTypo: {
@@ -72,31 +71,35 @@ const CurrentWeather = props => {
     if (imageName) getImage(imageName);
   }, [imageName]);
 
+  const content = (
+    <>
+      <div className={styles.infoContainer}>
+        <Typography variant="subtitle1" classes={{ root: classes.timeTypo }}>
+          Local Time: {currentTime}
+        </Typography>
+        <div className={styles.locationContainer}>
+          <Typography variant="h2">{`${city}, ${country.toUpperCase()}`}</Typography>
+        </div>
+        <div className={styles.temperatureContainer}>
+          <Typography variant="h1">{`${Math.round(weatherData.temperature)}°C`}</Typography>
+        </div>
+        <SunInfo sunriseTime={sunriseTime} sunsetTime={sunsetTime} />
+      </div>
+      <div className={styles.imageContainer}>
+        {image && <img className={styles.imageResponsive} alt="weather icon" src={image.default} />}
+      </div>
+    </>
+  );
+
   return (
     <div className={`${styles.container} ${className}`}>
-      <div />
       <div
         id="home-here-map"
         className={styles.mapContainer}
-        style={{ width: '100%', height: '100%', background: 'rgba(0, 0, 0, 0.2)', borderRadius: '20px' }}
+        style={{ width: '100%', height: '100%', position: 'absolute', top: 0, borderRadius: '20px' }}
       />
-      <div className={styles.mainInfoContainer}>
-        <div className={styles.infoContainer}>
-          <Typography variant="subtitle1" classes={{ root: classes.timeTypo }}>
-            Local Time: {currentTime}
-          </Typography>
-          <div className={styles.locationContainer}>
-            <Typography variant="h2">{`${city}, ${country.toUpperCase()}`}</Typography>
-          </div>
-          <div className={styles.temperatureContainer}>
-            <Typography variant="h1">{`${Math.round(weatherData.temperature)}°C`}</Typography>
-          </div>
-          <SunInfo sunriseTime={sunriseTime} sunsetTime={sunsetTime} />
-        </div>
-        <div className={styles.imageContainer}>
-          {image && <img className={styles.imageResponsive} alt="weather icon" src={image.default} />}
-        </div>
-      </div>
+      <div className={`${styles.mainInfoContainer} ${styles.mainInfoContainerOverlay}`}>{content}</div>
+      <div className={styles.mainInfoContainer}>{content}</div>
     </div>
   );
 };
