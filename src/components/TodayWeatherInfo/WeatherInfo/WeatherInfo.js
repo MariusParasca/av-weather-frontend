@@ -62,7 +62,7 @@ WeatherInfo.defaultProps = {
   withPercent: false,
   progressText: undefined,
   circularSize: 70,
-  circularStrokeWidth: 9,
+  circularStrokeWidth: 8,
   isOnFavorite: false,
   onClick: () => {},
 };

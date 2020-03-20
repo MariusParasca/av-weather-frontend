@@ -11,6 +11,7 @@ import { SET_FAVORITE_WEATHER_INFO, SET_FAVORITE_WEATHER_INFO_DATA } from 'store
 import { useDispatch, useSelector } from 'react-redux';
 import WeatherInfo from './WeatherInfo/WeatherInfo';
 import styles from './TodayWeatherInfo.module.css';
+import HomeAdditional from 'routes/Home/HomeAdditional/HomeAdditional';
 
 const TodayWeatherInfo = props => {
   const { isLoading } = props;
@@ -35,35 +36,9 @@ const TodayWeatherInfo = props => {
     <Spinner />
   ) : (
     <RightBottomContainer className={styles.mainContainer}>
+      <HomeAdditional/>
       <div className={styles.otherContainer}>
         {userWeatherData.map((item, index) => {
-          // if (item.weatherType === AIR_WEATHER_TYPE) {
-          //   return (
-          //     <AirGauge
-          //       key="airGauge"
-          //       onClick={() =>
-          //         onClickItem(
-          //           index,
-          //           item.progressValue,
-          //           item.text,
-          //           item.svg,
-          //           item.withPercent,
-          //           item.progressText,
-          //           item.weatherType,
-          //         )
-          //       }
-          //       className={styles.airGauge}
-          //       classNameTypo={styles.typoAirGauge}
-          //       pointerWidth={2}
-          //       stroke={9}
-          //       width={80}
-          //       height={90}
-          //       showDetail={false}
-          //       airQuality={item.progressValue}
-          //       showCustomLabel
-          //     />
-          //   );
-          // }
           if (item.weatherType === WIND_WEATHER_TYPE) {
             return (
               <Wind

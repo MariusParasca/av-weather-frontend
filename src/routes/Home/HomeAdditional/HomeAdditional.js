@@ -16,8 +16,8 @@ const HomeAdditional = () => {
     weatherComponent = (
       <WeatherInfo
         isOnFavorite
-        circularSize={150}
-        circularStrokeWidth={16}
+        circularSize={120}
+        circularStrokeWidth={15}
         progressValue={userFavoriteWeatherInfo.progressValue}
         text={userFavoriteWeatherInfo.text}
         withPercent={userFavoriteWeatherInfo.withPercent}
@@ -28,7 +28,7 @@ const HomeAdditional = () => {
     );
   } else if (userFavoriteWeatherInfo.weatherType === WIND_WEATHER_TYPE) {
     weatherComponent = (
-      <Wind isOnFavorite strokeWidth={18} circularProgressSize={150} maxWind={userFavoriteWeatherInfo.progressValue} />
+      <Wind isOnFavorite strokeWidth={15} circularProgressSize={120} maxWind={userFavoriteWeatherInfo.progressValue} />
     );
   }
 

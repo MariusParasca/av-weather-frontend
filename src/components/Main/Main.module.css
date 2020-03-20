@@ -3,14 +3,17 @@
   flex-grow: 1;
 }
 
-.container {
+.wrapperContainer {
   display: flex;
   flex-direction: column;
   width: 100%;
   background: #2a2951;
-  /* height: 100%; */
+}
+
+.container {
+  display: flex;
+  width: 100%;
   min-width: 1350px;
-  /* justify-content: space-between; */
 }
 
 .leftWeatherContainer {
@@ -34,6 +37,5 @@
 
 .additionalContainer {
   height: 100%;
-  width: 315px;
-  border-left: 1px solid rgba(0, 0, 0, 0.12);
+  width: 280px;
 }

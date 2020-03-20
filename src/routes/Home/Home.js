@@ -204,7 +204,6 @@ const Home = props => {
         </div>
         <Forecast weekDaysHighLight={weekDaysHighLight} forecastTemperature={modifiedWeatherForecast} />
       </div>
-      <TodayWeatherInfo isLoading={false} />
     </div>
   );
 };

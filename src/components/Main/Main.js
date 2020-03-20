@@ -15,6 +15,7 @@ import HistoryAdditional from 'routes/History/HistoryAdditional/HistoryAdditiona
 import Account from 'routes/Account/Account';
 import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
 import HomeSearchBox from 'components/HomeSearchBox/HomeSearchBox';
+import TodayWeatherInfo from 'components/TodayWeatherInfo/TodayWeatherInfo';
 import CurrentWeather from './CurrentWeather/CurrentWeather';
 import styles from './Main.module.css';
 
@@ -56,7 +57,7 @@ const Main = props => {
 
   return (
     <div className={styles.container}>
-      <>
+      <div className={styles.wrapperContainer}>
         <Route exact path={topContainerRoutes}>
           <div className={styles.topContainer}>
             <ErrorBoundary>
@@ -78,11 +79,6 @@ const Main = props => {
                       <HomeSearchBox />
                     </Route>
                   </div>
-                  <Route exact path={PageRoute.home}>
-                    <div className={styles.additionalContainer}>
-                      <HomeAdditional airQuality={weatherData.currently.airQuality} />
-                    </div>
-                  </Route>
                   <Route path={PageRoute.history}>
                     <div className={styles.additionalContainer}>
                       <HistoryAdditional />
@@ -138,7 +134,12 @@ const Main = props => {
             </ErrorBoundary>
           </Route>
         </div>
-      </>
+      </div>
+      <div>
+        <Route exact path={PageRoute.home}>
+          <TodayWeatherInfo isLoading={false} />
+        </Route>
+      </div>
     </div>
   );
 };
