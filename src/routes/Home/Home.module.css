@@ -4,7 +4,7 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
-  padding-left: 48px;
+  padding-left: 20px;
 }
 
 .forecastContainer {
@@ -21,4 +21,9 @@
 .sliderContainer {
   margin-right: 35px;
   margin-left: 20px;
+}
+
+.textContainer {
+  margin-left: 8px;
+  margin-bottom: 20px;
 }

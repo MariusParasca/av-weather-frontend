@@ -6,7 +6,7 @@ import HomeChart from 'components/Charts/HomeChart/HomeChart';
 import { WEEK_DAYS } from 'constants/constants';
 import { createDateFromEpoch } from 'utils/dateTimeUtils';
 import { flatten } from 'utils/helperFunctions';
-import { Slider, withStyles } from '@material-ui/core';
+import { Slider, withStyles, Typography } from '@material-ui/core';
 import styles from './Home.module.css';
 
 const CustomSlider = withStyles({
@@ -186,6 +186,9 @@ const Home = props => {
       <div className={styles.forecastContainer}>
         <div className={styles.chartContainer}>
           <HomeChart xLabel={xLabel} actualTemp={actualTemp} feelsLike={feelsLike} />
+        </div>
+        <div className={styles.textContainer}>
+          <Typography variant="subtitle1">7-day forecast</Typography>
         </div>
         <div className={styles.sliderContainer}>
           <CustomSlider
