@@ -81,7 +81,7 @@ async function firestoreRequest(uid) {
 
 function* firestoreRequestSaga() {
   const state = yield select(getCurrentState);
-  const auth = yield select(getCurrentStateAuth); 
+  const auth = yield select(getCurrentStateAuth);
 
   if (state.dataLoaded) {
     yield put({ type: FETCH_FAVORITES_ALREADY_FETCHED });
@@ -232,7 +232,7 @@ function* watchAddFavoriteLocallySaga(action) {
 
 function* watchDeleteFavoriteLocallySaga(action) {
   const state = yield select(getCurrentState);
-  const newDataLocally = [...state.dataLocally];
+  const newDataLocally = state.dataLocally;
   newDataLocally.splice(action.index, 1);
   yield put({ type: DELETE_FAVORITE_LOCALLY, dataLocally: newDataLocally });
   // yield put({ type: SEND_NOTIFICATIONS, notificationType: 'success', message: 'City deleted!' });

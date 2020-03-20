@@ -79,13 +79,14 @@ const HomeSearchBox = props => {
         </div>
         <div className={styles.favorites}>
           <Grid container spacing={2}>
-            {dataLocally.map(fav => (
+            {dataLocally.map((fav, index) => (
               <Grid item>
                 <HomeFavorite
                   city={fav.city}
                   latitude={fav.latitude}
                   longitude={fav.longitude}
                   utcOffset={fav.utcOffset}
+                  onClickIcon={() => dispatch({ type: DELETE_FAVORITE_LOCALLY_SEND, index })}
                 />
               </Grid>
             ))}

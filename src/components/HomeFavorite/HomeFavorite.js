@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { Typography, makeStyles } from '@material-ui/core';
+import { Typography, makeStyles, IconButton } from '@material-ui/core';
 
 import darkSkyAxios from 'axios/darkSky';
 import useHttp from 'hooks/useHttp';
@@ -8,7 +8,6 @@ import { getTimeFromDate, getTimeBasedOnTimeZone } from 'utils/dateTimeUtils';
 import { ReactComponent as StarFilledSvg } from 'svgs/Favorites/star_filled.svg';
 import WithSvg from 'components/WithSvg/WithSvg';
 import rain from 'images/TypeOfWeather/rain.png';
-import { useSelector } from 'react-redux';
 import styles from './HomeFavorite.module.css';
 
 const useStyles = makeStyles(() => ({
@@ -21,12 +20,14 @@ const useStyles = makeStyles(() => ({
   tempTypo: {
     fontSize: '2.4rem',
   },
+  iconButton: {
+    padding: '1px',
+    paddingTop: 0,
+  },
 }));
 
 const HomeFavorite = props => {
   const { utcOffset, latitude, longitude, city, onClickIcon, className } = props;
-
-  const favorites = useSelector(state => state.favorites);
 
   const darkSkyHttp = useHttp();
   const { sendRequest: sendRequestDarkSky } = darkSkyHttp;
@@ -76,8 +77,6 @@ const HomeFavorite = props => {
     };
   }, [time, startClock]);
 
-  console.log('favorites', favorites);
-
   const classes = useStyles();
 
   return (
@@ -86,9 +85,9 @@ const HomeFavorite = props => {
         <Typography variant="caption" color="primary" classes={{ root: classes.timeTypo }}>
           {time}
         </Typography>
-        <div onClick={onClickIcon}>
+        <IconButton classes={{ root: classes.iconButton }} onClick={onClickIcon}>
           <WithSvg component={StarFilledSvg} size={13} />
-        </div>
+        </IconButton>
       </div>
       <Typography variant="subtitle1" classes={{ root: classes.cityTypo }}>
         {city}
