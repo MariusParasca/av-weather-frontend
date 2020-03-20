@@ -135,11 +135,13 @@ const Main = props => {
           </Route>
         </div>
       </div>
-      <div>
-        <Route exact path={PageRoute.home}>
-          <TodayWeatherInfo isLoading={false} />
-        </Route>
-      </div>
+      {pending ? null : (
+        <div>
+          <Route exact path={PageRoute.home}>
+            <TodayWeatherInfo isLoading={false} />
+          </Route>
+        </div>
+      )}
     </div>
   );
 };

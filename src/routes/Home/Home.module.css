@@ -8,7 +8,7 @@
 }
 
 .forecastContainer {
-  width: calc(100% - 240px);
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -19,6 +19,6 @@
 }
 
 .sliderContainer {
-  margin-right: 120px;
+  margin-right: 20px;
   margin-left: 5px;
 }

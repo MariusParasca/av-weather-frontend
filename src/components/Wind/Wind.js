@@ -17,13 +17,17 @@ const Wind = props => {
       role="button"
       tabIndex="0"
       onClick={onClick}
-      className={`${styles.windContainer} ${isOnFavorite ? styles.windContainerFavorite : ''}`}
+      className={`${styles.windContainer} ${
+        isOnFavorite ? styles.windContainerFavorite : styles.windIconContainerNotFavorite
+      }`}
     >
       <LabeledCircularProgress
         isOnFavorite={isOnFavorite}
         circularProgressSize={circularProgressSize}
         strokeWidth={strokeWidth}
-        labelFontSize={16}
+        activeColor="#504BCA"
+        inactiveColor={isOnFavorite ? '#131231' : '#29294E'}
+        labelFontSize={20}
         progressValue={(maxWind / MAX_WIND) * 100}
         progressText={String(Number(maxWind).toFixed(1))}
       />

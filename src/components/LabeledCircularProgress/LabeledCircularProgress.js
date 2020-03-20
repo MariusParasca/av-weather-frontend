@@ -13,6 +13,7 @@ const LabeledCircularProgress = props => {
     circularProgressSize,
     labelFontSize,
     activeColor,
+    inactiveColor,
     strokeWidth,
     isOnFavorite,
   } = props;
@@ -45,6 +46,8 @@ const LabeledCircularProgress = props => {
           strokeWidth={strokeWidth}
           percent={progressValue}
           text={!progressText ? String(progressValue) : progressText}
+          inactiveColor={inactiveColor}
+          activeColor={activeColor}
         />
       </div>
     </div>
@@ -59,6 +62,7 @@ LabeledCircularProgress.propTypes = {
   circularProgressSize: PropTypes.number,
   labelFontSize: PropTypes.number,
   activeColor: PropTypes.string,
+  inactiveColor: PropTypes.string,
   strokeWidth: PropTypes.number,
   isOnFavorite: PropTypes.bool,
 };
@@ -68,6 +72,7 @@ LabeledCircularProgress.defaultProps = {
   circularProgressSize: 70,
   labelFontSize: 16,
   activeColor: '#5651C8',
+  inactiveColor: '#29294E',
   strokeWidth: undefined,
   isOnFavorite: false,
 };

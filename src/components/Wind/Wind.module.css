@@ -5,10 +5,7 @@
 .windContainer {
   display: flex;
   align-items: center;
-  padding-left: 16px;
-}
-.windContainer:not(:first-child) {
-  /* margin-top: 20px; */
+  padding-bottom: 5px;
 }
 
 .windContainer:hover {
@@ -24,6 +21,10 @@
 
 .windContainerFavorite {
   flex-direction: column;
+}
+
+.windIconContainerNotFavorite {
+  padding-left: 13px;
 }
 
 .windContainerFavorite:hover {
