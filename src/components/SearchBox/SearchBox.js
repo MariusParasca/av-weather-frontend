@@ -31,6 +31,18 @@ const useStyles = makeStyles(() => ({
     borderTopRightRadius: 0,
     borderTopLeftRadius: 0,
   },
+  input: {
+    padding: '12px 12px 12px 50px !important',
+  },
+  inputRoot: {
+    padding: '0 !important',
+    borderRadius: '10px',
+  },
+  option: {
+    '&[data-focus="true"]': {
+      backgroundColor: '#3a3966',
+    },
+  },
 }));
 
 const SearchBox = props => {
@@ -131,6 +143,9 @@ const SearchBox = props => {
       <div className={className} ref={wrapperRef}>
         <div className={styles.subContainer}>
           <div className={styles.spinner}>{isLoading ? <Spinner size={18} /> : null}</div>
+          <div className={styles.searchIcon}>
+            <SearchIcon style={{ fill: '#6C66FA' }} />
+          </div>
           <Autocomplete
             options={autoCompleteOptions}
             getOptionLabel={option => option.title}
@@ -144,14 +159,16 @@ const SearchBox = props => {
               popupIndicator: classes.popupIndicator,
               root: classes.autocompleteRoot,
               inputRoot: classes.inputRoot,
+              input: classes.input,
               paper: classes.autocompletePaper,
+              option: classes.option,
             }}
             renderInput={params => (
               <TextField
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...params}
                 value={searchString}
-                onClick={() => setAutoCompleteOptions([])}
+                onBlur={() => setAutoCompleteOptions([])}
                 onChange={updateTextField(setSearchString)}
                 placeholder={placeholder}
                 // InputProps={{
@@ -160,7 +177,7 @@ const SearchBox = props => {
                 //       <SearchIcon style={{ fill: '#6C66FA' }} />
                 //     </InputAdornment>
                 //   ),
-                //   classes: { root: classes.searchRoot },
+                //   classes: { root: classes.inputRoot },
                 // }}
                 variant="outlined"
                 fullWidth

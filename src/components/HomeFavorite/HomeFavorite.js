@@ -100,7 +100,7 @@ const HomeFavorite = props => {
       </Typography>
       <div className={styles.temperatureContainer}>
         <Typography variant="h2" classes={{ root: classes.tempTypo }}>
-          {darkSkyHttp.isLoading ? <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> : degreeValue}°
+          {degreeValue}°
         </Typography>
         <div className={styles.imageContainer}>
           <img className={styles.imageResponsive} alt="weather icon" src={rain} />
