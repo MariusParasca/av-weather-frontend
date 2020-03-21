@@ -136,8 +136,6 @@ const SearchBox = props => {
     [disableAutocomplete, dispatch, isLoggedIn],
   );
 
-  console.log('autoCompleteOptions', autoCompleteOptions);
-
   return (
     <>
       <div className={className} ref={wrapperRef}>

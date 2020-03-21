@@ -49,7 +49,7 @@ const HomeSearchBox = () => {
         <div className={styles.favorites}>
           <Grid container spacing={2}>
             {dataLocally.map((fav, index) => (
-              <Grid item>
+              <Grid item key={`${fav.city}`}>
                 <HomeFavorite
                   city={fav.city}
                   latitude={fav.latitude}

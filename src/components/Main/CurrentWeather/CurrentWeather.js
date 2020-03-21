@@ -24,8 +24,6 @@ const CurrentWeather = props => {
   const [isMapCreated, setIsMapCreated] = useState(false);
   const [image, setImage] = useState('');
 
-  console.log('image', image);
-
   const [currentTime, setCurrentTime] = useState('00:00');
 
   const startClock = () => {
