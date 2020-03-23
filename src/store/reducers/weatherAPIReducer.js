@@ -6,7 +6,7 @@ import {
 } from 'store/actionTypes/weatherAPIActionTypes';
 import { DAY_NO_HOURS, WEEK_DAYS } from 'constants/constants';
 
-import { getHourFromEpoch, createDateFromEpoch } from 'utils/dateTimeUtils';
+import { getHourFromEpoch, createDateFromEpoch, formatHourAMPM } from 'utils/dateTimeUtils';
 import { createCurrentlyWeather } from 'utils/helperFunctions';
 
 const initialState = {
@@ -48,6 +48,7 @@ const createHourlyWeather = data => {
   return data.data.map(el => ({
     ...el,
     hour: `${getHourFromEpoch(el.time)}:00`,
+    hourAMPM: formatHourAMPM(getHourFromEpoch(el.time)),
     temperature: Math.round(el.temperature),
   }));
 };

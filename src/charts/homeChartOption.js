@@ -9,11 +9,11 @@ const get7DaysChartOption = (xLabel, actualTemp, apparentTemperature) => {
         },
       },
     },
-    calculable: true,
+    // calculable: true,
     grid: {
-      top: '12%',
-      left: '1%',
-      right: '10%',
+      top: '1%',
+      left: '0%',
+      right: '20px',
       containLabel: true,
     },
     // dataZoom: [
@@ -26,31 +26,54 @@ const get7DaysChartOption = (xLabel, actualTemp, apparentTemperature) => {
         type: 'category',
         data: xLabel,
         boundaryGap: true,
-        axisPointer: {
+        // axisPointer: {
+        //   show: true,
+        // },
+        axisLabel: {
+          color: '#ffffff',
+          // rotate: 30, // If the label names are too long you can manage this by rotating the label.
           show: true,
         },
-        axisLabel: {
-          show: false,
-        },
         axisTick: {
-          show: false,
+          show: true,
+          alignWithLabel: true,
+          lineStyle: {
+            color: '#ffffff',
+          },
         },
-        axisLine: { show: true },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#3A3966',
+            width: 3,
+          },
+          onZero: false,
+        },
       },
     ],
     yAxis: [
       {
         type: 'value',
-        name: '°C',
+        // name: '°C',
         axisLine: {
           show: true,
-        },
-        axisTick: {
-          show: true,
+          lineStyle: {
+            color: '#3A3966',
+            width: 3,
+          },
+          onZero: false,
         },
         splitLine: {
           show: false,
         },
+        axisLabel: {
+          interval: 10,
+          show: true,
+          color: '#ffffff',
+          padding: [0, 10, 0, 0],
+        },
+        min: -30,
+        max: 30,
       },
     ],
     series: [
@@ -58,11 +81,15 @@ const get7DaysChartOption = (xLabel, actualTemp, apparentTemperature) => {
         name: 'Temperature',
         type: 'bar',
         data: actualTemp,
+        areaStyle: {},
+        showSymbol: false,
       },
       {
         name: 'Feels like',
         type: 'bar',
         data: apparentTemperature,
+        areaStyle: {},
+        showSymbol: false,
       },
     ],
   };

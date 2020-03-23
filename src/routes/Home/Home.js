@@ -5,7 +5,7 @@ import Forecast from 'components/Forecast/Forecast';
 import HomeChart from 'components/Charts/HomeChart/HomeChart';
 import { WEEK_DAYS } from 'constants/constants';
 import { createDateFromEpoch } from 'utils/dateTimeUtils';
-import { flatten } from 'utils/helperFunctions';
+import { flatten, createBarChartWithGradient, getMinArray, getMaxArray } from 'utils/helperFunctions';
 import { Slider, withStyles, Typography } from '@material-ui/core';
 import styles from './Home.module.css';
 
@@ -60,14 +60,38 @@ const getToday = (weatherHourly, indexFirstDay) => {
   const actualTempCurrent = [];
   const feelsLikeCurrent = [];
 
-  for (let i = 0; i < indexFirstDay; i += 1) {
+  const todayData = weatherHourly.slice(0, indexFirstDay);
+  const minActual = Math.round(getMinArray(todayData, el => el.temperature));
+  const maxActual = Math.round(getMaxArray(todayData, el => el.temperature));
+  const minFeelLike = Math.round(getMinArray(todayData, el => el.apparentTemperature));
+  const maxFeelLike = Math.round(getMaxArray(todayData, el => el.apparentTemperature));
+
+  for (let i = 0; i < todayData.length; i += 1) {
     const dataElement = weatherHourly[i];
-    xLabelCurrent.push(`Today (${dataElement.hour})`);
-    actualTempCurrent.push(Math.round(dataElement.temperature));
-    feelsLikeCurrent.push(Math.round(dataElement.apparentTemperature));
+    xLabelCurrent.push(`${dataElement.hourAMPM}`);
+    actualTempCurrent.push(createBarChartWithGradient(Math.round(dataElement.temperature), minActual, maxActual));
+    feelsLikeCurrent.push(
+      createBarChartWithGradient(Math.round(dataElement.apparentTemperature), minFeelLike, maxFeelLike),
+    );
   }
 
   return [xLabelCurrent, actualTempCurrent, feelsLikeCurrent];
+};
+
+const initVars = array => {
+  const minActual = Math.round(getMinArray(array, el => el.temperature));
+  const maxActual = Math.round(getMaxArray(array, el => el.temperature));
+  const minFeelLike = Math.round(getMinArray(array, el => el.apparentTemperature));
+  const maxFeelLike = Math.round(getMaxArray(array, el => el.apparentTemperature));
+  return {
+    xLabelCurrent: [],
+    actualTempCurrent: [],
+    feelsLikeCurrent: [],
+    minActual,
+    maxActual,
+    minFeelLike,
+    maxFeelLike,
+  };
 };
 
 const Home = props => {
@@ -128,35 +152,35 @@ const Home = props => {
     actualTempArray.push(actualToday);
     feelsLikeArray.push(feelsToday);
 
-    let label = WEEK_DAYS[createDateFromEpoch(weatherHourly[indexFirstDay].time).getDay()];
+    // let label = WEEK_DAYS[createDateFromEpoch(weatherHourly[indexFirstDay].time).getDay()];
     let counter = 0;
-    let xLabelCurrent = [];
-    let actualTempCurrent = [];
-    let feelsLikeCurrent = [];
+    let data = initVars(weatherHourly.slice(indexFirstDay, indexFirstDay + 24));
     for (let i = indexFirstDay; i < weatherHourly.length - 1; i += 1) {
       const dataElement = weatherHourly[i];
       if (counter === 24) {
         newWeekDaysHighLight[index] = true;
         index += 1;
         counter = 1;
-        label = WEEK_DAYS[createDateFromEpoch(dataElement.time).getDay()];
-        xLabelArray.push(xLabelCurrent);
-        actualTempArray.push(actualTempCurrent);
-        feelsLikeArray.push(feelsLikeCurrent);
-        xLabelCurrent = [];
-        actualTempCurrent = [];
-        feelsLikeCurrent = [];
+        // label = WEEK_DAYS[createDateFromEpoch(dataElement.time).getDay()];
+        xLabelArray.push(data.xLabelCurrent);
+        actualTempArray.push(data.actualTempCurrent);
+        feelsLikeArray.push(data.feelsLikeCurrent);
+        data = initVars(weatherHourly.slice(i, i + 24));
       } else {
         counter += 1;
       }
-      xLabelCurrent.push(`${label} (${dataElement.hour})`);
-      actualTempCurrent.push(Math.round(dataElement.temperature));
-      feelsLikeCurrent.push(Math.round(dataElement.apparentTemperature));
+      data.xLabelCurrent.push(`${dataElement.hourAMPM}`);
+      data.actualTempCurrent.push(
+        createBarChartWithGradient(Math.round(dataElement.temperature), data.minActual, data.maxActual),
+      );
+      data.feelsLikeCurrent.push(
+        createBarChartWithGradient(Math.round(dataElement.apparentTemperature), data.minFeelLike, data.maxFeelLike),
+      );
     }
     newWeekDaysHighLight[index] = true;
-    xLabelArray.push(xLabelCurrent);
-    actualTempArray.push(actualTempCurrent);
-    feelsLikeArray.push(feelsLikeCurrent);
+    xLabelArray.push(data.xLabelCurrent);
+    actualTempArray.push(data.actualTempCurrent);
+    feelsLikeArray.push(data.feelsLikeCurrent);
 
     setSliderValue([0, (index + 1) * 2]);
     setWeekDaysHighLight(newWeekDaysHighLight);
@@ -185,6 +209,7 @@ const Home = props => {
     <div className={styles.container}>
       <div className={styles.forecastContainer}>
         <div className={styles.chartContainer}>
+          <Typography variant="subtitle1">Hourly chart</Typography>
           <HomeChart xLabel={xLabel} actualTemp={actualTemp} feelsLike={feelsLike} />
         </div>
         <div className={styles.textContainer}>

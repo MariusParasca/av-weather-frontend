@@ -1,5 +1,6 @@
 /* eslint-disable prefer-template */
 import ts from '@mapbox/timespace';
+import echarts from 'echarts/lib/echarts';
 
 export const createChartData = (array, { label, propName }, options) => {
   let currentOptions;
@@ -185,4 +186,38 @@ export function increaseBrightness(hex, lum) {
 
 export const normalizeVar = (value, min, max, minNormalize, maxNormalize) => {
   return ((maxNormalize - minNormalize) * (value - min)) / (max - min) + minNormalize;
+};
+
+export const getMinArray = (array, callback) => {
+  return array.reduce((min, el) => (callback(el) < min ? callback(el) : min), callback(array[0]));
+};
+
+export const getMaxArray = (array, callback) => {
+  return array.reduce((max, el) => (callback(el) > max ? callback(el) : max), callback(array[0]));
+};
+
+export const createBarChartWithGradient = (value, min, max, itemStyleRest = {}) => {
+  const colorMax = getChartColor(max);
+  const colorMin = getChartColor(min > 0 ? -1 : min);
+  const brightnessPercent = normalizeVar(value, min, max, -40, 40) * 0.01;
+  return {
+    value,
+    itemStyle: {
+      shadowColor: 'rgba(0, 0, 0, 0.5)',
+      shadowBlur: 2,
+      shadowOffsetX: 0,
+      shadowOffsetY: 0,
+      color: new echarts.graphic.LinearGradient(0, 0, 0, 2, [
+        {
+          offset: 0,
+          color: increaseBrightness(colorMax, brightnessPercent),
+        },
+        {
+          offset: 1,
+          color: increaseBrightness(colorMin, brightnessPercent),
+        },
+      ]),
+      ...itemStyleRest,
+    },
+  };
 };

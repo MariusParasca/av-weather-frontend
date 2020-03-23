@@ -95,7 +95,7 @@ const HomeFavorite = props => {
           <WithSvg component={StarFilledSvg} size={13} />
         </IconButton>
       </div>
-      <Typography variant="subtitle1" classes={{ root: classes.cityTypo }}>
+      <Typography variant="subtitle1" classes={{ root: classes.cityTypo }} noWrap>
         {city}
       </Typography>
       <div className={styles.temperatureContainer}>

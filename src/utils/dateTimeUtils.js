@@ -21,6 +21,14 @@ export const zeroPadTime = number => {
   return `0${number}`.slice(-2);
 };
 
+export const formatHourAMPM = hour => {
+  let newHour = hour;
+  const ampm = newHour >= 12 ? 'PM' : 'AM';
+  newHour %= 12;
+  newHour = newHour || 12;
+  return `${zeroPadTime(newHour)}${ampm}`;
+};
+
 export const getTimeFromDate = (date, isAmPm = true) => {
   if (!isAmPm) return `${zeroPadTime(date.getHours())}:${zeroPadTime(date.getMinutes())}`;
   return formatAMPM(date);

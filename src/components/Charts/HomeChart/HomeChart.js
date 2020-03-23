@@ -10,7 +10,7 @@ const HomeChart = props => {
   return (
     <ReactEcharts
       style={{
-        height: 'calc(120% - 40px)',
+        height: '100%',
       }}
       option={getHomeChartOption(xLabel, actualTemp, feelsLike)}
     />
@@ -19,8 +19,8 @@ const HomeChart = props => {
 
 HomeChart.propTypes = {
   xLabel: PropTypes.arrayOf(PropTypes.string).isRequired,
-  actualTemp: PropTypes.arrayOf(PropTypes.number).isRequired,
-  feelsLike: PropTypes.arrayOf(PropTypes.number).isRequired,
+  actualTemp: PropTypes.arrayOf(PropTypes.object).isRequired,
+  feelsLike: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default HomeChart;
