@@ -6,13 +6,28 @@ import { ReactComponent as SettingsSvg } from 'svgs/Appbar/settings.svg';
 import SearchBox from 'components/SearchBox/SearchBox';
 import { SEARCH_PLACEHOLDER } from 'constants/constants';
 import { FETCH_FAVORITES_SEND, DELETE_FAVORITE_LOCALLY_SEND } from 'store/actionTypes/favoritesActionTypes';
-import { Typography, Grid } from '@material-ui/core';
+import { Typography, Grid, makeStyles } from '@material-ui/core';
 import { WEATHER_API_SEND } from 'store/actionTypes/weatherAPIActionTypes';
 import WithSvg from 'components/WithSvg/WithSvg';
 import HomeFavorite from 'components/HomeFavorite/HomeFavorite';
 import styles from './HomeSearchBox.module.css';
 
+const useStyles = makeStyles(() => ({
+  gridRoot: {
+    height: '120px',
+    overflow: 'hidden',
+  },
+  gridItem: {
+    '&:first-child': {
+      padding: '0 8px 0 0',
+    },
+    padding: '0 8px',
+  },
+}));
+
 const HomeSearchBox = () => {
+  const classes = useStyles();
+
   const dispatch = useDispatch();
 
   const favorites = useSelector(state => state.favorites);
@@ -47,9 +62,9 @@ const HomeSearchBox = () => {
           <WithSvg component={SettingsSvg} size={15} className={styles.icon} />
         </div>
         <div className={styles.favorites}>
-          <Grid container spacing={2}>
+          <Grid container classes={{ root: classes.gridRoot }}>
             {dataLocally.map((fav, index) => (
-              <Grid item key={`${fav.city}`}>
+              <Grid item key={`${fav.city}`} classes={{ root: classes.gridItem }}>
                 <HomeFavorite
                   city={fav.city}
                   latitude={fav.latitude}

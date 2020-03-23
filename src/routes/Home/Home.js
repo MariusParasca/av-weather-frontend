@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 
 import Forecast from 'components/Forecast/Forecast';
 import HomeChart from 'components/Charts/HomeChart/HomeChart';
-import { WEEK_DAYS } from 'constants/constants';
-import { createDateFromEpoch } from 'utils/dateTimeUtils';
 import { flatten, createBarChartWithGradient, getMinArray, getMaxArray } from 'utils/helperFunctions';
 import { Slider, withStyles, Typography } from '@material-ui/core';
 import styles from './Home.module.css';
@@ -208,8 +206,10 @@ const Home = props => {
   return (
     <div className={styles.container}>
       <div className={styles.forecastContainer}>
-        <div className={styles.chartContainer}>
+        <div className={styles.chartTitleContainer}>
           <Typography variant="subtitle1">Hourly chart</Typography>
+        </div>
+        <div className={styles.chartContainer}>
           <HomeChart xLabel={xLabel} actualTemp={actualTemp} feelsLike={feelsLike} />
         </div>
         <div className={styles.textContainer}>

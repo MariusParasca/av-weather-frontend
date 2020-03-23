@@ -116,33 +116,33 @@ export const getChartColor = value => {
     return '#FFFFFF';
   }
   if (value >= -40 && value < -30) {
-    return '#f0f6f8';
+    return '#bab8f1';
   }
   if (value >= -30 && value < -20) {
-    return '#e9f2f5';
+    return '#8b87e8';
   }
   if (value >= -20 && value < -10) {
-    return '#cbdcf2';
+    return '#7a75e4';
   }
   if (value >= -10 && value < 0) {
-    return '#91b2ed';
+    return '#615cdf';
   }
   if (value >= 0 && value < 10) {
-    return '#608ee9';
+    return '#5d58ce';
   }
   if (value >= 10 && value < 20) {
-    return '#306be2';
+    return '#5653b5';
   }
   if (value >= 20 && value < 30) {
-    return '#1154e1';
+    return '#5653b5';
   }
   if (value >= 30 && value < 40) {
-    return '#1154e1';
+    return '#4e4b94';
   }
   if (value >= 30 && value < 40) {
-    return '#0048df';
+    return '#3a3788';
   }
-  return '#2578FF';
+  return '#5d58ce';
 };
 
 // export const increaseBrightness = (hex, percent) => {

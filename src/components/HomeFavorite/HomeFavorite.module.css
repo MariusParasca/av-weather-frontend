@@ -1,5 +1,6 @@
 .container {
-  min-width: 130px;
+  height: 100%;
+  width: 150px;
   background: #131231;
   padding: 8px 12px;
   border-radius: 10px;
