@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles(() => ({
   timeTypo: {
-    fontSize: '1.3rem',
+    fontSize: '2.5vh',
   },
 }));
 

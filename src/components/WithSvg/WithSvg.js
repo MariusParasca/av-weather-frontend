@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-const WithSvg = ({ component: Svg, size, className, width, height }) => {
+const WithSvg = ({ component: Svg, size, className, width, height, responsive }) => {
   const [svgImported, setSvgImported] = useState('');
 
   let actualWidth = width;
@@ -27,10 +27,18 @@ const WithSvg = ({ component: Svg, size, className, width, height }) => {
         <img
           alt="svgIcon"
           src={svgImported}
-          style={{
-            width: actualWidth,
-            height: actualHeight,
-          }}
+          style={
+            responsive
+              ? {
+                  maxWidth: actualWidth,
+                  height: 'auto',
+                  width: '100%',
+                }
+              : {
+                  width: actualWidth,
+                  height: actualHeight,
+                }
+          }
         />
       ) : (
         <div
@@ -53,10 +61,12 @@ WithSvg.propTypes = {
   className: PropTypes.string,
   width: PropTypes.number,
   height: PropTypes.number,
+  responsive: PropTypes.bool,
 };
 WithSvg.defaultProps = {
   size: 32,
   className: '',
+  responsive: true,
   width: undefined,
   height: undefined,
 };

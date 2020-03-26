@@ -63,7 +63,7 @@ const HomeSearchBox = () => {
         </div>
         <div className={styles.favorites}>
           <Grid container classes={{ root: classes.gridRoot }}>
-            {dataLocally.map((fav, index) => (
+            {dataLocally.slice(0, 5).map((fav, index) => (
               <Grid item key={`${fav.city}`} classes={{ root: classes.gridItem }}>
                 <HomeFavorite
                   city={fav.city}

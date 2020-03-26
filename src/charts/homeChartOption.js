@@ -11,7 +11,7 @@ const get7DaysChartOption = (xLabel, actualTemp, apparentTemperature) => {
     },
     // calculable: true,
     grid: {
-      top: '1%',
+      top: '2%',
       left: '0%',
       right: '20px',
       containLabel: true,
@@ -33,12 +33,15 @@ const get7DaysChartOption = (xLabel, actualTemp, apparentTemperature) => {
           color: '#ffffff',
           // rotate: 30, // If the label names are too long you can manage this by rotating the label.
           show: true,
+          padding: [5, 0, 0, 0],
         },
         axisTick: {
           show: true,
           alignWithLabel: true,
+          inside: true,
           lineStyle: {
             color: '#ffffff',
+            width: 4,
           },
         },
         axisLine: {

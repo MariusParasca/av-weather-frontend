@@ -56,22 +56,22 @@ const theme = createMuiTheme({
     },
     MuiTypography: {
       h1: {
-        fontSize: '4.3rem',
+        fontSize: '5.3vh',
       },
       h2: {
-        fontSize: '2.5rem',
+        fontSize: '3.5vh',
       },
       h3: {
-        fontSize: '1.6rem',
+        fontSize: '2.6vh',
       },
       subtitle1: {
-        fontSize: '1.3rem',
+        fontSize: '2.3vh',
       },
       subtitle2: {
-        fontSize: '1.05rem',
+        fontSize: '2.05vh',
       },
       caption: {
-        fontSize: '0.85rem',
+        fontSize: '1.2vh',
       },
     },
   },

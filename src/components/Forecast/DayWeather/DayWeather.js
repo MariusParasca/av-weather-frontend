@@ -25,7 +25,7 @@ const DayWeather = props => {
         {label}
       </Typography>
       <div className={styles.iconContainer}>
-        <WithSvg component={svg} size={40} />
+        <WithSvg component={svg} size={35} />
       </div>
       <div className={styles.dayContainer}>
         <Typography variant="h3" display="inline">

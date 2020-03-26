@@ -135,7 +135,7 @@ const Main = props => {
         </div>
       </div>
       {pending ? null : (
-        <div>
+        <div className={styles.rightToTheWrapper}>
           <Route exact path={PageRoute.home}>
             <TodayWeatherInfo isLoading={false} />
           </Route>
