@@ -196,6 +196,12 @@ export const getMaxArray = (array, callback) => {
   return array.reduce((max, el) => (callback(el) > max ? callback(el) : max), callback(array[0]));
 };
 
+export const nearest = (number, roundTo) => {
+  let numberAux = number / roundTo;
+  numberAux = (numberAux < 0 ? Math.floor(numberAux) : Math.ceil(numberAux)) * roundTo;
+  return numberAux;
+};
+
 export const createBarChartWithGradient = (value, min, max, itemStyleRest = {}) => {
   const colorMax = getChartColor(max);
   const colorMin = getChartColor(min > 0 ? -1 : min);

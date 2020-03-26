@@ -1,4 +1,4 @@
-const get7DaysChartOption = (xLabel, actualTemp, apparentTemperature) => {
+const get7DaysChartOption = (xLabel, actualTemp, apparentTemperature, min = -30, max = 30) => {
   const option = {
     tooltip: {
       trigger: 'axis',
@@ -75,8 +75,8 @@ const get7DaysChartOption = (xLabel, actualTemp, apparentTemperature) => {
           color: '#ffffff',
           padding: [0, 10, 0, 0],
         },
-        min: -30,
-        max: 30,
+        min,
+        max,
       },
     ],
     series: [
