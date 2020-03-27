@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles, TextField, InputAdornment, MenuItem } from '@material-ui/core';
+import { makeStyles, TextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import { ADD_FAVORITE_SEND, ADD_FAVORITE_LOCALLY_SEND } from 'store/actionTypes/favoritesActionTypes';

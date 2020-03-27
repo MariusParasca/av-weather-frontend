@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const hereWeatherInstance = axios.create({
-  baseURL: 'http://localhost:8080/https://weather.ls.hereapi.com/weather/1.0/report.json',
+  baseURL: 'https://cors-anywhere.herokuapp.com/https://weather.ls.hereapi.com/weather/1.0/report.json',
 });
 
 hereWeatherInstance.interceptors.request.use(config => ({
