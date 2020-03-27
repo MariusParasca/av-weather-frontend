@@ -33,24 +33,24 @@ const CurrentWeather = props => {
     return currentDate.getSeconds();
   };
 
-  useEffect(() => {
-    if (!isMapCreated) {
-      const layer = HereMaps.createDefaultLayers();
-      const container = document.getElementById('home-here-map');
+  // useEffect(() => {
+  //   if (!isMapCreated) {
+  //     const layer = HereMaps.createDefaultLayers();
+  //     const container = document.getElementById('home-here-map');
 
-      // eslint-disable-next-line no-unused-vars
-      const map = new window.H.Map(container, layer.vector.normal.map, {
-        zoom: 13,
-        center: { lat: currentLocation.latitude, lng: currentLocation.longitude },
-        pixelRatio: window.devicePixelRatio || 1,
-      });
-      map.getViewPort().resize();
-      window.addEventListener('resize', function() {
-        map.getViewPort().resize();
-      });
-      setIsMapCreated(true);
-    }
-  }, [currentLocation, isMapCreated]);
+  //     // eslint-disable-next-line no-unused-vars
+  //     const map = new window.H.Map(container, layer.vector.normal.map, {
+  //       zoom: 13,
+  //       center: { lat: currentLocation.latitude, lng: currentLocation.longitude },
+  //       pixelRatio: window.devicePixelRatio || 1,
+  //     });
+  //     map.getViewPort().resize();
+  //     window.addEventListener('resize', function() {
+  //       map.getViewPort().resize();
+  //     });
+  //     setIsMapCreated(true);
+  //   }
+  // }, [currentLocation, isMapCreated]);
 
   useEffect(() => {
     const seconds = startClock();
@@ -93,12 +93,6 @@ const CurrentWeather = props => {
 
   return (
     <div className={`${styles.container} ${className}`}>
-      <div
-        id="home-here-map"
-        className={styles.mapContainer}
-        style={{ width: '100%', height: '100%', position: 'absolute', top: 0, borderRadius: '20px' }}
-      />
-      <div className={`${styles.mainInfoContainer} ${styles.mainInfoContainerOverlay}`}>{content}</div>
       <div className={styles.mainInfoContainer}>{content}</div>
     </div>
   );

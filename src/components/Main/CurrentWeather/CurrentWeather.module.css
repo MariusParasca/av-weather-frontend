@@ -1,7 +1,7 @@
 .mainInfoContainer {
   background-color: rgba(42, 41, 81, 0.75);
   border-radius: 20px;
-  padding: 1.7% 0px 1% 2%;
+  /* padding: 1.7% 0px 1% 2%; */
   display: flex;
   justify-content: space-between;
 }
