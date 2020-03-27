@@ -14,7 +14,7 @@ import styles from './HomeSearchBox.module.css';
 
 const useStyles = makeStyles(() => ({
   gridRoot: {
-    height: '120px',
+    height: '123px',
     overflow: 'hidden',
   },
   gridItem: {

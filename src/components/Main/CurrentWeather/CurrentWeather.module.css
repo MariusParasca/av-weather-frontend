@@ -21,6 +21,9 @@
 
 .infoContainer {
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .container {
@@ -34,7 +37,8 @@
 .temperatureContainer {
   display: flex;
   align-items: center;
-  margin-top: 1.7%;
+  margin-top: 2%;
+  margin-bottom: auto;
 }
 
 .icon {

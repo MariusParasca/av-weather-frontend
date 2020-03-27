@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles(() => ({
   timeTypo: {
-    fontSize: '2.5vh',
+    fontSize: '2.3vh',
   },
 }));
 
@@ -72,14 +72,16 @@ const CurrentWeather = props => {
   const content = (
     <>
       <div className={styles.infoContainer}>
-        <Typography variant="subtitle1" classes={{ root: classes.timeTypo }}>
-          Local Time: {currentTime}
-        </Typography>
-        <div className={styles.locationContainer}>
-          <Typography variant="h2">{`${city}, ${country.toUpperCase()}`}</Typography>
-        </div>
-        <div className={styles.temperatureContainer}>
-          <Typography variant="h1">{`${Math.round(weatherData.temperature)}°C`}</Typography>
+        <div className={styles.dataWrapper}>
+          <Typography variant="subtitle1" classes={{ root: classes.timeTypo }}>
+            Local Time: {currentTime}
+          </Typography>
+          <div className={styles.locationContainer}>
+            <Typography variant="h2">{`${city}, ${country.toUpperCase()}`}</Typography>
+          </div>
+          <div className={styles.temperatureContainer}>
+            <Typography variant="h1">{`${Math.round(weatherData.temperature)}°C`}</Typography>
+          </div>
         </div>
         <SunInfo sunriseTime={sunriseTime} sunsetTime={sunsetTime} />
       </div>

@@ -15,10 +15,10 @@ const useStyles = makeStyles(() => ({
     fontSize: '0.7rem',
   },
   cityTypo: {
-    fontSize: '2vh',
+    fontSize: '1.3rem',
   },
   tempTypo: {
-    fontSize: '4vh',
+    fontSize: '2rem',
   },
   iconButton: {
     padding: '1px',

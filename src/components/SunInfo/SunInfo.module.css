@@ -13,6 +13,10 @@
   margin-left: 15px;
 }
 
+.sunInfoMiniContainer:first-child {
+  margin-left: 0;
+}
+
 .sunText:first-child {
   margin-left: 3px;
 }
