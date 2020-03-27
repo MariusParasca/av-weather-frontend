@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Forecast from 'components/Forecast/Forecast';
 import HomeChart from 'components/Charts/HomeChart/HomeChart';
 import { flatten, createBarChartWithGradient, getMinArray, getMaxArray } from 'utils/helperFunctions';
-import { Slider, withStyles, Typography } from '@material-ui/core';
+import { Slider, withStyles } from '@material-ui/core';
 import styles from './Home.module.css';
 
 const CustomSlider = withStyles({
@@ -212,9 +212,6 @@ const Home = props => {
           <HomeChart xLabel={xLabel} actualTemp={actualTemp} feelsLike={feelsLike} />
         </div>
         <div>
-          <div className={styles.textContainer}>
-            <Typography variant="subtitle1">7-day forecast</Typography>
-          </div>
           <div className={styles.sliderContainer}>
             <CustomSlider
               onChange={handleChange}

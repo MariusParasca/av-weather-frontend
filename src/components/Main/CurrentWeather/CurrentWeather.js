@@ -3,11 +3,9 @@ import PropTypes from 'prop-types';
 
 import { getTimeFromDate } from 'utils/dateTimeUtils';
 import { Typography, makeStyles } from '@material-ui/core';
-import HereMaps from 'utils/HereMapsInstance';
 import styles from './CurrentWeather.module.css';
 import './CurrentWeatherMapStyle.css';
 import SunInfo from 'components/SunInfo/SunInfo';
-import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles(() => ({
   timeTypo: {
@@ -20,8 +18,6 @@ const CurrentWeather = props => {
 
   const classes = useStyles();
 
-  const currentLocation = useSelector(state => state.data.ipStack);
-  const [isMapCreated, setIsMapCreated] = useState(false);
   const [image, setImage] = useState('');
 
   const [currentTime, setCurrentTime] = useState('00:00');

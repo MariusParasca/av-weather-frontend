@@ -2,13 +2,13 @@ import React, { useEffect, useCallback, useRef, useState } from 'react';
 // import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { ReactComponent as SettingsSvg } from 'svgs/Appbar/settings.svg';
+// import { ReactComponent as SettingsSvg } from 'svgs/Appbar/settings.svg';
 import SearchBox from 'components/SearchBox/SearchBox';
 import { SEARCH_PLACEHOLDER } from 'constants/constants';
 import { FETCH_FAVORITES_SEND, DELETE_FAVORITE_LOCALLY_SEND } from 'store/actionTypes/favoritesActionTypes';
-import { Typography, Grid, makeStyles } from '@material-ui/core';
+import { Grid, makeStyles } from '@material-ui/core';
 import { WEATHER_API_SEND } from 'store/actionTypes/weatherAPIActionTypes';
-import WithSvg from 'components/WithSvg/WithSvg';
+// import WithSvg from 'components/WithSvg/WithSvg';
 import HomeFavorite from 'components/HomeFavorite/HomeFavorite';
 import styles from './HomeSearchBox.module.css';
 
@@ -55,14 +55,17 @@ const HomeSearchBox = () => {
   }, [dispatch, isLoggedIn]);
 
   useEffect(() => {
+    const numberOfFavoritesSetter = () =>
+      setNumberOfFavorites(Math.floor((favoriteRef.current.offsetWidth - favoriteRef.current.offsetWidth / 10) / 175));
+
     if (favoriteRef && favoriteRef.current) {
       setNumberOfFavorites(Math.floor((favoriteRef.current.offsetWidth - favoriteRef.current.offsetWidth / 10) / 170));
-      window.addEventListener('resize', () =>
-        setNumberOfFavorites(
-          Math.floor((favoriteRef.current.offsetWidth - favoriteRef.current.offsetWidth / 10) / 175),
-        ),
-      );
+      window.addEventListener('resize', numberOfFavoritesSetter);
     }
+
+    return () => {
+      window.removeEventListener('resize', numberOfFavoritesSetter);
+    };
   }, []);
 
   return (
