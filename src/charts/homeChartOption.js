@@ -65,7 +65,6 @@ const get7DaysChartOption = (xLabel, actualTemp, apparentTemperature, min = -30,
     yAxis: [
       {
         type: 'value',
-        // name: '°C',
         axisLine: {
           show: true,
           lineStyle: {
@@ -73,6 +72,9 @@ const get7DaysChartOption = (xLabel, actualTemp, apparentTemperature, min = -30,
             width: 3,
           },
           onZero: false,
+        },
+        axisTick: {
+          show: false,
         },
         splitLine: {
           show: false,
