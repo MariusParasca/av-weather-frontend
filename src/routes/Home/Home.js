@@ -205,26 +205,28 @@ const Home = props => {
   return (
     <div className={styles.container}>
       <div className={styles.forecastContainer}>
-        <div className={styles.chartTitleContainer}>
+        {/* <div className={styles.chartTitleContainer}>
           <Typography variant="subtitle1">Hourly chart</Typography>
-        </div>
+        </div> */}
         <div className={styles.chartContainer}>
           <HomeChart xLabel={xLabel} actualTemp={actualTemp} feelsLike={feelsLike} />
         </div>
-        <div className={styles.textContainer}>
-          <Typography variant="subtitle1">7-day forecast</Typography>
+        <div>
+          <div className={styles.textContainer}>
+            <Typography variant="subtitle1">7-day forecast</Typography>
+          </div>
+          <div className={styles.sliderContainer}>
+            <CustomSlider
+              onChange={handleChange}
+              ThumbComponent={AirbnbThumbComponent}
+              step={2}
+              min={0}
+              max={16}
+              value={sliderValue}
+            />
+          </div>
+          <Forecast weekDaysHighLight={weekDaysHighLight} forecastTemperature={modifiedWeatherForecast} />
         </div>
-        <div className={styles.sliderContainer}>
-          <CustomSlider
-            onChange={handleChange}
-            ThumbComponent={AirbnbThumbComponent}
-            step={2}
-            min={0}
-            max={16}
-            value={sliderValue}
-          />
-        </div>
-        <Forecast weekDaysHighLight={weekDaysHighLight} forecastTemperature={modifiedWeatherForecast} />
       </div>
     </div>
   );

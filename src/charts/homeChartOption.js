@@ -1,5 +1,14 @@
 const get7DaysChartOption = (xLabel, actualTemp, apparentTemperature, min = -30, max = 30) => {
   const option = {
+    title: {
+      text: 'Hourly chart',
+      textStyle: {
+        color: '#ffffff',
+        fontFamily: '"Nunito Sans"',
+        fontWeight: 'lighter',
+        fontSize: 20,
+      },
+    },
     tooltip: {
       trigger: 'axis',
       axisPointer: {
@@ -11,7 +20,7 @@ const get7DaysChartOption = (xLabel, actualTemp, apparentTemperature, min = -30,
     },
     // calculable: true,
     grid: {
-      top: '2%',
+      top: '50px',
       left: '0%',
       right: '20px',
       containLabel: true,
@@ -31,7 +40,6 @@ const get7DaysChartOption = (xLabel, actualTemp, apparentTemperature, min = -30,
         // },
         axisLabel: {
           color: '#ffffff',
-          // rotate: 30, // If the label names are too long you can manage this by rotating the label.
           show: true,
           padding: [5, 0, 0, 0],
         },

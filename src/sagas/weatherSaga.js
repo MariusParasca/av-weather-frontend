@@ -12,7 +12,6 @@ import {
   MAX_VISIBILITY,
   MAX_DEW_POINT,
   MAX_AIQ,
-  AIR_WEATHER_TYPE,
   STANDARD_WEATHER_TYPE,
   WIND_WEATHER_TYPE,
 } from 'constants/constants';
@@ -174,7 +173,9 @@ function* setWeatherData(data) {
     yield put({
       type: SET_FAVORITE_WEATHER_INFO,
       progressValue: data.currently.airQuality || 0,
-      weatherType: AIR_WEATHER_TYPE,
+      text: 'Air Quality',
+      svg: 'svgs/WeatherInfo/air.svg',
+      weatherType: STANDARD_WEATHER_TYPE,
     });
     yield put({ type: SET_FAVORITE_WEATHER_INFO_DATA, data: weatherData.slice(1, weatherData.length) });
   } else {

@@ -10,6 +10,8 @@ import styles from './HomeAdditional.module.css';
 const HomeAdditional = () => {
   const userFavoriteWeatherInfo = useSelector(state => state.userSettings.favoriteWeatherInfoLocally);
 
+  console.log('userFavoriteWeatherInfo', userFavoriteWeatherInfo);
+
   let weatherComponent;
 
   if (userFavoriteWeatherInfo.weatherType === STANDARD_WEATHER_TYPE) {
