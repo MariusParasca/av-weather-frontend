@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useRef, useState } from 'react';
 // import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -13,10 +13,7 @@ import HomeFavorite from 'components/HomeFavorite/HomeFavorite';
 import styles from './HomeSearchBox.module.css';
 
 const useStyles = makeStyles(() => ({
-  gridRoot: {
-    height: '123px',
-    overflow: 'hidden',
-  },
+  gridRoot: {},
   gridItem: {
     '&:first-child': {
       padding: '0 8px 0 0',
@@ -29,6 +26,10 @@ const HomeSearchBox = () => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
+
+  const favoriteRef = useRef();
+
+  const [numberOfFavorites, setNumberOfFavorites] = useState(0);
 
   const favorites = useSelector(state => state.favorites);
   const { dataLocally } = favorites;
@@ -53,30 +54,39 @@ const HomeSearchBox = () => {
     if (isLoggedIn) dispatch({ type: FETCH_FAVORITES_SEND });
   }, [dispatch, isLoggedIn]);
 
+  useEffect(() => {
+    if (favoriteRef && favoriteRef.current) {
+      setNumberOfFavorites(Math.floor((favoriteRef.current.offsetWidth - favoriteRef.current.offsetWidth / 10) / 170));
+      window.addEventListener('resize', () =>
+        setNumberOfFavorites(
+          Math.floor((favoriteRef.current.offsetWidth - favoriteRef.current.offsetWidth / 10) / 175),
+        ),
+      );
+    }
+  }, []);
+
   return (
     <div className={styles.rightWeatherContainer}>
       <SearchBox className={styles.searchBoxContainer} placeholder={SEARCH_PLACEHOLDER} />
-      <div className={styles.favoriteContainer}>
-        <div className={styles.textContainer}>
+      <div className={styles.favoriteContainer} ref={favoriteRef}>
+        {/* <div className={styles.textContainer}>
           <Typography variant="subtitle1">Frequent locations</Typography>
           <WithSvg component={SettingsSvg} size={15} className={styles.icon} />
-        </div>
-        <div className={styles.favorites}>
-          <Grid container classes={{ root: classes.gridRoot }}>
-            {dataLocally.slice(0, 5).map((fav, index) => (
-              <Grid item key={`${fav.city}`} classes={{ root: classes.gridItem }}>
-                <HomeFavorite
-                  city={fav.city}
-                  latitude={fav.latitude}
-                  longitude={fav.longitude}
-                  utcOffset={fav.utcOffset}
-                  onClickIcon={() => dispatch({ type: DELETE_FAVORITE_LOCALLY_SEND, index })}
-                  onClickContainer={() => onClickCity(fav)}
-                />
-              </Grid>
-            ))}
-          </Grid>
-        </div>
+        </div> */}
+        <Grid container classes={{ root: classes.gridRoot }}>
+          {dataLocally.slice(0, numberOfFavorites).map((fav, index) => (
+            <Grid item key={`${fav.city}`} classes={{ root: classes.gridItem }}>
+              <HomeFavorite
+                city={fav.city}
+                latitude={fav.latitude}
+                longitude={fav.longitude}
+                utcOffset={fav.utcOffset}
+                onClickIcon={() => dispatch({ type: DELETE_FAVORITE_LOCALLY_SEND, index })}
+                onClickContainer={() => onClickCity(fav)}
+              />
+            </Grid>
+          ))}
+        </Grid>
       </div>
     </div>
   );

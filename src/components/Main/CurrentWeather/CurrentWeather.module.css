@@ -1,7 +1,7 @@
 .mainInfoContainer {
   background-color: rgba(42, 41, 81, 0.75);
   border-radius: 20px;
-  padding: 18px 0px 10px 22px;
+  padding: 1.7% 0px 1% 2%;
   display: flex;
   justify-content: space-between;
 }
@@ -67,6 +67,7 @@
 
 .imageContainer {
   margin-top: -10px;
-  max-width: 200px;
-  max-height: 165px;
+  height: 15vh;
+  /* max-width: 200px;
+  max-height: 165px; */
 }

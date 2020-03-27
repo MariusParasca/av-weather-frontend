@@ -24,8 +24,6 @@ const HomeChart = props => {
     <ReactEcharts
       style={{
         height: '100%',
-        display: 'flex',
-        alignItems: 'center',
       }}
       option={getHomeChartOption(xLabel, actualTemp, feelsLike, min, max)}
     />

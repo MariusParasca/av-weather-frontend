@@ -12,13 +12,13 @@ import styles from './HomeFavorite.module.css';
 
 const useStyles = makeStyles(() => ({
   timeTypo: {
-    fontSize: '0.7rem',
+    fontSize: '1.3vh',
   },
   cityTypo: {
-    fontSize: '1.3rem',
+    fontSize: '2vh',
   },
   tempTypo: {
-    fontSize: '2rem',
+    fontSize: '2.5vh',
   },
   iconButton: {
     padding: '1px',

@@ -98,7 +98,6 @@ const Home = props => {
   const [modifiedWeatherForecast, setModifiedWeatherForecast] = useState([]);
 
   const [weekDaysHighLight, setWeekDaysHighLight] = useState([false, false, false, false, false, false, false]);
-
   const [xLabel, setXLabel] = useState([]);
   const [actualTemp, setActualTemp] = useState([]);
   const [feelsLike, setFeelsLike] = useState([]);
