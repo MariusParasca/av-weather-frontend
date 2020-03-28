@@ -55,18 +55,21 @@ const HomeSearchBox = () => {
   }, [dispatch, isLoggedIn]);
 
   useEffect(() => {
-    const numberOfFavoritesSetter = () =>
-      setNumberOfFavorites(Math.floor((favoriteRef.current.offsetWidth - favoriteRef.current.offsetWidth / 10) / 175));
+    const numberOfFavoritesSetter = () => {
+      const boxWidth = window.innerHeight * 0.16 + 16; // 0.16 means 16% from view height (home favorite width = 16vh), 16 is the grid spacing (padding)
+      setNumberOfFavorites(Math.floor(favoriteRef.current.offsetWidth / boxWidth));
+    };
+
+    numberOfFavoritesSetter();
 
     if (favoriteRef && favoriteRef.current) {
-      setNumberOfFavorites(Math.floor((favoriteRef.current.offsetWidth - favoriteRef.current.offsetWidth / 10) / 170));
       window.addEventListener('resize', numberOfFavoritesSetter);
     }
 
     return () => {
       window.removeEventListener('resize', numberOfFavoritesSetter);
     };
-  }, []);
+  });
 
   return (
     <div className={styles.rightWeatherContainer}>
