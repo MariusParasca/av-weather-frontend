@@ -209,7 +209,9 @@ const Home = props => {
           <Typography variant="subtitle1">Hourly chart</Typography>
         </div> */}
         <div className={styles.chartContainer}>
-          <HomeChart xLabel={xLabel} actualTemp={actualTemp} feelsLike={feelsLike} />
+          <div className={styles.chartContainerWrapper}>
+            <HomeChart xLabel={xLabel} actualTemp={actualTemp} feelsLike={feelsLike} />
+          </div>
         </div>
         <div>
           <div className={styles.sliderContainer}>

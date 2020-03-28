@@ -9,7 +9,10 @@ import SunInfo from 'components/SunInfo/SunInfo';
 
 const useStyles = makeStyles(() => ({
   timeTypo: {
-    fontSize: '2.3vh',
+    fontSize: '2.2vh',
+  },
+  cityTypo: {
+    marginBottom: '1.7%',
   },
 }));
 
@@ -73,7 +76,10 @@ const CurrentWeather = props => {
             Local Time: {currentTime}
           </Typography>
           <div className={styles.locationContainer}>
-            <Typography variant="h2">{`${city}, ${country.toUpperCase()}`}</Typography>
+            <Typography variant="h2" classes={{ root: classes.cityTypo }}>
+              {city}
+            </Typography>
+            <Typography variant="h2">{country}</Typography>
           </div>
           <div className={styles.temperatureContainer}>
             <Typography variant="h1">{`${Math.round(weatherData.temperature)}°C`}</Typography>

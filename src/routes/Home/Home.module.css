@@ -15,8 +15,16 @@
 }
 
 .chartContainer {
-  margin-top: 1.5%;
-  flex: 1;
+  position: relative;
+  height: 100%;
+  margin-top: 1%;
+}
+
+.chartContainerWrapper {
+  position: absolute;
+  top: 0;
+  height: 110%;
+  width: 100%;
 }
 
 .chartTitleContainer {

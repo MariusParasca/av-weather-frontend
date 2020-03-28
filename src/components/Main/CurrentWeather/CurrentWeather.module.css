@@ -3,7 +3,6 @@
   border-radius: 20px;
   /* padding: 1.7% 0px 1% 2%; */
   display: flex;
-  justify-content: space-between;
 }
 
 .mainInfoContainerOverlay {
@@ -68,6 +67,8 @@
 .imageContainer {
   margin-top: -10px;
   height: 15vh;
+  max-width: 25vh;
+  margin-top: 1.5vh;
   /* max-width: 200px;
   max-height: 165px; */
 }
