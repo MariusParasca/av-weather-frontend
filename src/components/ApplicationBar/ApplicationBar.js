@@ -2,7 +2,6 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core';
 import Drawer from '@material-ui/core/Drawer';
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
 
 import { ReactComponent as LocationSvg } from 'svgs/Appbar/location.svg';
 import { ReactComponent as GraphSvg } from 'svgs/Appbar/graph.svg';

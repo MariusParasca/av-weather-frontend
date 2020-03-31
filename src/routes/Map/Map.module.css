@@ -1,9 +1,9 @@
 .mapContainer {
-  height: calc(100% - 60px);
+  height: calc(100% - 125px);
   width: 100%;
   position: absolute;
   z-index: 10;
-  top: 60px;
+  top: 70px;
 }
 
 .container {
@@ -18,7 +18,7 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 60px;
+  height: 70px;
 }
 
 .menuButton {
@@ -31,7 +31,7 @@
 
 .slider {
   background: #131231;
-  width: 96%;
+  width: 100%;
   padding: 0 2%;
   position: absolute;
   bottom: 0;

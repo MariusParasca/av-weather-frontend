@@ -12,7 +12,8 @@ async function makeWeatherRequest(latitude, longitude) {
     const response = await darkSkyAxios.get(`/${latitude},${longitude}`, {
       params: {
         units: 'si',
-        exclude: '[minutely, alerts, flags, hourly, currently]',
+        exclude: '[minutely, alerts, flags, currently]',
+        extend: 'hourly',
       },
     });
 

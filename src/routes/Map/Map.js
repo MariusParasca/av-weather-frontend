@@ -18,6 +18,7 @@ import {
   TEMPERATURE_MAP_TYPE,
   WEEK_DAYS,
 } from 'constants/constants';
+import { DELETE_FAVORITE_LOCALLY_SEND } from 'store/actionTypes/favoritesActionTypes';
 import { withRouter } from 'react-router-dom';
 import MapWeatherInfo from 'components/MapWeatherInfo/MapWeatherInfo';
 import { WEATHER_MAP_API_SEND } from 'store/actionTypes/weatherMapActionTypes';
@@ -53,29 +54,60 @@ const Map = props => {
 
   const { dataLocally } = favorites;
 
-  const [favoriteClicked, setFavoriteClicked] = useState(null);
+  const [markers, setMarkers] = useState([]);
+  const [favoriteIndex, setFavoriteIndex] = useState(-1);
   const [sliderIndex, setSliderIndex] = useState(0);
   const [weatherData, setWeatherData] = useState(null);
 
   const dispatch = useDispatch();
+
+  console.log('favoriteIndex', favoriteIndex);
+
+  const nextCity = useCallback(() => {
+    if (favoriteIndex === dataLocally.length - 1) {
+      setFavoriteIndex(0);
+    } else {
+      setFavoriteIndex(favoriteIndex + 1);
+    }
+  }, [dataLocally.length, favoriteIndex]);
+
+  const previousCity = useCallback(() => {
+    if (favoriteIndex === 0) {
+      setFavoriteIndex(dataLocally.length - 1);
+    } else {
+      setFavoriteIndex(favoriteIndex - 1);
+    }
+  }, [dataLocally.length, favoriteIndex]);
+
+  const deleteCity = useCallback(() => {
+    if (dataLocally[favoriteIndex].city !== currentLocation.city) {
+      markers[favoriteIndex].setMap(null);
+      setMarkers(oldMarkers => {
+        const newMarkers = [...oldMarkers];
+        return newMarkers.splice(favoriteIndex, 1);
+      });
+      dispatch({ type: DELETE_FAVORITE_LOCALLY_SEND, index: favoriteIndex });
+    }
+  }, [currentLocation.city, dataLocally, dispatch, favoriteIndex, markers]);
 
   const onChangeSlider = useCallback((event, newValue) => {
     setSliderIndex(newValue);
   }, []);
 
   useEffect(() => {
-    if (!favoriteClicked) setFavoriteClicked(currentLocation);
-  }, [currentLocation, favoriteClicked]);
+    if (favoriteIndex === -1 && currentLocation)
+      setFavoriteIndex(dataLocally.findIndex(fav => fav.city === currentLocation.city));
+  }, [currentLocation, dataLocally, favoriteIndex]);
 
   useEffect(() => {
-    if (favoriteClicked) {
+    if (favoriteIndex !== -1 && dataLocally[favoriteIndex]) {
       dispatch({
         type: WEATHER_MAP_API_SEND,
-        latitude: favoriteClicked.latitude,
-        longitude: favoriteClicked.longitude,
+        latitude: dataLocally[favoriteIndex].latitude,
+        longitude: dataLocally[favoriteIndex].longitude,
       });
     }
-  }, [dispatch, favoriteClicked]);
+  }, [dataLocally, dispatch, favoriteIndex]);
 
   useEffect(() => {
     if (weatherMap.daily.length > 0) {
@@ -84,29 +116,33 @@ const Map = props => {
         minTemp: weatherMap.daily[sliderIndex].temperatureLow,
         maxTemp: weatherMap.daily[sliderIndex].temperatureHigh,
         icon: weatherMap.daily[sliderIndex].icon,
+        hourly: weatherMap.hourly[sliderIndex],
       });
     }
-  }, [sliderIndex, weatherMap.daily]);
+  }, [sliderIndex, weatherMap.daily, weatherMap.hourly]);
 
   const [mapType, setMapType] = useState(CLOUD_COVER_MAP_TYPE);
 
   const setFavoritesMarkers = useCallback((favoritesArray, map) => {
     if (favoritesArray.length > 0) {
       const bounds = new window.google.maps.LatLngBounds();
+      const markersAux = [];
 
-      for (const favorite of favoritesArray) {
+      for (let i = 0; i < favoritesArray.length; i += 1) {
+        const favorite = favoritesArray[i];
         const bound = new window.google.maps.LatLng(favorite.latitude, favorite.longitude);
         const marker = new window.google.maps.Marker({
           position: bound,
           map,
         });
         marker.addListener('click', () => {
-          setFavoriteClicked(favorite);
+          setFavoriteIndex(i);
         });
         marker.setMap(map);
+        markersAux.push(marker);
         bounds.extend(bound);
       }
-
+      setMarkers(markersAux);
       map.fitBounds(bounds);
     }
   }, []);
@@ -149,14 +185,18 @@ const Map = props => {
   return (
     <div className={styles.container}>
       <div className={styles.favoriteContainer}>
-        {!weatherMap.pending && weatherData && (
+        {!weatherMap.pending && weatherData && dataLocally[favoriteIndex] && (
           <MapWeatherInfo
-            city={favoriteClicked.city}
+            city={dataLocally[favoriteIndex].city}
             weekDay={MARKS[sliderIndex].label}
             summaryDay={weatherData.summaryDay}
             minTemp={weatherData.minTemp}
             maxTemp={weatherData.maxTemp}
             icon={weatherData.icon}
+            hourly={weatherData.hourly}
+            onClickRightArrow={nextCity}
+            onClickLeftArrow={previousCity}
+            onClickDelete={deleteCity}
           />
         )}
       </div>
