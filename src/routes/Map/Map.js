@@ -1,11 +1,28 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { ReactComponent as LocationSvg } from 'svgs/WeatherInfo/cloud_cover.svg';
+import { ReactComponent as HumiditySvg } from 'svgs/WeatherInfo/humidity.svg';
+import { ReactComponent as WindSvg } from 'svgs/WeatherInfo/wind.svg';
+import { ReactComponent as PressureSvg } from 'svgs/WeatherInfo/pressure.svg';
 import HereMaps from 'utils/HereMapsInstance';
 import { FETCH_FAVORITES_SEND } from 'store/actionTypes/favoritesActionTypes';
 import Spinner from 'components/Spinner/Spinner';
 import FavoriteCity from 'components/FavoriteCity/FavoriteCity';
 import darkSkyAxios from 'axios/darkSky';
+import WithSvg from 'components/WithSvg/WithSvg';
+import { Button, Typography } from '@material-ui/core';
+import MenuButton from 'components/MenuButton/MenuButton';
+import { PageRoute, MapsRoute } from 'utils/routes';
+import {
+  CLOUD_COVER_MAP_TYPE,
+  PRECIPITATION_MAP_TYPE,
+  PRESSURE_MAP_TYPE,
+  WIND_MAP_TYPE,
+  TEMPERATURE_MAP_TYPE,
+} from 'constants/constants';
+import { withRouter } from 'react-router-dom';
 import styles from './Map.module.css';
 
 const markupTemplate =
@@ -20,7 +37,9 @@ const findByCity = (favorites, city) => {
   return null;
 };
 
-const Map = () => {
+const Map = props => {
+  const { history } = props;
+
   const favorites = useSelector(state => state.favorites);
   const isLoggedIn = useSelector(state => state.authData.isLoggedIn);
   const currentLocation = useSelector(state => state.data.ipStack);
@@ -28,10 +47,12 @@ const Map = () => {
   const { data, dataLocally, pending } = favorites;
 
   const [currentMap, setCurrentMap] = useState(null);
-  const [favoriteClicked, setFavoriteClicked] = useState(null);
+  const [favoriteClicked, setFavoriteClicked] = useState(currentLocation);
   const wrapperRef = useRef(null);
 
   const dispatch = useDispatch();
+
+  const [mapType, setMapType] = useState(CLOUD_COVER_MAP_TYPE);
 
   const handleClickOutside = useCallback(event => {
     if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
@@ -46,133 +67,171 @@ const Map = () => {
     };
   });
 
+  const setFavoritesMarkers = useCallback(
+    (favoritesArray, map) => {
+      if (favoritesArray.length > 0 && currentLocation) {
+        const bounds = new window.google.maps.LatLngBounds();
+
+        for (const favorite of favoritesArray) {
+          const bound = new window.google.maps.LatLng(favorite.latitude, favorite.longitude);
+          const marker = new window.google.maps.Marker({
+            position: bound,
+            map,
+          });
+          marker.addListener('click', function() {
+            setFavoriteClicked(favorite);
+          });
+          marker.setMap(map);
+          bounds.extend(bound);
+          // promises.push(
+          //   darkSkyAxios.get(`/${favorite.latitude},${favorite.longitude}`, {
+          //     params: { units: 'si', exclude: '[minutely, hourly, daily]' },
+          //   }),
+          // );
+        }
+
+        map.fitBounds(bounds);
+
+        // const results = await Promise.all(promises);
+        // for (let i = 0; i < results.length; i += 1) {
+        //   const result = results[i];
+        //   const favorite = favoritesArray[i];
+        //   const markup = markupTemplate.replace('$text', Math.round(result.data.currently.temperature));
+        //   const icon = new window.H.map.Icon(markup);
+        //   const marker = new window.H.map.Marker({ lat: favorite.latitude, lng: favorite.longitude }, { icon });
+        //   marker.setData(favorite.city);
+        //   markers.push(marker);
+        // }
+      }
+    },
+    [currentLocation],
+  );
+
   useEffect(() => {
     if (!pending) {
-      const layer = HereMaps.createDefaultLayers();
-      const container = document.getElementById('here-map');
-
-      const map = new window.H.Map(container, layer.vector.normal.map, {
-        zoom: 5,
-        padding: { top: 80, left: 80, bottom: 80, right: 80 },
-        pixelRatio: window.devicePixelRatio || 1,
+      const map = new window.google.maps.Map(document.getElementById('google-map'), {
+        zoom: 4,
       });
 
-      // eslint-disable-next-line no-unused-vars
-      const behavior = new window.H.mapevents.Behavior(new window.H.mapevents.MapEvents(map));
-
-      // eslint-disable-next-line no-unused-vars
-      // const ui = window.H.ui.UI.createDefault(map, layer);
-
-      map.addEventListener(
-        'pointermove',
-        event => {
-          if (event.target instanceof window.H.map.Marker) {
-            map.getViewPort().element.style.cursor = 'pointer';
-          } else {
-            map.getViewPort().element.style.cursor = 'auto';
-          }
+      const myMapType = new window.google.maps.ImageMapType({
+        getTileUrl(coord, zoom) {
+          return `https://tile.openweathermap.org/map/${mapType}/${zoom}/${coord.x}/${coord.y}.png?appid=92525d1cc3a7d52b6259b05627c70e00`;
         },
-        false,
-      );
+        tileSize: new window.google.maps.Size(256, 256),
+        maxZoom: 9,
+        minZoom: 0,
+        name: 'mymaptype',
+      });
 
+      map.overlayMapTypes.insertAt(0, myMapType);
+
+      setFavoritesMarkers(dataLocally, map);
       setCurrentMap(map);
+
+      // const layer = HereMaps.createDefaultLayers();
+      // const container = document.getElementById('here-map');
+
+      // const map = new window.H.Map(container, layer.vector.normal.map, {
+      //   zoom: 5,
+      //   padding: { top: 80, left: 80, bottom: 80, right: 80 },
+      //   pixelRatio: window.devicePixelRatio || 1,
+      // });
+
+      // // eslint-disable-next-line no-unused-vars
+      // const behavior = new window.H.mapevents.Behavior(new window.H.mapevents.MapEvents(map));
+
+      // // eslint-disable-next-line no-unused-vars
+      // // const ui = window.H.ui.UI.createDefault(map, layer);
+
+      // map.addEventListener(
+      //   'pointermove',
+      //   event => {
+      //     if (event.target instanceof window.H.map.Marker) {
+      //       map.getViewPort().element.style.cursor = 'pointer';
+      //     } else {
+      //       map.getViewPort().element.style.cursor = 'auto';
+      //     }
+      //   },
+      //   false,
+      // );
     }
-  }, [pending]);
+  }, [dataLocally, mapType, pending, setFavoritesMarkers]);
+
+  useEffect(() => {
+    const path = history.location.pathname;
+    if (path === `${PageRoute.map}${MapsRoute.cloudCover}`) {
+      setMapType(CLOUD_COVER_MAP_TYPE);
+    } else if (path === `${PageRoute.map}${MapsRoute.precipitation}`) {
+      setMapType(PRECIPITATION_MAP_TYPE);
+    } else if (path === `${PageRoute.map}${MapsRoute.pressure}`) {
+      setMapType(PRESSURE_MAP_TYPE);
+    } else if (path === `${PageRoute.map}${MapsRoute.wind}`) {
+      setMapType(WIND_MAP_TYPE);
+    } else if (path === `${PageRoute.map}${MapsRoute.temperature}`) {
+      setMapType(TEMPERATURE_MAP_TYPE);
+    }
+  }, [history.location.pathname]);
 
   useEffect(() => {
     if (isLoggedIn) dispatch({ type: FETCH_FAVORITES_SEND });
   }, [dispatch, isLoggedIn]);
 
-  const makerGroupEventListener = useCallback(
-    evt => {
-      if (isLoggedIn) {
-        const city = findByCity(data, evt.target.getData());
-        setFavoriteClicked(city);
-        currentMap.setCenter({ lat: city.latitude, lng: city.longitude });
-      } else {
-        const city = findByCity(dataLocally, evt.target.getData());
-        setFavoriteClicked(city);
-        currentMap.setCenter({ lat: city.latitude, lng: city.longitude });
-      }
-    },
-    [currentMap, data, dataLocally, isLoggedIn],
-  );
+  // const makerGroupEventListener = useCallback(
+  //   evt => {
+  //     if (isLoggedIn) {
+  //       const city = findByCity(data, evt.target.getData());
+  //       setFavoriteClicked(city);
+  //       currentMap.setCenter({ lat: city.latitude, lng: city.longitude });
+  //     } else {
+  //       const city = findByCity(dataLocally, evt.target.getData());
+  //       setFavoriteClicked(city);
+  //       currentMap.setCenter({ lat: city.latitude, lng: city.longitude });
+  //     }
+  //   },
+  //   [currentMap, data, dataLocally, isLoggedIn],
+  // );
 
-  const setFavoritesMarkers = useCallback(
-    async favoritesArray => {
-      if (favoritesArray.length > 0 && currentLocation) {
-        const markers = [];
-        const promises = [];
-
-        for (const favorite of favoritesArray) {
-          promises.push(
-            darkSkyAxios.get(`/${favorite.latitude},${favorite.longitude}`, {
-              params: { units: 'si', exclude: '[minutely, hourly, daily]' },
-            }),
-          );
-        }
-
-        const results = await Promise.all(promises);
-        for (let i = 0; i < results.length; i += 1) {
-          const result = results[i];
-          const favorite = favoritesArray[i];
-          const markup = markupTemplate.replace('$text', Math.round(result.data.currently.temperature));
-          const icon = new window.H.map.Icon(markup);
-          const marker = new window.H.map.Marker({ lat: favorite.latitude, lng: favorite.longitude }, { icon });
-          marker.setData(favorite.city);
-          markers.push(marker);
-        }
-
-        const group = new window.H.map.Group({
-          objects: markers,
-        });
-
-        group.addEventListener('tap', makerGroupEventListener);
-
-        currentMap.getViewModel().setLookAtData({
-          bounds: group.getBoundingBox(),
-        });
-
-        currentMap.addObject(group);
-        currentMap.setCenter({ lat: currentLocation.latitude, lng: currentLocation.longitude });
-      }
-    },
-    [currentLocation, currentMap, makerGroupEventListener],
-  );
-
-  useEffect(() => {
-    if (currentMap) {
-      if (isLoggedIn) {
-        setFavoritesMarkers(data);
-      } else {
-        setFavoritesMarkers(dataLocally);
-      }
-    }
-  }, [currentMap, data, dataLocally, isLoggedIn, setFavoritesMarkers]);
+  // useEffect(() => {
+  //   if (currentMap) {
+  //     if (isLoggedIn) {
+  //       setFavoritesMarkers(data);
+  //     } else {
+  //       setFavoritesMarkers(dataLocally);
+  //     }
+  //   }
+  // }, [currentMap, data, dataLocally, isLoggedIn, setFavoritesMarkers]);
 
   return pending ? (
     <Spinner />
   ) : (
     <div className={styles.container}>
-      {favoriteClicked && (
-        <div className={styles.favoriteContainer} ref={wrapperRef}>
-          <FavoriteCity
-            utcOffset={favoriteClicked.utcOffset}
-            city={favoriteClicked.city}
-            country={favoriteClicked.country}
-            latitude={favoriteClicked.latitude}
-            longitude={favoriteClicked.longitude}
-            isOnMap
-          />
-        </div>
-      )}
-      <div
-        id="here-map"
-        className={styles.mapContainer}
-        style={{ width: '100%', height: '100%', background: 'grey' }}
-      />
+      <div className={styles.favoriteContainer}>
+        <Typography variant="h3">{favoriteClicked.city}</Typography>
+      </div>
+      <div id="google-map" className={styles.mapContainer} />
+      <div className={styles.menuButton}>
+        <MenuButton path={`${PageRoute.map}${MapsRoute.cloudCover}`}>
+          <WithSvg component={LocationSvg} size={22} />
+        </MenuButton>
+        <MenuButton path={`${PageRoute.map}${MapsRoute.temperature}`}>
+          <WithSvg component={LocationSvg} size={22} />
+        </MenuButton>
+        <MenuButton path={`${PageRoute.map}${MapsRoute.wind}`}>
+          <WithSvg component={WindSvg} size={22} />
+        </MenuButton>
+        <MenuButton path={`${PageRoute.map}${MapsRoute.precipitation}`}>
+          <WithSvg component={HumiditySvg} size={22} />
+        </MenuButton>
+        <MenuButton path={`${PageRoute.map}${MapsRoute.pressure}`}>
+          <WithSvg component={PressureSvg} size={22} />
+        </MenuButton>
+      </div>
     </div>
   );
 };
 
-export default Map;
+Map.propTypes = {
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
+};
+
+export default withRouter(Map);

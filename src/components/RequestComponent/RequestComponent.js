@@ -29,7 +29,8 @@ const RequestComponent = props => {
   const pendingCheckLogin = useSelector(state => state.authData.pending);
 
   useEffect(() => {
-    if (isCorrectRoute(searchTopContainers, location.pathname) && !pendingCheckLogin) {
+    // isCorrectRoute(searchTopContainers, location.pathname) &&
+    if (!pendingCheckLogin) {
       dispatch({ type: WEATHER_API_SEND });
     }
   }, [dispatch, location.pathname, pendingCheckLogin]);

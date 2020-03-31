@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Route } from 'react-router-dom';
 
-import { PageRoute } from 'utils/routes';
+import { PageRoute, MapsRoute } from 'utils/routes';
 import { topContainerRoutes, bottomContainerRoutes } from 'constants/routes';
 import Spinner from 'components/Spinner/Spinner';
 import Home from 'routes/Home/Home';
@@ -114,17 +114,25 @@ const Main = props => {
                     />
                   </ErrorBoundary>
                 </Route>
+                <Route
+                  path={[
+                    `${PageRoute.map}${MapsRoute.cloudCover}`,
+                    `${PageRoute.map}${MapsRoute.temperature}`,
+                    `${PageRoute.map}${MapsRoute.wind}`,
+                    `${PageRoute.map}${MapsRoute.precipitation}`,
+                    `${PageRoute.map}${MapsRoute.pressure}`,
+                  ]}
+                >
+                  <ErrorBoundary>
+                    <Map />
+                  </ErrorBoundary>
+                </Route>
               </>
             )}
           </Route>
           <Route path={PageRoute.favorites}>
             <ErrorBoundary>
               <Favorites />
-            </ErrorBoundary>
-          </Route>
-          <Route path={PageRoute.map}>
-            <ErrorBoundary>
-              <Map />
             </ErrorBoundary>
           </Route>
           <Route path={[PageRoute.account, PageRoute.register, PageRoute.login]}>

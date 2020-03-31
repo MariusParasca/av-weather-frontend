@@ -1,4 +1,4 @@
-import { PageRoute, ChartsRoute } from 'utils/routes';
+import { PageRoute, ChartsRoute, MapsRoute } from 'utils/routes';
 
 export const topContainerRoutes = [
   PageRoute.home,
@@ -19,4 +19,9 @@ export const bottomContainerRoutes = [
   `${PageRoute.charts}${ChartsRoute.humidity}`,
   `${PageRoute.charts}${ChartsRoute.wind}`,
   `${PageRoute.charts}${ChartsRoute.pressure}`,
+  `${PageRoute.map}${MapsRoute.cloudCover}`,
+  `${PageRoute.map}${MapsRoute.temperature}`,
+  `${PageRoute.map}${MapsRoute.wind}`,
+  `${PageRoute.map}${MapsRoute.precipitation}`,
+  `${PageRoute.map}${MapsRoute.pressure}`,
 ];

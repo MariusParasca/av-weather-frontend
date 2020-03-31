@@ -17,4 +17,13 @@ export const ChartsRoute = {
   pressure: '/pressure',
 };
 
+export const MapsRoute = {
+  temperature: '/temperature',
+  precipitation: '/precipitation',
+  humidity: '/humidity',
+  wind: '/wind',
+  pressure: '/pressure',
+  cloudCover: '/cloud-cover',
+};
+
 export const basename = '/';

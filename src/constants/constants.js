@@ -42,3 +42,9 @@ export const SEARCH_PLACEHOLDER = 'City, postcode or place';
 export const AIR_WEATHER_TYPE = 'air';
 export const STANDARD_WEATHER_TYPE = 'standard';
 export const WIND_WEATHER_TYPE = 'wind';
+
+export const CLOUD_COVER_MAP_TYPE = 'clouds_new';
+export const PRECIPITATION_MAP_TYPE = 'precipitation_new';
+export const PRESSURE_MAP_TYPE = 'pressure_new';
+export const WIND_MAP_TYPE = 'wind_new';
+export const TEMPERATURE_MAP_TYPE = 'temp_new';
