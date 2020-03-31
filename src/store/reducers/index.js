@@ -5,6 +5,7 @@ import authReducer from 'store/reducers/authReducer';
 import favoriteReducer from 'store/reducers/favoritesReducer';
 import notificationReducer from 'store/reducers/notificationReducer';
 import userSettingsReducer from 'store/reducers/userSettingsReducer';
+import weatherMapReducer from 'store/reducers/weatherMapReducer';
 
 export default combineReducers({
   data: ipStackReducer,
@@ -12,4 +13,5 @@ export default combineReducers({
   favorites: favoriteReducer,
   notification: notificationReducer,
   userSettings: userSettingsReducer,
+  weatherMap: weatherMapReducer,
 });
