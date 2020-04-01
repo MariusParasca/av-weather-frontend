@@ -58,10 +58,9 @@ const Map = props => {
   const [favoriteIndex, setFavoriteIndex] = useState(-1);
   const [sliderIndex, setSliderIndex] = useState(0);
   const [weatherData, setWeatherData] = useState(null);
+  const [currentMap, setCurrentMap] = useState(null);
 
   const dispatch = useDispatch();
-
-  console.log('favoriteIndex', favoriteIndex);
 
   const nextCity = useCallback(() => {
     if (favoriteIndex === dataLocally.length - 1) {
@@ -82,13 +81,35 @@ const Map = props => {
   const deleteCity = useCallback(() => {
     if (dataLocally[favoriteIndex].city !== currentLocation.city) {
       markers[favoriteIndex].setMap(null);
-      setMarkers(oldMarkers => {
-        const newMarkers = [...oldMarkers];
-        return newMarkers.splice(favoriteIndex, 1);
-      });
       dispatch({ type: DELETE_FAVORITE_LOCALLY_SEND, index: favoriteIndex });
+
+      const newMarkers = [...markers];
+      newMarkers.splice(favoriteIndex, 1);
+
+      const bounds = new window.google.maps.LatLngBounds();
+
+      const markersForMap = [];
+      for (let i = 0; i < newMarkers.length; i += 1) {
+        const newMarker = newMarkers[i];
+        newMarker.setMap(null);
+        const bound = new window.google.maps.LatLng(newMarker.getPosition().lat(), newMarker.getPosition().lng());
+        const markerForMap = new window.google.maps.Marker({
+          position: bound,
+          map: currentMap,
+        });
+
+        markerForMap.addListener('click', () => {
+          setFavoriteIndex(i);
+        });
+        markerForMap.setMap(currentMap);
+        markersForMap.push(markerForMap);
+        bounds.extend(bound);
+      }
+
+      currentMap.fitBounds(bounds);
+      setMarkers(markersForMap);
     }
-  }, [currentLocation.city, dataLocally, dispatch, favoriteIndex, markers]);
+  }, [currentLocation.city, currentMap, dataLocally, dispatch, favoriteIndex, markers]);
 
   const onChangeSlider = useCallback((event, newValue) => {
     setSliderIndex(newValue);
@@ -142,8 +163,9 @@ const Map = props => {
         markersAux.push(marker);
         bounds.extend(bound);
       }
-      setMarkers(markersAux);
       map.fitBounds(bounds);
+      setMarkers(markersAux);
+      setCurrentMap(map);
     }
   }, []);
 

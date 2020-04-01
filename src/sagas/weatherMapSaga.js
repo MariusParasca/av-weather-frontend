@@ -26,8 +26,6 @@ async function makeWeatherRequest(latitude, longitude) {
 function* apiRequest(action) {
   const { data, error } = yield call(makeWeatherRequest, action.latitude, action.longitude);
 
-  console.log('data', data);
-
   if (data) {
     yield put({ type: WEATHER_MAP_SET_DATA, data });
   } else {
