@@ -10,7 +10,7 @@ const MapChart = props => {
   return (
     <ReactEcharts
       style={{
-        height: '100%',
+        height: '90px',
         width: '100%',
       }}
       option={getMapChartOption(data)}

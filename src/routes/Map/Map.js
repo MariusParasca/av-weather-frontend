@@ -224,10 +224,10 @@ const Map = props => {
       </div>
       <div id="google-map" className={styles.mapContainer} />
       <div className={styles.menuButton}>
-        <MenuButton path={`${PageRoute.map}${MapsRoute.cloudCover}`}>
+        <MenuButton path={`${PageRoute.map}${MapsRoute.temperature}`}>
           <WithSvg component={LocationSvg} size={22} />
         </MenuButton>
-        <MenuButton path={`${PageRoute.map}${MapsRoute.temperature}`}>
+        <MenuButton path={`${PageRoute.map}${MapsRoute.cloudCover}`}>
           <WithSvg component={LocationSvg} size={22} />
         </MenuButton>
         <MenuButton path={`${PageRoute.map}${MapsRoute.wind}`}>

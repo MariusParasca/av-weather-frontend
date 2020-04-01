@@ -36,7 +36,7 @@ const MapWeatherInfo = props => {
       <Typography variant="h3">{city}</Typography>
       <Divider orientation="vertical" classes={{ root: classes.dividerRoot }} />
       <Typography variant="h4">{weekDay}</Typography>
-      <WithSvg component={`svgs/TypeOfWeather/Forecast/${icon}.svg`} />
+      <WithSvg component={`svgs/TypeOfWeather/${icon}.svg`} />
       <Typography variant="h5">{summaryDay}</Typography>
       <Divider orientation="vertical" classes={{ root: classes.dividerRoot }} />
       <Typography variant="h3">{Math.round(minTemp)}°</Typography>

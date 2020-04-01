@@ -43,7 +43,7 @@ const ApplicationBar = () => {
           <MenuButton exact path={PageRoute.home}>
             <WithSvg component={LocationSvg} size={22} />
           </MenuButton>
-          <MenuButton path={`${PageRoute.map}${MapsRoute.cloudCover}`}>
+          <MenuButton path={`${PageRoute.map}${MapsRoute.temperature}`}>
             <WithSvg component={MapSvg} size={20} />
           </MenuButton>
           <MenuButton path={`${PageRoute.charts}${ChartsRoute.temperature}`}>
