@@ -19,10 +19,10 @@ import {
   WEEK_DAYS,
 } from 'constants/constants';
 import { DELETE_FAVORITE_LOCALLY_SEND } from 'store/actionTypes/favoritesActionTypes';
+import { WEATHER_MAP_DELETE_BY_INDEX, WEATHER_MAP_API_SEND } from 'store/actionTypes/weatherMapActionTypes';
 import { withRouter } from 'react-router-dom';
 import MapWeatherInfo from 'components/MapWeatherInfo/MapWeatherInfo';
-import { WEATHER_MAP_API_SEND } from 'store/actionTypes/weatherMapActionTypes';
-import darkSkyAxios from 'axios/darkSky';
+
 import styles from './Map.module.css';
 import mapStyles from './mapStyle';
 import './ControlMapStyles.css';
@@ -58,13 +58,11 @@ const mapOptions = {
 };
 
 const customZoomControl = (controlDiv, map) => {
-  // grap the zoom elements from the DOM and insert them in the map
   const controlUIzoomIn = document.getElementById('cd-zoom-in');
   const controlUIzoomOut = document.getElementById('cd-zoom-out');
   controlDiv.appendChild(controlUIzoomIn);
   controlDiv.appendChild(controlUIzoomOut);
 
-  // Setup the click event listeners and zoom-in or out according to the clicked element
   window.google.maps.event.addDomListener(controlUIzoomIn, 'click', () => {
     map.setZoom(map.getZoom() + 1);
   });
@@ -91,20 +89,6 @@ const customMapType = (controlDiv, map) => {
     satelliteType.style.background = '#3c3a73';
     mapType.style.background = '#2a2951';
   });
-};
-
-const getTemperatureForMarkersPromises = favoritesArray => {
-  const promises = [];
-
-  for (const favorite of favoritesArray) {
-    promises.push(
-      darkSkyAxios.get(`/${favorite.latitude},${favorite.longitude}`, {
-        params: { units: 'si', exclude: '[minutely, hourly, daily]' },
-      }),
-    );
-  }
-
-  return promises;
 };
 
 const Map = props => {
@@ -143,6 +127,7 @@ const Map = props => {
   const deleteCity = useCallback(() => {
     if (dataLocally[favoriteIndex].city !== currentLocation.city) {
       markers[favoriteIndex].setMap(null);
+      dispatch({ type: WEATHER_MAP_DELETE_BY_INDEX, index: favoriteIndex });
       dispatch({ type: DELETE_FAVORITE_LOCALLY_SEND, index: favoriteIndex });
 
       const newMarkers = [...markers];
@@ -184,59 +169,60 @@ const Map = props => {
   }, [currentLocation, dataLocally, favoriteIndex]);
 
   useEffect(() => {
-    if (favoriteIndex !== -1 && dataLocally[favoriteIndex]) {
-      dispatch({
-        type: WEATHER_MAP_API_SEND,
-        latitude: dataLocally[favoriteIndex].latitude,
-        longitude: dataLocally[favoriteIndex].longitude,
-      });
-    }
-  }, [dataLocally, dispatch, favoriteIndex]);
+    dispatch({
+      type: WEATHER_MAP_API_SEND,
+    });
+  }, [dispatch]);
 
   useEffect(() => {
-    if (weatherMap.daily.length > 0) {
+    if (favoriteIndex !== -1 && weatherMap.daily.length > 0) {
       setWeatherData({
-        summaryDay: weatherMap.daily[sliderIndex].summary,
-        minTemp: weatherMap.daily[sliderIndex].temperatureLow,
-        maxTemp: weatherMap.daily[sliderIndex].temperatureHigh,
-        icon: weatherMap.daily[sliderIndex].icon,
-        hourly: weatherMap.hourly[sliderIndex],
+        summaryDay: weatherMap.daily[favoriteIndex][sliderIndex].summary,
+        minTemp: weatherMap.daily[favoriteIndex][sliderIndex].temperatureLow,
+        maxTemp: weatherMap.daily[favoriteIndex][sliderIndex].temperatureHigh,
+        icon: weatherMap.daily[favoriteIndex][sliderIndex].icon,
+        hourly: weatherMap.hourly[favoriteIndex][sliderIndex],
       });
     }
-  }, [sliderIndex, weatherMap.daily, weatherMap.hourly]);
+  }, [favoriteIndex, sliderIndex, weatherMap]);
 
   const [mapType, setMapType] = useState(CLOUD_COVER_MAP_TYPE);
 
-  const setFavoritesMarkers = useCallback(async (favoritesArray, map) => {
-    if (favoritesArray.length > 0) {
-      const bounds = new window.google.maps.LatLngBounds();
-      const markersAux = [];
+  console.log('weatherMap', weatherMap);
 
-      const results = await Promise.all(getTemperatureForMarkersPromises(favoritesArray));
+  const setFavoritesMarkers = useCallback(
+    async (map, newMarkers) => {
+      if (dataLocally.length > 0 && weatherMap.daily.length > 0) {
+        const bounds = new window.google.maps.LatLngBounds();
+        const markersAux = [];
 
-      for (let i = 0; i < results.length; i += 1) {
-        const favorite = favoritesArray[i];
-        const result = results[i];
+        for (let i = 0; i < dataLocally.length; i += 1) {
+          const favorite = dataLocally[i];
 
-        const bound = new window.google.maps.LatLng(favorite.latitude, favorite.longitude);
-        const marker = new window.google.maps.Marker({
-          position: bound,
-          map,
-          label: `${Math.round(result.data.currently.temperature)}`,
-        });
-        marker.addListener('click', () => {
-          map.setCenter({ lat: favorite.latitude, lng: favorite.longitude });
-          setFavoriteIndex(i);
-        });
-        marker.setMap(map);
-        markersAux.push(marker);
-        bounds.extend(bound);
+          if (newMarkers.length > 0) {
+            newMarkers[i].setMap(null);
+          }
+
+          const bound = new window.google.maps.LatLng(favorite.latitude, favorite.longitude);
+          const marker = new window.google.maps.Marker({
+            position: bound,
+            map,
+            label: `${Math.round(weatherMap.daily[i][sliderIndex].temperatureHigh)}°`,
+          });
+          marker.addListener('click', () => {
+            map.setCenter({ lat: favorite.latitude, lng: favorite.longitude });
+            setFavoriteIndex(i);
+          });
+          marker.setMap(map);
+          markersAux.push(marker);
+          bounds.extend(bound);
+        }
+        map.fitBounds(bounds);
+        setMarkers(markersAux);
       }
-      map.fitBounds(bounds);
-      setMarkers(markersAux);
-      setCurrentMap(map);
-    }
-  }, []);
+    },
+    [dataLocally, sliderIndex, weatherMap.daily],
+  );
 
   useEffect(() => {
     const map = new window.google.maps.Map(document.getElementById('google-map'), mapOptions);
@@ -250,8 +236,12 @@ const Map = props => {
     map.controls[window.google.maps.ControlPosition.RIGHT_TOP].push(zoomControlDiv);
     map.controls[window.google.maps.ControlPosition.LEFT_TOP].push(customMapTypeDiv);
 
-    setFavoritesMarkers(dataLocally, map);
-  }, [dataLocally, setFavoritesMarkers]);
+    setCurrentMap(map);
+  }, []);
+
+  useEffect(() => {
+    if (currentMap) setFavoritesMarkers(currentMap);
+  }, [currentMap, setFavoritesMarkers]);
 
   useEffect(() => {
     const path = history.location.pathname;
@@ -292,7 +282,6 @@ const Map = props => {
           <MapWeatherInfo
             city={dataLocally[favoriteIndex].city}
             weekDay={MARKS[sliderIndex].label}
-            summaryDay={weatherData.summaryDay}
             minTemp={weatherData.minTemp}
             maxTemp={weatherData.maxTemp}
             icon={weatherData.icon}

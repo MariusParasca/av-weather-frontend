@@ -2,6 +2,7 @@ import {
   WEATHER_MAP_API_SEND,
   WEATHER_MAP_API_FAILED,
   WEATHER_MAP_SET_DATA,
+  WEATHER_MAP_DELETE_BY_INDEX,
 } from 'store/actionTypes/weatherMapActionTypes';
 import { createDateFromEpoch } from 'utils/dateTimeUtils';
 
@@ -12,7 +13,7 @@ const initialState = {
   pending: false,
 };
 
-const createHourly = data => {
+const createHourlySplitted = data => {
   const hourly = [];
   let hourlyPerDay = [];
 
@@ -42,6 +43,28 @@ const createHourly = data => {
   return hourly;
 };
 
+const createHourly = dataArray => {
+  const hourly = [];
+
+  for (let i = 0; i < dataArray.length; i += 1) {
+    const dataElement = dataArray[i];
+    hourly.push(createHourlySplitted(dataElement.data.hourly.data));
+  }
+
+  return hourly;
+};
+
+const createDaily = dataArray => {
+  const daily = [];
+
+  for (let i = 0; i < dataArray.length; i += 1) {
+    const dataElement = dataArray[i];
+    daily.push(dataElement.data.daily.data);
+  }
+
+  return daily;
+};
+
 const reducer = (state = initialState, action) => {
   const newState = { ...state };
 
@@ -50,13 +73,17 @@ const reducer = (state = initialState, action) => {
       newState.pending = true;
       break;
     case WEATHER_MAP_SET_DATA:
-      newState.daily = action.data.daily.data;
-      newState.hourly = createHourly(action.data.hourly.data);
+      newState.daily = createDaily(action.data);
+      newState.hourly = createHourly(action.data);
       newState.pending = false;
       break;
     case WEATHER_MAP_API_FAILED:
       newState.pending = false;
       newState.error = action.error;
+      break;
+    case WEATHER_MAP_DELETE_BY_INDEX:
+      newState.daily.splice(action.index, 1);
+      newState.hourly.splice(action.index, 1);
       break;
     default:
       break;

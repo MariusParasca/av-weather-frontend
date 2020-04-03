@@ -1,4 +1,4 @@
-import { takeEvery, put, call } from 'redux-saga/effects';
+import { takeEvery, put, call, select } from 'redux-saga/effects';
 
 import {
   WEATHER_MAP_API_SEND,
@@ -7,24 +7,31 @@ import {
 } from 'store/actionTypes/weatherMapActionTypes';
 import darkSkyAxios from 'axios/darkSky';
 
-async function makeWeatherRequest(latitude, longitude) {
+async function makeWeatherRequest(favorites) {
   try {
-    const response = await darkSkyAxios.get(`/${latitude},${longitude}`, {
-      params: {
-        units: 'si',
-        exclude: '[minutely, alerts, flags, currently]',
-        extend: 'hourly',
-      },
-    });
+    const promises = [];
+    for (const favorite of favorites) {
+      promises.push(
+        darkSkyAxios.get(`/${favorite.latitude},${favorite.longitude}`, {
+          params: {
+            units: 'si',
+            exclude: '[minutely, alerts, flags, currently]',
+            extend: 'hourly',
+          },
+        }),
+      );
+    }
+    const responses = await Promise.all(promises);
 
-    return { data: response.data };
+    return { data: responses };
   } catch (error) {
     return { error };
   }
 }
 
-function* apiRequest(action) {
-  const { data, error } = yield call(makeWeatherRequest, action.latitude, action.longitude);
+function* apiRequest() {
+  const favorites = yield select(state => state.favorites.dataLocally);
+  const { data, error } = yield call(makeWeatherRequest, favorites);
 
   if (data) {
     yield put({ type: WEATHER_MAP_SET_DATA, data });
