@@ -1,0 +1,51 @@
+#customButtons {
+  display: none;
+}
+
+#cd-zoom-in,
+#cd-zoom-out {
+  height: 32px;
+  width: 32px;
+  cursor: pointer;
+  margin-left: 10px;
+  margin-right: 20px;
+  background-color: #2a2951;
+  background-repeat: no-repeat;
+  background-size: 32px 64px;
+  background-image: url('../../svgs/cdIconController.svg');
+}
+#cd-zoom-in:hover,
+#cd-zoom-out:hover,
+#cd-map:hover,
+#cd-satellite:hover {
+  background-color: #3c3a73;
+}
+
+#cd-zoom-in {
+  background-position: 50% 0;
+  margin-top: 10px;
+  margin-bottom: 1px;
+}
+
+#cd-zoom-out {
+  background-position: 50% -32px;
+}
+
+#cd-map {
+  background: #2a2951;
+  border-right: 1px solid #474689;
+  margin-left: 20px;
+}
+
+#cd-map,
+#cd-satellite {
+  margin-top: 10px;
+  display: inline-block;
+  padding: 8px 17px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+#cd-satellite {
+  background-color: #3c3a73;
+}

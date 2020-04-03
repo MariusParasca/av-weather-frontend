@@ -22,7 +22,10 @@ import { DELETE_FAVORITE_LOCALLY_SEND } from 'store/actionTypes/favoritesActionT
 import { withRouter } from 'react-router-dom';
 import MapWeatherInfo from 'components/MapWeatherInfo/MapWeatherInfo';
 import { WEATHER_MAP_API_SEND } from 'store/actionTypes/weatherMapActionTypes';
+import darkSkyAxios from 'axios/darkSky';
 import styles from './Map.module.css';
+import mapStyles from './mapStyle';
+import './ControlMapStyles.css';
 
 const createMarks = () => {
   const followDay = new Date();
@@ -44,6 +47,65 @@ const createMarks = () => {
 };
 
 const MARKS = createMarks();
+
+const mapOptions = {
+  styles: mapStyles,
+  mapTypeId: window.google.maps.MapTypeId.SATELLITE,
+  mapTypeControl: false,
+  zoomControl: false,
+  streetViewControl: false,
+  fullscreenControl: false,
+};
+
+const customZoomControl = (controlDiv, map) => {
+  // grap the zoom elements from the DOM and insert them in the map
+  const controlUIzoomIn = document.getElementById('cd-zoom-in');
+  const controlUIzoomOut = document.getElementById('cd-zoom-out');
+  controlDiv.appendChild(controlUIzoomIn);
+  controlDiv.appendChild(controlUIzoomOut);
+
+  // Setup the click event listeners and zoom-in or out according to the clicked element
+  window.google.maps.event.addDomListener(controlUIzoomIn, 'click', () => {
+    map.setZoom(map.getZoom() + 1);
+  });
+  window.google.maps.event.addDomListener(controlUIzoomOut, 'click', () => {
+    map.setZoom(map.getZoom() - 1);
+  });
+};
+
+const customMapType = (controlDiv, map) => {
+  const mapType = document.getElementById('cd-map');
+  const satelliteType = document.getElementById('cd-satellite');
+
+  controlDiv.appendChild(mapType);
+  controlDiv.appendChild(satelliteType);
+
+  window.google.maps.event.addDomListener(mapType, 'click', () => {
+    map.setMapTypeId(window.google.maps.MapTypeId.ROADMAP);
+    mapType.style.background = '#3c3a73';
+    satelliteType.style.background = '#2a2951';
+  });
+
+  window.google.maps.event.addDomListener(satelliteType, 'click', () => {
+    map.setMapTypeId(window.google.maps.MapTypeId.SATELLITE);
+    satelliteType.style.background = '#3c3a73';
+    mapType.style.background = '#2a2951';
+  });
+};
+
+const getTemperatureForMarkersPromises = favoritesArray => {
+  const promises = [];
+
+  for (const favorite of favoritesArray) {
+    promises.push(
+      darkSkyAxios.get(`/${favorite.latitude},${favorite.longitude}`, {
+        params: { units: 'si', exclude: '[minutely, hourly, daily]' },
+      }),
+    );
+  }
+
+  return promises;
+};
 
 const Map = props => {
   const { history } = props;
@@ -99,6 +161,7 @@ const Map = props => {
         });
 
         markerForMap.addListener('click', () => {
+          currentMap.setCenter({ lat: newMarker.getPosition().lat(), lng: newMarker.getPosition().lng() });
           setFavoriteIndex(i);
         });
         markerForMap.setMap(currentMap);
@@ -144,19 +207,25 @@ const Map = props => {
 
   const [mapType, setMapType] = useState(CLOUD_COVER_MAP_TYPE);
 
-  const setFavoritesMarkers = useCallback((favoritesArray, map) => {
+  const setFavoritesMarkers = useCallback(async (favoritesArray, map) => {
     if (favoritesArray.length > 0) {
       const bounds = new window.google.maps.LatLngBounds();
       const markersAux = [];
 
-      for (let i = 0; i < favoritesArray.length; i += 1) {
+      const results = await Promise.all(getTemperatureForMarkersPromises(favoritesArray));
+
+      for (let i = 0; i < results.length; i += 1) {
         const favorite = favoritesArray[i];
+        const result = results[i];
+
         const bound = new window.google.maps.LatLng(favorite.latitude, favorite.longitude);
         const marker = new window.google.maps.Marker({
           position: bound,
           map,
+          label: `${Math.round(result.data.currently.temperature)}`,
         });
         marker.addListener('click', () => {
+          map.setCenter({ lat: favorite.latitude, lng: favorite.longitude });
           setFavoriteIndex(i);
         });
         marker.setMap(map);
@@ -170,24 +239,19 @@ const Map = props => {
   }, []);
 
   useEffect(() => {
-    const map = new window.google.maps.Map(document.getElementById('google-map'), {
-      zoom: 4,
-    });
+    const map = new window.google.maps.Map(document.getElementById('google-map'), mapOptions);
 
-    const myMapType = new window.google.maps.ImageMapType({
-      getTileUrl(coord, zoom) {
-        return `https://tile.openweathermap.org/map/${mapType}/${zoom}/${coord.x}/${coord.y}.png?appid=92525d1cc3a7d52b6259b05627c70e00`;
-      },
-      tileSize: new window.google.maps.Size(256, 256),
-      maxZoom: 9,
-      minZoom: 0,
-      name: 'mymaptype',
-    });
+    const zoomControlDiv = document.createElement('div');
+    customZoomControl(zoomControlDiv, map);
 
-    map.overlayMapTypes.insertAt(0, myMapType);
+    const customMapTypeDiv = document.createElement('div');
+    customMapType(customMapTypeDiv, map);
+
+    map.controls[window.google.maps.ControlPosition.RIGHT_TOP].push(zoomControlDiv);
+    map.controls[window.google.maps.ControlPosition.LEFT_TOP].push(customMapTypeDiv);
 
     setFavoritesMarkers(dataLocally, map);
-  }, [dataLocally, mapType, setFavoritesMarkers]);
+  }, [dataLocally, setFavoritesMarkers]);
 
   useEffect(() => {
     const path = history.location.pathname;
@@ -203,6 +267,23 @@ const Map = props => {
       setMapType(TEMPERATURE_MAP_TYPE);
     }
   }, [history.location.pathname]);
+
+  useEffect(() => {
+    if (currentMap) {
+      const myMapType = new window.google.maps.ImageMapType({
+        getTileUrl(coord, zoom) {
+          return `https://tile.openweathermap.org/map/${mapType}/${zoom}/${coord.x}/${coord.y}.png?appid=92525d1cc3a7d52b6259b05627c70e00`;
+        },
+        tileSize: new window.google.maps.Size(256, 256),
+        maxZoom: 9,
+        minZoom: 0,
+        name: 'mymaptype',
+      });
+
+      currentMap.overlayMapTypes.clear();
+      currentMap.overlayMapTypes.insertAt(0, myMapType);
+    }
+  }, [currentMap, mapType]);
 
   return (
     <div className={styles.container}>
@@ -221,6 +302,12 @@ const Map = props => {
             onClickDelete={deleteCity}
           />
         )}
+      </div>
+      <div id="customButtons">
+        <div id="cd-map">Map</div>
+        <div id="cd-satellite">Satellite</div>
+        <div id="cd-zoom-in" />
+        <div id="cd-zoom-out" />
       </div>
       <div id="google-map" className={styles.mapContainer} />
       <div className={styles.menuButton}>
