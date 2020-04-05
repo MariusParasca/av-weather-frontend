@@ -105,6 +105,7 @@ const Map = props => {
   const [sliderIndex, setSliderIndex] = useState(0);
   const [weatherData, setWeatherData] = useState(null);
   const [currentMap, setCurrentMap] = useState(null);
+  const [mapType, setMapType] = useState(CLOUD_COVER_MAP_TYPE);
 
   const dispatch = useDispatch();
 
@@ -159,9 +160,50 @@ const Map = props => {
     }
   }, [currentLocation.city, currentMap, dataLocally, dispatch, favoriteIndex, markers]);
 
-  const onChangeSlider = useCallback((event, newValue) => {
-    setSliderIndex(newValue);
-  }, []);
+  const setFavoritesMarkers = useCallback(
+    async (map, oldMarkers = []) => {
+      console.log('oldMarkers', oldMarkers);
+      if (dataLocally.length > 0 && weatherMap.daily.length > 0) {
+        const bounds = new window.google.maps.LatLngBounds();
+        console.log('in if');
+        const markersAux = [];
+
+        for (let i = 0; i < dataLocally.length; i += 1) {
+          const favorite = dataLocally[i];
+
+          if (oldMarkers.length > 0) {
+            oldMarkers[i].setMap(null);
+          }
+
+          const bound = new window.google.maps.LatLng(favorite.latitude, favorite.longitude);
+          const marker = new window.google.maps.Marker({
+            position: bound,
+            map,
+            label: `${Math.round(weatherMap.daily[i][sliderIndex].temperatureHigh)}°`,
+          });
+          // marker.addListener('click', () => {
+          //   map.setCenter({ lat: favorite.latitude, lng: favorite.longitude });
+          //   setFavoriteIndex(i);
+          // });
+          // marker.setMap(map);
+          // markersAux.push(marker);
+          bounds.extend(bound);
+        }
+        map.fitBounds(bounds);
+        setMarkers(markersAux);
+      }
+    },
+    [dataLocally, sliderIndex, weatherMap.daily],
+  );
+
+  const onChangeSlider = useCallback(
+    (event, newValue) => {
+      console.log('hei');
+      setFavoritesMarkers(currentMap, markers);
+      setSliderIndex(newValue);
+    },
+    [currentMap, markers, setFavoritesMarkers],
+  );
 
   useEffect(() => {
     if (favoriteIndex === -1 && currentLocation)
@@ -185,44 +227,6 @@ const Map = props => {
       });
     }
   }, [favoriteIndex, sliderIndex, weatherMap]);
-
-  const [mapType, setMapType] = useState(CLOUD_COVER_MAP_TYPE);
-
-  console.log('weatherMap', weatherMap);
-
-  const setFavoritesMarkers = useCallback(
-    async (map, newMarkers) => {
-      if (dataLocally.length > 0 && weatherMap.daily.length > 0) {
-        const bounds = new window.google.maps.LatLngBounds();
-        const markersAux = [];
-
-        for (let i = 0; i < dataLocally.length; i += 1) {
-          const favorite = dataLocally[i];
-
-          if (newMarkers.length > 0) {
-            newMarkers[i].setMap(null);
-          }
-
-          const bound = new window.google.maps.LatLng(favorite.latitude, favorite.longitude);
-          const marker = new window.google.maps.Marker({
-            position: bound,
-            map,
-            label: `${Math.round(weatherMap.daily[i][sliderIndex].temperatureHigh)}°`,
-          });
-          marker.addListener('click', () => {
-            map.setCenter({ lat: favorite.latitude, lng: favorite.longitude });
-            setFavoriteIndex(i);
-          });
-          marker.setMap(map);
-          markersAux.push(marker);
-          bounds.extend(bound);
-        }
-        map.fitBounds(bounds);
-        setMarkers(markersAux);
-      }
-    },
-    [dataLocally, sliderIndex, weatherMap.daily],
-  );
 
   useEffect(() => {
     const map = new window.google.maps.Map(document.getElementById('google-map'), mapOptions);

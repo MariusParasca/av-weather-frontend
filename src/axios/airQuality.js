@@ -1,7 +1,8 @@
 import axios from 'axios';
+import corsUrl from './cors-anywhere';
 
 const airQualityInstance = axios.create({
-  baseURL: 'https://cors-anywhere.herokuapp.com/https://api.waqi.info/feed',
+  baseURL: `${corsUrl}https://api.waqi.info/feed`,
 });
 
 airQualityInstance.interceptors.request.use(config => ({
