@@ -1,8 +1,6 @@
 import axios from 'axios';
 import corsUrl from './cors-anywhere';
 
-console.log('corsUrl', corsUrl);
-
 const hereAutosuggestInstance = axios.create({
   baseURL: `${corsUrl}https://places.sit.ls.hereapi.com/places/v1/autosuggest`,
 });

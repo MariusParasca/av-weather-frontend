@@ -2,5 +2,39 @@
   display: flex;
   align-items: center;
   height: 100%;
+  background: #131231;
   box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.55);
+}
+
+.container > div {
+  border-right: 2px solid #202043;
+  height: 100%;
+}
+
+.countryTemp {
+  width: 16%;
+}
+
+.temperature {
+  display: flex;
+}
+
+.graphTemp {
+  width: 10%;
+}
+
+.weatherInfo {
+  width: 30%;
+}
+
+.precipitationGraph {
+  width: 26%;
+}
+
+.airGraph {
+  width: 10%;
+}
+
+.controlButtons {
+  width: 8%;
 }

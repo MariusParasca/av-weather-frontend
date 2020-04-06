@@ -80,14 +80,14 @@ const customMapType = (controlDiv, map) => {
 
   window.google.maps.event.addDomListener(mapType, 'click', () => {
     map.setMapTypeId(window.google.maps.MapTypeId.ROADMAP);
-    mapType.style.background = '#3c3a73';
-    satelliteType.style.background = '#2a2951';
+    mapType.style.background = '#212056';
+    satelliteType.style.background = '#131231';
   });
 
   window.google.maps.event.addDomListener(satelliteType, 'click', () => {
     map.setMapTypeId(window.google.maps.MapTypeId.SATELLITE);
-    satelliteType.style.background = '#3c3a73';
-    mapType.style.background = '#2a2951';
+    satelliteType.style.background = '#212056';
+    mapType.style.background = '#131231';
   });
 };
 
@@ -181,12 +181,12 @@ const Map = props => {
             map,
             label: `${Math.round(weatherMap.daily[i][sliderIndex].temperatureHigh)}°`,
           });
-          // marker.addListener('click', () => {
-          //   map.setCenter({ lat: favorite.latitude, lng: favorite.longitude });
-          //   setFavoriteIndex(i);
-          // });
-          // marker.setMap(map);
-          // markersAux.push(marker);
+          marker.addListener('click', () => {
+            map.setCenter({ lat: favorite.latitude, lng: favorite.longitude });
+            setFavoriteIndex(i);
+          });
+          marker.setMap(map);
+          markersAux.push(marker);
           bounds.extend(bound);
         }
         map.fitBounds(bounds);
@@ -237,7 +237,7 @@ const Map = props => {
     const customMapTypeDiv = document.createElement('div');
     customMapType(customMapTypeDiv, map);
 
-    map.controls[window.google.maps.ControlPosition.RIGHT_TOP].push(zoomControlDiv);
+    map.controls[window.google.maps.ControlPosition.RIGHT_BOTTOM].push(zoomControlDiv);
     map.controls[window.google.maps.ControlPosition.LEFT_TOP].push(customMapTypeDiv);
 
     setCurrentMap(map);

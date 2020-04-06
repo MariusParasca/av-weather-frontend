@@ -6,6 +6,7 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import CancelIcon from '@material-ui/icons/Cancel';
 import WithSvg from 'components/WithSvg/WithSvg';
 import MapChart from 'components/Charts/MapChart/MapChart';
+import DashedCircularProgress from 'components/DashedCircularProgress/DashedCircularProgress';
 import styles from './MapWeatherInfo.module.css';
 
 const useStyles = makeStyles(() => ({
@@ -22,18 +23,25 @@ const MapWeatherInfo = props => {
 
   return (
     <div className={styles.container}>
-      <Typography variant="h3">{city}</Typography>
-      <Divider orientation="vertical" classes={{ root: classes.dividerRoot }} />
-      <Typography variant="h4">{weekDay}</Typography>
-      <WithSvg component={`svgs/TypeOfWeather/${icon}.svg`} />
-      <Divider orientation="vertical" classes={{ root: classes.dividerRoot }} />
-      <Typography variant="h3">{Math.round(minTemp)}°</Typography>
-      <div>
+      <div className={styles.countryTemp}>
+        <Typography variant="h3">{city}</Typography>
+        <div className={styles.temperature}>
+          <WithSvg component={`svgs/TypeOfWeather/${icon}.svg`} />
+          <Typography variant="subtitle1">12</Typography>
+        </div>
+      </div>
+      <div className={styles.graphTemp}>
         <MapChart data={hourly} />
       </div>
-      <Typography variant="h3">{Math.round(maxTemp)}°</Typography>
-      <Divider orientation="vertical" classes={{ root: classes.dividerRoot }} />
-      <div>
+      <div className={styles.weatherInfo}>
+        <DashedCircularProgress />
+      </div>
+      <div className={styles.precipitationGraph}>
+        <Typography variant="h3">{Math.round(minTemp)}°</Typography>
+        <Typography variant="h3">{Math.round(maxTemp)}°</Typography>
+      </div>
+      <div className={styles.airGraph}>hei</div>
+      <div className={styles.controlButtons}>
         <IconButton onClick={onClickLeftArrow}>
           <ArrowBackIosIcon />
         </IconButton>

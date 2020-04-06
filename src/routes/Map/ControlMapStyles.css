@@ -9,7 +9,7 @@
   cursor: pointer;
   margin-left: 10px;
   margin-right: 20px;
-  background-color: #2a2951;
+  background-color: #131231;
   background-repeat: no-repeat;
   background-size: 32px 64px;
   background-image: url('../../svgs/cdIconController.svg');
@@ -18,23 +18,29 @@
 #cd-zoom-out:hover,
 #cd-map:hover,
 #cd-satellite:hover {
-  background-color: #3c3a73;
+  background-color: #212056;
 }
 
 #cd-zoom-in {
   background-position: 50% 0;
-  margin-top: 10px;
-  margin-bottom: 1px;
+  border-bottom: 1px solid #1f1e42;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
 }
 
 #cd-zoom-out {
   background-position: 50% -32px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  margin-bottom: 10px;
 }
 
 #cd-map {
-  background: #2a2951;
-  border-right: 1px solid #474689;
+  background: #131231;
   margin-left: 20px;
+  border-right: 1px solid #1f1e42;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
 }
 
 #cd-map,
@@ -47,5 +53,7 @@
 }
 
 #cd-satellite {
-  background-color: #3c3a73;
+  background-color: #212056;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
 }
