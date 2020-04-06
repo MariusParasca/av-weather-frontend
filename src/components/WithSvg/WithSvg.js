@@ -27,6 +27,7 @@ const WithSvg = ({ component: Svg, size, className, width, height, responsive })
         <img
           alt="svgIcon"
           src={svgImported}
+          className={className}
           style={
             responsive
               ? {

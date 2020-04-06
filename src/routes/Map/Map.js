@@ -219,10 +219,7 @@ const Map = props => {
   useEffect(() => {
     if (favoriteIndex !== -1 && weatherMap.daily.length > 0) {
       setWeatherData({
-        summaryDay: weatherMap.daily[favoriteIndex][sliderIndex].summary,
-        minTemp: weatherMap.daily[favoriteIndex][sliderIndex].temperatureLow,
-        maxTemp: weatherMap.daily[favoriteIndex][sliderIndex].temperatureHigh,
-        icon: weatherMap.daily[favoriteIndex][sliderIndex].icon,
+        day: weatherMap.daily[favoriteIndex][sliderIndex],
         hourly: weatherMap.hourly[favoriteIndex][sliderIndex],
       });
     }
@@ -285,10 +282,7 @@ const Map = props => {
         {!weatherMap.pending && weatherData && dataLocally[favoriteIndex] && (
           <MapWeatherInfo
             city={dataLocally[favoriteIndex].city}
-            weekDay={MARKS[sliderIndex].label}
-            minTemp={weatherData.minTemp}
-            maxTemp={weatherData.maxTemp}
-            icon={weatherData.icon}
+            day={weatherData.day}
             hourly={weatherData.hourly}
             onClickRightArrow={nextCity}
             onClickLeftArrow={previousCity}

@@ -14,32 +14,39 @@ const useStyles = makeStyles(() => ({
     marginLeft: 20,
     marginRight: 20,
   },
+  temperature: {
+    fontSize: '1.9vh',
+  },
 }));
 
 const MapWeatherInfo = props => {
-  const { city, weekDay, minTemp, maxTemp, hourly, icon, onClickLeftArrow, onClickRightArrow, onClickDelete } = props;
+  const { city, country, day, hourly, onClickLeftArrow, onClickRightArrow, onClickDelete } = props;
 
   const classes = useStyles();
+
+  console.log('hourly', hourly);
+  console.log('day', day);
 
   return (
     <div className={styles.container}>
       <div className={styles.countryTemp}>
-        <Typography variant="h3">{city}</Typography>
+        <Typography variant="h3">
+          {city}, {country}
+        </Typography>
         <div className={styles.temperature}>
-          <WithSvg component={`svgs/TypeOfWeather/${icon}.svg`} />
-          <Typography variant="subtitle1">12</Typography>
+          <WithSvg size={36} className={styles.temperatureIcon} component={`svgs/TypeOfWeather/${day.icon}.svg`} />
+          <Typography classes={{ root: classes.temperature }} variant="subtitle2">
+            {Math.round(day.temperatureHigh)}°C
+          </Typography>
         </div>
       </div>
       <div className={styles.graphTemp}>
-        <MapChart data={hourly} />
+        <MapChart data={hourly.map(hour => hour.temperature)} />
       </div>
       <div className={styles.weatherInfo}>
         <DashedCircularProgress />
       </div>
-      <div className={styles.precipitationGraph}>
-        <Typography variant="h3">{Math.round(minTemp)}°</Typography>
-        <Typography variant="h3">{Math.round(maxTemp)}°</Typography>
-      </div>
+      <div className={styles.precipitationGraph}>graph precip</div>
       <div className={styles.airGraph}>hei</div>
       <div className={styles.controlButtons}>
         <IconButton onClick={onClickLeftArrow}>
@@ -61,11 +68,9 @@ MapWeatherInfo.propTypes = {
   onClickRightArrow: PropTypes.func.isRequired,
   onClickDelete: PropTypes.func.isRequired,
   city: PropTypes.string.isRequired,
-  weekDay: PropTypes.string.isRequired,
-  minTemp: PropTypes.number.isRequired,
-  maxTemp: PropTypes.number.isRequired,
+  country: PropTypes.string.isRequired,
   hourly: PropTypes.arrayOf(PropTypes.number).isRequired,
-  icon: PropTypes.string.isRequired,
+  day: PropTypes.arrayOf(PropTypes.any).isRequired,
 };
 
 export default MapWeatherInfo;

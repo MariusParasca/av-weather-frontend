@@ -21,7 +21,7 @@ const createHourlySplitted = data => {
   const indexFirstDay = 24 - hour;
 
   for (let i = 0; i < indexFirstDay; i += 1) {
-    hourlyPerDay.push(Math.round(data[i].temperature));
+    hourlyPerDay.push(data[i]);
   }
 
   hourly.push(hourlyPerDay);
@@ -36,7 +36,7 @@ const createHourlySplitted = data => {
     } else {
       counter += 1;
     }
-    hourlyPerDay.push(Math.round(data[i].temperature));
+    hourlyPerDay.push(data[i]);
   }
   hourly.push(hourlyPerDay);
 

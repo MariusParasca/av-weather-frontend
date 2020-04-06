@@ -9,14 +9,25 @@
 .container > div {
   border-right: 2px solid #202043;
   height: 100%;
+  padding-top: 1.5%;
 }
 
 .countryTemp {
   width: 16%;
+  padding-left: 1%;
+  padding-bottom: 1.5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .temperature {
   display: flex;
+  align-items: flex-end;
+}
+
+.temperatureIcon {
+  margin-right: 1%;
 }
 
 .graphTemp {
