@@ -4,7 +4,7 @@ import corsUrl from './cors-anywhere';
 console.log('corsUrl', corsUrl);
 
 const hereAutosuggestInstance = axios.create({
-  baseURL: `${corsUrl}https://api.waqi.info/feed`,
+  baseURL: `${corsUrl}https://places.sit.ls.hereapi.com/places/v1/autosuggest`,
 });
 
 hereAutosuggestInstance.interceptors.request.use(config => ({
