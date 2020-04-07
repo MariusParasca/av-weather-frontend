@@ -2,8 +2,8 @@ import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { TextField, MenuItem, Typography, makeStyles } from '@material-ui/core';
 
-import { ReactComponent as Humidity } from 'svgs/humidity.svg';
-import { ReactComponent as Precipitation } from 'svgs/precipitation.svg';
+import { ReactComponent as Humidity, ReactComponent as Precipitation } from 'svgs/next.svg';
+
 import { WEEK_DAYS, MONTHS } from 'constants/constants';
 import CalendarDay from 'components/CalendarDay/CalendarDay';
 import WithSvg from 'components/WithSvg/WithSvg';

@@ -198,7 +198,6 @@ const Map = props => {
 
   const onChangeSlider = useCallback(
     (event, newValue) => {
-      console.log('hei');
       setFavoritesMarkers(currentMap, markers);
       setSliderIndex(newValue);
     },
@@ -282,8 +281,10 @@ const Map = props => {
         {!weatherMap.pending && weatherData && dataLocally[favoriteIndex] && (
           <MapWeatherInfo
             city={dataLocally[favoriteIndex].city}
+            country={dataLocally[favoriteIndex].country}
             day={weatherData.day}
             hourly={weatherData.hourly}
+            daily={weatherMap.daily}
             onClickRightArrow={nextCity}
             onClickLeftArrow={previousCity}
             onClickDelete={deleteCity}

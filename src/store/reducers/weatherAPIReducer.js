@@ -75,8 +75,6 @@ const reducer = (state = initialState, action) => {
   let newStateIpStack = { ...state.ipStack };
   const newStateWeather = { ...state.weather };
 
-  console.log('action.data', action.data);
-
   switch (action.type) {
     case WEATHER_API_SEND:
       newState.pending = true;

@@ -42,8 +42,6 @@ async function makeWeatherRequest(latitude, longitude, city) {
 
     const responses = await Promise.all([darkSkyPromise, ariQualityPromise]);
 
-    console.log('responses', responses);
-
     return {
       data: {
         currently: { ...responses[0].data.currently, airQuality: responses[1].data.data.aqi },
