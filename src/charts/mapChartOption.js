@@ -2,8 +2,8 @@ const getMapChartOption = data => {
   const option = {
     grid: {
       top: '0%',
-      left: '1%',
-      right: '1%',
+      left: '4%',
+      right: '4%',
       containLabel: false,
     },
     xAxis: {
@@ -35,7 +35,12 @@ const getMapChartOption = data => {
       {
         data,
         type: 'line',
-        areaStyle: {},
+        lineStyle: {
+          color: '#333466',
+        },
+        areaStyle: {
+          color: '#1E1F47',
+        },
         showSymbol: false,
       },
     ],

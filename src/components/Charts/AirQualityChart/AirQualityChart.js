@@ -18,16 +18,16 @@ const AirQualityChart = props => {
 AirQualityChart.propTypes = {
   value: PropTypes.number.isRequired,
   stroke: PropTypes.number,
-  height: PropTypes.number,
-  width: PropTypes.number,
+  height: PropTypes.string,
+  width: PropTypes.string,
   pointerWidth: PropTypes.number,
   showDetail: PropTypes.bool,
 };
 
 AirQualityChart.defaultProps = {
-  height: 300,
+  height: '130%',
   stroke: 18,
-  width: 299,
+  width: '100%',
   pointerWidth: undefined,
   showDetail: true,
 };

@@ -6,6 +6,7 @@ import { ReactComponent as LocationSvg } from 'svgs/WeatherInfo/cloud_cover.svg'
 import { ReactComponent as HumiditySvg } from 'svgs/WeatherInfo/humidity.svg';
 import { ReactComponent as WindSvg } from 'svgs/WeatherInfo/wind.svg';
 import { ReactComponent as PressureSvg } from 'svgs/WeatherInfo/pressure.svg';
+import { ReactComponent as TemperatureSvg } from 'svgs/WeatherInfo/temperature.svg';
 import WithSvg from 'components/WithSvg/WithSvg';
 import { Slider } from '@material-ui/core';
 import MenuButton from 'components/MenuButton/MenuButton';
@@ -48,15 +49,6 @@ const createMarks = () => {
 
 const MARKS = createMarks();
 
-const mapOptions = {
-  styles: mapStyles,
-  mapTypeId: window.google.maps.MapTypeId.SATELLITE,
-  mapTypeControl: false,
-  zoomControl: false,
-  streetViewControl: false,
-  fullscreenControl: false,
-};
-
 const customZoomControl = (controlDiv, map) => {
   const controlUIzoomIn = document.getElementById('cd-zoom-in');
   const controlUIzoomOut = document.getElementById('cd-zoom-out');
@@ -93,6 +85,15 @@ const customMapType = (controlDiv, map) => {
 
 const Map = props => {
   const { history } = props;
+
+  const mapOptions = {
+    styles: mapStyles,
+    mapTypeId: window.google.maps.MapTypeId.SATELLITE,
+    mapTypeControl: false,
+    zoomControl: false,
+    streetViewControl: false,
+    fullscreenControl: false,
+  };
 
   const favorites = useSelector(state => state.favorites);
   const currentLocation = useSelector(state => state.data.ipStack);
@@ -284,7 +285,7 @@ const Map = props => {
             country={dataLocally[favoriteIndex].country}
             day={weatherData.day}
             hourly={weatherData.hourly}
-            daily={weatherMap.daily}
+            dailyHourly={weatherMap.hourly[favoriteIndex]}
             onClickRightArrow={nextCity}
             onClickLeftArrow={previousCity}
             onClickDelete={deleteCity}
@@ -300,7 +301,7 @@ const Map = props => {
       <div id="google-map" className={styles.mapContainer} />
       <div className={styles.menuButton}>
         <MenuButton path={`${PageRoute.map}${MapsRoute.temperature}`}>
-          <WithSvg component={LocationSvg} size={22} />
+          <WithSvg component={TemperatureSvg} size={22} />
         </MenuButton>
         <MenuButton path={`${PageRoute.map}${MapsRoute.cloudCover}`}>
           <WithSvg component={LocationSvg} size={22} />

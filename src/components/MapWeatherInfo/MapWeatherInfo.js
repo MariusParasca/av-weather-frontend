@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Typography, makeStyles, IconButton } from '@material-ui/core';
+import { Typography, makeStyles, IconButton, withWidth } from '@material-ui/core';
 
 import { ReactComponent as NextSvg } from 'svgs/next.svg';
 import { ReactComponent as BackSvg } from 'svgs/back.svg';
@@ -11,19 +11,13 @@ import { ReactComponent as cloudCoverSvg } from 'svgs/WeatherInfo/cloud_cover.sv
 import { ReactComponent as eyeSvg } from 'svgs/WeatherInfo/eye.svg';
 import { ReactComponent as pressureSvg } from 'svgs/WeatherInfo/pressure.svg';
 
-import {
-  MAX_UV,
-  MAX_PRESSURE,
-  MAX_VISIBILITY,
-  MAX_AIQ,
-  STANDARD_WEATHER_TYPE,
-  WIND_WEATHER_TYPE,
-} from 'constants/constants';
+import { MAX_UV, MAX_PRESSURE, MAX_VISIBILITY } from 'constants/constants';
 // import { ReactComponent as CrossSvg } from 'svgs/cross.svg';
-import { getHourFromEpoch, formatHourAMPM } from 'utils/dateTimeUtils';
 import WithSvg from 'components/WithSvg/WithSvg';
 import MapChart from 'components/Charts/MapChart/MapChart';
+import AirGauge from 'components/AirGauge/AirGauge';
 import CircularProgress from 'components/CircularProgress/CircularProgress';
+import { flatten } from 'utils/helperFunctions';
 import styles from './MapWeatherInfo.module.css';
 
 const useStyles = makeStyles(() => ({
@@ -36,12 +30,9 @@ const useStyles = makeStyles(() => ({
 }));
 
 const MapWeatherInfo = props => {
-  const { city, country, day, daily, hourly, onClickLeftArrow, onClickRightArrow, onClickDelete } = props;
+  const { width, city, country, day, dailyHourly, onClickLeftArrow, onClickRightArrow, onClickDelete } = props;
 
   const classes = useStyles();
-
-  console.log('hourly', hourly);
-  console.log('daily', daily);
 
   return (
     <div className={styles.container}>
@@ -58,27 +49,49 @@ const MapWeatherInfo = props => {
       </div>
       <div className={styles.weatherInfo}>
         <div className={styles.subWeatherInfo}>
-          <CircularProgress size={65} percent={day.windSpeed}>
-            <WithSvg size={16} component={WindSvg} />
+          <CircularProgress
+            size={width === 'md' ? 45 : 65}
+            strokeWidth={width === 'md' ? 5 : 9}
+            percent={day.windSpeed}
+          >
+            <WithSvg size={width === 'md' ? 12 : 16} component={WindSvg} />
           </CircularProgress>
-          <CircularProgress size={65} percent={(day.uvIndex / MAX_UV) * 100}>
-            <WithSvg size={16} component={uvIndexSvg} />
+          <CircularProgress
+            size={width === 'md' ? 45 : 65}
+            strokeWidth={width === 'md' ? 5 : 9}
+            percent={(day.uvIndex / MAX_UV) * 100}
+          >
+            <WithSvg size={width === 'md' ? 12 : 16} component={uvIndexSvg} />
           </CircularProgress>
-          <CircularProgress size={65} percent={day.cloudCover * 100}>
-            <WithSvg size={16} component={cloudCoverSvg} />
+          <CircularProgress
+            size={width === 'md' ? 45 : 65}
+            strokeWidth={width === 'md' ? 5 : 9}
+            percent={day.cloudCover * 100}
+          >
+            <WithSvg size={width === 'md' ? 12 : 16} component={cloudCoverSvg} />
           </CircularProgress>
-          <CircularProgress size={65} percent={(day.visibility / MAX_VISIBILITY) * 100}>
-            <WithSvg size={16} component={eyeSvg} />
+          <CircularProgress
+            size={width === 'md' ? 45 : 65}
+            strokeWidth={width === 'md' ? 5 : 9}
+            percent={(day.visibility / MAX_VISIBILITY) * 100}
+          >
+            <WithSvg size={width === 'md' ? 12 : 16} component={eyeSvg} />
           </CircularProgress>
-          <CircularProgress size={65} percent={(day.pressure / MAX_PRESSURE) * 100}>
-            <WithSvg size={16} component={pressureSvg} />
+          <CircularProgress
+            size={width === 'md' ? 45 : 65}
+            strokeWidth={width === 'md' ? 5 : 9}
+            percent={(day.pressure / MAX_PRESSURE) * 100}
+          >
+            <WithSvg size={width === 'md' ? 12 : 16} component={pressureSvg} />
           </CircularProgress>
         </div>
       </div>
       <div className={styles.graph}>
-        <MapChart data={hourly.map(hour => hour.temperature)} />
+        <MapChart data={flatten(dailyHourly).map(hour => hour.temperature)} />
       </div>
-      <div className={styles.airGraph}>hei</div>
+      <div className={styles.airGraph}>
+        <AirGauge airQuality={27} />
+      </div>
       <div className={styles.controlButtons}>
         <IconButton onClick={onClickLeftArrow} classes={{ root: classes.iconButtonRoot }}>
           <WithSvg component={BackSvg} size={15} />
@@ -100,8 +113,9 @@ MapWeatherInfo.propTypes = {
   onClickDelete: PropTypes.func.isRequired,
   city: PropTypes.string.isRequired,
   country: PropTypes.string.isRequired,
-  hourly: PropTypes.arrayOf(PropTypes.any).isRequired,
   day: PropTypes.objectOf(PropTypes.any).isRequired,
+  dailyHourly: PropTypes.arrayOf(PropTypes.any).isRequired,
+  width: PropTypes.string.isRequired,
 };
 
-export default MapWeatherInfo;
+export default withWidth()(MapWeatherInfo);
