@@ -43,7 +43,7 @@ const MapWeatherInfo = props => {
       </div>
       <div className={styles.graphTemp}>
         <div className={styles.temperature}>
-          <WithSvg size={64} className={styles.temperatureIcon} component={`svgs/TypeOfWeather/${day.icon}.svg`} />
+          <WithSvg size={70} className={styles.temperatureIcon} component={`svgs/TypeOfWeather/${day.icon}.svg`} />
           <Typography variant="h3">{Math.round(day.temperatureHigh)}°C</Typography>
         </div>
       </div>

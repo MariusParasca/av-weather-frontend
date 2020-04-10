@@ -86,15 +86,6 @@ const customMapType = (controlDiv, map) => {
 const Map = props => {
   const { history } = props;
 
-  const mapOptions = {
-    styles: mapStyles,
-    mapTypeId: window.google.maps.MapTypeId.SATELLITE,
-    mapTypeControl: false,
-    zoomControl: false,
-    streetViewControl: false,
-    fullscreenControl: false,
-  };
-
   const favorites = useSelector(state => state.favorites);
   const currentLocation = useSelector(state => state.data.ipStack);
   const weatherMap = useSelector(state => state.weatherMap);
@@ -180,7 +171,7 @@ const Map = props => {
           const marker = new window.google.maps.Marker({
             position: bound,
             map,
-            label: `${Math.round(weatherMap.daily[i][sliderIndex].temperatureHigh)}°`,
+            label: { text: `${Math.round(weatherMap.daily[i][sliderIndex].temperatureHigh)}°`, color: 'white' },
           });
           marker.addListener('click', () => {
             map.setCenter({ lat: favorite.latitude, lng: favorite.longitude });
@@ -226,7 +217,14 @@ const Map = props => {
   }, [favoriteIndex, sliderIndex, weatherMap]);
 
   useEffect(() => {
-    const map = new window.google.maps.Map(document.getElementById('google-map'), mapOptions);
+    const map = new window.google.maps.Map(document.getElementById('google-map'), {
+      styles: mapStyles,
+      mapTypeId: window.google.maps.MapTypeId.SATELLITE,
+      mapTypeControl: false,
+      zoomControl: false,
+      streetViewControl: false,
+      fullscreenControl: false,
+    });
 
     const zoomControlDiv = document.createElement('div');
     customZoomControl(zoomControlDiv, map);
