@@ -14,10 +14,12 @@
   background-size: 32px 64px;
   background-image: url('../../svgs/cdIconController.svg');
 }
+
 #cd-zoom-in:hover,
 #cd-zoom-out:hover,
 #cd-map:hover,
-#cd-satellite:hover {
+#cd-satellite:hover,
+#cd-quick-access:hover {
   background-color: #212056;
 }
 
@@ -50,6 +52,17 @@
   padding: 8px 17px;
   font-size: 18px;
   cursor: pointer;
+}
+
+#cd-quick-access {
+  background-color: #131231;
+  margin-top: 10px;
+  margin-right: 10px;
+  display: inline-block;
+  padding: 8px 17px;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 8px;
 }
 
 #cd-satellite {

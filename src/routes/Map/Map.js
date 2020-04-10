@@ -49,42 +49,42 @@ const createMarks = () => {
 
 const MARKS = createMarks();
 
-const customZoomControl = (controlDiv, map) => {
-  const controlUIzoomIn = document.getElementById('cd-zoom-in');
-  const controlUIzoomOut = document.getElementById('cd-zoom-out');
-  controlDiv.appendChild(controlUIzoomIn);
-  controlDiv.appendChild(controlUIzoomOut);
-
-  window.google.maps.event.addDomListener(controlUIzoomIn, 'click', () => {
-    map.setZoom(map.getZoom() + 1);
-  });
-  window.google.maps.event.addDomListener(controlUIzoomOut, 'click', () => {
-    map.setZoom(map.getZoom() - 1);
-  });
-};
-
-const customMapType = (controlDiv, map) => {
-  const mapType = document.getElementById('cd-map');
-  const satelliteType = document.getElementById('cd-satellite');
-
-  controlDiv.appendChild(mapType);
-  controlDiv.appendChild(satelliteType);
-
-  window.google.maps.event.addDomListener(mapType, 'click', () => {
-    map.setMapTypeId(window.google.maps.MapTypeId.ROADMAP);
-    mapType.style.background = '#212056';
-    satelliteType.style.background = '#131231';
-  });
-
-  window.google.maps.event.addDomListener(satelliteType, 'click', () => {
-    map.setMapTypeId(window.google.maps.MapTypeId.SATELLITE);
-    satelliteType.style.background = '#212056';
-    mapType.style.background = '#131231';
-  });
-};
-
 const Map = props => {
   const { history } = props;
+
+  const customZoomControl = (controlDiv, map) => {
+    const controlUIzoomIn = document.getElementById('cd-zoom-in');
+    const controlUIzoomOut = document.getElementById('cd-zoom-out');
+    controlDiv.appendChild(controlUIzoomIn);
+    controlDiv.appendChild(controlUIzoomOut);
+
+    window.google.maps.event.addDomListener(controlUIzoomIn, 'click', () => {
+      map.setZoom(map.getZoom() + 1);
+    });
+    window.google.maps.event.addDomListener(controlUIzoomOut, 'click', () => {
+      map.setZoom(map.getZoom() - 1);
+    });
+  };
+
+  const customMapType = (controlDiv, map) => {
+    const mapType = document.getElementById('cd-map');
+    const satelliteType = document.getElementById('cd-satellite');
+
+    controlDiv.appendChild(mapType);
+    controlDiv.appendChild(satelliteType);
+
+    window.google.maps.event.addDomListener(mapType, 'click', () => {
+      map.setMapTypeId(window.google.maps.MapTypeId.ROADMAP);
+      mapType.style.background = '#212056';
+      satelliteType.style.background = '#131231';
+    });
+
+    window.google.maps.event.addDomListener(satelliteType, 'click', () => {
+      map.setMapTypeId(window.google.maps.MapTypeId.SATELLITE);
+      satelliteType.style.background = '#212056';
+      mapType.style.background = '#131231';
+    });
+  };
 
   const favorites = useSelector(state => state.favorites);
   const currentLocation = useSelector(state => state.data.ipStack);
@@ -100,6 +100,16 @@ const Map = props => {
   const [mapType, setMapType] = useState(CLOUD_COVER_MAP_TYPE);
 
   const dispatch = useDispatch();
+
+  const quickZoomControl = (controlDiv, map) => {
+    const quickZoomUI = document.getElementById('cd-quick-access');
+
+    controlDiv.appendChild(quickZoomUI);
+
+    window.google.maps.event.addDomListener(quickZoomUI, 'click', () => {
+      map.setZoom(map.getZoom() + 1);
+    });
+  };
 
   const nextCity = useCallback(() => {
     if (favoriteIndex === dataLocally.length - 1) {
@@ -154,10 +164,8 @@ const Map = props => {
 
   const setFavoritesMarkers = useCallback(
     async (map, oldMarkers = []) => {
-      console.log('oldMarkers', oldMarkers);
       if (dataLocally.length > 0 && weatherMap.daily.length > 0) {
         const bounds = new window.google.maps.LatLngBounds();
-        console.log('in if');
         const markersAux = [];
 
         for (let i = 0; i < dataLocally.length; i += 1) {
@@ -217,30 +225,33 @@ const Map = props => {
   }, [favoriteIndex, sliderIndex, weatherMap]);
 
   useEffect(() => {
-    const map = new window.google.maps.Map(document.getElementById('google-map'), {
-      styles: mapStyles,
-      mapTypeId: window.google.maps.MapTypeId.SATELLITE,
-      mapTypeControl: false,
-      zoomControl: false,
-      streetViewControl: false,
-      fullscreenControl: false,
-    });
+    if (!currentMap && dataLocally.length > 0 && weatherMap.daily.length > 0) {
+      const map = new window.google.maps.Map(document.getElementById('google-map'), {
+        styles: mapStyles,
+        mapTypeId: window.google.maps.MapTypeId.SATELLITE,
+        mapTypeControl: false,
+        zoomControl: false,
+        streetViewControl: false,
+        fullscreenControl: false,
+      });
 
-    const zoomControlDiv = document.createElement('div');
-    customZoomControl(zoomControlDiv, map);
+      const zoomControlDiv = document.createElement('div');
+      customZoomControl(zoomControlDiv, map);
 
-    const customMapTypeDiv = document.createElement('div');
-    customMapType(customMapTypeDiv, map);
+      const customMapTypeDiv = document.createElement('div');
+      customMapType(customMapTypeDiv, map);
 
-    map.controls[window.google.maps.ControlPosition.RIGHT_BOTTOM].push(zoomControlDiv);
-    map.controls[window.google.maps.ControlPosition.LEFT_TOP].push(customMapTypeDiv);
+      const quickZoomDiv = document.createElement('div');
+      quickZoomControl(quickZoomDiv, map);
 
-    setCurrentMap(map);
-  }, []);
+      map.controls[window.google.maps.ControlPosition.RIGHT_BOTTOM].push(zoomControlDiv);
+      map.controls[window.google.maps.ControlPosition.LEFT_TOP].push(customMapTypeDiv);
+      map.controls[window.google.maps.ControlPosition.RIGHT_TOP].push(quickZoomDiv);
 
-  useEffect(() => {
-    if (currentMap) setFavoritesMarkers(currentMap);
-  }, [currentMap, setFavoritesMarkers]);
+      setFavoritesMarkers(map);
+      setCurrentMap(map);
+    }
+  }, [currentMap, dataLocally.length, setFavoritesMarkers, weatherMap.daily.length]);
 
   useEffect(() => {
     const path = history.location.pathname;
@@ -295,6 +306,7 @@ const Map = props => {
         <div id="cd-satellite">Satellite</div>
         <div id="cd-zoom-in" />
         <div id="cd-zoom-out" />
+        <div id="cd-quick-access">quick zoom</div>
       </div>
       <div id="google-map" className={styles.mapContainer} />
       <div className={styles.menuButton}>
