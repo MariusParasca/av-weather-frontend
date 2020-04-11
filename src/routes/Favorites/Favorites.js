@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { DELETE_FAVORITE_LOCALLY_SEND } from 'store/actionTypes/favoritesActionTypes';
 
-import { WEATHER_MAP_API_SEND } from 'store/actionTypes/weatherMapActionTypes';
+import { WEATHER_MAP_API_SEND, WEATHER_MAP_DELETE_BY_INDEX } from 'store/actionTypes/weatherMapActionTypes';
 import FavoriteCity from 'components/FavoriteCity/FavoriteCity';
 import Spinner from 'components/Spinner/Spinner';
 import { getMinArray, getMaxArray } from 'utils/helperFunctions';
@@ -39,7 +39,10 @@ const Favorites = () => {
       country={favorite.country}
       currently={weatherMap.currently[index]}
       daily={weatherMap.daily[index]}
-      onClickIcon={() => dispatch({ type: DELETE_FAVORITE_LOCALLY_SEND, id: favorite.id })}
+      onClickIcon={() => {
+        dispatch({ type: WEATHER_MAP_DELETE_BY_INDEX, index });
+        dispatch({ type: DELETE_FAVORITE_LOCALLY_SEND, id: favorite.id });
+      }}
     />
   );
 

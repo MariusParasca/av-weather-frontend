@@ -146,6 +146,7 @@ const Map = props => {
         const markerForMap = new window.google.maps.Marker({
           position: bound,
           map: currentMap,
+          label: { text: `${Math.round(weatherMap.daily[i][sliderIndex].temperatureHigh)}°`, color: 'white' },
         });
 
         markerForMap.addListener('click', () => {
@@ -160,7 +161,7 @@ const Map = props => {
       currentMap.fitBounds(bounds);
       setMarkers(markersForMap);
     }
-  }, [currentLocation.city, currentMap, dataLocally, dispatch, favoriteIndex, markers]);
+  }, [currentLocation.city, currentMap, dataLocally, dispatch, favoriteIndex, markers, sliderIndex, weatherMap.daily]);
 
   const setFavoritesMarkers = useCallback(
     async (map, oldMarkers = []) => {
