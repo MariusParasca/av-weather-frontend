@@ -1,56 +1,49 @@
-import React, { useEffect } from 'react';
-import { Typography } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import {
-  FETCH_FAVORITES_SEND,
-  DELETE_FAVORITE_LOCALLY_SEND,
-  DELETE_FAVORITE_SEND,
-} from 'store/actionTypes/favoritesActionTypes';
+import { DELETE_FAVORITE_LOCALLY_SEND } from 'store/actionTypes/favoritesActionTypes';
+
+import { WEATHER_MAP_API_SEND } from 'store/actionTypes/weatherMapActionTypes';
 import FavoriteCity from 'components/FavoriteCity/FavoriteCity';
 import Spinner from 'components/Spinner/Spinner';
+import { getMinArray, getMaxArray } from 'utils/helperFunctions';
 import styles from './Favorites.module.css';
 
 const Favorites = () => {
+  const weatherMap = useSelector(state => state.weatherMap);
   const favorites = useSelector(state => state.favorites);
-  const isLoggedIn = useSelector(state => state.authData.isLoggedIn);
-  const { data, dataLocally, pending } = favorites;
+
+  const [pending, setPending] = useState(true);
+
+  const { dataLocally } = favorites;
 
   const dispatch = useDispatch();
 
-  const mapFunction = favorite => (
+  useEffect(() => {
+    if (weatherMap.daily.length === 0 && weatherMap.hourly.length === 0) {
+      setPending(true);
+      dispatch({
+        type: WEATHER_MAP_API_SEND,
+      });
+    } else {
+      setPending(false);
+    }
+  }, [dispatch, weatherMap.daily.length, weatherMap.hourly.length]);
+
+  const mapFunction = (favorite, index) => (
     <FavoriteCity
+      minTemp={getMinArray(weatherMap.hourly[index][0], el => el.temperature)}
+      maxTemp={getMaxArray(weatherMap.hourly[index][0], el => el.temperature)}
       key={favorite.city}
-      utcOffset={favorite.utcOffset}
       city={favorite.city}
       country={favorite.country}
-      latitude={favorite.latitude}
-      longitude={favorite.longitude}
-      onClickIcon={
-        isLoggedIn
-          ? () => dispatch({ type: DELETE_FAVORITE_SEND, id: favorite.id })
-          : () => dispatch({ type: DELETE_FAVORITE_LOCALLY_SEND, id: favorite.id })
-      }
+      currently={weatherMap.currently[index]}
+      daily={weatherMap.daily[index]}
+      onClickIcon={() => dispatch({ type: DELETE_FAVORITE_LOCALLY_SEND, id: favorite.id })}
     />
   );
 
-  useEffect(() => {
-    if (isLoggedIn) dispatch({ type: FETCH_FAVORITES_SEND });
-  }, [dispatch, isLoggedIn]);
-
-  return (
-    <div className={styles.container}>
-      {!isLoggedIn && dataLocally.map(mapFunction)}
-      {pending && isLoggedIn ? (
-        <Spinner />
-      ) : (
-        <>
-          {data.map(mapFunction)}
-          {data.length === 0 && dataLocally.length === 0 && <Typography variant="h2">No favorite places</Typography>}
-        </>
-      )}
-    </div>
-  );
+  return pending ? <Spinner /> : <div className={styles.container}>{dataLocally.map(mapFunction)}</div>;
 };
 
 export default Favorites;

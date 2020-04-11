@@ -15,7 +15,7 @@ async function makeWeatherRequest(favorites) {
         darkSkyAxios.get(`/${favorite.latitude},${favorite.longitude}`, {
           params: {
             units: 'si',
-            exclude: '[minutely, alerts, flags, currently]',
+            exclude: '[minutely, alerts, flags]',
             extend: 'hourly',
           },
         }),

@@ -9,6 +9,7 @@ import { createDateFromEpoch } from 'utils/dateTimeUtils';
 const initialState = {
   daily: [],
   hourly: [],
+  currently: [],
   error: null,
   pending: false,
 };
@@ -65,6 +66,17 @@ const createDaily = dataArray => {
   return daily;
 };
 
+const createCurrently = dataArray => {
+  const currently = [];
+
+  for (let i = 0; i < dataArray.length; i += 1) {
+    const dataElement = dataArray[i];
+    currently.push(dataElement.data.currently);
+  }
+
+  return currently;
+};
+
 const reducer = (state = initialState, action) => {
   const newState = { ...state };
 
@@ -75,6 +87,7 @@ const reducer = (state = initialState, action) => {
     case WEATHER_MAP_SET_DATA:
       newState.daily = createDaily(action.data);
       newState.hourly = createHourly(action.data);
+      newState.currently = createCurrently(action.data);
       newState.pending = false;
       break;
     case WEATHER_MAP_API_FAILED:
@@ -84,6 +97,7 @@ const reducer = (state = initialState, action) => {
     case WEATHER_MAP_DELETE_BY_INDEX:
       newState.daily.splice(action.index, 1);
       newState.hourly.splice(action.index, 1);
+      newState.currently.splice(action.index, 1);
       break;
     default:
       break;

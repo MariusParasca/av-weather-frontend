@@ -1,10 +1,7 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles, Typography, Button, IconButton } from '@material-ui/core';
+import { makeStyles, Typography, IconButton } from '@material-ui/core';
 
-import darkSkyAxios from 'axios/darkSky';
-import useHttp from 'hooks/useHttp';
-import { getTimeFromDate, getTimeBasedOnTimeZone } from 'utils/dateTimeUtils';
 import { ReactComponent as StarFilledSvg } from 'svgs/Favorites/star_filled.svg';
 import { ReactComponent as PrecipitationSvg } from 'svgs/WeatherInfo/precipitation.svg';
 import { ReactComponent as PressureSvg } from 'svgs/WeatherInfo/pressure.svg';
@@ -14,10 +11,13 @@ import { ReactComponent as UvIndexSvg } from 'svgs/WeatherInfo/uv_index.svg';
 import { ReactComponent as VisibilitySvg } from 'svgs/WeatherInfo/visibility.svg';
 import { ReactComponent as dewPointSvg } from 'svgs/WeatherInfo/dew_point.svg';
 import WithSvg from 'components/WithSvg/WithSvg';
-import Spinner from 'components/Spinner/Spinner';
 import exampleImage from 'images/TypeOfWeather/partly-cloudy-day.png';
 import LabeledCircularProgress from 'components/LabeledCircularProgress/LabeledCircularProgress';
+import { createDateFromEpoch } from 'utils/dateTimeUtils';
+import { WEEK_DAYS } from 'constants/constants';
+import { capitalizeFirstLetter } from 'utils/helperFunctions';
 import styles from './FavoriteCity.module.css';
+import ForecastDay from './ForecastDay/ForecastDay';
 
 const useStyles = makeStyles(() => ({
   starButtonRoot: {
@@ -30,78 +30,52 @@ const useStyles = makeStyles(() => ({
     marginLeft: '2%',
   },
   typoWeatherInfo: {
-    color: '#353666',
+    color: '#44448a',
     fontSize: '1.8vh',
+  },
+  typoLabel: {
+    fontSize: '14px',
+    color: '#44448a',
   },
 }));
 
 const FavoriteCity = props => {
-  const { city, country, utcOffset, latitude, longitude, onClickIcon, isOnMap } = props;
+  const { city, country, onClickIcon, currently, daily, minTemp, maxTemp } = props;
 
   const classes = useStyles();
 
-  const darkSkyHttp = useHttp();
-  const { sendRequest: sendRequestDarkSky } = darkSkyHttp;
-
-  const [time, setTime] = useState('00:00');
-  const [degreeValue, setDegreeValue] = useState('');
-
-  const getWeatherByDarkSky = useCallback(
-    async (currentLatitude, currentLongitude) => {
-      sendRequestDarkSky(
-        darkSkyAxios,
-        [`/${currentLatitude},${currentLongitude}`, { params: { units: 'si', exclude: '[minutely, hourly, daily]' } }],
-        'get',
-      );
-    },
-    [sendRequestDarkSky],
-  );
+  const [image, setImage] = useState('');
 
   useEffect(() => {
-    if (latitude && longitude) {
-      getWeatherByDarkSky(latitude, longitude);
-    }
-  }, [getWeatherByDarkSky, latitude, longitude]);
-
-  useEffect(() => {
-    if (darkSkyHttp.data) {
-      setDegreeValue(Math.round(darkSkyHttp.data.currently.temperature));
-    }
-  }, [darkSkyHttp.data]);
-
-  const startClock = useCallback(() => {
-    const date = getTimeBasedOnTimeZone(utcOffset);
-    if (date) {
-      setTime(getTimeFromDate(date));
-    }
-
-    return date.getSeconds();
-  }, [utcOffset]);
-
-  useEffect(() => {
-    const seconds = startClock();
-    const firstClockAfter = 60 - seconds;
-    const interval = setTimeout(startClock, firstClockAfter * 1000);
-
-    return () => {
-      clearTimeout(interval);
+    const getImage = async image => {
+      const imageImported = await import(`../../images/TypeOfWeather/${image}.png`);
+      console.log('imageImported', imageImported);
+      setImage(imageImported);
     };
-  }, [time, startClock]);
+    if (currently && currently.icon) {
+      console.log('currently.icon', currently.icon);
+      getImage(currently.icon);
+    }
+  }, []);
 
   return (
     <div className={styles.container}>
       <div className={styles.imageContainer}>
-        <img className={styles.imageResponsive} alt="weather icon" src={exampleImage} />
+        <img className={styles.imageResponsive} alt="weather icon" src={image.default} />
       </div>
       <div className={styles.cityCountryContainer}>
-        <Typography variant="h5">Viena, Austria</Typography>
+        <Typography variant="h5">
+          {city}, {country}
+        </Typography>
         <IconButton classes={{ root: classes.iconButton }} onClick={onClickIcon}>
           <WithSvg component={StarFilledSvg} size={16} />
         </IconButton>
       </div>
-      <Typography variant="h1">11°C</Typography>
+      <Typography variant="h1">{Math.round(currently.temperature)}°C</Typography>
       <div className={styles.todayWeatherContainer}>
-        <LabeledCircularProgress circularProgressSize={64} progressValue={10} />
+        <div className={styles.circularProgressContainer}>
+          <LabeledCircularProgress circularProgressSize={64} progressValue={Math.round(currently.windSpeed)} />
+        </div>
         <div className={styles.todayWeatherSubContainer}>
           <div className={styles.todayWeatherIconsContainer}>
             <WithSvg component={PrecipitationSvg} size={20} />
@@ -111,17 +85,17 @@ const FavoriteCity = props => {
           <div className={styles.todayWeatherTextContainer}>
             <div>
               <Typography variant="subtitle2" classes={{ root: classes.typoWeatherInfo }}>
-                24%
+                {Math.round(currently.precipProbability * 100)}%
               </Typography>
             </div>
             <div>
               <Typography variant="subtitle2" classes={{ root: classes.typoWeatherInfo }}>
-                1,046.1
+                {currently.pressure}
               </Typography>
             </div>
             <div>
               <Typography variant="subtitle2" classes={{ root: classes.typoWeatherInfo }}>
-                62%
+                {Math.round(currently.humidity * 100)}%
               </Typography>
             </div>
           </div>
@@ -135,45 +109,58 @@ const FavoriteCity = props => {
           <div className={styles.todayWeatherTextContainer}>
             <div>
               <Typography variant="subtitle2" classes={{ root: classes.typoWeatherInfo }}>
-                67%
+                {Math.round(currently.cloudCover * 100)}%
               </Typography>
             </div>
             <div>
               <Typography variant="subtitle2" classes={{ root: classes.typoWeatherInfo }}>
-                0
+                {currently.uvIndex}
               </Typography>
             </div>
             <div>
               <Typography variant="subtitle2" classes={{ root: classes.typoWeatherInfo }}>
-                5km
+                {Math.round(currently.visibility)}km
               </Typography>
             </div>
           </div>
         </div>
         <div className={styles.todayWeatherSubContainer}>
           <div className={styles.todayWeatherIconsContainer}>
-            <WithSvg component={PrecipitationSvg} size={20} />
-            <WithSvg component={PressureSvg} size={20} />
+            <Typography variant="subtitle2" classes={{ root: classes.typoLabel }}>
+              Min
+            </Typography>
+            <Typography variant="subtitle2" classes={{ root: classes.typoLabel }}>
+              Max
+            </Typography>
             <WithSvg component={dewPointSvg} size={20} />
           </div>
           <div className={styles.todayWeatherTextContainer}>
             <div>
               <Typography variant="subtitle2" classes={{ root: classes.typoWeatherInfo }}>
-                4°
+                {Math.round(minTemp)}°
               </Typography>
             </div>
             <div>
               <Typography variant="subtitle2" classes={{ root: classes.typoWeatherInfo }}>
-                12°
+                {Math.round(maxTemp)}°
               </Typography>
             </div>
             <div>
               <Typography variant="subtitle2" classes={{ root: classes.typoWeatherInfo }}>
-                -2°
+                {currently.dewPoint}°
               </Typography>
             </div>
           </div>
         </div>
+      </div>
+      <div className={styles.forecastContainer}>
+        {daily.map((day, index) => (
+          <ForecastDay
+            temperature={day.temperatureHigh}
+            icon={day.icon}
+            dayName={index === 0 ? 'Today' : capitalizeFirstLetter(WEEK_DAYS[createDateFromEpoch(day.time).getDay()])}
+          />
+        ))}
       </div>
     </div>
   );
@@ -183,16 +170,14 @@ FavoriteCity.propTypes = {
   city: PropTypes.string.isRequired,
   country: PropTypes.string.isRequired,
   onClickIcon: PropTypes.func,
-  utcOffset: PropTypes.number,
-  latitude: PropTypes.number.isRequired,
-  longitude: PropTypes.number.isRequired,
-  isOnMap: PropTypes.bool,
+  currently: PropTypes.arrayOf(PropTypes.any).isRequired,
+  daily: PropTypes.arrayOf(PropTypes.any).isRequired,
+  minTemp: PropTypes.number.isRequired,
+  maxTemp: PropTypes.number.isRequired,
 };
 
 FavoriteCity.defaultProps = {
-  utcOffset: undefined,
   onClickIcon: undefined,
-  isOnMap: false,
 };
 
 export default FavoriteCity;
