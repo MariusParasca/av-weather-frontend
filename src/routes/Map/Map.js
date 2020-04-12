@@ -211,10 +211,12 @@ const Map = props => {
   }, [currentLocation, dataLocally, favoriteIndex]);
 
   useEffect(() => {
-    dispatch({
-      type: WEATHER_MAP_API_SEND,
-    });
-  }, [dispatch]);
+    if (weatherMap.daily.length === 0 && weatherMap.hourly.length === 0) {
+      dispatch({
+        type: WEATHER_MAP_API_SEND,
+      });
+    }
+  }, [dispatch, weatherMap.daily.length, weatherMap.hourly.length]);
 
   useEffect(() => {
     if (favoriteIndex !== -1 && weatherMap.daily.length > 0) {

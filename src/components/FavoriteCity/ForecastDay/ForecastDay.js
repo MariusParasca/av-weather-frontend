@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Typography, makeStyles } from '@material-ui/core';
-import exampleImage from 'images/TypeOfWeather/partly-cloudy-day.png';
 
 import styles from './ForecastDay.module.css';
 

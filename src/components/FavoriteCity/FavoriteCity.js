@@ -11,7 +11,6 @@ import { ReactComponent as UvIndexSvg } from 'svgs/WeatherInfo/uv_index.svg';
 import { ReactComponent as VisibilitySvg } from 'svgs/WeatherInfo/visibility.svg';
 import { ReactComponent as dewPointSvg } from 'svgs/WeatherInfo/dew_point.svg';
 import WithSvg from 'components/WithSvg/WithSvg';
-import exampleImage from 'images/TypeOfWeather/partly-cloudy-day.png';
 import LabeledCircularProgress from 'components/LabeledCircularProgress/LabeledCircularProgress';
 import { createDateFromEpoch } from 'utils/dateTimeUtils';
 import { WEEK_DAYS } from 'constants/constants';
@@ -49,14 +48,12 @@ const FavoriteCity = props => {
   useEffect(() => {
     const getImage = async image => {
       const imageImported = await import(`../../images/TypeOfWeather/${image}.png`);
-      console.log('imageImported', imageImported);
       setImage(imageImported);
     };
     if (currently && currently.icon) {
-      console.log('currently.icon', currently.icon);
       getImage(currently.icon);
     }
-  }, []);
+  }, [currently]);
 
   return (
     <div className={styles.container}>
@@ -156,6 +153,7 @@ const FavoriteCity = props => {
       <div className={styles.forecastContainer}>
         {daily.map((day, index) => (
           <ForecastDay
+            key={day.time}
             temperature={day.temperatureHigh}
             icon={day.icon}
             dayName={index === 0 ? 'Today' : capitalizeFirstLetter(WEEK_DAYS[createDateFromEpoch(day.time).getDay()])}
@@ -170,7 +168,7 @@ FavoriteCity.propTypes = {
   city: PropTypes.string.isRequired,
   country: PropTypes.string.isRequired,
   onClickIcon: PropTypes.func,
-  currently: PropTypes.arrayOf(PropTypes.any).isRequired,
+  currently: PropTypes.objectOf(PropTypes.any).isRequired,
   daily: PropTypes.arrayOf(PropTypes.any).isRequired,
   minTemp: PropTypes.number.isRequired,
   maxTemp: PropTypes.number.isRequired,
