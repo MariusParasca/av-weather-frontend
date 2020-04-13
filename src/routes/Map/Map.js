@@ -49,6 +49,8 @@ const createMarks = () => {
 
 const MARKS = createMarks();
 
+const quickZoom = false;
+
 const Map = props => {
   const { history } = props;
 
@@ -114,15 +116,17 @@ const Map = props => {
 
   const dispatch = useDispatch();
 
-  const quickZoomControl = (controlDiv, map) => {
-    const quickZoomUI = document.getElementById('cd-quick-access');
+  // const quickZoomControl = (controlDiv, map) => {
+  //   const quickZoomUI = document.getElementById('cd-quick-access');
 
-    controlDiv.appendChild(quickZoomUI);
+  //   controlDiv.appendChild(quickZoomUI);
 
-    window.google.maps.event.addDomListener(quickZoomUI, 'click', () => {
-      map.setZoom(map.getZoom() + 1);
-    });
-  };
+  //   window.google.maps.event.addDomListener(quickZoomUI, 'click', () => {
+  //     if (quickZoom) map.setZoom(map.getZoom() + 1);
+  //     else map.setZoom(map.getZoom() + 1);
+  //     quickZoom = !quickZoom;
+  //   });
+  // };
 
   const nextCity = useCallback(() => {
     if (favoriteIndex === dataLocally.length - 1) {
@@ -257,12 +261,12 @@ const Map = props => {
       const customMapTypeDiv = document.createElement('div');
       customMapType(customMapTypeDiv, map);
 
-      const quickZoomDiv = document.createElement('div');
-      quickZoomControl(quickZoomDiv, map);
+      // const quickZoomDiv = document.createElement('div');
+      // quickZoomControl(quickZoomDiv, map);
 
       map.controls[window.google.maps.ControlPosition.RIGHT_BOTTOM].push(zoomControlDiv);
       map.controls[window.google.maps.ControlPosition.LEFT_TOP].push(customMapTypeDiv);
-      map.controls[window.google.maps.ControlPosition.RIGHT_TOP].push(quickZoomDiv);
+      // map.controls[window.google.maps.ControlPosition.RIGHT_TOP].push(quickZoomDiv);
 
       setFavoritesMarkers(map, dataLocally, weatherMap.daily, sliderIndex);
       setCurrentMap(map);

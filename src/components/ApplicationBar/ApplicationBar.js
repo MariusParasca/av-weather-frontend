@@ -57,7 +57,7 @@ const ApplicationBar = () => {
           </MenuButton>
         </div>
         <div className={styles.settingsContainer}>
-          <MenuButton exact path={PageRoute.home}>
+          <MenuButton exact path={PageRoute.settings}>
             <WithSvg component={SettingsSvg} size={20} />
           </MenuButton>
         </div>

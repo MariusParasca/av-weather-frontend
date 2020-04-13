@@ -7,6 +7,7 @@ export const PageRoute = {
   account: '/account',
   register: '/register',
   login: '/login',
+  settings: '/settings',
 };
 
 export const ChartsRoute = {
