@@ -34,6 +34,7 @@ const HomeFavorite = props => {
 
   const [time, setTime] = useState('00:00');
   const [degreeValue, setDegreeValue] = useState('');
+  const [image, setImage] = useState('');
 
   const getWeatherByDarkSky = useCallback(
     async (currentLatitude, currentLongitude) => {
@@ -55,6 +56,11 @@ const HomeFavorite = props => {
   useEffect(() => {
     if (darkSkyHttp.data) {
       setDegreeValue(Math.round(darkSkyHttp.data.currently.temperature));
+      const getImage = async image => {
+        const imageImported = await import(`../../images/TypeOfWeather/${image}.png`);
+        setImage(imageImported);
+      };
+      if (darkSkyHttp.data.currently.icon) getImage(darkSkyHttp.data.currently.icon);
     }
   }, [darkSkyHttp.data]);
 
@@ -103,7 +109,7 @@ const HomeFavorite = props => {
           {degreeValue}°
         </Typography>
         <div className={styles.imageContainer}>
-          <img className={styles.imageResponsive} alt="weather icon" src={rain} />
+          {image && <img className={styles.imageResponsive} alt="weather icon" src={image.default} />}
         </div>
       </div>
     </div>
