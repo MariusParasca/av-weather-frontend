@@ -155,7 +155,7 @@ const Home = props => {
     for (let i = indexFirstDay; i < weatherHourly.length - 1; i += 1) {
       const dataElement = weatherHourly[i];
       if (counter === 24) {
-        newWeekDaysHighLight[index] = true;
+        if (index < 3) newWeekDaysHighLight[index] = true;
         index += 1;
         counter = 1;
         // label = WEEK_DAYS[createDateFromEpoch(dataElement.time).getDay()];
@@ -174,17 +174,17 @@ const Home = props => {
         createBarChartWithGradient(Math.round(dataElement.apparentTemperature), data.minFeelLike, data.maxFeelLike),
       );
     }
-    newWeekDaysHighLight[index] = true;
+    // newWeekDaysHighLight[index] = true;
     xLabelArray.push(data.xLabelCurrent);
     actualTempArray.push(data.actualTempCurrent);
     feelsLikeArray.push(data.feelsLikeCurrent);
 
-    setSliderValue([0, (index + 1) * 2]);
+    setSliderValue([0, 6]); // 6 -> means 3 days the step is by 2
     setWeekDaysHighLight(newWeekDaysHighLight);
 
-    setXLabel(flatten(xLabelArray));
-    setActualTemp(flatten(actualTempArray));
-    setFeelsLike(flatten(feelsLikeArray));
+    setXLabel(flatten(xLabelArray.slice(0, 3)));
+    setActualTemp(flatten(actualTempArray.slice(0, 3)));
+    setFeelsLike(flatten(feelsLikeArray.slice(0, 3)));
 
     setXLabelArr(xLabelArray);
     setActualTempArr(actualTempArray);
