@@ -20,7 +20,11 @@ const Favorites = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (weatherMap.daily.length === 0 && weatherMap.hourly.length === 0) {
+    if (
+      weatherMap.daily.length === 0 ||
+      weatherMap.hourly.length === 0 ||
+      weatherMap.daily.length !== dataLocally.length
+    ) {
       setPending(true);
       dispatch({
         type: WEATHER_MAP_API_SEND,
@@ -28,7 +32,7 @@ const Favorites = () => {
     } else {
       setPending(false);
     }
-  }, [dispatch, weatherMap.daily.length, weatherMap.hourly.length]);
+  }, [dataLocally.length, dispatch, weatherMap.daily.length, weatherMap.hourly.length]);
 
   const mapFunction = (favorite, index) => (
     <FavoriteCity

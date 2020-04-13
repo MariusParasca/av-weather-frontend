@@ -76,3 +76,9 @@
   justify-content: center;
   align-items: center;
 }
+
+@media (max-width: 1280px) {
+  .subWeatherInfo {
+    max-height: 55px;
+  }
+}

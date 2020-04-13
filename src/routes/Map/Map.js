@@ -52,7 +52,7 @@ const MARKS = createMarks();
 const Map = props => {
   const { history } = props;
 
-  const customZoomControl = (controlDiv, map) => {
+  const customZoomControl = useCallback((controlDiv, map) => {
     const controlUIzoomIn = document.getElementById('cd-zoom-in');
     const controlUIzoomOut = document.getElementById('cd-zoom-out');
     controlDiv.appendChild(controlUIzoomIn);
@@ -64,9 +64,9 @@ const Map = props => {
     window.google.maps.event.addDomListener(controlUIzoomOut, 'click', () => {
       map.setZoom(map.getZoom() - 1);
     });
-  };
+  }, []);
 
-  const customMapType = (controlDiv, map) => {
+  const customMapType = useCallback((controlDiv, map) => {
     const mapType = document.getElementById('cd-map');
     const satelliteType = document.getElementById('cd-satellite');
 
@@ -84,7 +84,7 @@ const Map = props => {
       satelliteType.style.background = '#212056';
       mapType.style.background = '#131231';
     });
-  };
+  }, []);
 
   const getIconMap = useCallback(
     () => ({
@@ -140,61 +140,14 @@ const Map = props => {
     }
   }, [dataLocally.length, favoriteIndex]);
 
-  const deleteCity = useCallback(() => {
-    if (dataLocally[favoriteIndex].city !== currentLocation.city) {
-      markers[favoriteIndex].setMap(null);
-      dispatch({ type: WEATHER_MAP_DELETE_BY_INDEX, index: favoriteIndex });
-      dispatch({ type: DELETE_FAVORITE_LOCALLY_SEND, index: favoriteIndex });
-
-      const newMarkers = [...markers];
-      newMarkers.splice(favoriteIndex, 1);
-
-      const bounds = new window.google.maps.LatLngBounds();
-
-      const markersForMap = [];
-      for (let i = 0; i < newMarkers.length; i += 1) {
-        const newMarker = newMarkers[i];
-        newMarker.setMap(null);
-        const bound = new window.google.maps.LatLng(newMarker.getPosition().lat(), newMarker.getPosition().lng());
-        const markerForMap = new window.google.maps.Marker({
-          position: bound,
-          map: currentMap,
-          icon: getIconMap(),
-          label: { text: `${Math.round(weatherMap.daily[i][sliderIndex].temperatureHigh)}°`, color: 'white' },
-        });
-
-        markerForMap.addListener('click', () => {
-          currentMap.setCenter({ lat: newMarker.getPosition().lat(), lng: newMarker.getPosition().lng() });
-          setFavoriteIndex(i);
-        });
-        markerForMap.setMap(currentMap);
-        markersForMap.push(markerForMap);
-        bounds.extend(bound);
-      }
-
-      currentMap.fitBounds(bounds);
-      setMarkers(markersForMap);
-    }
-  }, [
-    currentLocation.city,
-    currentMap,
-    dataLocally,
-    dispatch,
-    favoriteIndex,
-    getIconMap,
-    markers,
-    sliderIndex,
-    weatherMap.daily,
-  ]);
-
   const setFavoritesMarkers = useCallback(
-    async (map, oldMarkers = []) => {
-      if (dataLocally.length > 0 && weatherMap.daily.length > 0) {
+    async (map, favoritesData, dailyWeather, sliderIndexParam, oldMarkers = []) => {
+      if (favoritesData.length > 0 && dailyWeather.length > 0) {
         const bounds = new window.google.maps.LatLngBounds();
         const markersAux = [];
 
-        for (let i = 0; i < dataLocally.length; i += 1) {
-          const favorite = dataLocally[i];
+        for (let i = 0; i < (oldMarkers.length > 0 ? oldMarkers.length : favoritesData.length); i += 1) {
+          const favorite = favoritesData[i];
 
           if (oldMarkers.length > 0) {
             oldMarkers[i].setMap(null);
@@ -206,7 +159,7 @@ const Map = props => {
             map,
             icon: getIconMap(),
             label: {
-              text: `${Math.round(weatherMap.daily[i][sliderIndex].temperatureHigh)}°`,
+              text: `${Math.round(dailyWeather[i][sliderIndexParam].temperatureHigh)}°`,
               color: 'white',
             },
           });
@@ -222,15 +175,38 @@ const Map = props => {
         setMarkers(markersAux);
       }
     },
-    [dataLocally, getIconMap, sliderIndex, weatherMap.daily],
+    [getIconMap],
   );
+
+  const deleteCity = useCallback(() => {
+    if (dataLocally[favoriteIndex].city !== currentLocation.city) {
+      markers[favoriteIndex].setMap(null);
+      dispatch({ type: WEATHER_MAP_DELETE_BY_INDEX, index: favoriteIndex });
+      dispatch({ type: DELETE_FAVORITE_LOCALLY_SEND, index: favoriteIndex });
+
+      const newMarkers = [...markers];
+      newMarkers.splice(favoriteIndex, 1);
+
+      setFavoritesMarkers(currentMap, dataLocally, weatherMap.daily, sliderIndex, newMarkers);
+    }
+  }, [
+    currentLocation.city,
+    currentMap,
+    dataLocally,
+    dispatch,
+    favoriteIndex,
+    markers,
+    setFavoritesMarkers,
+    sliderIndex,
+    weatherMap.daily,
+  ]);
 
   const onChangeSlider = useCallback(
     (event, newValue) => {
-      setFavoritesMarkers(currentMap, markers);
+      setFavoritesMarkers(currentMap, dataLocally, weatherMap.daily, sliderIndex, markers);
       setSliderIndex(newValue);
     },
-    [currentMap, markers, setFavoritesMarkers],
+    [currentMap, dataLocally, markers, setFavoritesMarkers, sliderIndex, weatherMap.daily],
   );
 
   useEffect(() => {
@@ -239,12 +215,16 @@ const Map = props => {
   }, [currentLocation, dataLocally, favoriteIndex]);
 
   useEffect(() => {
-    if (weatherMap.daily.length === 0 && weatherMap.hourly.length === 0) {
+    if (
+      weatherMap.daily.length === 0 ||
+      weatherMap.hourly.length === 0 ||
+      weatherMap.daily.length !== dataLocally.length
+    ) {
       dispatch({
         type: WEATHER_MAP_API_SEND,
       });
     }
-  }, [dispatch, weatherMap.daily.length, weatherMap.hourly.length]);
+  }, [dataLocally.length, dispatch, weatherMap.daily.length, weatherMap.hourly.length]);
 
   useEffect(() => {
     if (favoriteIndex !== -1 && weatherMap.daily.length > 0) {
@@ -253,10 +233,15 @@ const Map = props => {
         hourly: weatherMap.hourly[favoriteIndex][sliderIndex],
       });
     }
-  }, [favoriteIndex, sliderIndex, weatherMap]);
+  }, [dataLocally.length, favoriteIndex, sliderIndex, weatherMap]);
 
   useEffect(() => {
-    if (!currentMap && dataLocally.length > 0 && weatherMap.daily.length > 0) {
+    if (
+      !currentMap &&
+      dataLocally.length > 0 &&
+      weatherMap.daily.length > 0 &&
+      weatherMap.daily.length === dataLocally.length
+    ) {
       const map = new window.google.maps.Map(document.getElementById('google-map'), {
         styles: mapStyles,
         mapTypeId: window.google.maps.MapTypeId.SATELLITE,
@@ -279,10 +264,21 @@ const Map = props => {
       map.controls[window.google.maps.ControlPosition.LEFT_TOP].push(customMapTypeDiv);
       map.controls[window.google.maps.ControlPosition.RIGHT_TOP].push(quickZoomDiv);
 
-      setFavoritesMarkers(map);
+      setFavoritesMarkers(map, dataLocally, weatherMap.daily, sliderIndex);
       setCurrentMap(map);
     }
-  }, [currentMap, dataLocally.length, setFavoritesMarkers, weatherMap.daily.length]);
+  }, [
+    currentMap,
+    customMapType,
+    customZoomControl,
+    dataLocally,
+    dataLocally.length,
+    setFavoritesMarkers,
+    sliderIndex,
+    weatherMap.daily,
+    weatherMap.daily.length,
+    weatherMap.pending,
+  ]);
 
   useEffect(() => {
     const path = history.location.pathname;

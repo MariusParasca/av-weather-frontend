@@ -50,35 +50,35 @@ const MapWeatherInfo = props => {
       <div className={styles.weatherInfo}>
         <div className={styles.subWeatherInfo}>
           <CircularProgress
-            size={width === 'md' ? 45 : 65}
+            size={width === 'md' ? 55 : 65}
             strokeWidth={width === 'md' ? 5 : 9}
             percent={day.windSpeed}
           >
             <WithSvg size={width === 'md' ? 12 : 16} component={WindSvg} />
           </CircularProgress>
           <CircularProgress
-            size={width === 'md' ? 45 : 65}
+            size={width === 'md' ? 55 : 65}
             strokeWidth={width === 'md' ? 5 : 9}
             percent={(day.uvIndex / MAX_UV) * 100}
           >
             <WithSvg size={width === 'md' ? 12 : 16} component={uvIndexSvg} />
           </CircularProgress>
           <CircularProgress
-            size={width === 'md' ? 45 : 65}
+            size={width === 'md' ? 55 : 65}
             strokeWidth={width === 'md' ? 5 : 9}
             percent={day.cloudCover * 100}
           >
             <WithSvg size={width === 'md' ? 12 : 16} component={cloudCoverSvg} />
           </CircularProgress>
           <CircularProgress
-            size={width === 'md' ? 45 : 65}
+            size={width === 'md' ? 55 : 65}
             strokeWidth={width === 'md' ? 5 : 9}
             percent={(day.visibility / MAX_VISIBILITY) * 100}
           >
             <WithSvg size={width === 'md' ? 12 : 16} component={eyeSvg} />
           </CircularProgress>
           <CircularProgress
-            size={width === 'md' ? 45 : 65}
+            size={width === 'md' ? 55 : 65}
             strokeWidth={width === 'md' ? 5 : 9}
             percent={(day.pressure / MAX_PRESSURE) * 100}
           >
