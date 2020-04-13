@@ -86,6 +86,19 @@ const Map = props => {
     });
   };
 
+  const getIconMap = useCallback(
+    () => ({
+      path: 'M0-48c-9.8 0-17.7 7.8-17.7 17.4 0 15.5 17.7 30.6 17.7 30.6s17.7-15.4 17.7-30.6c0-9.6-7.9-17.4-17.7-17.4z',
+      fillColor: '#131231',
+      fillOpacity: 1,
+      anchor: new window.google.maps.Point(0, 0),
+      strokeWeight: 0,
+      scale: 1,
+      labelOrigin: new window.google.maps.Point(0, -28),
+    }),
+    [],
+  );
+
   const favorites = useSelector(state => state.favorites);
   const currentLocation = useSelector(state => state.data.ipStack);
   const weatherMap = useSelector(state => state.weatherMap);
@@ -146,6 +159,7 @@ const Map = props => {
         const markerForMap = new window.google.maps.Marker({
           position: bound,
           map: currentMap,
+          icon: getIconMap(),
           label: { text: `${Math.round(weatherMap.daily[i][sliderIndex].temperatureHigh)}°`, color: 'white' },
         });
 
@@ -161,7 +175,17 @@ const Map = props => {
       currentMap.fitBounds(bounds);
       setMarkers(markersForMap);
     }
-  }, [currentLocation.city, currentMap, dataLocally, dispatch, favoriteIndex, markers, sliderIndex, weatherMap.daily]);
+  }, [
+    currentLocation.city,
+    currentMap,
+    dataLocally,
+    dispatch,
+    favoriteIndex,
+    getIconMap,
+    markers,
+    sliderIndex,
+    weatherMap.daily,
+  ]);
 
   const setFavoritesMarkers = useCallback(
     async (map, oldMarkers = []) => {
@@ -180,7 +204,11 @@ const Map = props => {
           const marker = new window.google.maps.Marker({
             position: bound,
             map,
-            label: { text: `${Math.round(weatherMap.daily[i][sliderIndex].temperatureHigh)}°`, color: 'white' },
+            icon: getIconMap(),
+            label: {
+              text: `${Math.round(weatherMap.daily[i][sliderIndex].temperatureHigh)}°`,
+              color: 'white',
+            },
           });
           marker.addListener('click', () => {
             map.setCenter({ lat: favorite.latitude, lng: favorite.longitude });
@@ -194,7 +222,7 @@ const Map = props => {
         setMarkers(markersAux);
       }
     },
-    [dataLocally, sliderIndex, weatherMap.daily],
+    [dataLocally, getIconMap, sliderIndex, weatherMap.daily],
   );
 
   const onChangeSlider = useCallback(
