@@ -49,8 +49,6 @@ const createMarks = () => {
 
 const MARKS = createMarks();
 
-const quickZoom = false;
-
 const Map = props => {
   const { history } = props;
 
