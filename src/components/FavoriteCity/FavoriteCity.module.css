@@ -48,6 +48,8 @@
 .todayWeatherTextContainer {
   margin-left: 10px;
   width: 70px;
+  display: flex;
+  flex-direction: column;
 }
 
 .todayWeatherTextContainer div {

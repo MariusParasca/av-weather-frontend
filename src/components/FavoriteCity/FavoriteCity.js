@@ -30,7 +30,7 @@ const useStyles = makeStyles(() => ({
   },
   typoWeatherInfo: {
     color: '#44448a',
-    fontSize: '1.8vh',
+    fontSize: '16px',
   },
   typoLabel: {
     fontSize: '14px',
