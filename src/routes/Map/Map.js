@@ -229,7 +229,7 @@ const Map = props => {
   }, [dataLocally.length, dispatch, weatherMap.daily.length, weatherMap.hourly.length]);
 
   useEffect(() => {
-    if (favoriteIndex !== -1 && weatherMap.daily.length > 0) {
+    if (favoriteIndex !== -1 && weatherMap.daily.length > 0 && weatherMap.daily.length === dataLocally.length) {
       setWeatherData({
         day: weatherMap.daily[favoriteIndex][sliderIndex],
         hourly: weatherMap.hourly[favoriteIndex][sliderIndex],
