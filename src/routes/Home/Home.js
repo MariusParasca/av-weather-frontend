@@ -202,8 +202,6 @@ const Home = props => {
     );
   }, [weatherForecast]);
 
-  console.log(findColorBetween('#302c99', '#ffffff', 25));
-
   return (
     <div className={styles.container}>
       <div className={styles.forecastContainer}>
