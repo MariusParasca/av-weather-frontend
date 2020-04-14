@@ -18,9 +18,19 @@ const getBarChartOption = (xLabels, fullBarArray, dataArray) => {
       {
         type: 'category',
         data: xLabels,
+        axisLabel: {
+          color: '#ffffff',
+        },
         axisTick: {
           alignWithLabel: true,
           show: false,
+        },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#3A3966',
+            width: 2,
+          },
         },
       },
     ],
@@ -34,7 +44,14 @@ const getBarChartOption = (xLabels, fullBarArray, dataArray) => {
           show: false,
         },
         axisLabel: {
-          show: false,
+          color: '#ffffff',
+        },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#3A3966',
+            width: 2,
+          },
         },
       },
     ],
@@ -60,7 +77,7 @@ const getBarChartOption = (xLabels, fullBarArray, dataArray) => {
           show: true,
           position: 'top',
           // color: 'red',
-          formatter: '{c} %',
+          formatter: '{c}%',
           // verticalAlign: 'top',
         },
         data: dataArray,

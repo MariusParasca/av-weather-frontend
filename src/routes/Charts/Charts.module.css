@@ -11,10 +11,10 @@
 }
 
 .chartContainer {
-  min-height: 280px;
-  padding: 20px 10px 20px 30px;
+  /* min-height: 280px; */
+  /* height: calc(50% - 20px); */
+  padding: 10px;
   background: #18163d;
   border-radius: 5px;
-  position: relative;
-  height: 50vh;
+  height: 100%;
 }

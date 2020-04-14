@@ -7,6 +7,16 @@ const getLineChartOption = (xLabels, dataArray) => {
         show: false,
       },
       data: xLabels,
+      axisLabel: {
+        color: '#ffffff',
+      },
+      axisLine: {
+        show: true,
+        lineStyle: {
+          color: '#3A3966',
+          width: 2,
+        },
+      },
     },
     grid: {
       left: '0',
@@ -23,7 +33,14 @@ const getLineChartOption = (xLabels, dataArray) => {
         show: false,
       },
       axisLabel: {
-        show: false,
+        color: '#ffffff',
+      },
+      axisLine: {
+        show: true,
+        lineStyle: {
+          color: '#3A3966',
+          width: 2,
+        },
       },
     },
     series: [

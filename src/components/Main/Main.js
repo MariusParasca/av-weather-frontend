@@ -101,7 +101,12 @@ const Main = props => {
                 </Route>
                 <Route path={PageRoute.charts}>
                   <ErrorBoundary>
-                    <Charts hourly={weatherData.hourly} daily={weatherData.daily} />
+                    <Charts
+                      hourly={weatherData.hourly}
+                      daily={weatherData.daily}
+                      currently={weatherData.currently}
+                      locationData={locationData}
+                    />
                   </ErrorBoundary>
                 </Route>
                 <Route path={PageRoute.history}>

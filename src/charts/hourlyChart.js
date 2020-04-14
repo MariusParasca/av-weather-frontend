@@ -6,8 +6,8 @@ const getHourlyChartOption = (timeline, hourly, feelsLike) => {
     },
     grid: {
       left: '0%',
-      right: '5%',
-      bottom: '1%',
+      right: '0%',
+      bottom: '0%',
       containLabel: true,
     },
     xAxis: [
@@ -19,16 +19,22 @@ const getHourlyChartOption = (timeline, hourly, feelsLike) => {
           show: false,
         },
         axisLabel: {
-          show: true,
+          color: '#ffffff',
         },
-        axisLine: { onZero: true },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#3A3966',
+            width: 2,
+          },
+          onZero: false,
+        },
         data: timeline,
       },
     ],
     yAxis: [
       {
         splitArea: { show: false },
-        name: 'Degree',
         type: 'value',
         splitLine: {
           show: false,
@@ -36,9 +42,17 @@ const getHourlyChartOption = (timeline, hourly, feelsLike) => {
         axisTick: {
           show: false,
         },
-        axisLine: { onZero: true },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#3A3966',
+            width: 2,
+          },
+          onZero: false,
+        },
         axisLabel: {
-          formatter: '{value}° C',
+          formatter: '{value}°',
+          color: '#ffffff',
         },
       },
     ],
