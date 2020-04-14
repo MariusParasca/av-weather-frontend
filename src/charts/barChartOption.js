@@ -48,14 +48,14 @@ const getBarChartOption = (xLabels, fullBarArray, dataArray) => {
         label: {
           show: false,
         },
-        barGap: '-100%',
-        barWidth: '40',
+        // barGap: '-100%',
+        // barWidth: '40',
         animation: false,
         data: fullBarArray,
       },
       {
         type: 'bar',
-        barWidth: '40',
+        // barWidth: '40',
         label: {
           show: true,
           position: 'top',

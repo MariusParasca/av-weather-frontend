@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { TextField, MenuItem, Typography } from '@material-ui/core';
+import { TextField, MenuItem, Typography, Grid } from '@material-ui/core';
 import PinDropIcon from '@material-ui/icons/PinDrop';
 import MapIcon from '@material-ui/icons/Map';
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
@@ -26,74 +26,40 @@ const Charts = props => {
   return (
     <Router>
       <div className={styles.container}>
-        <div className={styles.topContainer}>
-          <div className={styles.selectContainer}>
-            <TextField select fullWidth onChange={changeOption} value={currentOption}>
-              {CHART_OPTIONS.map((option, index) => (
-                <MenuItem key={option} value={index}>
-                  {option}
-                </MenuItem>
-              ))}
-            </TextField>
-          </div>
-          <div className={styles.chartContainer}>
-            <Switch>
-              <Route path={`${PageRoute.charts}${ChartsRoute.temperature}`}>
-                <Temperature hourly={hourly} daily={daily} option={currentOption} />
-              </Route>
-              <Route path={`${PageRoute.charts}${ChartsRoute.precipitation}`}>
-                <Precipitation hourly={hourly} daily={daily} option={currentOption} />
-              </Route>
-              <Route path={`${PageRoute.charts}${ChartsRoute.humidity}`}>
-                <Humidity hourly={hourly} daily={daily} option={currentOption} />
-              </Route>
-              <Route path={`${PageRoute.charts}${ChartsRoute.wind}`}>
-                <Wind hourly={hourly} daily={daily} option={currentOption} />
-              </Route>
-              <Route path={`${PageRoute.charts}${ChartsRoute.pressure}`}>
-                <Pressure hourly={hourly} daily={daily} option={currentOption} />
-              </Route>
-            </Switch>
-          </div>
+        <div className={styles.selectContainer}>
+          <TextField select fullWidth onChange={changeOption} value={currentOption}>
+            {CHART_OPTIONS.map((option, index) => (
+              <MenuItem key={option} value={index}>
+                {option}
+              </MenuItem>
+            ))}
+          </TextField>
         </div>
-        <div className={styles.bottomContainer}>
-          <div className={styles.subMenu}>
-            <MenuButton path={`${PageRoute.charts}${ChartsRoute.temperature}`}>
-              <PinDropIcon />
-            </MenuButton>
-            <MenuButton path={`${PageRoute.charts}${ChartsRoute.precipitation}`}>
-              <MapIcon />
-            </MenuButton>
-            <MenuButton path={`${PageRoute.charts}${ChartsRoute.humidity}`}>
-              <PinDropIcon />
-            </MenuButton>
-            <MenuButton path={`${PageRoute.charts}${ChartsRoute.wind}`}>
-              <MapIcon />
-            </MenuButton>
-            <MenuButton path={`${PageRoute.charts}${ChartsRoute.pressure}`}>
-              <PinDropIcon />
-            </MenuButton>
-          </div>
-          <div className={styles.titleContainer}>
-            <Switch>
-              <Route path={`${PageRoute.charts}${ChartsRoute.temperature}`}>
-                <Typography variant="h5">{CHART_SUB_PAGE_TITLES[0]}</Typography>
-              </Route>
-              <Route path={`${PageRoute.charts}${ChartsRoute.precipitation}`}>
-                <Typography variant="h5">{CHART_SUB_PAGE_TITLES[1]}</Typography>
-              </Route>
-              <Route path={`${PageRoute.charts}${ChartsRoute.humidity}`}>
-                <Typography variant="h5">{CHART_SUB_PAGE_TITLES[2]}</Typography>
-              </Route>
-              <Route path={`${PageRoute.charts}${ChartsRoute.wind}`}>
-                <Typography variant="h5">{CHART_SUB_PAGE_TITLES[3]}</Typography>
-              </Route>
-              <Route path={`${PageRoute.charts}${ChartsRoute.pressure}`}>
-                <Typography variant="h5">{CHART_SUB_PAGE_TITLES[4]}</Typography>
-              </Route>
-            </Switch>
-          </div>
-        </div>
+
+        <Grid container spacing={2}>
+          <Grid item xs={4}>
+            <div className={styles.chartContainer}>
+              <Temperature hourly={hourly} daily={daily} option={currentOption} />
+            </div>
+          </Grid>
+          <Grid item xs={4}>
+            <div className={styles.chartContainer}>
+              <Precipitation hourly={hourly} daily={daily} option={currentOption} />
+            </div>
+          </Grid>
+          <Grid item xs={4}>
+            <div className={styles.chartContainer}>
+              <Humidity hourly={hourly} daily={daily} option={currentOption} />
+            </div>
+          </Grid>
+        </Grid>
+
+        <Route path={`${PageRoute.charts}${ChartsRoute.wind}`}>
+          <Wind hourly={hourly} daily={daily} option={currentOption} />
+        </Route>
+        <Route path={`${PageRoute.charts}${ChartsRoute.pressure}`}>
+          <Pressure hourly={hourly} daily={daily} option={currentOption} />
+        </Route>
       </div>
     </Router>
   );
