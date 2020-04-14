@@ -7,7 +7,6 @@ import useHttp from 'hooks/useHttp';
 import { getTimeFromDate, getTimeBasedOnTimeZone } from 'utils/dateTimeUtils';
 import { ReactComponent as StarFilledSvg } from 'svgs/Favorites/star_filled.svg';
 import WithSvg from 'components/WithSvg/WithSvg';
-import rain from 'images/TypeOfWeather/rain.png';
 import styles from './HomeFavorite.module.css';
 
 const useStyles = makeStyles(() => ({

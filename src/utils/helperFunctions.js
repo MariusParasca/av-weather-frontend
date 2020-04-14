@@ -113,58 +113,71 @@ export const flatten = arr => {
 
 export const getChartColor = value => {
   if (value >= -50 && value < -40) {
-    return '#FFFFFF';
+    return '#d9d9eb';
   }
   if (value >= -40 && value < -30) {
-    return '#bab8f1';
+    return '#d1d1e7';
   }
-  if (value >= -30 && value < -20) {
-    return '#8b87e8';
+  if (value >= -30 && value < -25) {
+    return '#c0c0df';
   }
-  if (value >= -20 && value < -10) {
-    return '#7a75e4';
+  if (value >= -25 && value < -20) {
+    return '#b0b0d7';
   }
-  if (value >= -10 && value < 0) {
-    return '#615cdf';
+  if (value >= -20 && value < -15) {
+    return '#a3a3d1';
   }
-  if (value >= 0 && value < 10) {
-    return '#5d58ce';
+  if (value >= -15 && value < -10) {
+    return '#9797cb';
   }
-  if (value >= 10 && value < 20) {
-    return '#5653b5';
+  if (value >= -10 && value < -5) {
+    return '#8989c4';
   }
-  if (value >= 20 && value < 30) {
-    return '#5653b5';
+  if (value >= -5 && value < 0) {
+    return '#8383c1';
   }
-  if (value >= 30 && value < 40) {
-    return '#4e4b94';
+  if (value >= 0 && value < 5) {
+    return '#8585c3';
   }
-  if (value >= 30 && value < 40) {
-    return '#3a3788';
+  if (value >= 5 && value < 10) {
+    return '#6d6db7';
   }
-  return '#5d58ce';
+  if (value >= 10 && value < 15) {
+    return '#6160b1';
+  }
+  if (value >= 15 && value < 20) {
+    return '#5453ab';
+  }
+  if (value >= 20 && value < 25) {
+    return '#4846a5';
+  }
+  if (value >= 25 && value < 30) {
+    return '#3c399f';
+  }
+  return '#302c99';
 };
 
-// export const increaseBrightness = (hex, percent) => {
-//   // strip the leading # if it's there
-//   hex = hex.replace(/^\s*#|\s*$/g, '');
+export const convertHexToRgb = hex => {
+  const match = hex.replace(/#/, '').match(/.{1,2}/g);
+  return {
+    r: parseInt(match[0], 16),
+    g: parseInt(match[1], 16),
+    b: parseInt(match[2], 16),
+  };
+};
 
-//   // convert 3 char codes --> 6, e.g. `E0F` --> `EE00FF`
-//   if (hex.length == 3) {
-//     hex = hex.replace(/(.)/g, '$1$1');
-//   }
+export const findColorBetween = (left, right, percentage) => {
+  const leftRgb = convertHexToRgb(left);
+  const rightRgb = convertHexToRgb(right);
+  const newColor = {};
+  const components = ['r', 'g', 'b'];
+  for (let i = 0; i < components.length; i += 1) {
+    const c = components[i];
+    newColor[c] = Math.round(leftRgb[c] + ((rightRgb[c] - leftRgb[c]) * percentage) / 100);
+  }
 
-//   const r = parseInt(hex.substr(0, 2), 16);
-//   const g = parseInt(hex.substr(2, 2), 16);
-//   const b = parseInt(hex.substr(4, 2), 16);
-
-//   return (
-//     '#' +
-//     (0 | ((1 << 8) + r + ((256 - r) * percent) / 100)).toString(16).substr(1) +
-//     (0 | ((1 << 8) + g + ((256 - g) * percent) / 100)).toString(16).substr(1) +
-//     (0 | ((1 << 8) + b + ((256 - b) * percent) / 100)).toString(16).substr(1)
-//   );
-// };
+  return 'rgb(' + newColor.r + ', ' + newColor.g + ', ' + newColor.b + ')';
+};
 
 export function increaseBrightness(hex, lum) {
   // Validate hex string
@@ -188,6 +201,10 @@ export const normalizeVar = (value, min, max, minNormalize, maxNormalize) => {
   return ((maxNormalize - minNormalize) * (value - min)) / (max - min) + minNormalize;
 };
 
+// const simpleNormalization = (value, min, max) => {
+//   return (value - min) / (max - min);
+// };
+
 export const getMinArray = (array, callback) => {
   return array.reduce((min, el) => (callback(el) < min ? callback(el) : min), callback(array[0]));
 };
@@ -205,6 +222,7 @@ export const nearest = (number, roundTo) => {
 export const createBarChartWithGradient = (value, min, max, itemStyleRest = {}) => {
   const colorMax = getChartColor(max);
   const colorMin = getChartColor(min > 0 ? -1 : min);
+
   const brightnessPercent = normalizeVar(value, min, max, -40, 40) * 0.01;
   return {
     value,

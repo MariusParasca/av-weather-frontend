@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import Forecast from 'components/Forecast/Forecast';
 import HomeChart from 'components/Charts/HomeChart/HomeChart';
-import { flatten, createBarChartWithGradient, getMinArray, getMaxArray } from 'utils/helperFunctions';
+import { flatten, createBarChartWithGradient, getMinArray, getMaxArray, findColorBetween } from 'utils/helperFunctions';
 import { Slider, withStyles } from '@material-ui/core';
 import styles from './Home.module.css';
 
@@ -201,6 +201,8 @@ const Home = props => {
       })),
     );
   }, [weatherForecast]);
+
+  console.log(findColorBetween('#302c99', '#ffffff', 25));
 
   return (
     <div className={styles.container}>
