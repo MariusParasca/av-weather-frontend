@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { TextField, MenuItem, Typography, Grid, makeStyles } from '@material-ui/core';
-import { BrowserRouter as Router } from 'react-router-dom';
 
 import { CHART_OPTIONS } from 'constants/constants';
 import { WEATHER_API_SEND } from 'store/actionTypes/weatherAPIActionTypes';
@@ -93,88 +92,86 @@ const Charts = props => {
   );
 
   return (
-    <Router>
-      <div className={styles.container}>
-        <Grid container spacing={2} classes={{ root: classes.gridContainer }}>
-          <Grid item xs={4}>
-            <div className={styles.chartContainer}>
-              <div className={styles.infoContainer}>
-                <div className={styles.dataWrapper}>
-                  <Typography variant="subtitle1" classes={{ root: classes.timeTypo }}>
-                    Local Time: {currentTime}
-                  </Typography>
-                  <div className={styles.locationContainer}>
-                    <TextField select fullWidth onChange={changeCityCountry} value={locationIndex}>
-                      {favorites.dataLocally.map((fav, index) => (
-                        <MenuItem key={`${fav.latitude}${fav.longitude}`} value={index}>
-                          {fav.city}, {fav.country}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </div>
-                  <div className={styles.temperatureContainer}>
-                    <Typography variant="h1">{`${Math.round(currently.temperature)}°C`}</Typography>
-                  </div>
+    <div className={styles.container}>
+      <Grid container spacing={2} classes={{ root: classes.gridContainer }}>
+        <Grid item xs={4}>
+          <div className={styles.chartContainer}>
+            <div className={styles.infoContainer}>
+              <div className={styles.dataWrapper}>
+                <Typography variant="subtitle1" classes={{ root: classes.timeTypo }}>
+                  Local Time: {currentTime}
+                </Typography>
+                <div className={styles.locationContainer}>
+                  <TextField select fullWidth onChange={changeCityCountry} value={locationIndex}>
+                    {favorites.dataLocally.map((fav, index) => (
+                      <MenuItem key={`${fav.latitude}${fav.longitude}`} value={index}>
+                        {fav.city}, {fav.country}
+                      </MenuItem>
+                    ))}
+                  </TextField>
                 </div>
-                <SunInfo sunriseTime={currently.sunriseTime} sunsetTime={currently.sunsetTime} />
+                <div className={styles.temperatureContainer}>
+                  <Typography variant="h1">{`${Math.round(currently.temperature)}°C`}</Typography>
+                </div>
               </div>
-              <div className={styles.selectContainer}>
-                <TextField select fullWidth onChange={changeOption} value={currentOption}>
-                  {CHART_OPTIONS.map((option, index) => (
-                    <MenuItem key={option} value={index}>
-                      {option}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </div>
-              <div className={styles.imageContainer}>
-                {image && <img className={styles.imageResponsive} alt="weather icon" src={image.default} />}
-              </div>
+              <SunInfo sunriseTime={currently.sunriseTime} sunsetTime={currently.sunsetTime} />
             </div>
-          </Grid>
-          <Grid item xs={4} classes={{ root: classes.gridItem }}>
-            <div className={styles.chartContainer}>
-              <div className={styles.chartTitleText}>
-                <Typography variant="h6">Temperature</Typography>
-              </div>
-              <Temperature hourly={hourly} daily={daily} option={currentOption} />
+            <div className={styles.selectContainer}>
+              <TextField select fullWidth onChange={changeOption} value={currentOption}>
+                {CHART_OPTIONS.map((option, index) => (
+                  <MenuItem key={option} value={index}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </TextField>
             </div>
-          </Grid>
-          <Grid item xs={4} classes={{ root: classes.gridItem }}>
-            <div className={styles.chartContainer}>
-              <div className={styles.chartTitleText}>
-                <Typography variant="h6">Precipitation</Typography>
-              </div>
-              <Precipitation hourly={hourly} daily={daily} option={currentOption} />
+            <div className={styles.imageContainer}>
+              {image && <img className={styles.imageResponsive} alt="weather icon" src={image.default} />}
             </div>
-          </Grid>
-          <Grid item xs={4} classes={{ root: classes.gridItem }}>
-            <div className={styles.chartContainer}>
-              <div className={styles.chartTitleText}>
-                <Typography variant="h6">Humidity</Typography>
-              </div>
-              <Humidity hourly={hourly} daily={daily} option={currentOption} />
-            </div>
-          </Grid>
-          <Grid item xs={4} classes={{ root: classes.gridItem }}>
-            <div className={styles.chartContainer}>
-              <div className={styles.chartTitleText}>
-                <Typography variant="h6">Wind</Typography>
-              </div>
-              <Wind hourly={hourly} daily={daily} option={currentOption} />
-            </div>
-          </Grid>
-          <Grid item xs={4} classes={{ root: classes.gridItem }}>
-            <div className={styles.chartContainer}>
-              <div className={styles.chartTitleText}>
-                <Typography variant="h6">Pressure</Typography>
-              </div>
-              <Pressure hourly={hourly} daily={daily} option={currentOption} />
-            </div>
-          </Grid>
+          </div>
         </Grid>
-      </div>
-    </Router>
+        <Grid item xs={4} classes={{ root: classes.gridItem }}>
+          <div className={styles.chartContainer}>
+            <div className={styles.chartTitleText}>
+              <Typography variant="h6">Temperature</Typography>
+            </div>
+            <Temperature hourly={hourly} daily={daily} option={currentOption} />
+          </div>
+        </Grid>
+        <Grid item xs={4} classes={{ root: classes.gridItem }}>
+          <div className={styles.chartContainer}>
+            <div className={styles.chartTitleText}>
+              <Typography variant="h6">Precipitation</Typography>
+            </div>
+            <Precipitation hourly={hourly} daily={daily} option={currentOption} />
+          </div>
+        </Grid>
+        <Grid item xs={4} classes={{ root: classes.gridItem }}>
+          <div className={styles.chartContainer}>
+            <div className={styles.chartTitleText}>
+              <Typography variant="h6">Humidity</Typography>
+            </div>
+            <Humidity hourly={hourly} daily={daily} option={currentOption} />
+          </div>
+        </Grid>
+        <Grid item xs={4} classes={{ root: classes.gridItem }}>
+          <div className={styles.chartContainer}>
+            <div className={styles.chartTitleText}>
+              <Typography variant="h6">Wind</Typography>
+            </div>
+            <Wind hourly={hourly} daily={daily} option={currentOption} />
+          </div>
+        </Grid>
+        <Grid item xs={4} classes={{ root: classes.gridItem }}>
+          <div className={styles.chartContainer}>
+            <div className={styles.chartTitleText}>
+              <Typography variant="h6">Pressure</Typography>
+            </div>
+            <Pressure hourly={hourly} daily={daily} option={currentOption} />
+          </div>
+        </Grid>
+      </Grid>
+    </div>
   );
 };
 

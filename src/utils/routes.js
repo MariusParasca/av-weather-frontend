@@ -10,13 +10,13 @@ export const PageRoute = {
   settings: '/settings',
 };
 
-export const ChartsRoute = {
-  temperature: '/temperature',
-  precipitation: '/precipitation',
-  humidity: '/humidity',
-  wind: '/wind',
-  pressure: '/pressure',
-};
+// export const ChartsRoute = {
+//   temperature: '/temperature',
+//   precipitation: '/precipitation',
+//   humidity: '/humidity',
+//   wind: '/wind',
+//   pressure: '/pressure',
+// };
 
 export const MapsRoute = {
   temperature: '/temperature',

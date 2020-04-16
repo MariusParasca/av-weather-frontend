@@ -10,7 +10,7 @@ import { ReactComponent as MapSvg } from 'svgs/Appbar/map.svg';
 import { ReactComponent as SettingsSvg } from 'svgs/Appbar/settings.svg';
 import { ReactComponent as StarSvg } from 'svgs/Appbar/star.svg';
 import { LEFT_DRAWER_WIDTH } from 'constants/constants';
-import { PageRoute, ChartsRoute, MapsRoute } from 'utils/routes';
+import { PageRoute, MapsRoute } from 'utils/routes';
 import MenuButton from 'components/MenuButton/MenuButton';
 import { NavLink } from 'react-router-dom';
 import WithSvg from 'components/WithSvg/WithSvg';
@@ -46,7 +46,7 @@ const ApplicationBar = () => {
           <MenuButton path={`${PageRoute.map}${MapsRoute.temperature}`}>
             <WithSvg component={MapSvg} size={20} />
           </MenuButton>
-          <MenuButton path={`${PageRoute.charts}${ChartsRoute.temperature}`}>
+          <MenuButton path={PageRoute.charts}>
             <WithSvg component={GraphSvg} size={20} />
           </MenuButton>
           <MenuButton path={PageRoute.favorites}>
