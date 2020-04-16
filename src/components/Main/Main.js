@@ -15,6 +15,7 @@ import Account from 'routes/Account/Account';
 import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
 import HomeSearchBox from 'components/HomeSearchBox/HomeSearchBox';
 import TodayWeatherInfo from 'components/TodayWeatherInfo/TodayWeatherInfo';
+import Settings from 'routes/Settings/Settings';
 import CurrentWeather from './CurrentWeather/CurrentWeather';
 import styles from './Main.module.css';
 
@@ -144,6 +145,9 @@ const Main = props => {
             <ErrorBoundary>
               <Account />
             </ErrorBoundary>
+          </Route>
+          <Route path={PageRoute.settings}>
+            <Settings />
           </Route>
         </div>
       </div>
