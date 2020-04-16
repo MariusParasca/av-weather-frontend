@@ -58,98 +58,70 @@ const Main = props => {
   return (
     <div className={styles.container}>
       <div className={styles.wrapperContainer}>
-        <Route exact path={topContainerRoutes}>
-          <div className={styles.topContainer}>
-            <ErrorBoundary>
-              {pending ? (
-                <Spinner />
-              ) : (
-                <>
-                  <div className={styles.todayContainer}>
-                    <CurrentWeather
-                      className={styles.leftWeatherContainer}
-                      city={locationData.city}
-                      country={locationData.country}
-                      imageName={weatherData.currently.imageName}
-                      weatherData={weatherData.currently}
-                      sunsetTime={weatherData.currently.sunsetTime}
-                      sunriseTime={weatherData.currently.sunriseTime}
-                    />
-                    <Route exact path={PageRoute.home}>
-                      <HomeSearchBox />
-                    </Route>
-                  </div>
-                  <Route path={PageRoute.history}>
-                    <div className={styles.additionalContainer}>
-                      <HistoryAdditional />
-                    </div>
-                  </Route>
-                </>
-              )}
-            </ErrorBoundary>
-          </div>
+        <Route exact path={bottomContainerRoutes}>
+          {pending ? (
+            <Spinner />
+          ) : (
+            <>
+              <Route exact path={PageRoute.home}>
+                <ErrorBoundary>
+                  <Home
+                    locationData={locationData}
+                    weatherForecast={weatherData.daily}
+                    weatherHourly={weatherData.sevenDayHourly}
+                    currently={weatherData.currently}
+                  />
+                </ErrorBoundary>
+              </Route>
+              <Route path={PageRoute.charts}>
+                <ErrorBoundary>
+                  <Charts
+                    hourly={weatherData.hourly}
+                    daily={weatherData.daily}
+                    currently={weatherData.currently}
+                    locationData={locationData}
+                  />
+                </ErrorBoundary>
+              </Route>
+              <Route path={PageRoute.history}>
+                <ErrorBoundary>
+                  <History
+                    monthTemperature={february}
+                    maxWind={weatherData.currently.maxWind}
+                    humidity={weatherData.currently.humidity}
+                    precipitation={weatherData.currently.precipitation}
+                  />
+                </ErrorBoundary>
+              </Route>
+              <Route
+                path={[
+                  `${PageRoute.map}${MapsRoute.cloudCover}`,
+                  `${PageRoute.map}${MapsRoute.temperature}`,
+                  `${PageRoute.map}${MapsRoute.wind}`,
+                  `${PageRoute.map}${MapsRoute.precipitation}`,
+                  `${PageRoute.map}${MapsRoute.pressure}`,
+                ]}
+              >
+                <ErrorBoundary>
+                  <Map />
+                </ErrorBoundary>
+              </Route>
+            </>
+          )}
         </Route>
-        <div className={styles.bottomContainer}>
-          <Route exact path={bottomContainerRoutes}>
-            {pending ? (
-              <Spinner />
-            ) : (
-              <>
-                <Route exact path={PageRoute.home}>
-                  <ErrorBoundary>
-                    <Home weatherForecast={weatherData.daily} weatherHourly={weatherData.sevenDayHourly} />
-                  </ErrorBoundary>
-                </Route>
-                <Route path={PageRoute.charts}>
-                  <ErrorBoundary>
-                    <Charts
-                      hourly={weatherData.hourly}
-                      daily={weatherData.daily}
-                      currently={weatherData.currently}
-                      locationData={locationData}
-                    />
-                  </ErrorBoundary>
-                </Route>
-                <Route path={PageRoute.history}>
-                  <ErrorBoundary>
-                    <History
-                      monthTemperature={february}
-                      maxWind={weatherData.currently.maxWind}
-                      humidity={weatherData.currently.humidity}
-                      precipitation={weatherData.currently.precipitation}
-                    />
-                  </ErrorBoundary>
-                </Route>
-                <Route
-                  path={[
-                    `${PageRoute.map}${MapsRoute.cloudCover}`,
-                    `${PageRoute.map}${MapsRoute.temperature}`,
-                    `${PageRoute.map}${MapsRoute.wind}`,
-                    `${PageRoute.map}${MapsRoute.precipitation}`,
-                    `${PageRoute.map}${MapsRoute.pressure}`,
-                  ]}
-                >
-                  <ErrorBoundary>
-                    <Map />
-                  </ErrorBoundary>
-                </Route>
-              </>
-            )}
-          </Route>
-          <Route path={PageRoute.favorites}>
-            <ErrorBoundary>
-              <Favorites />
-            </ErrorBoundary>
-          </Route>
-          <Route path={[PageRoute.account, PageRoute.register, PageRoute.login]}>
-            <ErrorBoundary>
-              <Account />
-            </ErrorBoundary>
-          </Route>
-          <Route path={PageRoute.settings}>
-            <Settings />
-          </Route>
-        </div>
+        <Route path={PageRoute.favorites}>
+          <ErrorBoundary>
+            <Favorites />
+          </ErrorBoundary>
+        </Route>
+        <Route path={[PageRoute.account, PageRoute.register, PageRoute.login]}>
+          <ErrorBoundary>
+            <Account />
+          </ErrorBoundary>
+        </Route>
+        <Route path={PageRoute.settings}>
+          <Settings />
+        </Route>
       </div>
       {pending ? null : (
         <div className={styles.rightToTheWrapper}>

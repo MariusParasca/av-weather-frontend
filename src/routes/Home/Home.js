@@ -5,6 +5,8 @@ import Forecast from 'components/Forecast/Forecast';
 import HomeChart from 'components/Charts/HomeChart/HomeChart';
 import { flatten, createBarChartWithGradient, getMinArray, getMaxArray } from 'utils/helperFunctions';
 import { Slider, withStyles } from '@material-ui/core';
+import CurrentWeather from 'components/Main/CurrentWeather/CurrentWeather';
+import HomeSearchBox from 'components/HomeSearchBox/HomeSearchBox';
 import styles from './Home.module.css';
 
 const CustomSlider = withStyles({
@@ -93,7 +95,7 @@ const initVars = array => {
 };
 
 const Home = props => {
-  const { weatherForecast, weatherHourly } = props;
+  const { weatherForecast, weatherHourly, currently, locationData } = props;
 
   const [modifiedWeatherForecast, setModifiedWeatherForecast] = useState([]);
 
@@ -203,31 +205,45 @@ const Home = props => {
   }, [weatherForecast]);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.forecastContainer}>
-        {/* <div className={styles.chartTitleContainer}>
+    <>
+      <div className={styles.topContainer}>
+        <CurrentWeather
+          className={styles.leftWeatherContainer}
+          city={locationData.city}
+          country={locationData.country}
+          imageName={currently.imageName}
+          weatherData={currently}
+          sunsetTime={currently.sunsetTime}
+          sunriseTime={currently.sunriseTime}
+        />
+        <HomeSearchBox />
+      </div>
+      <div className={styles.container}>
+        <div className={styles.forecastContainer}>
+          {/* <div className={styles.chartTitleContainer}>
           <Typography variant="subtitle1">Hourly chart</Typography>
         </div> */}
-        <div className={styles.chartContainer}>
-          <div className={styles.chartContainerWrapper}>
-            <HomeChart xLabel={xLabel} actualTemp={actualTemp} feelsLike={feelsLike} />
+          <div className={styles.chartContainer}>
+            <div className={styles.chartContainerWrapper}>
+              <HomeChart xLabel={xLabel} actualTemp={actualTemp} feelsLike={feelsLike} />
+            </div>
           </div>
-        </div>
-        <div>
-          <div className={styles.sliderContainer}>
-            <CustomSlider
-              onChange={handleChange}
-              ThumbComponent={AirbnbThumbComponent}
-              step={2}
-              min={0}
-              max={16}
-              value={sliderValue}
-            />
+          <div>
+            <div className={styles.sliderContainer}>
+              <CustomSlider
+                onChange={handleChange}
+                ThumbComponent={AirbnbThumbComponent}
+                step={2}
+                min={0}
+                max={16}
+                value={sliderValue}
+              />
+            </div>
+            <Forecast weekDaysHighLight={weekDaysHighLight} forecastTemperature={modifiedWeatherForecast} />
           </div>
-          <Forecast weekDaysHighLight={weekDaysHighLight} forecastTemperature={modifiedWeatherForecast} />
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
