@@ -256,6 +256,8 @@ Home.propTypes = {
     }),
   ).isRequired,
   weatherHourly: PropTypes.arrayOf(PropTypes.any).isRequired,
+  currently: PropTypes.objectOf(PropTypes.any).isRequired,
+  locationData: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default Home;

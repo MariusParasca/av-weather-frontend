@@ -6,15 +6,16 @@ import {
   WEATHER_MAP_SET_DATA,
 } from 'store/actionTypes/weatherMapActionTypes';
 import darkSkyAxios from 'axios/darkSky';
+import { getWeatherUnitsType } from 'utils/helperFunctions';
 
-async function makeWeatherRequest(favorites) {
+async function makeWeatherRequest(favorites, units) {
   try {
     const promises = [];
     for (const favorite of favorites) {
       promises.push(
         darkSkyAxios.get(`/${favorite.latitude},${favorite.longitude}`, {
           params: {
-            units: 'si',
+            units,
             exclude: '[minutely, alerts, flags]',
             extend: 'hourly',
           },
@@ -30,8 +31,9 @@ async function makeWeatherRequest(favorites) {
 }
 
 function* apiRequest() {
+  const units = yield select(getWeatherUnitsType);
   const favorites = yield select(state => state.favorites.dataLocally);
-  const { data, error } = yield call(makeWeatherRequest, favorites);
+  const { data, error } = yield call(makeWeatherRequest, favorites, units);
 
   if (data) {
     yield put({ type: WEATHER_MAP_SET_DATA, data });

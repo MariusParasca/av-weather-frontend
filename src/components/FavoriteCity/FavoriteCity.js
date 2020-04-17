@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles, Typography, IconButton } from '@material-ui/core';
+import { useSelector } from 'react-redux';
 
 import { ReactComponent as StarFilledSvg } from 'svgs/Favorites/star_filled.svg';
 import { ReactComponent as PrecipitationSvg } from 'svgs/WeatherInfo/precipitation.svg';
@@ -41,6 +42,9 @@ const useStyles = makeStyles(() => ({
 const FavoriteCity = props => {
   const { city, country, onClickIcon, currently, daily, minTemp, maxTemp } = props;
 
+  const distanceScale = useSelector(state => state.userSettings.settings.weatherUnits.distance);
+  const temperatureScale = useSelector(state => state.userSettings.settings.weatherUnits.temperature);
+
   const classes = useStyles();
 
   const [image, setImage] = useState('');
@@ -68,7 +72,9 @@ const FavoriteCity = props => {
           <WithSvg component={StarFilledSvg} size={16} />
         </IconButton>
       </div>
-      <Typography variant="h1">{Math.round(currently.temperature)}°C</Typography>
+      <Typography variant="h1">
+        {Math.round(currently.temperature)}°{temperatureScale}
+      </Typography>
       <div className={styles.todayWeatherContainer}>
         <div className={styles.circularProgressContainer}>
           <LabeledCircularProgress circularProgressSize={64} progressValue={Math.round(currently.windSpeed)} />
@@ -116,7 +122,8 @@ const FavoriteCity = props => {
             </div>
             <div>
               <Typography variant="subtitle2" classes={{ root: classes.typoWeatherInfo }}>
-                {Math.round(currently.visibility)}km
+                {Math.round(currently.visibility)}
+                {distanceScale}
               </Typography>
             </div>
           </div>

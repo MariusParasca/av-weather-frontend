@@ -48,3 +48,6 @@ export const PRECIPITATION_MAP_TYPE = 'precipitation_new';
 export const PRESSURE_MAP_TYPE = 'pressure_new';
 export const WIND_MAP_TYPE = 'wind_new';
 export const TEMPERATURE_MAP_TYPE = 'temp_new';
+
+export const EUROPEAN_UNITS = 'si';
+export const AMERICAN_UNITS = 'us';

@@ -6,6 +6,7 @@ import { Typography, makeStyles } from '@material-ui/core';
 import styles from './CurrentWeather.module.css';
 import './CurrentWeatherMapStyle.css';
 import SunInfo from 'components/SunInfo/SunInfo';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles(() => ({
   timeTypo: {
@@ -20,6 +21,8 @@ const CurrentWeather = props => {
   const { city, country, weatherData, className, sunriseTime, sunsetTime, imageName } = props;
 
   const classes = useStyles();
+
+  const temperatureScale = useSelector(state => state.userSettings.settings.weatherUnits.temperature);
 
   const [image, setImage] = useState('');
 
@@ -82,7 +85,7 @@ const CurrentWeather = props => {
             <Typography variant="h2">{country}</Typography>
           </div>
           <div className={styles.temperatureContainer}>
-            <Typography variant="h1">{`${Math.round(weatherData.temperature)}°C`}</Typography>
+            <Typography variant="h1">{`${Math.round(weatherData.temperature)}°${temperatureScale}`}</Typography>
           </div>
         </div>
         <SunInfo sunriseTime={sunriseTime} sunsetTime={sunsetTime} />

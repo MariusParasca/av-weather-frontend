@@ -18,9 +18,19 @@ import {
 import ipStackAxios from 'axios/ipStack';
 import darkSkyAxios from 'axios/darkSky';
 import airQualityInstance from 'axios/airQuality';
-import { replaceDiacritics, getUtcOffsetByCoordinates, createCurrentlyWeather } from 'utils/helperFunctions';
+import {
+  replaceDiacritics,
+  getUtcOffsetByCoordinates,
+  createCurrentlyWeather,
+  getWeatherUnitsType,
+  getWeatherUnits,
+} from 'utils/helperFunctions';
 import { ADD_FAVORITE_SEND, ADD_FAVORITE_LOCALLY_SEND } from 'store/actionTypes/favoritesActionTypes';
-import { SET_FAVORITE_WEATHER_INFO, SET_FAVORITE_WEATHER_INFO_DATA } from 'store/actionTypes/userSettingsActionTypes';
+import {
+  SET_FAVORITE_WEATHER_INFO,
+  SET_FAVORITE_WEATHER_INFO_DATA,
+  CHANGE_DEFAULT_LOCATION,
+} from 'store/actionTypes/userSettingsActionTypes';
 
 const getCurrentStateData = state => state.data;
 
@@ -28,11 +38,13 @@ const getIsLoggedState = state => state.authData.isLoggedIn;
 
 const getUserSettings = state => state.userSettings;
 
-async function makeWeatherRequest(latitude, longitude, city) {
+const getDefaultLocation = state => state.userSettings.settings.defaultLocation;
+
+async function makeWeatherRequest(latitude, longitude, city, units) {
   try {
     const darkSkyPromise = await darkSkyAxios.get(`/${latitude},${longitude}`, {
       params: {
-        units: 'si',
+        units,
         exclude: '[minutely, alerts, flags]',
         extend: 'hourly',
       },
@@ -77,7 +89,7 @@ async function makeRequest() {
   }
 }
 
-function getWeatherArray(data) {
+function getWeatherArray(data, weatherUnits) {
   const { maxWind, humidity, precipitation, uvIndex, cloudCover, pressure, visibility, dewPoint, airQuality } = data;
 
   const tempAir = airQuality || 0;
@@ -132,7 +144,7 @@ function getWeatherArray(data) {
     },
     {
       progressValue: (visibility / MAX_VISIBILITY) * 100,
-      progressText: `${Math.round(visibility)}km`,
+      progressText: `${Math.round(visibility)}${weatherUnits.distance}`,
       text: 'Visibility',
       svg: 'svgs/WeatherInfo/visibility.svg',
       weatherType: STANDARD_WEATHER_TYPE,
@@ -149,11 +161,12 @@ function getWeatherArray(data) {
 
 function* setWeatherData(data) {
   const userSettings = yield select(getUserSettings);
+  const weatherUnits = yield select(getWeatherUnits);
 
   const weatherData = [];
   let favoriteYieldObj = null;
 
-  for (const item of getWeatherArray(createCurrentlyWeather(data.currently))) {
+  for (const item of getWeatherArray(createCurrentlyWeather(data.currently), weatherUnits)) {
     if (item.text === userSettings.favoriteWeatherInfoLocally.text && userSettings.favoriteWeatherInfoLocally.text) {
       favoriteYieldObj = {
         type: SET_FAVORITE_WEATHER_INFO,
@@ -186,8 +199,9 @@ function* setWeatherData(data) {
 
 function* weatherRequestGenerator(latitude, longitude, city, ipStack = {}) {
   const isLoggedIn = yield select(getIsLoggedState);
+  const units = yield select(getWeatherUnitsType);
 
-  const { data, error } = yield call(makeWeatherRequest, latitude, longitude, city);
+  const { data, error } = yield call(makeWeatherRequest, latitude, longitude, city, units);
   if (data) {
     yield put({ type: WEATHER_SET_DATA, data: { weather: data, ipStack } });
     yield setWeatherData(data);
@@ -211,6 +225,7 @@ function* weatherRequestGenerator(latitude, longitude, city, ipStack = {}) {
 
 function* apiRequest(action) {
   const state = yield select(getCurrentStateData);
+  const defaultLocation = yield select(getDefaultLocation);
 
   if (action.payload) {
     yield call(weatherRequestGenerator, action.payload.latitude, action.payload.longitude, action.payload.city, {
@@ -224,13 +239,24 @@ function* apiRequest(action) {
       yield put({ type: WEATHER_API_FAILED, ipError });
       return;
     }
-    yield call(
-      weatherRequestGenerator,
-      ipData.ipStack.latitude,
-      ipData.ipStack.longitude,
-      ipData.ipStack.city,
-      ipData.ipStack,
-    );
+    if (defaultLocation.city) {
+      yield call(
+        weatherRequestGenerator,
+        defaultLocation.latitude,
+        defaultLocation.longitude,
+        defaultLocation.city,
+        defaultLocation,
+      );
+    } else {
+      yield put({ type: CHANGE_DEFAULT_LOCATION, data: ipData.ipStack });
+      yield call(
+        weatherRequestGenerator,
+        ipData.ipStack.latitude,
+        ipData.ipStack.longitude,
+        ipData.ipStack.city,
+        ipData.ipStack,
+      );
+    }
   } else {
     yield put({ type: WEATHER_DATA_ALREADY_FETCHED });
   }

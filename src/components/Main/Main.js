@@ -3,20 +3,17 @@ import PropTypes from 'prop-types';
 import { Route } from 'react-router-dom';
 
 import { PageRoute, MapsRoute } from 'utils/routes';
-import { topContainerRoutes, bottomContainerRoutes } from 'constants/routes';
+import { bottomContainerRoutes } from 'constants/routes';
 import Spinner from 'components/Spinner/Spinner';
 import Home from 'routes/Home/Home';
 import Charts from 'routes/Charts/Charts';
 import History from 'routes/History/History';
 import Favorites from 'routes/Favorites/Favorites';
 import Map from 'routes/Map/Map';
-import HistoryAdditional from 'routes/History/HistoryAdditional/HistoryAdditional';
 import Account from 'routes/Account/Account';
 import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
-import HomeSearchBox from 'components/HomeSearchBox/HomeSearchBox';
 import TodayWeatherInfo from 'components/TodayWeatherInfo/TodayWeatherInfo';
 import Settings from 'routes/Settings/Settings';
-import CurrentWeather from './CurrentWeather/CurrentWeather';
 import styles from './Main.module.css';
 
 // Calendar dumb data

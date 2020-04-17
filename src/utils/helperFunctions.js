@@ -245,3 +245,7 @@ export const createBarChartWithGradient = (value, min, max, itemStyleRest = {}) 
     },
   };
 };
+
+export const getWeatherUnitsType = state => state.userSettings.settings.weatherUnits.type;
+
+export const getWeatherUnits = state => state.userSettings.settings.weatherUnits;

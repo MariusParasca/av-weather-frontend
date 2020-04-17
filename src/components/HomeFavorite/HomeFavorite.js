@@ -8,6 +8,7 @@ import { getTimeFromDate, getTimeBasedOnTimeZone } from 'utils/dateTimeUtils';
 import { ReactComponent as StarFilledSvg } from 'svgs/Favorites/star_filled.svg';
 import WithSvg from 'components/WithSvg/WithSvg';
 import styles from './HomeFavorite.module.css';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles(() => ({
   timeTypo: {
@@ -28,6 +29,8 @@ const useStyles = makeStyles(() => ({
 const HomeFavorite = props => {
   const { utcOffset, latitude, longitude, city, onClickIcon, className, onClickContainer } = props;
 
+  const units = useSelector(state => state.userSettings.settings.weatherUnits.type);
+
   const darkSkyHttp = useHttp();
   const { sendRequest: sendRequestDarkSky } = darkSkyHttp;
 
@@ -39,11 +42,11 @@ const HomeFavorite = props => {
     async (currentLatitude, currentLongitude) => {
       sendRequestDarkSky(
         darkSkyAxios,
-        [`/${currentLatitude},${currentLongitude}`, { params: { units: 'si', exclude: '[minutely, hourly, daily]' } }],
+        [`/${currentLatitude},${currentLongitude}`, { params: { units, exclude: '[minutely, hourly, daily]' } }],
         'get',
       );
     },
-    [sendRequestDarkSky],
+    [sendRequestDarkSky, units],
   );
 
   useEffect(() => {

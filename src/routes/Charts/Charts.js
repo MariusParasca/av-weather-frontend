@@ -35,6 +35,8 @@ const Charts = props => {
   const dispatch = useDispatch();
 
   const favorites = useSelector(state => state.favorites);
+  const temperatureScale = useSelector(state => state.userSettings.settings.weatherUnits.temperature);
+
   const classes = useStyles();
 
   const [locationIndex, setLocationIndex] = useState(
@@ -111,7 +113,7 @@ const Charts = props => {
                   </TextField>
                 </div>
                 <div className={styles.temperatureContainer}>
-                  <Typography variant="h1">{`${Math.round(currently.temperature)}°C`}</Typography>
+                  <Typography variant="h1">{`${Math.round(currently.temperature)}°${temperatureScale}`}</Typography>
                 </div>
               </div>
               <SunInfo sunriseTime={currently.sunriseTime} sunsetTime={currently.sunsetTime} />

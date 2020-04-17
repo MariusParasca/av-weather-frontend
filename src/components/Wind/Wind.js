@@ -6,10 +6,13 @@ import { ReactComponent as WindSvg } from 'svgs/WeatherInfo/wind.svg';
 import LabeledCircularProgress from 'components/LabeledCircularProgress/LabeledCircularProgress';
 import { MAX_WIND } from 'constants/constants';
 import WithSvg from 'components/WithSvg/WithSvg';
+import { useSelector } from 'react-redux';
 import styles from './Wind.module.css';
 
 const Wind = props => {
   const { maxWind, onClick, circularProgressSize, strokeWidth, isOnFavorite } = props;
+
+  const distanceScale = useSelector(state => state.userSettings.settings.weatherUnits.distance);
 
   return (
     <div
@@ -33,7 +36,7 @@ const Wind = props => {
       />
       <div className={`${styles.textContainer} ${isOnFavorite ? styles.textContainerFavorite : ''}`}>
         <WithSvg component={WindSvg} size={20} className={styles.windIconContainer} />
-        <Typography variant={isOnFavorite ? 'subtitle2' : 'caption'}>Max wind (m/s)</Typography>
+        <Typography variant={isOnFavorite ? 'subtitle2' : 'caption'}>Max wind ({distanceScale}/h)</Typography>
       </div>
     </div>
   );

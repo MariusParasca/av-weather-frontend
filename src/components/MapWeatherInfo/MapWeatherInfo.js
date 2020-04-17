@@ -18,6 +18,7 @@ import MapChart from 'components/Charts/MapChart/MapChart';
 import AirGauge from 'components/AirGauge/AirGauge';
 import CircularProgress from 'components/CircularProgress/CircularProgress';
 import { flatten } from 'utils/helperFunctions';
+import { useSelector } from 'react-redux';
 import styles from './MapWeatherInfo.module.css';
 
 const useStyles = makeStyles(() => ({
@@ -34,6 +35,8 @@ const MapWeatherInfo = props => {
 
   const classes = useStyles();
 
+  const temperatureScale = useSelector(state => state.userSettings.settings.weatherUnits.temperature);
+
   return (
     <div className={styles.container}>
       <div className={styles.countryTemp}>
@@ -44,7 +47,9 @@ const MapWeatherInfo = props => {
       <div className={styles.graphTemp}>
         <div className={styles.temperature}>
           <WithSvg size={70} className={styles.temperatureIcon} component={`svgs/TypeOfWeather/${day.icon}.svg`} />
-          <Typography variant="h3">{Math.round(day.temperatureHigh)}°C</Typography>
+          <Typography variant="h3">
+            {Math.round(day.temperatureHigh)}°{temperatureScale}
+          </Typography>
         </div>
       </div>
       <div className={styles.weatherInfo}>
