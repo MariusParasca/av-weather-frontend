@@ -1,6 +1,7 @@
 /* eslint-disable prefer-template */
 import ts from '@mapbox/timespace';
 import echarts from 'echarts/lib/echarts';
+import { store } from 'store/store';
 
 export const createChartData = (array, { label, propName }, options) => {
   let currentOptions;
@@ -219,11 +220,18 @@ export const nearest = (number, roundTo) => {
   return numberAux;
 };
 
-export const createBarChartWithGradient = (value, min, max, itemStyleRest = {}) => {
-  const colorMax = getChartColor(max);
-  const colorMin = getChartColor(min > 0 ? -1 : min);
+const fToC = value => Math.round(((value - 32) * 5) / 9);
 
-  const brightnessPercent = normalizeVar(value, min, max, -40, 40) * 0.01;
+export const createBarChartWithGradient = (value, min, max, itemStyleRest = {}) => {
+  const isCelsius = store.getState().userSettings.settings.weatherUnits.temperature === 'C';
+  const toGetColorMin = min > 0 ? -1 : min;
+
+  const colorMax = getChartColor(isCelsius ? max : fToC(max));
+  const colorMin = getChartColor(isCelsius ? toGetColorMin : fToC(toGetColorMin));
+
+  const brightnessPercent =
+    normalizeVar(isCelsius ? value : fToC(value), isCelsius ? min : fToC(min), isCelsius ? max : fToC(max), -40, 40) *
+    0.01;
   return {
     value,
     itemStyle: {
