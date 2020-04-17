@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CHANGE_WEATHER_SCALE, CHANGE_DEFAULT_LOCATION } from 'store/actionTypes/userSettingsActionTypes';
 import { EUROPEAN_UNITS } from 'constants/constants';
 import { WEATHER_API_SEND } from 'store/actionTypes/weatherAPIActionTypes';
+import { WEATHER_MAP_API_SEND } from 'store/actionTypes/weatherMapActionTypes';
 import styles from './Settings.module.css';
 
 const useStyles = makeStyles(theme => ({
@@ -38,7 +39,19 @@ const Settings = props => {
   const changeIsCelsius = useCallback(() => {
     setIsCelsius(!isCelsius);
     dispatch({ type: CHANGE_WEATHER_SCALE, isCelsius: !isCelsius });
-  }, [dispatch, isCelsius]);
+    dispatch({
+      type: WEATHER_API_SEND,
+      payload: {
+        latitude: favorites.dataLocally[locationIndex].latitude,
+        longitude: favorites.dataLocally[locationIndex].longitude,
+        city: favorites.dataLocally[locationIndex].city,
+        country: favorites.dataLocally[locationIndex].country,
+      },
+    });
+    dispatch({
+      type: WEATHER_MAP_API_SEND,
+    });
+  }, [dispatch, favorites.dataLocally, isCelsius, locationIndex]);
 
   const changeCityCountry = useCallback(
     event => {
