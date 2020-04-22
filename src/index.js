@@ -16,6 +16,7 @@ import * as serviceWorker from './serviceWorker';
 
 import theme from './theme';
 
+localStorage.clear();
 sagaMiddleware.run(sagaRoot);
 
 ReactDOM.render(
