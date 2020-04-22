@@ -21,7 +21,9 @@ const searchTopContainers = [...topContainerRoutes];
 searchTopContainers.push(PageRoute.map);
 
 const getSettingsDefaultViewUrl = () => {
-  return store.getState().userSettings ? store.getState().userSettings.settings.defaultView.url : '/';
+  return store.getState().userSettings && store.getState().userSettings.settings
+    ? store.getState().userSettings.settings.defaultView.url
+    : '/';
 };
 
 const RequestComponent = props => {

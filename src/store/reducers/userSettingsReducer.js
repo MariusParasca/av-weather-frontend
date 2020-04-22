@@ -60,13 +60,11 @@ const reducer = (state = initialState, action) => {
 
   switch (action.type) {
     case REHYDRATE:
-      return {
-        ...state,
-        favoriteWeatherInfoLocally: action.payload
-          ? action.payload.userSettings.favoriteWeatherInfoLocally
-          : initialState.favoriteWeatherInfoLocally,
-        settings: action.payload ? action.payload.userSettings.settings : initialState.settings,
-      };
+      newState.favoriteWeatherInfoLocally = action.payload
+        ? action.payload.userSettings.favoriteWeatherInfoLocally
+        : initialState.favoriteWeatherInfoLocally;
+      newState.settings = action.payload ? action.payload.userSettings.settings : initialState.settings;
+      break;
     case SET_FAVORITE_WEATHER_INFO:
       newState.favoriteWeatherInfoLocally.progressValue = action.progressValue;
       newState.favoriteWeatherInfoLocally.text = action.text;
