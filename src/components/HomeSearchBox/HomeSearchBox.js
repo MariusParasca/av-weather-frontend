@@ -57,8 +57,6 @@ const HomeSearchBox = () => {
   useEffect(() => {
     const numberOfFavoritesSetter = () => {
       const boxWidth = window.innerHeight * 0.16 + 16; // 0.16 means 16% from view height (home favorite width = 16vh), 16 is the grid spacing (padding)
-      console.log('boxWidth', boxWidth);
-      console.log('favoriteRef.current.offsetWidth', favoriteRef.current.offsetWidth);
       setNumberOfFavorites(Math.floor(favoriteRef.current.offsetWidth / boxWidth));
     };
 

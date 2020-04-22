@@ -1,3 +1,5 @@
+import { PageRoute, MapsRoute } from 'utils/routes';
+
 export const LEFT_DRAWER_WIDTH = 76;
 export const RIGHT_DRAWER_WIDTH = 380;
 
@@ -32,6 +34,15 @@ export const MONTHS = [
   'November',
   'December',
 ];
+
+export const DEFAULT_VIEWS = ['Home', 'Favorites', 'Map', 'Charts'];
+
+export const DEFAULT_VIEWS_MAP_OBJECT = {
+  Home: PageRoute.home,
+  Favorites: PageRoute.favorites,
+  Map: `${PageRoute.map}${MapsRoute.temperature}`,
+  Charts: `${PageRoute.charts}`,
+};
 
 export const ONE_MINUTE_IN_MILLISECONDS = 60000;
 

@@ -14,6 +14,7 @@ import Account from 'routes/Account/Account';
 import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
 import TodayWeatherInfo from 'components/TodayWeatherInfo/TodayWeatherInfo';
 import Settings from 'routes/Settings/Settings';
+
 import styles from './Main.module.css';
 
 // Calendar dumb data

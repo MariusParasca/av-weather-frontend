@@ -5,8 +5,10 @@ import {
   SET_FAVORITE_WEATHER_INFO_DATA,
   CHANGE_WEATHER_SCALE,
   CHANGE_DEFAULT_LOCATION,
+  CHANGE_DEFAULT_VIEW,
 } from 'store/actionTypes/userSettingsActionTypes';
 import { AMERICAN_UNITS, EUROPEAN_UNITS } from 'constants/constants';
+import { PageRoute } from 'utils/routes';
 
 const initialState = {
   favoriteWeatherInfo: {
@@ -32,6 +34,9 @@ const initialState = {
       distance: 'km',
     },
     defaultLocation: {},
+    defaultView: {
+      url: PageRoute.home,
+    },
   },
   data: [],
 };
@@ -78,6 +83,9 @@ const reducer = (state = initialState, action) => {
       break;
     case CHANGE_DEFAULT_LOCATION:
       newState.settings.defaultLocation = action.data;
+      break;
+    case CHANGE_DEFAULT_VIEW:
+      newState.settings.defaultView.url = action.url;
       break;
     default:
       break;

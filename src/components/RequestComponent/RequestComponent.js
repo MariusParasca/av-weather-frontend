@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { withRouter, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { WEATHER_API_SEND } from 'store/actionTypes/weatherAPIActionTypes';
@@ -14,10 +14,15 @@ import SearchBox from 'components/SearchBox/SearchBox';
 import { SEARCH_PLACEHOLDER } from 'constants/constants';
 import Spinner from 'components/Spinner/Spinner';
 import { PageRoute } from 'utils/routes';
+import { store } from 'store/store';
 import styles from './RequestComponent.module.css';
 
 const searchTopContainers = [...topContainerRoutes];
 searchTopContainers.push(PageRoute.map);
+
+const getSettingsDefaultViewUrl = () => {
+  return store.getState().userSettings.settings.defaultView.url;
+};
 
 const RequestComponent = props => {
   const { location } = props;
@@ -27,6 +32,8 @@ const RequestComponent = props => {
   const weatherData = useSelector(state => state.data.weather);
   const pending = useSelector(state => state.data.pending);
   const pendingCheckLogin = useSelector(state => state.authData.pending);
+
+  const history = useHistory();
 
   useEffect(() => {
     // isCorrectRoute(searchTopContainers, location.pathname) &&
@@ -38,6 +45,10 @@ const RequestComponent = props => {
   useEffect(() => {
     dispatch({ type: LOGIN_CHECK });
   }, [dispatch]);
+
+  useEffect(() => {
+    history.push(getSettingsDefaultViewUrl());
+  }, [history]);
 
   return (
     <>
