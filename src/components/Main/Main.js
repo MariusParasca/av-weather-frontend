@@ -81,7 +81,7 @@ const Main = props => {
                   />
                 </ErrorBoundary>
               </Route>
-              <Route path={PageRoute.history}>
+              {/* <Route path={PageRoute.history}>
                 <ErrorBoundary>
                   <History
                     monthTemperature={february}
@@ -90,7 +90,7 @@ const Main = props => {
                     precipitation={weatherData.currently.precipitation}
                   />
                 </ErrorBoundary>
-              </Route>
+              </Route> */}
               <Route
                 path={[
                   `${PageRoute.map}${MapsRoute.cloudCover}`,

@@ -52,9 +52,9 @@ const ApplicationBar = () => {
           <MenuButton path={PageRoute.favorites}>
             <WithSvg component={StarSvg} size={20} />
           </MenuButton>
-          <MenuButton path={PageRoute.history}>
+          {/* <MenuButton path={PageRoute.history}>
             <WithSvg component={HistorySvg} size={20} />
-          </MenuButton>
+          </MenuButton> */}
         </div>
         <div className={styles.settingsContainer}>
           <MenuButton exact path={PageRoute.settings}>

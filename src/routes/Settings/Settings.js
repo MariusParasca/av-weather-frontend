@@ -20,6 +20,10 @@ const useStyles = makeStyles(theme => ({
   track: {
     backgroundColor: theme.palette.primary.main,
   },
+  selector: {
+    marginLeft: 20,
+    minWidth: 180,
+  },
 }));
 
 const Settings = props => {
@@ -102,16 +106,19 @@ const Settings = props => {
           <Grid item>Celsius</Grid>
         </Grid>
       </Typography>
-      <TextField select fullWidth onChange={changeCityCountry} value={locationIndex}>
-        {favorites.dataLocally.map((fav, index) => (
-          <MenuItem key={`${fav.latitude}${fav.longitude}`} value={index}>
-            {fav.city}, {fav.country}
-          </MenuItem>
-        ))}
-      </TextField>
       <div className={styles.defaultViewContainer}>
-        <Typography>Change Default View</Typography>
-        <TextField select fullWidth onChange={changeDefaultView} value={defaultViewIndex}>
+        <Typography>Change Default City:</Typography>
+        <TextField select classes={{ root: classes.selector }} onChange={changeCityCountry} value={locationIndex}>
+          {favorites.dataLocally.map((fav, index) => (
+            <MenuItem key={`${fav.latitude}${fav.longitude}`} value={index}>
+              {fav.city}, {fav.country}
+            </MenuItem>
+          ))}
+        </TextField>
+      </div>
+      <div className={styles.defaultViewContainer}>
+        <Typography>Change Default View:</Typography>
+        <TextField select classes={{ root: classes.selector }} onChange={changeDefaultView} value={defaultViewIndex}>
           {DEFAULT_VIEWS.map((view, index) => (
             <MenuItem key={view} value={index}>
               {view}
