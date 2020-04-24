@@ -1,21 +1,18 @@
 import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
 import { WIND_WEATHER_TYPE } from 'constants/constants';
 
-import Spinner from 'components/Spinner/Spinner';
 import RightBottomContainer from 'components/RightBottomContainer/RightBottomContainer';
 import Wind from 'components/Wind/Wind';
 import WithSvg from 'components/WithSvg/WithSvg';
 import { SET_FAVORITE_WEATHER_INFO, SET_FAVORITE_WEATHER_INFO_DATA } from 'store/actionTypes/userSettingsActionTypes';
 import { useDispatch, useSelector } from 'react-redux';
+import HomeAdditional from 'routes/Home/HomeAdditional/HomeAdditional';
 import WeatherInfo from './WeatherInfo/WeatherInfo';
 import styles from './TodayWeatherInfo.module.css';
-import HomeAdditional from 'routes/Home/HomeAdditional/HomeAdditional';
 
-const TodayWeatherInfo = props => {
-  const { isLoading } = props;
-
+const TodayWeatherInfo = () => {
   const dispatch = useDispatch();
 
   const userSettings = useSelector(state => state.userSettings);
@@ -32,11 +29,9 @@ const TodayWeatherInfo = props => {
     [dispatch, userFavoriteWeatherInfo, userWeatherData],
   );
 
-  return isLoading ? (
-    <Spinner />
-  ) : (
+  return (
     <RightBottomContainer className={styles.mainContainer}>
-      <HomeAdditional/>
+      <HomeAdditional />
       <div className={styles.otherContainer}>
         {userWeatherData.map((item, index) => {
           if (item.weatherType === WIND_WEATHER_TYPE) {
@@ -86,8 +81,6 @@ const TodayWeatherInfo = props => {
   );
 };
 
-TodayWeatherInfo.propTypes = {
-  isLoading: PropTypes.bool.isRequired,
-};
+TodayWeatherInfo.propTypes = {};
 
 export default TodayWeatherInfo;

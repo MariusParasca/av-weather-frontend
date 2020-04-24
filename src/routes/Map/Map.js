@@ -19,7 +19,7 @@ import {
   TEMPERATURE_MAP_TYPE,
   WEEK_DAYS,
 } from 'constants/constants';
-import { DELETE_FAVORITE_LOCALLY_SEND } from 'store/actionTypes/favoritesActionTypes';
+import { DELETE_FAVORITE_LOCALLY } from 'store/actionTypes/favoritesActionTypes';
 import { WEATHER_MAP_DELETE_BY_INDEX, WEATHER_MAP_API_SEND } from 'store/actionTypes/weatherMapActionTypes';
 import { withRouter } from 'react-router-dom';
 import MapWeatherInfo from 'components/MapWeatherInfo/MapWeatherInfo';
@@ -184,7 +184,7 @@ const Map = props => {
     if (dataLocally[favoriteIndex].city !== currentLocation.city) {
       markers[favoriteIndex].setMap(null);
       dispatch({ type: WEATHER_MAP_DELETE_BY_INDEX, index: favoriteIndex });
-      dispatch({ type: DELETE_FAVORITE_LOCALLY_SEND, index: favoriteIndex });
+      dispatch({ type: DELETE_FAVORITE_LOCALLY, index: favoriteIndex });
 
       const newMarkers = [...markers];
       newMarkers.splice(favoriteIndex, 1);

@@ -15,7 +15,7 @@ import {
   STANDARD_WEATHER_TYPE,
   WIND_WEATHER_TYPE,
 } from 'constants/constants';
-import ipStackAxios from 'axios/ipStack';
+// import ipStackAxios from 'axios/ipStack';
 import darkSkyAxios from 'axios/darkSky';
 import airQualityInstance from 'axios/airQuality';
 import {
@@ -25,7 +25,7 @@ import {
   getWeatherUnitsType,
   getWeatherUnits,
 } from 'utils/helperFunctions';
-import { ADD_FAVORITE_SEND, ADD_FAVORITE_LOCALLY_SEND } from 'store/actionTypes/favoritesActionTypes';
+import { ADD_FAVORITE_LOCALLY } from 'store/actionTypes/favoritesActionTypes';
 import {
   SET_FAVORITE_WEATHER_INFO,
   SET_FAVORITE_WEATHER_INFO_DATA,
@@ -33,8 +33,6 @@ import {
 } from 'store/actionTypes/userSettingsActionTypes';
 
 const getCurrentStateData = state => state.data;
-
-const getIsLoggedState = state => state.authData.isLoggedIn;
 
 const getUserSettings = state => state.userSettings;
 
@@ -66,30 +64,37 @@ async function makeWeatherRequest(latitude, longitude, city, units) {
   }
 }
 
-async function makeRequest() {
-  try {
-    const response = await ipStackAxios.get();
-    const location = response.data.loc.split(',');
-    const latitude = Number(location[0]);
-    const longitude = Number(location[1]);
+async function locationRequest() {
+  // try {
+  // const response = await ipStackAxios.get();
+  // const location = response.data.loc.split(',');
+  // const latitude = Number(location[0]);
+  // const longitude = Number(location[1]);
 
-    return {
-      data: {
-        ipStack: {
-          latitude,
-          longitude,
-          city: response.data.city,
-          country: response.data.country,
-          ip: response.data.ip,
-        },
+  return {
+    data: {
+      // ipStack: {
+      //   latitude,
+      //   longitude,
+      //   city: response.data.city,
+      //   country: response.data.country,
+      //   ip: response.data.ip,
+      // },
+      ipStack: {
+        latitude: 40.71455,
+        longitude: -74.00714,
+        city: 'New York',
+        country: 'USA',
+        ip: '31.5.170.101',
       },
-    };
-  } catch (error) {
-    return { error };
-  }
+    },
+  };
+  // } catch (error) {
+  //   return { error };
+  // }
 }
 
-function getWeatherArray(data, weatherUnits) {
+function getWeatherInfoArray(data, weatherUnits) {
   const { maxWind, humidity, precipitation, uvIndex, cloudCover, pressure, visibility, dewPoint, airQuality } = data;
 
   const tempAir = airQuality || 0;
@@ -166,7 +171,7 @@ function* setWeatherData(data) {
   const weatherData = [];
   let favoriteYieldObj = null;
 
-  for (const item of getWeatherArray(createCurrentlyWeather(data.currently), weatherUnits)) {
+  for (const item of getWeatherInfoArray(createCurrentlyWeather(data.currently), weatherUnits)) {
     if (item.text === userSettings.favoriteWeatherInfoLocally.text && userSettings.favoriteWeatherInfoLocally.text) {
       favoriteYieldObj = {
         type: SET_FAVORITE_WEATHER_INFO,
@@ -198,7 +203,6 @@ function* setWeatherData(data) {
 }
 
 function* weatherRequestGenerator(latitude, longitude, city, ipStack = {}) {
-  const isLoggedIn = yield select(getIsLoggedState);
   const units = yield select(getWeatherUnitsType);
 
   const { data, error } = yield call(makeWeatherRequest, latitude, longitude, city, units);
@@ -213,17 +217,13 @@ function* weatherRequestGenerator(latitude, longitude, city, ipStack = {}) {
       utcOffset: getUtcOffsetByCoordinates(ipStack.latitude, ipStack.longitude),
       dateTime: new Date(),
     };
-    if (isLoggedIn) {
-      yield put({ type: ADD_FAVORITE_SEND, data: favorite });
-    } else {
-      yield put({ type: ADD_FAVORITE_LOCALLY_SEND, favoriteCity: favorite });
-    }
+    yield put({ type: ADD_FAVORITE_LOCALLY, favoriteCity: favorite });
   } else {
     yield put({ type: WEATHER_API_FAILED, error });
   }
 }
 
-function* apiRequest(action) {
+function* weatherApiRequest(action) {
   const state = yield select(getCurrentStateData);
   const defaultLocation = yield select(getDefaultLocation);
 
@@ -234,7 +234,7 @@ function* apiRequest(action) {
       country: action.payload.country,
     });
   } else if (!state.ipStack.dataLoaded) {
-    const { data: ipData, error: ipError } = yield call(makeRequest);
+    const { data: ipData, error: ipError } = yield call(locationRequest);
     if (ipError) {
       yield put({ type: WEATHER_API_FAILED, ipError });
       return;
@@ -263,7 +263,7 @@ function* apiRequest(action) {
 }
 
 function* watchApiSend() {
-  yield takeEvery(WEATHER_API_SEND, apiRequest);
+  yield takeEvery(WEATHER_API_SEND, weatherApiRequest);
 }
 
 export default watchApiSend;

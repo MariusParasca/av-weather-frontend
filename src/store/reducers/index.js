@@ -1,14 +1,12 @@
 import { combineReducers } from 'redux';
 
-import ipStackReducer from 'store/reducers/weatherAPIReducer';
-import authReducer from 'store/reducers/authReducer';
+import weatherReducer from 'store/reducers/weatherAPIReducer';
 import favoriteReducer from 'store/reducers/favoritesReducer';
 import userSettingsReducer from 'store/reducers/userSettingsReducer';
 import weatherMapReducer from 'store/reducers/weatherMapReducer';
 
 export default combineReducers({
-  data: ipStackReducer,
-  authData: authReducer,
+  data: weatherReducer,
   favorites: favoriteReducer,
   userSettings: userSettingsReducer,
   weatherMap: weatherMapReducer,

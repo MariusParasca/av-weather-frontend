@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
 import Forecast from 'components/Forecast/Forecast';
 import HomeChart from 'components/Charts/HomeChart/HomeChart';
@@ -7,6 +7,7 @@ import { flatten, createBarChartWithGradient, getMinArray, getMaxArray } from 'u
 import { Slider, withStyles } from '@material-ui/core';
 import CurrentWeather from 'components/Main/CurrentWeather/CurrentWeather';
 import HomeSearchBox from 'components/HomeSearchBox/HomeSearchBox';
+import { useSelector } from 'react-redux';
 import styles from './Home.module.css';
 
 const CustomSlider = withStyles({
@@ -55,19 +56,19 @@ function AirbnbThumbComponent(props) {
   );
 }
 
-const getToday = (weatherHourly, indexFirstDay) => {
+const getToday = (hourly, indexFirstDay) => {
   const xLabelCurrent = [];
   const actualTempCurrent = [];
   const feelsLikeCurrent = [];
 
-  const todayData = weatherHourly.slice(0, indexFirstDay);
+  const todayData = hourly.slice(0, indexFirstDay);
   const minActual = Math.round(getMinArray(todayData, el => el.temperature));
   const maxActual = Math.round(getMaxArray(todayData, el => el.temperature));
   const minFeelLike = Math.round(getMinArray(todayData, el => el.apparentTemperature));
   const maxFeelLike = Math.round(getMaxArray(todayData, el => el.apparentTemperature));
 
   for (let i = 0; i < todayData.length; i += 1) {
-    const dataElement = weatherHourly[i];
+    const dataElement = hourly[i];
     xLabelCurrent.push(`${dataElement.hourAMPM}`);
     actualTempCurrent.push(createBarChartWithGradient(Math.round(dataElement.temperature), minActual, maxActual));
     feelsLikeCurrent.push(
@@ -94,8 +95,11 @@ const initVars = array => {
   };
 };
 
-const Home = props => {
-  const { weatherForecast, weatherHourly, currently, locationData } = props;
+const Home = () => {
+  const locationData = useSelector(state => state.data.ipStack);
+  const currently = useSelector(state => state.data.weather.currently);
+  const hourly = useSelector(state => state.data.weather.sevenDayHourly);
+  const daily = useSelector(state => state.data.weather.daily);
 
   const [modifiedWeatherForecast, setModifiedWeatherForecast] = useState([]);
 
@@ -143,19 +147,19 @@ const Home = props => {
     let index = 1;
     newWeekDaysHighLight[0] = true;
 
-    const currentHour = +weatherHourly[0].hour.split(':')[0];
+    const currentHour = +hourly[0].hour.split(':')[0];
     const indexFirstDay = 23 - currentHour + 1;
 
-    const [xLabelToday, actualToday, feelsToday] = getToday(weatherHourly, indexFirstDay);
+    const [xLabelToday, actualToday, feelsToday] = getToday(hourly, indexFirstDay);
     xLabelArray.push(xLabelToday);
     actualTempArray.push(actualToday);
     feelsLikeArray.push(feelsToday);
 
-    // let label = WEEK_DAYS[createDateFromEpoch(weatherHourly[indexFirstDay].time).getDay()];
+    // let label = WEEK_DAYS[createDateFromEpoch(hourly[indexFirstDay].time).getDay()];
     let counter = 0;
-    let data = initVars(weatherHourly.slice(indexFirstDay, indexFirstDay + 24));
-    for (let i = indexFirstDay; i < weatherHourly.length - 1; i += 1) {
-      const dataElement = weatherHourly[i];
+    let data = initVars(hourly.slice(indexFirstDay, indexFirstDay + 24));
+    for (let i = indexFirstDay; i < hourly.length - 1; i += 1) {
+      const dataElement = hourly[i];
       if (counter === 24) {
         if (index < 3) newWeekDaysHighLight[index] = true;
         index += 1;
@@ -164,7 +168,7 @@ const Home = props => {
         xLabelArray.push(data.xLabelCurrent);
         actualTempArray.push(data.actualTempCurrent);
         feelsLikeArray.push(data.feelsLikeCurrent);
-        data = initVars(weatherHourly.slice(i, i + 24));
+        data = initVars(hourly.slice(i, i + 24));
       } else {
         counter += 1;
       }
@@ -191,18 +195,18 @@ const Home = props => {
     setXLabelArr(xLabelArray);
     setActualTempArr(actualTempArray);
     setFeelsLikeArr(feelsLikeArray);
-  }, [weatherHourly]);
+  }, [hourly]);
 
   useEffect(() => {
     setModifiedWeatherForecast(
-      weatherForecast.map(el => ({
+      daily.map(el => ({
         label: el.label,
         temperatureNight: el.temperatureLow,
         temperatureDay: el.temperatureHigh,
         svg: `svgs/TypeOfWeather/Forecast/${el.icon}.svg`,
       })),
     );
-  }, [weatherForecast]);
+  }, [daily]);
 
   return (
     <>
@@ -247,17 +251,6 @@ const Home = props => {
   );
 };
 
-Home.propTypes = {
-  weatherForecast: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string,
-      temperatureNight: PropTypes.number,
-      temperatureDay: PropTypes.number,
-    }),
-  ).isRequired,
-  weatherHourly: PropTypes.arrayOf(PropTypes.any).isRequired,
-  currently: PropTypes.objectOf(PropTypes.any).isRequired,
-  locationData: PropTypes.objectOf(PropTypes.any).isRequired,
-};
+Home.propTypes = {};
 
 export default Home;

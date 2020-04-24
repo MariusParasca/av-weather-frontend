@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { makeStyles, TextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
-import { ADD_FAVORITE_SEND, ADD_FAVORITE_LOCALLY_SEND } from 'store/actionTypes/favoritesActionTypes';
+import { ADD_FAVORITE_LOCALLY } from 'store/actionTypes/favoritesActionTypes';
 import useHttp from 'hooks/useHttp';
 import hereAutosuggestAxios from 'axios/hereAutosuggest';
 import SearchIcon from '@material-ui/icons/Search';
@@ -46,7 +46,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const SearchBox = props => {
-  const { placeholder, className, locationData, isLoggedIn } = props;
+  const { placeholder, className, locationData } = props;
 
   const hereAutosuggestHttp = useHttp();
   const { sendRequest: sendRequestHereAutosuggest } = hereAutosuggestHttp;
@@ -116,11 +116,7 @@ const SearchBox = props => {
         utcOffset: getUtcOffsetByCoordinates(value.position[0], value.position[1]),
         dateTime: new Date(),
       };
-      if (isLoggedIn) {
-        dispatch({ type: ADD_FAVORITE_SEND, data: favorite });
-      } else {
-        dispatch({ type: ADD_FAVORITE_LOCALLY_SEND, favoriteCity: favorite });
-      }
+      dispatch({ type: ADD_FAVORITE_LOCALLY, favoriteCity: favorite });
 
       dispatch({
         type: WEATHER_API_SEND,
@@ -133,7 +129,7 @@ const SearchBox = props => {
       });
       disableAutocomplete();
     },
-    [disableAutocomplete, dispatch, isLoggedIn],
+    [disableAutocomplete, dispatch],
   );
 
   return (
@@ -169,14 +165,6 @@ const SearchBox = props => {
                 onBlur={() => setAutoCompleteOptions([])}
                 onChange={updateTextField(setSearchString)}
                 placeholder={placeholder}
-                // InputProps={{
-                //   startAdornment: (
-                //     <InputAdornment position="start">
-                //       <SearchIcon style={{ fill: '#6C66FA' }} />
-                //     </InputAdornment>
-                //   ),
-                //   classes: { root: classes.inputRoot },
-                // }}
                 variant="outlined"
                 fullWidth
               />
@@ -199,7 +187,6 @@ SearchBox.propTypes = {
   placeholder: PropTypes.string,
   className: PropTypes.string,
   locationData: PropTypes.objectOf(PropTypes.any).isRequired,
-  isLoggedIn: PropTypes.bool.isRequired,
 };
 
 SearchBox.defaultProps = {

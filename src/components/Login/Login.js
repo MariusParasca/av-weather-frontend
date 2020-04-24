@@ -1,55 +1,47 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { TextField, Button, Typography } from '@material-ui/core';
-
-import { isEmailValid } from 'utils/validators';
-import { updateTextField } from 'utils/helperFunctions';
-import { LOGIN } from 'store/actionTypes/authActionTypes';
-import Spinner from 'components/Spinner/Spinner';
-import styles from './Login.module.css';
+import React from 'react';
 
 const Login = () => {
-  const authData = useSelector(state => state.authData);
+  // const authData = useSelector(state => state.authData);
 
-  const [value, setValue] = useState('');
-  const [error, setError] = useState(false);
-  const [helperText, setHelperText] = useState('');
+  // const [value, setValue] = useState('');
+  // const [error, setError] = useState(false);
+  // const [helperText, setHelperText] = useState('');
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  const resetError = () => {
-    setError(false);
-    setHelperText('');
-  };
+  // const resetError = () => {
+  //   setError(false);
+  //   setHelperText('');
+  // };
 
-  const setErrorMessage = message => {
-    setError(true);
-    setHelperText(message);
-  };
+  // const setErrorMessage = message => {
+  //   setError(true);
+  //   setHelperText(message);
+  // };
 
-  const onBlur = () => {
-    if (!isEmailValid(value)) {
-      setErrorMessage('Invalid email! Please provide a valid one');
-    }
-  };
+  // const onBlur = () => {
+  //   if (!isEmailValid(value)) {
+  //     setErrorMessage('Invalid email! Please provide a valid one');
+  //   }
+  // };
 
-  const onClickRegister = () => {
-    if (isEmailValid(value)) {
-      dispatch({ type: LOGIN, email: value });
-    } else if (!value) {
-      setErrorMessage('Invalid email! Please provide a valid one');
-    }
-  };
+  // const onClickRegister = () => {
+  //   if (isEmailValid(value)) {
+  //     dispatch({ type: LOGIN, email: value });
+  //   } else if (!value) {
+  //     setErrorMessage('Invalid email! Please provide a valid one');
+  //   }
+  // };
 
-  useEffect(() => {
-    if (authData.error) {
-      setErrorMessage(authData.error.message);
-    }
-  }, [authData]);
+  // useEffect(() => {
+  //   if (authData.error) {
+  //     setErrorMessage(authData.error.message);
+  //   }
+  // }, [authData]);
 
   return (
     <>
-      <Typography variant="h3" gutterBottom align="center">
+      {/* <Typography variant="h3" gutterBottom align="center">
         Login/Register
       </Typography>
       <div className={styles.textField}>
@@ -68,7 +60,7 @@ const Login = () => {
           Login
         </Button>
       </div>
-      {authData.pending ? <Spinner /> : null}
+      {authData.pending ? <Spinner /> : null} */}
     </>
   );
 };

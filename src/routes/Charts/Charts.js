@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { TextField, MenuItem, Typography, Grid, makeStyles } from '@material-ui/core';
 
 import { CHART_OPTIONS } from 'constants/constants';
@@ -30,9 +30,12 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Charts = props => {
-  const { hourly, daily, locationData, currently } = props;
-
   const dispatch = useDispatch();
+
+  const locationData = useSelector(state => state.data.ipStack);
+  const currently = useSelector(state => state.data.weather.currently);
+  const hourly = useSelector(state => state.data.weather.hourly);
+  const daily = useSelector(state => state.data.weather.daily);
 
   const favorites = useSelector(state => state.favorites);
   const temperatureScale = useSelector(state => state.userSettings.settings.weatherUnits.temperature);
@@ -177,9 +180,6 @@ const Charts = props => {
   );
 };
 
-Charts.propTypes = {
-  hourly: PropTypes.arrayOf(PropTypes.object).isRequired,
-  daily: PropTypes.arrayOf(PropTypes.object).isRequired,
-};
+Charts.propTypes = {};
 
 export default Charts;

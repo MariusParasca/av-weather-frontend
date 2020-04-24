@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 // import { ReactComponent as SettingsSvg } from 'svgs/Appbar/settings.svg';
 import SearchBox from 'components/SearchBox/SearchBox';
 import { SEARCH_PLACEHOLDER } from 'constants/constants';
-import { FETCH_FAVORITES_SEND, DELETE_FAVORITE_LOCALLY_SEND } from 'store/actionTypes/favoritesActionTypes';
+import { DELETE_FAVORITE_LOCALLY } from 'store/actionTypes/favoritesActionTypes';
 import { Grid, makeStyles } from '@material-ui/core';
 import { WEATHER_API_SEND } from 'store/actionTypes/weatherAPIActionTypes';
 // import WithSvg from 'components/WithSvg/WithSvg';
@@ -33,7 +33,6 @@ const HomeSearchBox = () => {
 
   const favorites = useSelector(state => state.favorites);
   const { dataLocally } = favorites;
-  const isLoggedIn = useSelector(state => state.authData.isLoggedIn);
 
   const onClickCity = useCallback(
     favorite => {
@@ -49,10 +48,6 @@ const HomeSearchBox = () => {
     },
     [dispatch],
   );
-
-  useEffect(() => {
-    if (isLoggedIn) dispatch({ type: FETCH_FAVORITES_SEND });
-  }, [dispatch, isLoggedIn]);
 
   useEffect(() => {
     const numberOfFavoritesSetter = () => {
@@ -87,7 +82,7 @@ const HomeSearchBox = () => {
                 latitude={fav.latitude}
                 longitude={fav.longitude}
                 utcOffset={fav.utcOffset}
-                onClickIcon={() => dispatch({ type: DELETE_FAVORITE_LOCALLY_SEND, index })}
+                onClickIcon={() => dispatch({ type: DELETE_FAVORITE_LOCALLY, index })}
                 onClickContainer={() => onClickCity(fav)}
               />
             </Grid>

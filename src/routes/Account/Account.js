@@ -1,23 +1,22 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+// import { useDispatch, useSelector } from 'react-redux';
 
-import { LOGOUT } from 'store/actionTypes/authActionTypes';
-import Login from 'components/Login/Login';
-import { Button } from '@material-ui/core';
+// import Login from 'components/Login/Login';
+// import { Button } from '@material-ui/core';
 import styles from './Account.module.css';
 
 const Account = () => {
-  const isLoggedIn = useSelector(state => state.authData.isLoggedIn);
-  const user = useSelector(state => state.authData.user);
-  const dispatch = useDispatch();
+  // const isLoggedIn = useSelector(state => state.authData.isLoggedIn);
+  // const user = useSelector(state => state.authData.user);
+  // const dispatch = useDispatch();
 
-  const onClickLogout = () => {
-    dispatch({ type: LOGOUT });
-  };
+  // const onClickLogout = () => {
+  //   dispatch({ type: LOGOUT });
+  // };
 
   return (
     <div className={styles.container}>
-      <div className={styles.formContainer}>
+      {/* <div className={styles.formContainer}>
         {!isLoggedIn ? (
           <Login />
         ) : (
@@ -28,7 +27,7 @@ const Account = () => {
             </Button>
           </div>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };
