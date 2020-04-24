@@ -179,7 +179,6 @@ const SearchBox = props => {
 const mapStateToProps = state => {
   return {
     locationData: state.data.ipStack,
-    isLoggedIn: state.authData.isLoggedIn,
   };
 };
 
