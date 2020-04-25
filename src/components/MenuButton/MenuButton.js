@@ -37,7 +37,7 @@ const MenuButton = props => {
 
 MenuButton.propTypes = {
   children: PropTypes.node.isRequired,
-  path: PropTypes.oneOfType(PropTypes.string, PropTypes.arrayOf(PropTypes.string)),
+  path: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
   exact: PropTypes.bool,
   isActive: PropTypes.func,
 };

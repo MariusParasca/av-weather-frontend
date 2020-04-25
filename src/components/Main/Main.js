@@ -2,7 +2,7 @@ import React from 'react';
 // import PropTypes from 'prop-types';
 import { Route } from 'react-router-dom';
 
-import { PageRoute, MapsRoute } from 'utils/routes';
+import { PageRoute } from 'utils/routes';
 import Spinner from 'components/Spinner/Spinner';
 import Home from 'routes/Home/Home';
 import Charts from 'routes/Charts/Charts';
