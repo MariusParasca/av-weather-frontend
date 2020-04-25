@@ -5,7 +5,7 @@ import Forecast from 'components/Forecast/Forecast';
 import HomeChart from 'components/Charts/HomeChart/HomeChart';
 import { flatten, createBarChartWithGradient, getMinArray, getMaxArray } from 'utils/helperFunctions';
 import { Slider, withStyles } from '@material-ui/core';
-import CurrentWeather from 'components/Main/CurrentWeather/CurrentWeather';
+import CurrentWeather from 'components/CurrentWeather/CurrentWeather';
 import HomeSearchBox from 'components/HomeSearchBox/HomeSearchBox';
 import { useSelector } from 'react-redux';
 import styles from './Home.module.css';

@@ -22,9 +22,9 @@ const CurrentWeather = props => {
 
   const classes = useStyles();
 
-  const temperatureScale = useSelector(state => state.userSettings.settings.weatherUnits.temperature);
-
   const [image, setImage] = useState('');
+
+  const temperatureScale = useSelector(state => state.userSettings.settings.weatherUnits.temperature);
 
   const [currentTime, setCurrentTime] = useState('00:00');
 
@@ -65,7 +65,7 @@ const CurrentWeather = props => {
 
   useEffect(() => {
     const getImage = async image => {
-      const imageImported = await import(`../../../images/TypeOfWeather/${image}.png`);
+      const imageImported = await import(`../../images/TypeOfWeather/${image}.png`);
       setImage(imageImported);
     };
     if (imageName) getImage(imageName);
@@ -115,7 +115,6 @@ CurrentWeather.propTypes = {
     sunriseTime: PropTypes.number.isRequired,
     sunsetTime: PropTypes.number.isRequired,
   }).isRequired,
-  imageName: PropTypes.string.isRequired,
 };
 
 CurrentWeather.defaultProps = {

@@ -56,21 +56,33 @@ const Main = () => {
   return (
     <div className={styles.container}>
       <div className={styles.wrapperContainer}>
-        {pending ? (
-          <Spinner />
-        ) : (
-          <>
-            <Route exact path={PageRoute.home}>
-              <ErrorBoundary>
-                <Home />
-              </ErrorBoundary>
-            </Route>
-            <Route path={PageRoute.charts}>
-              <ErrorBoundary>
-                <Charts />
-              </ErrorBoundary>
-            </Route>
-            {/* <Route path={PageRoute.history}>
+        <Route
+          exact
+          path={[
+            PageRoute.home,
+            PageRoute.charts,
+            `${PageRoute.map}${MapsRoute.cloudCover}`,
+            `${PageRoute.map}${MapsRoute.temperature}`,
+            `${PageRoute.map}${MapsRoute.wind}`,
+            `${PageRoute.map}${MapsRoute.precipitation}`,
+            `${PageRoute.map}${MapsRoute.pressure}`,
+          ]}
+        >
+          {pending ? (
+            <Spinner />
+          ) : (
+            <>
+              <Route exact path={PageRoute.home}>
+                <ErrorBoundary>
+                  <Home />
+                </ErrorBoundary>
+              </Route>
+              <Route path={PageRoute.charts}>
+                <ErrorBoundary>
+                  <Charts />
+                </ErrorBoundary>
+              </Route>
+              {/* <Route path={PageRoute.history}>
                 <ErrorBoundary>
                   <History
                     monthTemperature={february}
@@ -80,21 +92,22 @@ const Main = () => {
                   />
                 </ErrorBoundary>
               </Route> */}
-            <Route
-              path={[
-                `${PageRoute.map}${MapsRoute.cloudCover}`,
-                `${PageRoute.map}${MapsRoute.temperature}`,
-                `${PageRoute.map}${MapsRoute.wind}`,
-                `${PageRoute.map}${MapsRoute.precipitation}`,
-                `${PageRoute.map}${MapsRoute.pressure}`,
-              ]}
-            >
-              <ErrorBoundary>
-                <Map />
-              </ErrorBoundary>
-            </Route>
-          </>
-        )}
+              <Route
+                path={[
+                  `${PageRoute.map}${MapsRoute.cloudCover}`,
+                  `${PageRoute.map}${MapsRoute.temperature}`,
+                  `${PageRoute.map}${MapsRoute.wind}`,
+                  `${PageRoute.map}${MapsRoute.precipitation}`,
+                  `${PageRoute.map}${MapsRoute.pressure}`,
+                ]}
+              >
+                <ErrorBoundary>
+                  <Map />
+                </ErrorBoundary>
+              </Route>
+            </>
+          )}
+        </Route>
         <Route path={PageRoute.favorites}>
           <ErrorBoundary>
             <Favorites />

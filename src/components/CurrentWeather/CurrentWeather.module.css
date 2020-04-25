@@ -27,6 +27,7 @@
 
 .container {
   position: relative;
+  width: 55vh;
 }
 
 .locationContainer {
