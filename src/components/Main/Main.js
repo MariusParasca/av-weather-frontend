@@ -52,7 +52,7 @@ import styles from './Main.module.css';
 // ];
 
 const Main = () => {
-  const pending = useSelector(state => state.data.pending);
+  const pending = useSelector(state => state.weatherData.pending);
 
   return (
     <div className={styles.container}>

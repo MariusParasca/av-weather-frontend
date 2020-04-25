@@ -34,7 +34,7 @@ const Settings = props => {
   const favorites = useSelector(state => state.favorites);
 
   const [locationIndex, setLocationIndex] = useState(
-    favorites.dataLocally.findIndex(fav => fav.city === defaultLocation.city),
+    favorites.favoritesData.findIndex(fav => fav.city === defaultLocation.city),
   );
 
   const [defaultViewIndex, setDefaultViewIndex] = useState(
@@ -53,33 +53,33 @@ const Settings = props => {
     dispatch({
       type: WEATHER_API_SEND,
       payload: {
-        latitude: favorites.dataLocally[locationIndex].latitude,
-        longitude: favorites.dataLocally[locationIndex].longitude,
-        city: favorites.dataLocally[locationIndex].city,
-        country: favorites.dataLocally[locationIndex].country,
+        latitude: favorites.favoritesData[locationIndex].latitude,
+        longitude: favorites.favoritesData[locationIndex].longitude,
+        city: favorites.favoritesData[locationIndex].city,
+        country: favorites.favoritesData[locationIndex].country,
       },
     });
     dispatch({
       type: WEATHER_MAP_API_SEND,
     });
-  }, [dispatch, favorites.dataLocally, isCelsius, locationIndex]);
+  }, [dispatch, favorites.favoritesData, isCelsius, locationIndex]);
 
   const changeCityCountry = useCallback(
     event => {
       const indexLocation = event.target.value;
       setLocationIndex(indexLocation);
-      dispatch({ type: CHANGE_DEFAULT_LOCATION, data: favorites.dataLocally[indexLocation] });
+      dispatch({ type: CHANGE_DEFAULT_LOCATION, data: favorites.favoritesData[indexLocation] });
       dispatch({
         type: WEATHER_API_SEND,
         payload: {
-          latitude: favorites.dataLocally[indexLocation].latitude,
-          longitude: favorites.dataLocally[indexLocation].longitude,
-          city: favorites.dataLocally[indexLocation].city,
-          country: favorites.dataLocally[indexLocation].country,
+          latitude: favorites.favoritesData[indexLocation].latitude,
+          longitude: favorites.favoritesData[indexLocation].longitude,
+          city: favorites.favoritesData[indexLocation].city,
+          country: favorites.favoritesData[indexLocation].country,
         },
       });
     },
-    [dispatch, favorites.dataLocally],
+    [dispatch, favorites.favoritesData],
   );
 
   const changeDefaultView = useCallback(
@@ -109,7 +109,7 @@ const Settings = props => {
       <div className={styles.defaultViewContainer}>
         <Typography>Change Default City:</Typography>
         <TextField select classes={{ root: classes.selector }} onChange={changeCityCountry} value={locationIndex}>
-          {favorites.dataLocally.map((fav, index) => (
+          {favorites.favoritesData.map((fav, index) => (
             <MenuItem key={`${fav.latitude}${fav.longitude}`} value={index}>
               {fav.city}, {fav.country}
             </MenuItem>

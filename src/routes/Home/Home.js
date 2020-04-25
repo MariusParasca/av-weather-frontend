@@ -96,10 +96,10 @@ const initVars = array => {
 };
 
 const Home = () => {
-  const locationData = useSelector(state => state.data.ipStack);
-  const currently = useSelector(state => state.data.weather.currently);
-  const hourly = useSelector(state => state.data.weather.sevenDayHourly);
-  const daily = useSelector(state => state.data.weather.daily);
+  const locationData = useSelector(state => state.weatherData.location);
+  const currently = useSelector(state => state.weatherData.weather.currently);
+  const hourly = useSelector(state => state.weatherData.weather.sevenDayHourly);
+  const daily = useSelector(state => state.weatherData.weather.daily);
 
   const [modifiedWeatherForecast, setModifiedWeatherForecast] = useState([]);
 

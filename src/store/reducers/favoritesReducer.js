@@ -3,8 +3,7 @@ import { REHYDRATE } from 'redux-persist/lib/constants';
 import { ADD_FAVORITE_LOCALLY, DELETE_FAVORITE_LOCALLY } from 'store/actionTypes/favoritesActionTypes';
 
 const initialState = {
-  data: [],
-  dataLocally: [],
+  favoritesData: [],
   pending: false,
   error: null,
   dataLoaded: false,
@@ -34,15 +33,16 @@ const reducer = (state = initialState, action) => {
 
   switch (action.type) {
     case REHYDRATE:
+      console.log('action.payload', action.payload);
       return {
         ...state,
-        dataLocally: action.payload ? action.payload.favorites.dataLocally : [],
+        // favoritesData: action.payload ? action.payload.favorites.favoritesData : [],
       };
     case ADD_FAVORITE_LOCALLY:
-      newState.dataLocally = getNewFavorites(newState.dataLocally, action.favoriteCity);
+      newState.favoritesData = getNewFavorites(newState.favoritesData, action.favoriteCity);
       break;
     case DELETE_FAVORITE_LOCALLY:
-      newState.dataLocally.splice(action.index, 1);
+      newState.favoritesData.splice(action.index, 1);
       break;
     default:
       break;

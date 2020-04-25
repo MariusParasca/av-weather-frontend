@@ -32,10 +32,10 @@ const useStyles = makeStyles(() => ({
 const Charts = props => {
   const dispatch = useDispatch();
 
-  const locationData = useSelector(state => state.data.ipStack);
-  const currently = useSelector(state => state.data.weather.currently);
-  const hourly = useSelector(state => state.data.weather.hourly);
-  const daily = useSelector(state => state.data.weather.daily);
+  const locationData = useSelector(state => state.weatherData.location);
+  const currently = useSelector(state => state.weatherData.weather.currently);
+  const hourly = useSelector(state => state.weatherData.weather.hourly);
+  const daily = useSelector(state => state.weatherData.weather.daily);
 
   const favorites = useSelector(state => state.favorites);
   const temperatureScale = useSelector(state => state.userSettings.settings.weatherUnits.temperature);
@@ -43,7 +43,7 @@ const Charts = props => {
   const classes = useStyles();
 
   const [locationIndex, setLocationIndex] = useState(
-    favorites.dataLocally.findIndex(fav => fav.city === locationData.city),
+    favorites.favoritesData.findIndex(fav => fav.city === locationData.city),
   );
 
   const [currentOption, setCurrentOption] = useState(1);
@@ -86,14 +86,14 @@ const Charts = props => {
       dispatch({
         type: WEATHER_API_SEND,
         payload: {
-          latitude: favorites.dataLocally[indexLocation].latitude,
-          longitude: favorites.dataLocally[indexLocation].longitude,
-          city: favorites.dataLocally[indexLocation].city,
-          country: favorites.dataLocally[indexLocation].country,
+          latitude: favorites.favoritesData[indexLocation].latitude,
+          longitude: favorites.favoritesData[indexLocation].longitude,
+          city: favorites.favoritesData[indexLocation].city,
+          country: favorites.favoritesData[indexLocation].country,
         },
       });
     },
-    [dispatch, favorites.dataLocally],
+    [dispatch, favorites.favoritesData],
   );
 
   return (
@@ -108,7 +108,7 @@ const Charts = props => {
                 </Typography>
                 <div className={styles.locationContainer}>
                   <TextField select fullWidth onChange={changeCityCountry} value={locationIndex}>
-                    {favorites.dataLocally.map((fav, index) => (
+                    {favorites.favoritesData.map((fav, index) => (
                       <MenuItem key={`${fav.latitude}${fav.longitude}`} value={index}>
                         {fav.city}, {fav.country}
                       </MenuItem>

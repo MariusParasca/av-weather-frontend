@@ -15,7 +15,7 @@ const Favorites = () => {
 
   const [pending, setPending] = useState(true);
 
-  const { dataLocally } = favorites;
+  const { favoritesData } = favorites;
 
   const dispatch = useDispatch();
 
@@ -23,7 +23,7 @@ const Favorites = () => {
     if (
       weatherMap.daily.length === 0 ||
       weatherMap.hourly.length === 0 ||
-      weatherMap.daily.length !== dataLocally.length
+      weatherMap.daily.length !== favoritesData.length
     ) {
       setPending(true);
       dispatch({
@@ -32,7 +32,7 @@ const Favorites = () => {
     } else {
       setPending(false);
     }
-  }, [dataLocally.length, dispatch, weatherMap.daily.length, weatherMap.hourly.length]);
+  }, [favoritesData.length, dispatch, weatherMap.daily.length, weatherMap.hourly.length]);
 
   const mapFunction = (favorite, index) => (
     <FavoriteCity
@@ -50,7 +50,7 @@ const Favorites = () => {
     />
   );
 
-  return pending ? <Spinner /> : <div className={styles.container}>{dataLocally.map(mapFunction)}</div>;
+  return pending ? <Spinner /> : <div className={styles.container}>{favoritesData.map(mapFunction)}</div>;
 };
 
 export default Favorites;

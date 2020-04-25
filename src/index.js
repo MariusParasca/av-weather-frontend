@@ -7,6 +7,8 @@ import { basename } from 'utils/routes';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import ReactNotification from 'react-notifications-component';
+import firebase from 'firebase/app';
+import 'firebase/database';
 
 import 'react-notifications-component/dist/theme.css';
 import sagaRoot from 'sagas';

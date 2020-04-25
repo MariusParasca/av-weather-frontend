@@ -6,7 +6,7 @@ import { WIND_WEATHER_TYPE } from 'constants/constants';
 import RightBottomContainer from 'components/RightBottomContainer/RightBottomContainer';
 import Wind from 'components/Wind/Wind';
 import WithSvg from 'components/WithSvg/WithSvg';
-import { SET_FAVORITE_WEATHER_INFO, SET_FAVORITE_WEATHER_INFO_DATA } from 'store/actionTypes/userSettingsActionTypes';
+import { SET_FAVORITE_WEATHER_INFO, SET_OTHER_WEATHER_INFO_ARRAY } from 'store/actionTypes/userSettingsActionTypes';
 import { useDispatch, useSelector } from 'react-redux';
 import HomeAdditional from 'routes/Home/HomeAdditional/HomeAdditional';
 import WeatherInfo from './WeatherInfo/WeatherInfo';
@@ -16,15 +16,15 @@ const TodayWeatherInfo = () => {
   const dispatch = useDispatch();
 
   const userSettings = useSelector(state => state.userSettings);
-  const userFavoriteWeatherInfo = userSettings.favoriteWeatherInfoLocally;
-  const userWeatherData = userSettings.data;
+  const userFavoriteWeatherInfo = userSettings.favoriteWeatherInfo;
+  const userWeatherData = userSettings.otherWeatherInfo;
 
   const onClickItem = useCallback(
     (index, progressValue, text, svg, withPercent, progressText, weatherType) => {
       const newItems = [...userWeatherData];
       newItems[index] = { ...userFavoriteWeatherInfo };
       dispatch({ type: SET_FAVORITE_WEATHER_INFO, progressValue, text, svg, withPercent, progressText, weatherType });
-      dispatch({ type: SET_FAVORITE_WEATHER_INFO_DATA, data: newItems });
+      dispatch({ type: SET_OTHER_WEATHER_INFO_ARRAY, data: newItems });
     },
     [dispatch, userFavoriteWeatherInfo, userWeatherData],
   );

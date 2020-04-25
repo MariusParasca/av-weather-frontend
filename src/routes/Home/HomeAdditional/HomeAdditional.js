@@ -8,7 +8,7 @@ import Wind from 'components/Wind/Wind';
 import styles from './HomeAdditional.module.css';
 
 const HomeAdditional = () => {
-  const userFavoriteWeatherInfo = useSelector(state => state.userSettings.favoriteWeatherInfoLocally);
+  const userFavoriteWeatherInfo = useSelector(state => state.userSettings.favoriteWeatherInfo);
 
   let weatherComponent;
 

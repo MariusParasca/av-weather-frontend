@@ -32,7 +32,7 @@ const HomeSearchBox = () => {
   const [numberOfFavorites, setNumberOfFavorites] = useState(0);
 
   const favorites = useSelector(state => state.favorites);
-  const { dataLocally } = favorites;
+  const { favoritesData } = favorites;
 
   const onClickCity = useCallback(
     favorite => {
@@ -75,7 +75,7 @@ const HomeSearchBox = () => {
           <WithSvg component={SettingsSvg} size={15} className={styles.icon} />
         </div> */}
         <Grid container classes={{ root: classes.gridRoot }}>
-          {dataLocally.slice(0, numberOfFavorites).map((fav, index) => (
+          {favoritesData.slice(0, numberOfFavorites).map((fav, index) => (
             <Grid item key={`${fav.city}`} classes={{ root: classes.gridItem }}>
               <HomeFavorite
                 city={fav.city}

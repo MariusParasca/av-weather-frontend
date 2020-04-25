@@ -178,7 +178,7 @@ const SearchBox = props => {
 
 const mapStateToProps = state => {
   return {
-    locationData: state.data.ipStack,
+    locationData: state.weatherData.location,
   };
 };
 

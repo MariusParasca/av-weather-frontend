@@ -10,7 +10,7 @@ import { getHourFromEpoch, createDateFromEpoch, formatHourAMPM } from 'utils/dat
 import { createCurrentlyWeather } from 'utils/helperFunctions';
 
 const initialState = {
-  ipStack: {
+  location: {
     latitude: 0,
     longitude: 0,
     city: '',
@@ -72,7 +72,7 @@ const createIpStack = data => {
 
 const reducer = (state = initialState, action) => {
   const newState = { ...state };
-  let newStateIpStack = { ...state.ipStack };
+  let newStateIpStack = { ...state.location };
   const newStateWeather = { ...state.weather };
 
   switch (action.type) {
@@ -80,7 +80,7 @@ const reducer = (state = initialState, action) => {
       newState.pending = true;
       break;
     case WEATHER_SET_DATA:
-      newStateIpStack = createIpStack(action.data.ipStack);
+      newStateIpStack = createIpStack(action.data.location);
       newStateWeather.currently = createCurrentlyWeather({
         ...action.data.weather.currently,
         sunriseTime: action.data.weather.daily.data[0].sunriseTime,
@@ -103,7 +103,7 @@ const reducer = (state = initialState, action) => {
   }
 
   newState.weather = newStateWeather;
-  newState.ipStack = newStateIpStack;
+  newState.location = newStateIpStack;
 
   return newState;
 };

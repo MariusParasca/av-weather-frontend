@@ -32,7 +32,7 @@ async function makeWeatherRequest(favorites, units) {
 
 function* apiRequest() {
   const units = yield select(getWeatherUnitsType);
-  const favorites = yield select(state => state.favorites.dataLocally);
+  const favorites = yield select(state => state.favorites.favoritesData);
   const { data, error } = yield call(makeWeatherRequest, favorites, units);
 
   if (data) {

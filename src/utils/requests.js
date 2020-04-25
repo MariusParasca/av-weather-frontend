@@ -1,4 +1,4 @@
-// import ipStackAxios from 'axios/ipStack';
+// import ipStackAxios from 'axios/location';
 
 // async function makeIpRequest() {
 //   try {

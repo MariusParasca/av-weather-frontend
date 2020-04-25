@@ -2,7 +2,7 @@ import { REHYDRATE } from 'redux-persist/lib/constants';
 
 import {
   SET_FAVORITE_WEATHER_INFO,
-  SET_FAVORITE_WEATHER_INFO_DATA,
+  SET_OTHER_WEATHER_INFO_ARRAY,
   CHANGE_WEATHER_SCALE,
   CHANGE_DEFAULT_LOCATION,
   CHANGE_DEFAULT_VIEW,
@@ -12,14 +12,6 @@ import { PageRoute } from 'utils/routes';
 
 const initialState = {
   favoriteWeatherInfo: {
-    progressValue: '',
-    text: '',
-    svg: '',
-    progressText: '',
-    withPercent: false,
-    weatherType: '',
-  },
-  favoriteWeatherInfoLocally: {
     progressValue: '',
     text: '',
     svg: '',
@@ -38,7 +30,7 @@ const initialState = {
       url: PageRoute.home,
     },
   },
-  data: [],
+  otherWeatherInfo: [],
 };
 
 const getWeatherUnits = isCelsius => {
@@ -60,21 +52,21 @@ const reducer = (state = initialState, action) => {
 
   switch (action.type) {
     case REHYDRATE:
-      newState.favoriteWeatherInfoLocally = action.payload
-        ? action.payload.userSettings.favoriteWeatherInfoLocally
-        : initialState.favoriteWeatherInfoLocally;
-      newState.settings = action.payload ? action.payload.userSettings.settings : initialState.settings;
+      // newState.favoriteWeatherInfo = action.payload
+      //   ? action.payload.userSettings.favoriteWeatherInfo
+      //   : initialState.favoriteWeatherInfo;
+      // newState.settings = action.payload ? action.payload.userSettings.settings : initialState.settings;
       break;
     case SET_FAVORITE_WEATHER_INFO:
-      newState.favoriteWeatherInfoLocally.progressValue = action.progressValue;
-      newState.favoriteWeatherInfoLocally.text = action.text;
-      newState.favoriteWeatherInfoLocally.svg = action.svg;
-      newState.favoriteWeatherInfoLocally.progressText = action.progressText;
-      newState.favoriteWeatherInfoLocally.withPercent = action.withPercent;
-      newState.favoriteWeatherInfoLocally.weatherType = action.weatherType;
+      newState.favoriteWeatherInfo.progressValue = action.progressValue;
+      newState.favoriteWeatherInfo.text = action.text;
+      newState.favoriteWeatherInfo.svg = action.svg;
+      newState.favoriteWeatherInfo.progressText = action.progressText;
+      newState.favoriteWeatherInfo.withPercent = action.withPercent;
+      newState.favoriteWeatherInfo.weatherType = action.weatherType;
       break;
-    case SET_FAVORITE_WEATHER_INFO_DATA:
-      newState.data = action.data;
+    case SET_OTHER_WEATHER_INFO_ARRAY:
+      newState.otherWeatherInfo = action.data;
       break;
     case CHANGE_WEATHER_SCALE:
       newState.settings.weatherUnits = getWeatherUnits(action.isCelsius);

@@ -1,4 +1,5 @@
 import { takeEvery, put, call, select } from 'redux-saga/effects';
+import firebase from 'firebase/app';
 
 import {
   WEATHER_API_SEND,
@@ -15,7 +16,7 @@ import {
   STANDARD_WEATHER_TYPE,
   WIND_WEATHER_TYPE,
 } from 'constants/constants';
-// import ipStackAxios from 'axios/ipStack';
+// import ipStackAxios from 'axios/location';
 import darkSkyAxios from 'axios/darkSky';
 import airQualityInstance from 'axios/airQuality';
 import {
@@ -28,11 +29,11 @@ import {
 import { ADD_FAVORITE_LOCALLY } from 'store/actionTypes/favoritesActionTypes';
 import {
   SET_FAVORITE_WEATHER_INFO,
-  SET_FAVORITE_WEATHER_INFO_DATA,
+  SET_OTHER_WEATHER_INFO_ARRAY,
   CHANGE_DEFAULT_LOCATION,
 } from 'store/actionTypes/userSettingsActionTypes';
 
-const getCurrentStateData = state => state.data;
+const getCurrentStateData = state => state.weatherData;
 
 const getUserSettings = state => state.userSettings;
 
@@ -73,14 +74,14 @@ async function locationRequest() {
 
   return {
     data: {
-      // ipStack: {
+      // location: {
       //   latitude,
       //   longitude,
       //   city: response.data.city,
       //   country: response.data.country,
       //   ip: response.data.ip,
       // },
-      ipStack: {
+      location: {
         latitude: 40.71455,
         longitude: -74.00714,
         city: 'New York',
@@ -172,7 +173,7 @@ function* setWeatherData(data) {
   let favoriteYieldObj = null;
 
   for (const item of getWeatherInfoArray(createCurrentlyWeather(data.currently), weatherUnits)) {
-    if (item.text === userSettings.favoriteWeatherInfoLocally.text && userSettings.favoriteWeatherInfoLocally.text) {
+    if (item.text === userSettings.favoriteWeatherInfo.text && userSettings.favoriteWeatherInfo.text) {
       favoriteYieldObj = {
         type: SET_FAVORITE_WEATHER_INFO,
         progressValue: item.progressValue,
@@ -195,26 +196,26 @@ function* setWeatherData(data) {
       svg: 'svgs/WeatherInfo/air.svg',
       weatherType: STANDARD_WEATHER_TYPE,
     });
-    yield put({ type: SET_FAVORITE_WEATHER_INFO_DATA, data: weatherData.slice(1, weatherData.length) });
+    yield put({ type: SET_OTHER_WEATHER_INFO_ARRAY, data: weatherData.slice(1, weatherData.length) });
   } else {
     yield put(favoriteYieldObj);
-    yield put({ type: SET_FAVORITE_WEATHER_INFO_DATA, data: weatherData });
+    yield put({ type: SET_OTHER_WEATHER_INFO_ARRAY, data: weatherData });
   }
 }
 
-function* weatherRequestGenerator(latitude, longitude, city, ipStack = {}) {
+function* weatherRequestGenerator(latitude, longitude, city, location = {}) {
   const units = yield select(getWeatherUnitsType);
 
   const { data, error } = yield call(makeWeatherRequest, latitude, longitude, city, units);
   if (data) {
-    yield put({ type: WEATHER_SET_DATA, data: { weather: data, ipStack } });
+    yield put({ type: WEATHER_SET_DATA, data: { weather: data, location } });
     yield setWeatherData(data);
     const favorite = {
-      city: ipStack.city,
-      country: ipStack.country,
-      latitude: ipStack.latitude,
-      longitude: ipStack.longitude,
-      utcOffset: getUtcOffsetByCoordinates(ipStack.latitude, ipStack.longitude),
+      city: location.city,
+      country: location.country,
+      latitude: location.latitude,
+      longitude: location.longitude,
+      utcOffset: getUtcOffsetByCoordinates(location.latitude, location.longitude),
       dateTime: new Date(),
     };
     yield put({ type: ADD_FAVORITE_LOCALLY, favoriteCity: favorite });
@@ -227,16 +228,23 @@ function* weatherApiRequest(action) {
   const state = yield select(getCurrentStateData);
   const defaultLocation = yield select(getDefaultLocation);
 
+  console.log('firebase', firebase.database());
+
+  // yield firebase
+  //   .database()
+  //   .ref('/todo')
+  //   .push({ nice: 'work!' });
+
   if (action.payload) {
     yield call(weatherRequestGenerator, action.payload.latitude, action.payload.longitude, action.payload.city, {
-      ...state.ipStack,
+      ...state.location,
       city: action.payload.city,
       country: action.payload.country,
     });
-  } else if (!state.ipStack.dataLoaded) {
-    const { data: ipData, error: ipError } = yield call(locationRequest);
-    if (ipError) {
-      yield put({ type: WEATHER_API_FAILED, ipError });
+  } else if (!state.location.dataLoaded) {
+    const { data: locationData, error: locationError } = yield call(locationRequest);
+    if (locationError) {
+      yield put({ type: WEATHER_API_FAILED, locationError });
       return;
     }
     if (defaultLocation.city) {
@@ -248,13 +256,13 @@ function* weatherApiRequest(action) {
         defaultLocation,
       );
     } else {
-      yield put({ type: CHANGE_DEFAULT_LOCATION, data: ipData.ipStack });
+      yield put({ type: CHANGE_DEFAULT_LOCATION, data: locationData.location });
       yield call(
         weatherRequestGenerator,
-        ipData.ipStack.latitude,
-        ipData.ipStack.longitude,
-        ipData.ipStack.city,
-        ipData.ipStack,
+        locationData.location.latitude,
+        locationData.location.longitude,
+        locationData.location.city,
+        locationData.location,
       );
     }
   } else {
