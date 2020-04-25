@@ -16,12 +16,18 @@ const useStyles = makeStyles(() => ({
 }));
 
 const MenuButton = props => {
-  const { children, path, exact } = props;
+  const { children, path, exact, isActive } = props;
 
   const classes = useStyles();
 
   return (
-    <NavLink className={styles.navLink} exact={exact} to={path} activeClassName={styles.activeClass}>
+    <NavLink
+      isActive={isActive}
+      className={styles.navLink}
+      exact={exact}
+      to={path}
+      activeClassName={styles.activeClass}
+    >
       <Button classes={{ root: classes.buttonRoot }} fullWidth>
         {children}
       </Button>
@@ -31,13 +37,15 @@ const MenuButton = props => {
 
 MenuButton.propTypes = {
   children: PropTypes.node.isRequired,
-  path: PropTypes.string,
+  path: PropTypes.oneOfType(PropTypes.string, PropTypes.arrayOf(PropTypes.string)),
   exact: PropTypes.bool,
+  isActive: PropTypes.func,
 };
 
 MenuButton.defaultProps = {
   path: '/',
   exact: false,
+  isActive: undefined,
 };
 
 export default MenuButton;

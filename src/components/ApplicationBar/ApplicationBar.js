@@ -14,6 +14,7 @@ import { PageRoute, MapsRoute } from 'utils/routes';
 import MenuButton from 'components/MenuButton/MenuButton';
 import { NavLink } from 'react-router-dom';
 import WithSvg from 'components/WithSvg/WithSvg';
+import { mapRoutes } from 'constants/routes';
 import styles from './ApplicationBar.module.css';
 
 const useStyles = makeStyles(theme => ({
@@ -43,7 +44,13 @@ const ApplicationBar = () => {
           <MenuButton exact path={PageRoute.home}>
             <WithSvg component={LocationSvg} size={22} />
           </MenuButton>
-          <MenuButton path={`${PageRoute.map}${MapsRoute.temperature}`}>
+          <MenuButton
+            isActive={(match, location) => {
+              if (mapRoutes.indexOf(location.pathname) !== -1) return true;
+              return false;
+            }}
+            path={`${PageRoute.map}${MapsRoute.temperature}`}
+          >
             <WithSvg component={MapSvg} size={20} />
           </MenuButton>
           <MenuButton path={PageRoute.charts}>

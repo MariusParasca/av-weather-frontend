@@ -15,6 +15,7 @@ import TodayWeatherInfo from 'components/TodayWeatherInfo/TodayWeatherInfo';
 import Settings from 'routes/Settings/Settings';
 
 import { useSelector } from 'react-redux';
+import { mapRoutes } from 'constants/routes';
 import styles from './Main.module.css';
 
 // Calendar dumb data
@@ -56,18 +57,7 @@ const Main = () => {
   return (
     <div className={styles.container}>
       <div className={styles.wrapperContainer}>
-        <Route
-          exact
-          path={[
-            PageRoute.home,
-            PageRoute.charts,
-            `${PageRoute.map}${MapsRoute.cloudCover}`,
-            `${PageRoute.map}${MapsRoute.temperature}`,
-            `${PageRoute.map}${MapsRoute.wind}`,
-            `${PageRoute.map}${MapsRoute.precipitation}`,
-            `${PageRoute.map}${MapsRoute.pressure}`,
-          ]}
-        >
+        <Route exact path={[PageRoute.home, PageRoute.charts, ...mapRoutes]}>
           {pending ? (
             <Spinner />
           ) : (
@@ -92,15 +82,7 @@ const Main = () => {
                   />
                 </ErrorBoundary>
               </Route> */}
-              <Route
-                path={[
-                  `${PageRoute.map}${MapsRoute.cloudCover}`,
-                  `${PageRoute.map}${MapsRoute.temperature}`,
-                  `${PageRoute.map}${MapsRoute.wind}`,
-                  `${PageRoute.map}${MapsRoute.precipitation}`,
-                  `${PageRoute.map}${MapsRoute.pressure}`,
-                ]}
-              >
+              <Route path={mapRoutes}>
                 <ErrorBoundary>
                   <Map />
                 </ErrorBoundary>
