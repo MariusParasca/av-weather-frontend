@@ -33,10 +33,9 @@ const reducer = (state = initialState, action) => {
 
   switch (action.type) {
     case REHYDRATE:
-      console.log('action.payload', action.payload);
       return {
         ...state,
-        // favoritesData: action.payload ? action.payload.favorites.favoritesData : [],
+        favoritesData: action.payload ? action.payload.favorites.favoritesData : [],
       };
     case ADD_FAVORITE_LOCALLY:
       newState.favoritesData = getNewFavorites(newState.favoritesData, action.favoriteCity);

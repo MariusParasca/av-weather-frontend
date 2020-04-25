@@ -5,12 +5,14 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import RequestComponent from 'components/RequestComponent/RequestComponent';
 import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
 
-import { useFirebaseConnect } from 'react-redux-firebase';
+import { useFirestoreConnect } from 'react-redux-firebase';
 import { useSelector } from 'react-redux';
 
 const App = () => {
-  // useFirebaseConnect([{ path: 'todo' }]);
-  // const todos = useSelector(state => state.firebase.data.todo);
+  // useFirestoreConnect([
+  //   { collection: 'locations' }, // or 'todos'
+  // ]);
+  // const todos = useSelector(state => state.firestore.ordered.locations);
 
   // console.log('todos', todos);
 
