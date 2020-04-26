@@ -7,7 +7,9 @@ import { WEATHER_MAP_API_SEND, WEATHER_MAP_DELETE_BY_INDEX } from 'store/actionT
 import FavoriteCity from 'components/FavoriteCity/FavoriteCity';
 import Spinner from 'components/Spinner/Spinner';
 import { getMinArray, getMaxArray } from 'utils/helperFunctions';
-import { FAVORITES_DATA } from 'constants/reduxState';
+import { getFavoritesDB, getFavoritesLocal } from 'utils/stateGetters';
+import { getFavoritesQuery } from 'utils/firestoreQueries';
+
 import styles from './Favorites.module.css';
 
 const Favorites = () => {
@@ -17,25 +19,10 @@ const Favorites = () => {
 
   const uid = useSelector(state => state.firebase.auth.uid);
 
-  useFirestoreConnect(
-    uid
-      ? [
-          {
-            collection: 'users',
-            doc: uid || '',
-            subcollections: [
-              {
-                collection: 'favoritesData',
-              },
-            ],
-            storeAs: FAVORITES_DATA,
-          },
-        ]
-      : [],
-  );
+  useFirestoreConnect(getFavoritesQuery(uid));
 
-  const favoritesDB = useSelector(state => state.firestore.ordered[FAVORITES_DATA]);
-  const favoritesLocal = useSelector(state => state.favorites[FAVORITES_DATA]);
+  const favoritesDB = useSelector(getFavoritesDB);
+  const favoritesLocal = useSelector(getFavoritesLocal);
 
   let favoritesData = [];
 
@@ -78,9 +65,7 @@ const Favorites = () => {
     />
   );
 
-  if (isLoaded(favoritesDB) || !uid)
-    return pending ? <Spinner /> : <div className={styles.container}>{favoritesData.map(mapFunction)}</div>;
-  return <Spinner />;
+  return pending ? <Spinner /> : <div className={styles.container}>{favoritesData.map(mapFunction)}</div>;
 };
 
 export default Favorites;

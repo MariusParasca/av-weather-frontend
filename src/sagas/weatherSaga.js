@@ -18,13 +18,7 @@ import {
 // import ipStackAxios from 'axios/location';
 import darkSkyAxios from 'axios/darkSky';
 import airQualityInstance from 'axios/airQuality';
-import {
-  replaceDiacritics,
-  getUtcOffsetByCoordinates,
-  createCurrentlyWeather,
-  getWeatherUnitsType,
-  getWeatherUnits,
-} from 'utils/helperFunctions';
+import { replaceDiacritics, getUtcOffsetByCoordinates, createCurrentlyWeather } from 'utils/helperFunctions';
 import { ADD_FAVORITE } from 'store/actionTypes/favoritesActionTypes';
 import {
   SET_FAVORITE_WEATHER_INFO,
@@ -33,14 +27,14 @@ import {
 } from 'store/actionTypes/userSettingsActionTypes';
 import { createPostSaga } from 'utils/sagaHelper';
 import firestore from 'utils/firestore';
-
-const getCurrentStateData = state => state.weatherData;
-
-const getUserSettings = state => state.userSettings;
-
-const getDefaultLocation = state => state.userSettings.settings.defaultLocation;
-
-const getUid = state => state.firebase.auth.uid;
+import {
+  getCurrentStateData,
+  getUserSettings,
+  getDefaultLocation,
+  getUid,
+  getWeatherUnitsType,
+  getWeatherUnits,
+} from 'utils/stateGetters';
 
 async function makeWeatherRequest(latitude, longitude, city, units) {
   try {
@@ -208,13 +202,18 @@ function* setWeatherData(data) {
 
 async function addFavorite(options) {
   try {
-    await firestore
+    const favoritesRef = firestore
       .collection('users')
       .doc(options.uid)
-      .collection('favoritesData')
-      .add(options.action.favoriteCity);
+      .collection('favoritesData');
+    const response = await favoritesRef.where('city', '==', options.action.favoriteCity.city).get();
+    console.log('response', response.data);
+    if (response.empty) {
+      favoritesRef.add(options.action.favoriteCity);
+    }
     return null;
   } catch (error) {
+    console.log('error', error);
     return error;
   }
 }

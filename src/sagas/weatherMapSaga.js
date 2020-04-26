@@ -5,8 +5,9 @@ import {
   WEATHER_MAP_API_FAILED,
   WEATHER_MAP_SET_DATA,
 } from 'store/actionTypes/weatherMapActionTypes';
+import { FAVORITES_DATA } from 'constants/reduxState';
 import darkSkyAxios from 'axios/darkSky';
-import { getWeatherUnitsType } from 'utils/helperFunctions';
+import { getUid, getWeatherUnitsType, getFavoritesLocal, getFavoritesDB } from 'utils/stateGetters';
 
 async function makeWeatherRequest(favorites, units) {
   try {
@@ -32,7 +33,10 @@ async function makeWeatherRequest(favorites, units) {
 
 function* apiRequest() {
   const units = yield select(getWeatherUnitsType);
-  const favorites = yield select(state => state.favorites.favoritesData);
+  const isLogged = yield select(getUid);
+  let favorites;
+  if (isLogged) favorites = yield select(getFavoritesDB);
+  else favorites = yield select(getFavoritesLocal);
   const { data, error } = yield call(makeWeatherRequest, favorites, units);
 
   if (data) {

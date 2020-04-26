@@ -8,6 +8,7 @@ import 'firebase/firestore';
 import 'firebase/database';
 import { createFirestoreInstance, reduxFirestore } from 'redux-firestore';
 import { compose } from 'react-redux';
+import { reactReduxFirebase } from 'react-redux-firebase';
 
 import { composeWithDevTools } from 'redux-devtools-extension';
 
@@ -23,6 +24,7 @@ const persistConfig = {
 const rrfConfig = {
   userProfile: 'users',
   useFirestoreForProfile: true,
+  attachAuthIsReady: true,
 };
 
 firebase.initializeApp(fbConfig);

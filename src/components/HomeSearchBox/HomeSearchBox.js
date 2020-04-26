@@ -11,8 +11,9 @@ import { Grid, makeStyles } from '@material-ui/core';
 import { WEATHER_API_SEND } from 'store/actionTypes/weatherAPIActionTypes';
 // import WithSvg from 'components/WithSvg/WithSvg';
 import HomeFavorite from 'components/HomeFavorite/HomeFavorite';
-import { FAVORITES_DATA } from 'constants/reduxState';
 import Spinner from 'components/Spinner/Spinner';
+import { getFavoritesLocal, getFavoritesDB, getUid } from 'utils/stateGetters';
+import { getFavoritesQuery } from 'utils/firestoreQueries';
 import styles from './HomeSearchBox.module.css';
 
 const useStyles = makeStyles(() => ({
@@ -34,27 +35,12 @@ const HomeSearchBox = () => {
 
   const [numberOfFavorites, setNumberOfFavorites] = useState(0);
 
-  const uid = useSelector(state => state.firebase.auth.uid);
+  const uid = useSelector(getUid);
 
-  useFirestoreConnect(
-    uid
-      ? [
-          {
-            collection: 'users',
-            doc: uid || '',
-            subcollections: [
-              {
-                collection: 'favoritesData',
-              },
-            ],
-            storeAs: FAVORITES_DATA,
-          },
-        ]
-      : [],
-  );
+  useFirestoreConnect(getFavoritesQuery(uid));
 
-  const favoritesDB = useSelector(state => state.firestore.ordered[FAVORITES_DATA]);
-  const favoritesLocal = useSelector(state => state.favorites[FAVORITES_DATA]);
+  const favoritesDB = useSelector(getFavoritesDB);
+  const favoritesLocal = useSelector(getFavoritesLocal);
 
   let favoritesData = [];
 
