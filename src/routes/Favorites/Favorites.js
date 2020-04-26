@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { DELETE_FAVORITE_LOCALLY } from 'store/actionTypes/favoritesActionTypes';
+import { DELETE_FAVORITE } from 'store/actionTypes/favoritesActionTypes';
 
 import { WEATHER_MAP_API_SEND, WEATHER_MAP_DELETE_BY_INDEX } from 'store/actionTypes/weatherMapActionTypes';
 import FavoriteCity from 'components/FavoriteCity/FavoriteCity';
@@ -45,7 +45,7 @@ const Favorites = () => {
       daily={weatherMap.daily[index]}
       onClickIcon={() => {
         dispatch({ type: WEATHER_MAP_DELETE_BY_INDEX, index });
-        dispatch({ type: DELETE_FAVORITE_LOCALLY, id: favorite.id });
+        dispatch({ type: DELETE_FAVORITE, id: favorite.id });
       }}
     />
   );

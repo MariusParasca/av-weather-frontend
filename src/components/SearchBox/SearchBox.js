@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { makeStyles, TextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
-import { ADD_FAVORITE_LOCALLY } from 'store/actionTypes/favoritesActionTypes';
+import { ADD_FAVORITE } from 'store/actionTypes/favoritesActionTypes';
 import useHttp from 'hooks/useHttp';
 import hereAutosuggestAxios from 'axios/hereAutosuggest';
 import SearchIcon from '@material-ui/icons/Search';
@@ -116,7 +116,7 @@ const SearchBox = props => {
         utcOffset: getUtcOffsetByCoordinates(value.position[0], value.position[1]),
         dateTime: new Date(),
       };
-      dispatch({ type: ADD_FAVORITE_LOCALLY, favoriteCity: favorite });
+      dispatch({ type: ADD_FAVORITE, favoriteCity: favorite });
 
       dispatch({
         type: WEATHER_API_SEND,

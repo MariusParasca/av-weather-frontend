@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 // import { ReactComponent as SettingsSvg } from 'svgs/Appbar/settings.svg';
 import SearchBox from 'components/SearchBox/SearchBox';
 import { SEARCH_PLACEHOLDER } from 'constants/constants';
-import { DELETE_FAVORITE_LOCALLY } from 'store/actionTypes/favoritesActionTypes';
+import { DELETE_FAVORITE } from 'store/actionTypes/favoritesActionTypes';
 import { Grid, makeStyles } from '@material-ui/core';
 import { WEATHER_API_SEND } from 'store/actionTypes/weatherAPIActionTypes';
 // import WithSvg from 'components/WithSvg/WithSvg';
@@ -82,7 +82,7 @@ const HomeSearchBox = () => {
                 latitude={fav.latitude}
                 longitude={fav.longitude}
                 utcOffset={fav.utcOffset}
-                onClickIcon={() => dispatch({ type: DELETE_FAVORITE_LOCALLY, index })}
+                onClickIcon={() => dispatch({ type: DELETE_FAVORITE, index })}
                 onClickContainer={() => onClickCity(fav)}
               />
             </Grid>

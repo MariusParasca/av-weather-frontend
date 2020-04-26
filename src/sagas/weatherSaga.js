@@ -1,5 +1,4 @@
 import { takeEvery, put, call, select } from 'redux-saga/effects';
-import firebase from 'firebase/app';
 
 import {
   WEATHER_API_SEND,
@@ -26,7 +25,7 @@ import {
   getWeatherUnitsType,
   getWeatherUnits,
 } from 'utils/helperFunctions';
-import { ADD_FAVORITE_LOCALLY } from 'store/actionTypes/favoritesActionTypes';
+import { ADD_FAVORITE } from 'store/actionTypes/favoritesActionTypes';
 import {
   SET_FAVORITE_WEATHER_INFO,
   SET_OTHER_WEATHER_INFO_ARRAY,
@@ -218,7 +217,7 @@ function* weatherRequestGenerator(latitude, longitude, city, location = {}) {
       utcOffset: getUtcOffsetByCoordinates(location.latitude, location.longitude),
       dateTime: new Date(),
     };
-    yield put({ type: ADD_FAVORITE_LOCALLY, favoriteCity: favorite });
+    yield put({ type: ADD_FAVORITE, favoriteCity: favorite });
   } else {
     yield put({ type: WEATHER_API_FAILED, error });
   }
@@ -227,13 +226,6 @@ function* weatherRequestGenerator(latitude, longitude, city, location = {}) {
 function* weatherApiRequest(action) {
   const state = yield select(getCurrentStateData);
   const defaultLocation = yield select(getDefaultLocation);
-
-  console.log('firebase', firebase.database());
-
-  // yield firebase
-  //   .database()
-  //   .ref('/todo')
-  //   .push({ nice: 'work!' });
 
   if (action.payload) {
     yield call(weatherRequestGenerator, action.payload.latitude, action.payload.longitude, action.payload.city, {
