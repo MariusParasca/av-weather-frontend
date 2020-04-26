@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { makeStyles, TextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
-import { ADD_FAVORITE_SEND } from 'store/actionTypes/favoritesActionTypes';
 import useHttp from 'hooks/useHttp';
 import hereAutosuggestAxios from 'axios/hereAutosuggest';
 import SearchIcon from '@material-ui/icons/Search';

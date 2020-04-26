@@ -207,13 +207,11 @@ async function addFavorite(options) {
       .doc(options.uid)
       .collection('favoritesData');
     const response = await favoritesRef.where('city', '==', options.action.favoriteCity.city).get();
-    console.log('response', response.data);
     if (response.empty) {
       favoritesRef.add(options.action.favoriteCity);
     }
     return null;
   } catch (error) {
-    console.log('error', error);
     return error;
   }
 }

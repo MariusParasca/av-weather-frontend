@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useFirestoreConnect, isLoaded } from 'react-redux-firebase';
+import { useFirestoreConnect } from 'react-redux-firebase';
 
 import { DELETE_FAVORITE_SEND } from 'store/actionTypes/favoritesActionTypes';
 import { WEATHER_MAP_API_SEND, WEATHER_MAP_DELETE_BY_INDEX } from 'store/actionTypes/weatherMapActionTypes';

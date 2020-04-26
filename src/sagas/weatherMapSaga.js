@@ -5,7 +5,6 @@ import {
   WEATHER_MAP_API_FAILED,
   WEATHER_MAP_SET_DATA,
 } from 'store/actionTypes/weatherMapActionTypes';
-import { FAVORITES_DATA } from 'constants/reduxState';
 import darkSkyAxios from 'axios/darkSky';
 import { getUid, getWeatherUnitsType, getFavoritesLocal, getFavoritesDB } from 'utils/stateGetters';
 
