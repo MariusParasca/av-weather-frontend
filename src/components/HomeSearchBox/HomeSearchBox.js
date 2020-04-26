@@ -1,15 +1,18 @@
 import React, { useEffect, useCallback, useRef, useState } from 'react';
 // import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
+import { useFirestoreConnect, isLoaded } from 'react-redux-firebase';
 
 // import { ReactComponent as SettingsSvg } from 'svgs/Appbar/settings.svg';
 import SearchBox from 'components/SearchBox/SearchBox';
 import { SEARCH_PLACEHOLDER } from 'constants/constants';
-import { DELETE_FAVORITE } from 'store/actionTypes/favoritesActionTypes';
+import { DELETE_FAVORITE_SEND } from 'store/actionTypes/favoritesActionTypes';
 import { Grid, makeStyles } from '@material-ui/core';
 import { WEATHER_API_SEND } from 'store/actionTypes/weatherAPIActionTypes';
 // import WithSvg from 'components/WithSvg/WithSvg';
 import HomeFavorite from 'components/HomeFavorite/HomeFavorite';
+import { FAVORITES_DATA } from 'constants/reduxState';
+import Spinner from 'components/Spinner/Spinner';
 import styles from './HomeSearchBox.module.css';
 
 const useStyles = makeStyles(() => ({
@@ -31,8 +34,35 @@ const HomeSearchBox = () => {
 
   const [numberOfFavorites, setNumberOfFavorites] = useState(0);
 
-  const favorites = useSelector(state => state.favorites);
-  const { favoritesData } = favorites;
+  const uid = useSelector(state => state.firebase.auth.uid);
+
+  useFirestoreConnect(
+    uid
+      ? [
+          {
+            collection: 'users',
+            doc: uid || '',
+            subcollections: [
+              {
+                collection: 'favoritesData',
+              },
+            ],
+            storeAs: FAVORITES_DATA,
+          },
+        ]
+      : [],
+  );
+
+  const favoritesDB = useSelector(state => state.firestore.ordered[FAVORITES_DATA]);
+  const favoritesLocal = useSelector(state => state.favorites[FAVORITES_DATA]);
+
+  let favoritesData = [];
+
+  if (uid) {
+    favoritesData = favoritesDB || [];
+  } else {
+    favoritesData = favoritesLocal;
+  }
 
   const onClickCity = useCallback(
     favorite => {
@@ -74,20 +104,24 @@ const HomeSearchBox = () => {
           <Typography variant="subtitle1">Frequent locations</Typography>
           <WithSvg component={SettingsSvg} size={15} className={styles.icon} />
         </div> */}
-        <Grid container classes={{ root: classes.gridRoot }}>
-          {favoritesData.slice(0, numberOfFavorites).map((fav, index) => (
-            <Grid item key={`${fav.city}`} classes={{ root: classes.gridItem }}>
-              <HomeFavorite
-                city={fav.city}
-                latitude={fav.latitude}
-                longitude={fav.longitude}
-                utcOffset={fav.utcOffset}
-                onClickIcon={() => dispatch({ type: DELETE_FAVORITE, index })}
-                onClickContainer={() => onClickCity(fav)}
-              />
-            </Grid>
-          ))}
-        </Grid>
+        {isLoaded(favoritesDB) || !uid ? (
+          <Grid container classes={{ root: classes.gridRoot }}>
+            {favoritesData.slice(0, numberOfFavorites).map((fav, index) => (
+              <Grid item key={`${fav.city}`} classes={{ root: classes.gridItem }}>
+                <HomeFavorite
+                  city={fav.city}
+                  latitude={fav.latitude}
+                  longitude={fav.longitude}
+                  utcOffset={fav.utcOffset}
+                  onClickIcon={() => dispatch({ type: DELETE_FAVORITE_SEND, index })}
+                  onClickContainer={() => onClickCity(fav)}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <Spinner />
+        )}
       </div>
     </div>
   );

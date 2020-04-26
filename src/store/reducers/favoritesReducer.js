@@ -26,25 +26,47 @@ function getNewFavorites(cities, newCity) {
   return cities;
 }
 
-const reducer = (state = initialState, action) => {
+const createAddReducer = (state, action, prefix) => {
   const newState = { ...state };
 
-  newState.error = null;
-
   switch (action.type) {
-    case REHYDRATE:
-      return {
-        ...state,
-        favoritesData: action.payload ? action.payload.favorites.favoritesData : [],
-      };
-    case ADD_FAVORITE:
-      newState.favoritesData = getNewFavorites(newState.favoritesData, action.favoriteCity);
+    case `${prefix}_SEND`:
+      newState.pending = true;
       break;
-    case DELETE_FAVORITE:
-      newState.favoritesData.splice(action.index, 1);
+    case `${prefix}_SUCCESS`:
+      newState.error = null;
+      newState.favoritesData = getNewFavorites(newState.favoritesData, action.favoriteCity);
+      newState.pending = false;
+      break;
+    case `${prefix}_LOCALLY`:
+      newState.favoritesData = getNewFavorites(newState.favoritesData, action.favoriteCity);
+      newState.pending = false;
+      newState.error = null;
+      break;
+    case `${prefix}_ERROR`:
+      newState.error = action.error.message;
+      newState.pending = false;
       break;
     default:
       break;
+  }
+
+  return newState;
+};
+
+const reducer = (state = initialState, action) => {
+  const newState = { ...state };
+
+  if (action.type === REHYDRATE) {
+    newState.favoritesData = action.payload ? action.payload.favorites.favoritesData : [];
+  }
+
+  if (action.type.indexOf(ADD_FAVORITE) !== -1) {
+    return createAddReducer(state, action, ADD_FAVORITE);
+  }
+
+  if (action.type.indexOf(DELETE_FAVORITE) !== -1) {
+    newState.favoritesData.splice(action.index, 1);
   }
 
   return newState;

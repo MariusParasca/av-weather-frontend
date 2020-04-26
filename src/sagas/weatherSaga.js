@@ -31,12 +31,16 @@ import {
   SET_OTHER_WEATHER_INFO_ARRAY,
   CHANGE_DEFAULT_LOCATION,
 } from 'store/actionTypes/userSettingsActionTypes';
+import { createPostSaga } from 'utils/sagaHelper';
+import firestore from 'utils/firestore';
 
 const getCurrentStateData = state => state.weatherData;
 
 const getUserSettings = state => state.userSettings;
 
 const getDefaultLocation = state => state.userSettings.settings.defaultLocation;
+
+const getUid = state => state.firebase.auth.uid;
 
 async function makeWeatherRequest(latitude, longitude, city, units) {
   try {
@@ -202,8 +206,22 @@ function* setWeatherData(data) {
   }
 }
 
+async function addFavorite(options) {
+  try {
+    await firestore
+      .collection('users')
+      .doc(options.uid)
+      .collection('favoritesData')
+      .add(options.action.favoriteCity);
+    return null;
+  } catch (error) {
+    return error;
+  }
+}
+
 function* weatherRequestGenerator(latitude, longitude, city, location = {}) {
   const units = yield select(getWeatherUnitsType);
+  const uid = yield select(getUid);
 
   const { data, error } = yield call(makeWeatherRequest, latitude, longitude, city, units);
   if (data) {
@@ -217,7 +235,10 @@ function* weatherRequestGenerator(latitude, longitude, city, location = {}) {
       utcOffset: getUtcOffsetByCoordinates(location.latitude, location.longitude),
       dateTime: new Date(),
     };
-    yield put({ type: ADD_FAVORITE, favoriteCity: favorite });
+    if (uid) {
+      yield createPostSaga({ favoriteCity: favorite }, ADD_FAVORITE, addFavorite, { uid });
+    }
+    yield put({ type: `${ADD_FAVORITE}_LOCALLY`, favoriteCity: favorite });
   } else {
     yield put({ type: WEATHER_API_FAILED, error });
   }

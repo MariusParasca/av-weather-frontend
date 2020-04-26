@@ -1,16 +1,8 @@
-import { takeEvery, put, call, all, fork } from 'redux-saga/effects';
+import { takeEvery, all, fork } from 'redux-saga/effects';
 import { LOGIN_SEND, LOGIN, REGISTER, REGISTER_SEND, SIGN_OUT, SIGN_OUT_SEND } from 'store/actionTypes/authActionTypes';
 import firebase from 'firebase/app';
 import firestore from 'utils/firestore';
-
-function* createCommonSaga(action, prefix, callback) {
-  const error = yield call(callback, action);
-  if (!error) {
-    yield put({ type: `${prefix}_SUCCESS` });
-  } else {
-    yield put({ type: `${prefix}_ERROR`, error });
-  }
-}
+import { createCommonSaga } from 'utils/sagaHelper';
 
 async function signOut() {
   try {
