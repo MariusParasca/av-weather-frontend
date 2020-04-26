@@ -25,8 +25,6 @@ const Login = () => {
   const authFirebaseRedux = useSelector(state => state.firebase);
   const authFirebase = authFirebaseRedux.auth;
 
-  console.log('authFirebase', authFirebase);
-
   useEffect(() => {
     if (auth.error) {
       setApiErrorMessage(auth.error);

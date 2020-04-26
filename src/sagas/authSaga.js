@@ -1,7 +1,7 @@
 import { takeEvery, put, call, all, fork } from 'redux-saga/effects';
 import { LOGIN_SEND, LOGIN, REGISTER, REGISTER_SEND, SIGN_OUT, SIGN_OUT_SEND } from 'store/actionTypes/authActionTypes';
 import firebase from 'firebase/app';
-import { getFirestore } from 'redux-firestore';
+import firestore from 'utils/firestore';
 
 function* createCommonSaga(action, prefix, callback) {
   const error = yield call(callback, action);
@@ -32,10 +32,10 @@ function* watchSignOut() {
 async function register(action) {
   try {
     const data = await firebase.auth().createUserWithEmailAndPassword(action.email, action.password);
-    getFirestore()
+    firestore
       .collection('users')
       .doc(data.user.uid)
-      .set({ test: 1 });
+      .set({ userId: data.user.uid });
   } catch (error) {
     return error;
   }
@@ -53,8 +53,6 @@ function* watchRegister() {
 async function login(action) {
   try {
     await firebase.auth().signInWithEmailAndPassword(action.email, action.password);
-
-    console.log('getFirestore()', getFirestore());
   } catch (error) {
     return error;
   }

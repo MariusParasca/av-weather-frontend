@@ -30,6 +30,11 @@ const fbConfig = {
   measurementId: 'G-RGT36Y5FVJ',
 };
 
+const rrfConfig = {
+  userProfile: 'users',
+  useFirestoreForProfile: true,
+};
+
 firebase.initializeApp(fbConfig);
 
 firebase.firestore();
@@ -44,11 +49,6 @@ const store = createStore(
     : compose(applyMiddleware(sagaMiddleware), reduxFirestore(fbConfig)),
 );
 const persistor = persistStore(store);
-
-const rrfConfig = {
-  userProfile: 'users',
-  useFirestoreForProfile: true,
-};
 
 const rrfProps = {
   firebase,

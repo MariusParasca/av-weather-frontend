@@ -25,12 +25,12 @@ ReactDOM.render(
   <BrowserRouter basename={basename}>
     <ThemeProvider theme={theme}>
       <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <ReactReduxFirebaseProvider {...rrfProps}>
+        <ReactReduxFirebaseProvider {...rrfProps}>
+          <PersistGate loading={null} persistor={persistor}>
             <ReactNotification />
             <App />
-          </ReactReduxFirebaseProvider>
-        </PersistGate>
+          </PersistGate>
+        </ReactReduxFirebaseProvider>
       </Provider>
     </ThemeProvider>
   </BrowserRouter>,
