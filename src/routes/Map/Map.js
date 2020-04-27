@@ -27,6 +27,9 @@ import MapWeatherInfo from 'components/MapWeatherInfo/MapWeatherInfo';
 import styles from './Map.module.css';
 import mapStyles from './mapStyle';
 import './ControlMapStyles.css';
+import { useFirestoreConnect } from 'react-redux-firebase';
+import { getFavoritesQuery } from 'utils/firestoreQueries';
+import { getUid, getFavoritesDB, getFavoritesLocal } from 'utils/stateGetters';
 
 const createMarks = () => {
   const followDay = new Date();
@@ -99,11 +102,23 @@ const Map = props => {
     [],
   );
 
-  const favorites = useSelector(state => state.favorites);
   const currentLocation = useSelector(state => state.weatherData.location);
   const weatherMap = useSelector(state => state.weatherMap);
 
-  const { favoritesData } = favorites;
+  const uid = useSelector(getUid);
+
+  useFirestoreConnect(getFavoritesQuery(uid));
+
+  const favoritesDB = useSelector(getFavoritesDB);
+  const favoritesLocal = useSelector(getFavoritesLocal);
+
+  let favoritesData = [];
+
+  if (uid) {
+    favoritesData = favoritesDB || [];
+  } else {
+    favoritesData = favoritesLocal;
+  }
 
   const [markers, setMarkers] = useState([]);
   const [favoriteIndex, setFavoriteIndex] = useState(-1);
@@ -143,14 +158,13 @@ const Map = props => {
   }, [favoritesData.length, favoriteIndex]);
 
   const setFavoritesMarkers = useCallback(
-    async (map, favoritesData, dailyWeather, sliderIndexParam, oldMarkers = []) => {
-      if (favoritesData.length > 0 && dailyWeather.length > 0) {
+    async (map, favorites, dailyWeather, sliderIndexParam, oldMarkers = []) => {
+      if (favorites.length > 0 && dailyWeather.length > 0) {
         const bounds = new window.google.maps.LatLngBounds();
         const markersAux = [];
 
-        for (let i = 0; i < (oldMarkers.length > 0 ? oldMarkers.length : favoritesData.length); i += 1) {
-          const favorite = favoritesData[i];
-
+        for (let i = 0; i < (oldMarkers.length > 0 ? oldMarkers.length : favorites.length); i += 1) {
+          const favorite = favorites[i];
           if (oldMarkers.length > 0) {
             oldMarkers[i].setMap(null);
           }
@@ -173,6 +187,7 @@ const Map = props => {
           markersAux.push(marker);
           bounds.extend(bound);
         }
+
         map.fitBounds(bounds);
         setMarkers(markersAux);
       }

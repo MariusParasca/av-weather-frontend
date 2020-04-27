@@ -13,6 +13,9 @@ import Precipitation from './Precipitation/Precipitation';
 import Humidity from './Humidity/Humidity';
 import Wind from './Wind/Wind';
 import Pressure from './Pressure/Pressure';
+import { getFavoritesQuery } from 'utils/firestoreQueries';
+import { getFavoritesDB, getFavoritesLocal, getUid } from 'utils/stateGetters';
+import { useFirestoreConnect } from 'react-redux-firebase';
 
 const useStyles = makeStyles(() => ({
   gridContainer: {
@@ -37,14 +40,26 @@ const Charts = props => {
   const hourly = useSelector(state => state.weatherData.weather.hourly);
   const daily = useSelector(state => state.weatherData.weather.daily);
 
-  const favorites = useSelector(state => state.favorites);
+  const uid = useSelector(getUid);
+
+  useFirestoreConnect(getFavoritesQuery(uid));
+
+  const favoritesDB = useSelector(getFavoritesDB);
+  const favoritesLocal = useSelector(getFavoritesLocal);
+
+  let favoritesData = [];
+
+  if (uid) {
+    favoritesData = favoritesDB || [];
+  } else {
+    favoritesData = favoritesLocal;
+  }
+
   const temperatureScale = useSelector(state => state.userSettings.settings.weatherUnits.temperature);
 
   const classes = useStyles();
 
-  const [locationIndex, setLocationIndex] = useState(
-    favorites.favoritesData.findIndex(fav => fav.city === locationData.city),
-  );
+  const [locationIndex, setLocationIndex] = useState(favoritesData.findIndex(fav => fav.city === locationData.city));
 
   const [currentOption, setCurrentOption] = useState(1);
   const [image, setImage] = useState('');
@@ -86,14 +101,14 @@ const Charts = props => {
       dispatch({
         type: WEATHER_API_SEND,
         payload: {
-          latitude: favorites.favoritesData[indexLocation].latitude,
-          longitude: favorites.favoritesData[indexLocation].longitude,
-          city: favorites.favoritesData[indexLocation].city,
-          country: favorites.favoritesData[indexLocation].country,
+          latitude: favoritesData[indexLocation].latitude,
+          longitude: favoritesData[indexLocation].longitude,
+          city: favoritesData[indexLocation].city,
+          country: favoritesData[indexLocation].country,
         },
       });
     },
-    [dispatch, favorites.favoritesData],
+    [dispatch, favoritesData],
   );
 
   return (
@@ -108,7 +123,7 @@ const Charts = props => {
                 </Typography>
                 <div className={styles.locationContainer}>
                   <TextField select fullWidth onChange={changeCityCountry} value={locationIndex}>
-                    {favorites.favoritesData.map((fav, index) => (
+                    {favoritesData.map((fav, index) => (
                       <MenuItem key={`${fav.latitude}${fav.longitude}`} value={index}>
                         {fav.city}, {fav.country}
                       </MenuItem>

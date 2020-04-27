@@ -232,6 +232,7 @@ function* weatherRequestGenerator(latitude, longitude, city, location = {}) {
       utcOffset: getUtcOffsetByCoordinates(location.latitude, location.longitude),
       dateTime: new Date(),
     };
+
     if (uid) {
       yield createPostSaga({ favoriteCity: favorite }, ADD_FAVORITE, addFavorite, { uid });
     }
@@ -248,6 +249,8 @@ function* weatherApiRequest(action) {
   if (action.payload) {
     yield call(weatherRequestGenerator, action.payload.latitude, action.payload.longitude, action.payload.city, {
       ...state.location,
+      latitude: action.payload.latitude,
+      longitude: action.payload.longitude,
       city: action.payload.city,
       country: action.payload.country,
     });

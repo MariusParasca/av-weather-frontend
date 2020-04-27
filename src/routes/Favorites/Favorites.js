@@ -7,7 +7,7 @@ import { WEATHER_MAP_API_SEND, WEATHER_MAP_DELETE_BY_INDEX } from 'store/actionT
 import FavoriteCity from 'components/FavoriteCity/FavoriteCity';
 import Spinner from 'components/Spinner/Spinner';
 import { getMinArray, getMaxArray } from 'utils/helperFunctions';
-import { getFavoritesDB, getFavoritesLocal } from 'utils/stateGetters';
+import { getFavoritesDB, getFavoritesLocal, getUid } from 'utils/stateGetters';
 import { getFavoritesQuery } from 'utils/firestoreQueries';
 
 import styles from './Favorites.module.css';
@@ -17,7 +17,7 @@ const Favorites = () => {
 
   const [pending, setPending] = useState(true);
 
-  const uid = useSelector(state => state.firebase.auth.uid);
+  const uid = useSelector(getUid);
 
   useFirestoreConnect(getFavoritesQuery(uid));
 
