@@ -2,6 +2,7 @@
 import ts from '@mapbox/timespace';
 import echarts from 'echarts/lib/echarts';
 import { store } from 'store/store';
+import { AMERICAN_UNITS, EUROPEAN_UNITS } from 'constants/constants';
 
 export const createChartData = (array, { label, propName }, options) => {
   let currentOptions;
@@ -252,4 +253,18 @@ export const createBarChartWithGradient = (value, min, max, itemStyleRest = {}) 
       ...itemStyleRest,
     },
   };
+};
+
+export const getWeatherUnits = isCelsius => {
+  return isCelsius
+    ? {
+        type: EUROPEAN_UNITS,
+        temperature: 'C',
+        distance: 'km',
+      }
+    : {
+        type: AMERICAN_UNITS,
+        temperature: 'F',
+        distance: 'mi',
+      };
 };

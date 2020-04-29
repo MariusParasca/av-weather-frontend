@@ -23,7 +23,7 @@ import { ADD_FAVORITE } from 'store/actionTypes/favoritesActionTypes';
 import {
   SET_FAVORITE_WEATHER_INFO,
   SET_OTHER_WEATHER_INFO_ARRAY,
-  CHANGE_DEFAULT_LOCATION,
+  CHANGE_DEFAULT_LOCATION_SEND,
 } from 'store/actionTypes/userSettingsActionTypes';
 import { createRequestCallbackSaga } from 'utils/sagaHelper';
 import {
@@ -253,7 +253,7 @@ function* weatherApiRequest(action) {
         defaultLocation,
       );
     } else {
-      yield put({ type: CHANGE_DEFAULT_LOCATION, data: locationData.location });
+      yield put({ type: CHANGE_DEFAULT_LOCATION_SEND, data: locationData.location });
       yield call(
         weatherRequestGenerator,
         locationData.location.latitude,

@@ -3,11 +3,17 @@ import { REHYDRATE } from 'redux-persist/lib/constants';
 import {
   SET_FAVORITE_WEATHER_INFO,
   SET_OTHER_WEATHER_INFO_ARRAY,
-  CHANGE_WEATHER_SCALE,
-  CHANGE_DEFAULT_LOCATION,
-  CHANGE_DEFAULT_VIEW,
+  CHANGE_WEATHER_SCALE_SEND,
+  CHANGE_DEFAULT_LOCATION_SEND,
+  CHANGE_DEFAULT_VIEW_SEND,
+  CHANGE_WEATHER_SCALE_DONE,
+  CHANGE_DEFAULT_LOCATION_DONE,
+  CHANGE_DEFAULT_VIEW_DONE,
+  CHANGE_WEATHER_SCALE_LOCALLY,
+  CHANGE_DEFAULT_LOCATION_LOCALLY,
+  CHANGE_DEFAULT_VIEW_LOCALLY,
 } from 'store/actionTypes/userSettingsActionTypes';
-import { AMERICAN_UNITS, EUROPEAN_UNITS } from 'constants/constants';
+import { getWeatherUnits } from 'utils/helperFunctions';
 import { PageRoute } from 'utils/routes';
 
 const initialState = {
@@ -31,24 +37,19 @@ const initialState = {
     },
   },
   otherWeatherInfo: [],
-};
-
-const getWeatherUnits = isCelsius => {
-  return isCelsius
-    ? {
-        type: EUROPEAN_UNITS,
-        temperature: 'C',
-        distance: 'km',
-      }
-    : {
-        type: AMERICAN_UNITS,
-        temperature: 'F',
-        distance: 'mi',
-      };
+  pending: false,
 };
 
 const reducer = (state = initialState, action) => {
   const newState = { ...state };
+
+  if ([CHANGE_WEATHER_SCALE_SEND, CHANGE_DEFAULT_LOCATION_SEND, CHANGE_DEFAULT_VIEW_SEND].includes(action.type)) {
+    newState.pending = true;
+  }
+
+  if ([CHANGE_WEATHER_SCALE_DONE, CHANGE_DEFAULT_LOCATION_DONE, CHANGE_DEFAULT_VIEW_DONE].includes(action.type)) {
+    newState.pending = false;
+  }
 
   switch (action.type) {
     case REHYDRATE:
@@ -68,13 +69,13 @@ const reducer = (state = initialState, action) => {
     case SET_OTHER_WEATHER_INFO_ARRAY:
       newState.otherWeatherInfo = action.data;
       break;
-    case CHANGE_WEATHER_SCALE:
+    case CHANGE_WEATHER_SCALE_LOCALLY:
       newState.settings.weatherUnits = getWeatherUnits(action.isCelsius);
       break;
-    case CHANGE_DEFAULT_LOCATION:
+    case CHANGE_DEFAULT_LOCATION_LOCALLY:
       newState.settings.defaultLocation = action.data;
       break;
-    case CHANGE_DEFAULT_VIEW:
+    case CHANGE_DEFAULT_VIEW_LOCALLY:
       newState.settings.defaultView.url = action.url;
       break;
     default:

@@ -4,9 +4,9 @@ import { Switch, Typography, Grid, makeStyles, TextField, MenuItem } from '@mate
 
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  CHANGE_WEATHER_SCALE,
-  CHANGE_DEFAULT_LOCATION,
-  CHANGE_DEFAULT_VIEW,
+  CHANGE_WEATHER_SCALE_SEND,
+  CHANGE_DEFAULT_LOCATION_SEND,
+  CHANGE_DEFAULT_VIEW_SEND,
 } from 'store/actionTypes/userSettingsActionTypes';
 import { EUROPEAN_UNITS, DEFAULT_VIEWS, DEFAULT_VIEWS_MAP_OBJECT } from 'constants/constants';
 import { WEATHER_API_SEND } from 'store/actionTypes/weatherAPIActionTypes';
@@ -49,7 +49,7 @@ const Settings = props => {
 
   const changeIsCelsius = useCallback(() => {
     setIsCelsius(!isCelsius);
-    dispatch({ type: CHANGE_WEATHER_SCALE, isCelsius: !isCelsius });
+    dispatch({ type: CHANGE_WEATHER_SCALE_SEND, isCelsius: !isCelsius });
     dispatch({
       type: WEATHER_API_SEND,
       payload: {
@@ -68,7 +68,7 @@ const Settings = props => {
     event => {
       const indexLocation = event.target.value;
       setLocationIndex(indexLocation);
-      dispatch({ type: CHANGE_DEFAULT_LOCATION, data: favorites.favoritesData[indexLocation] });
+      dispatch({ type: CHANGE_DEFAULT_LOCATION_SEND, data: favorites.favoritesData[indexLocation] });
       dispatch({
         type: WEATHER_API_SEND,
         payload: {
@@ -85,7 +85,7 @@ const Settings = props => {
   const changeDefaultView = useCallback(
     event => {
       setDefaultViewIndex(event.target.value);
-      dispatch({ type: CHANGE_DEFAULT_VIEW, url: DEFAULT_VIEWS_MAP_OBJECT[DEFAULT_VIEWS[event.target.value]] });
+      dispatch({ type: CHANGE_DEFAULT_VIEW_SEND, url: DEFAULT_VIEWS_MAP_OBJECT[DEFAULT_VIEWS[event.target.value]] });
     },
     [dispatch],
   );
