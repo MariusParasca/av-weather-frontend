@@ -7,6 +7,7 @@ import RequestComponent from 'components/RequestComponent/RequestComponent';
 import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
 import { useSelector } from 'react-redux';
 import Spinner from 'components/Spinner/Spinner';
+import Notification from 'components/Notification/Notification';
 
 const App = () => {
   const auth = useSelector(state => state.firebase.auth);
@@ -14,6 +15,7 @@ const App = () => {
   if (isLoaded(auth)) {
     return (
       <ErrorBoundary>
+        <Notification />
         <CssBaseline />
         <RequestComponent />
       </ErrorBoundary>

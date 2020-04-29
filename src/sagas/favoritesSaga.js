@@ -1,4 +1,4 @@
-import { takeEvery, put, call, select } from 'redux-saga/effects';
+import { takeEvery, put, select } from 'redux-saga/effects';
 
 import { DELETE_FAVORITE_SEND, DELETE_FAVORITE } from 'store/actionTypes/favoritesActionTypes';
 import firestore from 'utils/firestore';

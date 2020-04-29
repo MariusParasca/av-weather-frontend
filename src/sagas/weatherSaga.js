@@ -26,7 +26,6 @@ import {
   CHANGE_DEFAULT_LOCATION,
 } from 'store/actionTypes/userSettingsActionTypes';
 import { createRequestCallbackSaga } from 'utils/sagaHelper';
-import firestore from 'utils/firestore';
 import {
   getCurrentStateData,
   getUserSettings,
@@ -35,6 +34,7 @@ import {
   getWeatherUnitsType,
   getWeatherUnits,
 } from 'utils/stateGetters';
+import { addFavorite } from 'utils/commonAsync';
 
 async function makeWeatherRequest(latitude, longitude, city, units) {
   try {
@@ -197,22 +197,6 @@ function* setWeatherData(data) {
   } else {
     yield put(favoriteYieldObj);
     yield put({ type: SET_OTHER_WEATHER_INFO_ARRAY, data: weatherData });
-  }
-}
-
-async function addFavorite(options) {
-  try {
-    const favoritesRef = firestore
-      .collection('users')
-      .doc(options.uid)
-      .collection('favoritesData');
-    const response = await favoritesRef.where('city', '==', options.action.favoriteCity.city).get();
-    if (response.empty) {
-      favoritesRef.add(options.action.favoriteCity);
-    }
-    return null;
-  } catch (error) {
-    return error;
   }
 }
 

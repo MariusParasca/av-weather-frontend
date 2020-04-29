@@ -7,6 +7,7 @@ import favoriteReducer from 'store/reducers/favoritesReducer';
 import userSettingsReducer from 'store/reducers/userSettingsReducer';
 import weatherMapReducer from 'store/reducers/weatherMapReducer';
 import authReducer from 'store/reducers/authReducer';
+import notificationReducer from 'store/reducers/notificationReducer';
 
 export default combineReducers({
   weatherData: weatherReducer,
@@ -16,4 +17,5 @@ export default combineReducers({
   firebase: firebaseReducer,
   firestore: firestoreReducer,
   auth: authReducer,
+  notification: notificationReducer,
 });
