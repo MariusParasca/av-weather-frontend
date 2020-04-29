@@ -199,7 +199,7 @@ const Map = props => {
     if (favoritesData[favoriteIndex].city !== currentLocation.city) {
       markers[favoriteIndex].setMap(null);
       dispatch({ type: WEATHER_MAP_DELETE_BY_INDEX, index: favoriteIndex });
-      dispatch({ type: DELETE_FAVORITE_SEND, index: favoriteIndex });
+      dispatch({ type: DELETE_FAVORITE_SEND, index: favoriteIndex, id: favoritesData[favoriteIndex].id });
 
       const newMarkers = [...markers];
       newMarkers.splice(favoriteIndex, 1);
@@ -235,7 +235,7 @@ const Map = props => {
     if (
       weatherMap.daily.length === 0 ||
       weatherMap.hourly.length === 0 ||
-      weatherMap.daily.length !== favoritesData.length
+      weatherMap.daily.length < favoritesData.length
     ) {
       dispatch({
         type: WEATHER_MAP_API_SEND,

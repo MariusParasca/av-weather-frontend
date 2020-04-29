@@ -25,7 +25,7 @@ import {
   SET_OTHER_WEATHER_INFO_ARRAY,
   CHANGE_DEFAULT_LOCATION,
 } from 'store/actionTypes/userSettingsActionTypes';
-import { createPostSaga } from 'utils/sagaHelper';
+import { createRequestCallbackSaga } from 'utils/sagaHelper';
 import firestore from 'utils/firestore';
 import {
   getCurrentStateData,
@@ -234,7 +234,7 @@ function* weatherRequestGenerator(latitude, longitude, city, location = {}) {
     };
 
     if (uid) {
-      yield createPostSaga({ favoriteCity: favorite }, ADD_FAVORITE, addFavorite, { uid });
+      yield createRequestCallbackSaga({ favoriteCity: favorite }, ADD_FAVORITE, addFavorite, { uid });
     }
     yield put({ type: `${ADD_FAVORITE}_LOCALLY`, favoriteCity: favorite });
   } else {

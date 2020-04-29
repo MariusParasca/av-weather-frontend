@@ -99,7 +99,7 @@ const HomeSearchBox = () => {
                   latitude={fav.latitude}
                   longitude={fav.longitude}
                   utcOffset={fav.utcOffset}
-                  onClickIcon={() => dispatch({ type: DELETE_FAVORITE_SEND, index })}
+                  onClickIcon={() => dispatch({ type: DELETE_FAVORITE_SEND, index, id: fav.id })}
                   onClickContainer={() => onClickCity(fav)}
                 />
               </Grid>

@@ -54,6 +54,34 @@ const createAddReducer = (state, action, prefix) => {
   return newState;
 };
 
+const createDeleteReducer = (state, action, prefix) => {
+  const newState = { ...state };
+
+  switch (action.type) {
+    case `${prefix}_SEND`:
+      newState.pending = true;
+      break;
+    case `${prefix}_SUCCESS`:
+      newState.error = null;
+      newState.favoritesData.splice(action.index, 1);
+      newState.pending = false;
+      break;
+    case `${prefix}_LOCALLY`:
+      newState.favoritesData.splice(action.index, 1);
+      newState.pending = false;
+      newState.error = null;
+      break;
+    case `${prefix}_ERROR`:
+      newState.error = action.error.message;
+      newState.pending = false;
+      break;
+    default:
+      break;
+  }
+
+  return newState;
+};
+
 const reducer = (state = initialState, action) => {
   const newState = { ...state };
 
@@ -66,7 +94,7 @@ const reducer = (state = initialState, action) => {
   }
 
   if (action.type.indexOf(DELETE_FAVORITE) !== -1) {
-    newState.favoritesData.splice(action.index, 1);
+    return createDeleteReducer(state, action, DELETE_FAVORITE);
   }
 
   return newState;

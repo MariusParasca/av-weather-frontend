@@ -83,6 +83,7 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case WEATHER_MAP_API_SEND:
       newState.pending = true;
+      newState.error = null;
       break;
     case WEATHER_MAP_SET_DATA:
       newState.daily = createDaily(action.data);
@@ -95,6 +96,7 @@ const reducer = (state = initialState, action) => {
       newState.error = action.error;
       break;
     case WEATHER_MAP_DELETE_BY_INDEX:
+      console.log('aici');
       newState.daily.splice(action.index, 1);
       newState.hourly.splice(action.index, 1);
       newState.currently.splice(action.index, 1);

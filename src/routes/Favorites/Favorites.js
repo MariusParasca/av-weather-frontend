@@ -38,7 +38,7 @@ const Favorites = () => {
     if (
       weatherMap.daily.length === 0 ||
       weatherMap.hourly.length === 0 ||
-      weatherMap.daily.length !== favoritesData.length
+      weatherMap.daily.length < favoritesData.length
     ) {
       setPending(true);
       dispatch({
@@ -48,6 +48,8 @@ const Favorites = () => {
       setPending(false);
     }
   }, [favoritesData.length, dispatch, weatherMap.daily.length, weatherMap.hourly.length]);
+
+  console.log('weatherMap', weatherMap);
 
   const mapFunction = (favorite, index) => (
     <FavoriteCity
@@ -59,8 +61,8 @@ const Favorites = () => {
       currently={weatherMap.currently[index]}
       daily={weatherMap.daily[index]}
       onClickIcon={() => {
-        dispatch({ type: WEATHER_MAP_DELETE_BY_INDEX, index });
-        dispatch({ type: DELETE_FAVORITE_SEND, id: favorite.id });
+        console.log('dispatched');
+        dispatch({ type: DELETE_FAVORITE_SEND, id: favorite.id, index });
       }}
     />
   );
