@@ -23,7 +23,6 @@ async function deleteFavorite(options) {
 function* deleteFavoriteSaga(action) {
   const uid = yield select(getUid);
   if (uid) {
-    console.log('in if');
     yield createRequestCallbackSaga(action, DELETE_FAVORITE, deleteFavorite, { uid });
   }
   yield put({ type: `${DELETE_FAVORITE}_LOCALLY`, index: action.index });

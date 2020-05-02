@@ -12,10 +12,9 @@ export function* createCommonSaga(action, prefix, callback, successCallback) {
 
 export function* createRequestCallbackSaga(action, prefix, callback, params) {
   const error = yield call(callback, { action, ...params });
-  console.log('prefix', prefix);
-  console.log('error', error);
+
   if (!error) {
-    yield put({ type: `${prefix}_SUCCESS`, ...action });
+    yield put({ ...action, type: `${prefix}_SUCCESS` });
   } else {
     yield put({ type: `${prefix}_ERROR`, error });
   }

@@ -30,14 +30,13 @@ async function makeWeatherRequest(favorites, units) {
   }
 }
 
-function* apiRequest() {
+function* apiRequest(action) {
   const units = yield select(getWeatherUnitsType);
-  const isLogged = yield select(getUid);
   let favorites = [];
-  if (isLogged) favorites = yield select(getFavoritesDB);
-  else favorites = yield select(getFavoritesLocal);
-  console.log('favorites', favorites);
-  const { data, error } = yield call(makeWeatherRequest, favorites || [], units);
+  if (!action.favorites) favorites = yield select(getFavoritesLocal);
+  else favorites = action.favorites;
+
+  const { data, error } = yield call(makeWeatherRequest, favorites, units);
 
   if (data) {
     yield put({ type: WEATHER_MAP_SET_DATA, data });
