@@ -5,22 +5,28 @@ import React from 'react';
 // import { Button } from '@material-ui/core';
 import Login from 'components/Login/Login';
 import { Button } from '@material-ui/core';
+import { useSelector, useDispatch } from 'react-redux';
+import { SIGN_OUT_SEND } from 'store/actionTypes/authActionTypes';
 import styles from './Account.module.css';
 
 const Account = () => {
+  const authFirebase = useSelector(state => state.firebase.auth);
+
+  const dispatch = useDispatch();
+
   const onClickLogout = () => {
-    console.log('log out');
+    dispatch({ type: SIGN_OUT_SEND });
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.formContainer}>
-        {!false ? (
+        {authFirebase.isEmpty ? (
           <Login />
         ) : (
           <div>
             <div>Account page: </div>
-            <Button variant="contained" onClick={onClickLogout}>
+            <Button color="primary" variant="contained" onClick={onClickLogout}>
               Logout
             </Button>
           </div>

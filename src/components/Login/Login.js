@@ -22,8 +22,6 @@ const Login = () => {
   const dispatch = useDispatch();
 
   const auth = useSelector(state => state.auth);
-  const authFirebaseRedux = useSelector(state => state.firebase);
-  const authFirebase = authFirebaseRedux.auth;
 
   useEffect(() => {
     if (auth.error) {
@@ -55,72 +53,57 @@ const Login = () => {
     }
   };
 
-  const onClickLogout = () => {
-    dispatch({ type: SIGN_OUT_SEND });
-  };
-
-  return (
+  return auth.pending ? (
+    <Spinner />
+  ) : (
     <>
-      {authFirebase.isEmpty ? (
-        <>
-          <Typography variant="h3" gutterBottom align="center">
-            Login/Register
-          </Typography>
-          <div className={styles.textField}>
-            <TextField
-              variant="outlined"
-              label="Email"
-              value={email}
-              onChange={updateTextField(
-                setEmail,
-                () => resetTextFieldError(setErrorEmail, setHelperTextEmail),
-                errorEmail,
-              )}
-              onBlur={onBlur}
-              error={errorEmail}
-              helperText={helperTextEmail}
-            />
-          </div>
-          <div className={styles.textField}>
-            <TextField
-              variant="outlined"
-              type="password"
-              label="Password"
-              value={password}
-              onChange={updateTextField(
-                setPassword,
-                () => resetTextFieldError(setErrorPassword, setHelperTextPassword),
-                errorPassword,
-              )}
-              onBlur={onBlur}
-              error={errorPassword}
-              helperText={helperTextPassword}
-            />
-          </div>
-          {apiErrorMessage && (
-            <Typography color="error" gutterBottom>
-              {apiErrorMessage}
-            </Typography>
+      <Typography variant="h3" gutterBottom align="center">
+        Login/Register
+      </Typography>
+      <div className={styles.textField}>
+        <TextField
+          variant="outlined"
+          label="Email"
+          value={email}
+          onChange={updateTextField(setEmail, () => resetTextFieldError(setErrorEmail, setHelperTextEmail), errorEmail)}
+          onBlur={onBlur}
+          error={errorEmail}
+          helperText={helperTextEmail}
+        />
+      </div>
+      <div className={styles.textField}>
+        <TextField
+          variant="outlined"
+          type="password"
+          label="Password"
+          value={password}
+          onChange={updateTextField(
+            setPassword,
+            () => resetTextFieldError(setErrorPassword, setHelperTextPassword),
+            errorPassword,
           )}
-          <div className={styles.buttonsContainer}>
-            <div className={styles.button}>
-              <Button color="primary" variant="contained" onClick={onClickLogin}>
-                Login
-              </Button>
-            </div>
-            <div className={styles.button}>
-              <Button color="primary" variant="contained" onClick={onClickRegister}>
-                Register
-              </Button>
-            </div>
-          </div>
-        </>
-      ) : (
-        <Button color="primary" variant="contained" onClick={onClickLogout}>
-          Logout
-        </Button>
+          onBlur={onBlur}
+          error={errorPassword}
+          helperText={helperTextPassword}
+        />
+      </div>
+      {apiErrorMessage && (
+        <Typography color="error" gutterBottom>
+          {apiErrorMessage}
+        </Typography>
       )}
-      {auth.pending ? <Spinner /> : null}
+      <div className={styles.buttonsContainer}>
+        <div className={styles.button}>
+          <Button color="primary" variant="contained" onClick={onClickLogin}>
+            Login
+          </Button>
+        </div>
+        <div className={styles.button}>
+          <Button color="primary" variant="contained" onClick={onClickRegister}>
+            Register
+          </Button>
+        </div>
+      </div>
     </>
   );
 };
