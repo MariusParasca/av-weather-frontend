@@ -25,7 +25,7 @@ const Account = () => {
           <Login />
         ) : (
           <div>
-            <div>Account page: </div>
+            {/* <div>Account page: </div> */}
             <Button color="primary" variant="contained" onClick={onClickLogout}>
               Logout
             </Button>
