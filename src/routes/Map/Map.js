@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
+import { useFirestoreConnect, isLoaded } from 'react-redux-firebase';
 
 import { ReactComponent as LocationSvg } from 'svgs/WeatherInfo/cloud_cover.svg';
 import { ReactComponent as HumiditySvg } from 'svgs/WeatherInfo/humidity.svg';
 import { ReactComponent as WindSvg } from 'svgs/WeatherInfo/wind.svg';
 import { ReactComponent as PressureSvg } from 'svgs/WeatherInfo/pressure.svg';
 import { ReactComponent as TemperatureSvg } from 'svgs/WeatherInfo/temperature.svg';
-import WithSvg from 'components/WithSvg/WithSvg';
 import { Slider } from '@material-ui/core';
 import MenuButton from 'components/MenuButton/MenuButton';
 import { PageRoute, MapsRoute } from 'utils/routes';
@@ -20,16 +20,18 @@ import {
   WEEK_DAYS,
 } from 'constants/constants';
 import { DELETE_FAVORITE_SEND } from 'store/actionTypes/favoritesActionTypes';
-import { WEATHER_MAP_DELETE_BY_INDEX, WEATHER_MAP_API_SEND } from 'store/actionTypes/weatherMapActionTypes';
+import { WEATHER_MAP_API_SEND } from 'store/actionTypes/weatherMapActionTypes';
 import { withRouter } from 'react-router-dom';
 import MapWeatherInfo from 'components/MapWeatherInfo/MapWeatherInfo';
+import WithSvg from 'components/WithSvg/WithSvg';
+import Spinner from 'components/Spinner/Spinner';
 
+import { getFavoritesQuery } from 'utils/firestoreQueries';
+import { getUid, getFavoritesDB, getFavoritesLocal } from 'utils/stateGetters';
 import styles from './Map.module.css';
 import mapStyles from './mapStyle';
 import './ControlMapStyles.css';
-import { useFirestoreConnect } from 'react-redux-firebase';
-import { getFavoritesQuery } from 'utils/firestoreQueries';
-import { getUid, getFavoritesDB, getFavoritesLocal } from 'utils/stateGetters';
+import { SEND_NOTIFICATION } from 'store/actionTypes/notificationActionTypes';
 
 const createMarks = () => {
   const followDay = new Date();
@@ -121,25 +123,12 @@ const Map = props => {
   }
 
   const [markers, setMarkers] = useState([]);
-  const [favoriteIndex, setFavoriteIndex] = useState(-1);
+  const [favoriteIndex, setFavoriteIndex] = useState(0);
   const [sliderIndex, setSliderIndex] = useState(0);
-  const [weatherData, setWeatherData] = useState(null);
   const [currentMap, setCurrentMap] = useState(null);
   const [mapType, setMapType] = useState(CLOUD_COVER_MAP_TYPE);
 
   const dispatch = useDispatch();
-
-  // const quickZoomControl = (controlDiv, map) => {
-  //   const quickZoomUI = document.getElementById('cd-quick-access');
-
-  //   controlDiv.appendChild(quickZoomUI);
-
-  //   window.google.maps.event.addDomListener(quickZoomUI, 'click', () => {
-  //     if (quickZoom) map.setZoom(map.getZoom() + 1);
-  //     else map.setZoom(map.getZoom() + 1);
-  //     quickZoom = !quickZoom;
-  //   });
-  // };
 
   const nextCity = useCallback(() => {
     if (favoriteIndex === favoritesData.length - 1) {
@@ -198,24 +187,25 @@ const Map = props => {
   const deleteCity = useCallback(() => {
     if (favoritesData[favoriteIndex].city !== currentLocation.city) {
       markers[favoriteIndex].setMap(null);
-      dispatch({ type: WEATHER_MAP_DELETE_BY_INDEX, index: favoriteIndex });
       dispatch({ type: DELETE_FAVORITE_SEND, index: favoriteIndex, id: favoritesData[favoriteIndex].id });
-
+      setFavoriteIndex(0);
       const newMarkers = [...markers];
       newMarkers.splice(favoriteIndex, 1);
 
       setFavoritesMarkers(currentMap, favoritesData, weatherMap.daily, sliderIndex, newMarkers);
+    } else {
+      dispatch({ type: SEND_NOTIFICATION, status: 'warning', message: "Can't delete current selected locaiton" });
     }
   }, [
-    currentLocation.city,
-    currentMap,
     favoritesData,
-    dispatch,
     favoriteIndex,
+    currentLocation.city,
     markers,
+    dispatch,
     setFavoritesMarkers,
-    sliderIndex,
+    currentMap,
     weatherMap.daily,
+    sliderIndex,
   ]);
 
   const onChangeSlider = useCallback(
@@ -226,39 +216,53 @@ const Map = props => {
     [currentMap, favoritesData, markers, setFavoritesMarkers, sliderIndex, weatherMap.daily],
   );
 
-  useEffect(() => {
-    if (favoriteIndex === -1 && currentLocation)
-      setFavoriteIndex(favoritesData.findIndex(fav => fav.city === currentLocation.city));
-  }, [currentLocation, favoritesData, favoriteIndex]);
+  // useEffect(() => {
+  //   if (uid) {
+  //     if (currentLocation && isLoaded(favoritesDB))
+  //       setFavoriteIndex(favoritesData.findIndex(fav => fav.city === currentLocation.city));
+  //   } else if (currentLocation) {
+  //     setFavoriteIndex(favoritesData.findIndex(fav => fav.city === currentLocation.city));
+  //   }
+  // }, [currentLocation, favoritesData, favoriteIndex, uid, favoritesDB]);
 
   useEffect(() => {
-    if (
-      weatherMap.daily.length === 0 ||
-      weatherMap.hourly.length === 0 ||
-      weatherMap.daily.length < favoritesData.length
-    ) {
+    if (uid) {
+      if (
+        (isLoaded(favoritesDB) && weatherMap.daily.length === 0) ||
+        weatherMap.daily.length !== favoritesData.length
+      ) {
+        dispatch({
+          type: WEATHER_MAP_API_SEND,
+          favorites: favoritesData,
+        });
+      }
+    } else if (weatherMap.daily.length === 0 || weatherMap.daily.length !== favoritesData.length) {
       dispatch({
         type: WEATHER_MAP_API_SEND,
+        favorites: favoritesData,
       });
     }
-  }, [favoritesData.length, dispatch, weatherMap.daily.length, weatherMap.hourly.length]);
+  }, [
+    favoritesData.length,
+    dispatch,
+    weatherMap.daily.length,
+    weatherMap.hourly.length,
+    favoritesData,
+    uid,
+    favoritesDB,
+  ]);
+
+  // useEffect(() => {
+  //   if (favoriteIndex !== -1 && weatherMap.daily.length > 0 && weatherMap.daily.length === favoritesData.length) {
+  //     setWeatherData({
+  //       day: weatherMap.daily[favoriteIndex][sliderIndex],
+  //       hourly: weatherMap.hourly[favoriteIndex][sliderIndex],
+  //     });
+  //   }
+  // }, [favoritesData.length, favoriteIndex, sliderIndex, weatherMap]);
 
   useEffect(() => {
-    if (favoriteIndex !== -1 && weatherMap.daily.length > 0 && weatherMap.daily.length === favoritesData.length) {
-      setWeatherData({
-        day: weatherMap.daily[favoriteIndex][sliderIndex],
-        hourly: weatherMap.hourly[favoriteIndex][sliderIndex],
-      });
-    }
-  }, [favoritesData.length, favoriteIndex, sliderIndex, weatherMap]);
-
-  useEffect(() => {
-    if (
-      !currentMap &&
-      favoritesData.length > 0 &&
-      weatherMap.daily.length > 0 &&
-      weatherMap.daily.length === favoritesData.length
-    ) {
+    const initMap = () => {
       const map = new window.google.maps.Map(document.getElementById('google-map'), {
         styles: mapStyles,
         mapTypeId: window.google.maps.MapTypeId.SATELLITE,
@@ -283,15 +287,29 @@ const Map = props => {
 
       setFavoritesMarkers(map, favoritesData, weatherMap.daily, sliderIndex);
       setCurrentMap(map);
+    };
+    if (uid) {
+      if (
+        isLoaded(favoritesDB) &&
+        !currentMap &&
+        weatherMap.daily.length > 0 &&
+        weatherMap.daily.length === favoritesData.length
+      ) {
+        initMap();
+      }
+    } else if (!currentMap && weatherMap.daily.length > 0 && weatherMap.daily.length === favoritesData.length) {
+      initMap();
     }
   }, [
     currentMap,
     customMapType,
     customZoomControl,
+    favoritesDB,
     favoritesData,
     favoritesData.length,
     setFavoritesMarkers,
     sliderIndex,
+    uid,
     weatherMap.daily,
     weatherMap.daily.length,
     weatherMap.pending,
@@ -329,22 +347,40 @@ const Map = props => {
     }
   }, [currentMap, mapType]);
 
+  let mapWeatherInfo;
+  if (uid) {
+    if (isLoaded(favoritesDB) && !weatherMap.pending && weatherMap.daily.length === favoritesData.length) {
+      mapWeatherInfo = (
+        <MapWeatherInfo
+          city={favoritesData[favoriteIndex].city}
+          country={favoritesData[favoriteIndex].country}
+          day={weatherMap.daily[favoriteIndex][sliderIndex]}
+          hourly={weatherMap.hourly[favoriteIndex][sliderIndex]}
+          dailyHourly={weatherMap.hourly[favoriteIndex]}
+          onClickRightArrow={nextCity}
+          onClickLeftArrow={previousCity}
+          onClickDelete={deleteCity}
+        />
+      );
+    }
+  } else if (!weatherMap.pending && weatherMap.daily.length === favoritesData.length) {
+    mapWeatherInfo = (
+      <MapWeatherInfo
+        city={favoritesData[favoriteIndex].city}
+        country={favoritesData[favoriteIndex].country}
+        day={weatherMap.daily[favoriteIndex][sliderIndex]}
+        hourly={weatherMap.hourly[favoriteIndex][sliderIndex]}
+        dailyHourly={weatherMap.hourly[favoriteIndex]}
+        onClickRightArrow={nextCity}
+        onClickLeftArrow={previousCity}
+        onClickDelete={deleteCity}
+      />
+    );
+  }
+
   return (
     <div className={styles.container}>
-      <div className={styles.favoriteContainer}>
-        {!weatherMap.pending && weatherData && favoritesData[favoriteIndex] && (
-          <MapWeatherInfo
-            city={favoritesData[favoriteIndex].city}
-            country={favoritesData[favoriteIndex].country}
-            day={weatherData.day}
-            hourly={weatherData.hourly}
-            dailyHourly={weatherMap.hourly[favoriteIndex]}
-            onClickRightArrow={nextCity}
-            onClickLeftArrow={previousCity}
-            onClickDelete={deleteCity}
-          />
-        )}
-      </div>
+      <div className={styles.favoriteContainer}>{mapWeatherInfo || <Spinner />}</div>
       <div id="customButtons">
         <div id="cd-map">Map</div>
         <div id="cd-satellite">Satellite</div>

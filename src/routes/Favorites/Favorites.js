@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useFirestoreConnect, isLoaded } from 'react-redux-firebase';
 
@@ -10,16 +10,18 @@ import { getMinArray, getMaxArray } from 'utils/helperFunctions';
 import { getFavoritesDB, getFavoritesLocal, getUid } from 'utils/stateGetters';
 import { getFavoritesQuery } from 'utils/firestoreQueries';
 
+import { SEND_NOTIFICATION } from 'store/actionTypes/notificationActionTypes';
 import styles from './Favorites.module.css';
 
 const Favorites = () => {
   const weatherMap = useSelector(state => state.weatherMap);
-
-  const [pending, setPending] = useState(true);
+  const currentLocation = useSelector(state => state.weatherData.location);
 
   const uid = useSelector(getUid);
 
   useFirestoreConnect(getFavoritesQuery(uid));
+
+  const favoritesPending = useSelector(state => state.favorites.pending);
 
   const favoritesDB = useSelector(getFavoritesDB);
   const favoritesLocal = useSelector(getFavoritesLocal);
@@ -35,29 +37,19 @@ const Favorites = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (weatherMap.daily.length !== favoritesData.length || weatherMap.daily.length === 0) setPending(true);
-  }, [favoritesData.length, weatherMap.daily.length]);
-
-  useEffect(() => {
     if (uid) {
       if (isLoaded(favoritesDB)) {
         if (weatherMap.daily.length !== favoritesData.length || weatherMap.daily.length === 0) {
-          setPending(true);
           dispatch({
             type: WEATHER_MAP_API_SEND,
             favorites: favoritesData,
           });
-        } else {
-          setPending(false);
         }
       }
     } else if (weatherMap.daily.length === 0 || weatherMap.daily.length !== favoritesData.length) {
-      setPending(true);
       dispatch({
         type: WEATHER_MAP_API_SEND,
       });
-    } else {
-      setPending(false);
     }
   }, [
     favoritesData.length,
@@ -80,13 +72,20 @@ const Favorites = () => {
         currently={weatherMap.currently[index]}
         daily={weatherMap.daily[index]}
         onClickIcon={() => {
-          dispatch({ type: DELETE_FAVORITE_SEND, id: favorite.id, index });
+          if (favoritesData[index].city !== currentLocation.city) {
+            dispatch({ type: DELETE_FAVORITE_SEND, id: favorite.id, index });
+          } else {
+            dispatch({ type: SEND_NOTIFICATION, status: 'warning', message: "Can't delete current selected locaiton" });
+          }
         }}
       />
     );
   };
 
-  return weatherMap.daily.length !== favoritesData.length || pending || !isLoaded(favoritesDB) ? (
+  return weatherMap.daily.length !== favoritesData.length ||
+    weatherMap.pending ||
+    !isLoaded(favoritesDB) ||
+    favoritesPending ? (
     <Spinner />
   ) : (
     <div className={styles.container}>{favoritesData.map(mapFunction)}</div>

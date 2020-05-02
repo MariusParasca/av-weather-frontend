@@ -6,7 +6,7 @@ import {
   WEATHER_MAP_SET_DATA,
 } from 'store/actionTypes/weatherMapActionTypes';
 import darkSkyAxios from 'axios/darkSky';
-import { getUid, getWeatherUnitsType, getFavoritesLocal, getFavoritesDB } from 'utils/stateGetters';
+import { getWeatherUnitsType, getFavoritesLocal } from 'utils/stateGetters';
 
 async function makeWeatherRequest(favorites, units) {
   try {

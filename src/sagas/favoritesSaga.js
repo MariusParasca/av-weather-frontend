@@ -1,4 +1,4 @@
-import { takeEvery, put, select } from 'redux-saga/effects';
+import { takeLatest, put, select } from 'redux-saga/effects';
 
 import { DELETE_FAVORITE_SEND, DELETE_FAVORITE } from 'store/actionTypes/favoritesActionTypes';
 import firestore from 'utils/firestore';
@@ -22,15 +22,15 @@ async function deleteFavorite(options) {
 
 function* deleteFavoriteSaga(action) {
   const uid = yield select(getUid);
+  yield put({ type: `${DELETE_FAVORITE}_LOCALLY`, index: action.index });
+  yield put({ type: WEATHER_MAP_DELETE_BY_INDEX, index: action.index });
   if (uid) {
     yield createRequestCallbackSaga(action, DELETE_FAVORITE, deleteFavorite, { uid });
   }
-  yield put({ type: `${DELETE_FAVORITE}_LOCALLY`, index: action.index });
-  yield put({ type: WEATHER_MAP_DELETE_BY_INDEX, index: action.index });
 }
 
 function* watchDeleteFavorite() {
-  yield takeEvery(DELETE_FAVORITE_SEND, deleteFavoriteSaga);
+  yield takeLatest(DELETE_FAVORITE_SEND, deleteFavoriteSaga);
 }
 
 export default watchDeleteFavorite;
