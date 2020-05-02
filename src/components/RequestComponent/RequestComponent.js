@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter, useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { WEATHER_API_SEND } from 'store/actionTypes/weatherAPIActionTypes';
 import { isCorrectRoute } from 'utils/helperFunctions';
@@ -14,6 +14,9 @@ import { SEARCH_PLACEHOLDER } from 'constants/constants';
 import Spinner from 'components/Spinner/Spinner';
 import { PageRoute } from 'utils/routes';
 import { store } from 'store/store';
+import { getUid, getUserSettingsDB } from 'utils/stateGetters';
+import { getSettingsQuery } from 'utils/firestoreQueries';
+import { useFirestoreConnect, isLoaded } from 'react-redux-firebase';
 import styles from './RequestComponent.module.css';
 
 const getSettingsDefaultViewUrl = () => {
@@ -25,21 +28,40 @@ const getSettingsDefaultViewUrl = () => {
 const RequestComponent = props => {
   const { location } = props;
 
+  const [isMount, setIsMount] = useState(false);
+
   const dispatch = useDispatch();
 
   const history = useHistory();
 
-  useEffect(() => {
-    dispatch({ type: WEATHER_API_SEND });
-  }, [dispatch, location.pathname]);
+  const uid = useSelector(getUid);
+
+  useFirestoreConnect(getSettingsQuery(uid));
+
+  const settingsDB = useSelector(getUserSettingsDB);
 
   useEffect(() => {
-    history.push(getSettingsDefaultViewUrl());
-  }, [history]);
+    if (uid) {
+      if (isLoaded(settingsDB) && !isMount) {
+        history.push(settingsDB.defaultView.url);
+        setIsMount(true);
+      }
+    } else {
+      history.push(getSettingsDefaultViewUrl());
+    }
+  }, [history, isMount, settingsDB, uid]);
+
+  useEffect(() => {
+    if (uid) {
+      if (isLoaded(settingsDB)) dispatch({ type: WEATHER_API_SEND, defaultLocation: settingsDB.defaultLocation });
+    } else {
+      dispatch({ type: WEATHER_API_SEND });
+    }
+  }, [dispatch, location.pathname, settingsDB, uid]);
 
   return (
     <>
-      {false ? (
+      {uid && !isLoaded(settingsDB) ? (
         <Spinner />
       ) : (
         <>

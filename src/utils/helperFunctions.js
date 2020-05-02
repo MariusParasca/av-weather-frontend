@@ -268,3 +268,14 @@ export const getWeatherUnits = isCelsius => {
         distance: 'mi',
       };
 };
+
+export const transformDocumentsToObject = documentsArray => {
+  const object = {};
+  console.log('documentsArray', documentsArray);
+  for (let i = 0; i < documentsArray.length; i += 1) {
+    const document = documentsArray[i];
+    object[document.id] = { ...document };
+  }
+  console.log('object', object);
+  return object;
+};

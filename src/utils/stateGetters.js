@@ -1,8 +1,10 @@
-import { FAVORITES_DATA } from 'constants/reduxState';
+import { FAVORITES_DATA, SETTINGS } from 'constants/reduxState';
 
 export const getCurrentStateData = state => state.weatherData;
 
 export const getUserSettings = state => state.userSettings;
+
+export const getUserSettingsDB = state => state.firestore.data[SETTINGS];
 
 export const getDefaultLocation = state => state.userSettings.settings.defaultLocation;
 

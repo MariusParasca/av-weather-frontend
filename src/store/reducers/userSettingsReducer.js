@@ -31,7 +31,12 @@ const initialState = {
       temperature: 'C',
       distance: 'km',
     },
-    defaultLocation: {},
+    defaultLocation: {
+      latitude: 40.71455,
+      longitude: -74.00714,
+      city: 'New York',
+      country: 'USA',
+    },
     defaultView: {
       url: PageRoute.home,
     },

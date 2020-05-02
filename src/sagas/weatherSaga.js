@@ -200,8 +200,9 @@ function* setWeatherData(data) {
   }
 }
 
-function* weatherRequestGenerator(latitude, longitude, city, location = {}) {
-  const units = yield select(getWeatherUnitsType);
+function* weatherRequestGenerator(latitude, longitude, city, location = {}, units = undefined) {
+  // eslint-disable-next-line no-param-reassign
+  if (!units) units = yield select(getWeatherUnitsType);
   const uid = yield select(getUid);
 
   const { data, error } = yield call(makeWeatherRequest, latitude, longitude, city, units);
@@ -228,16 +229,25 @@ function* weatherRequestGenerator(latitude, longitude, city, location = {}) {
 
 function* weatherApiRequest(action) {
   const state = yield select(getCurrentStateData);
-  const defaultLocation = yield select(getDefaultLocation);
+  let defaultLocation;
+  if (!action.defaultLocation) defaultLocation = yield select(getDefaultLocation);
+  else defaultLocation = action.defaultLocation;
 
   if (action.payload) {
-    yield call(weatherRequestGenerator, action.payload.latitude, action.payload.longitude, action.payload.city, {
-      ...state.location,
-      latitude: action.payload.latitude,
-      longitude: action.payload.longitude,
-      city: action.payload.city,
-      country: action.payload.country,
-    });
+    yield call(
+      weatherRequestGenerator,
+      action.payload.latitude,
+      action.payload.longitude,
+      action.payload.city,
+      {
+        ...state.location,
+        latitude: action.payload.latitude,
+        longitude: action.payload.longitude,
+        city: action.payload.city,
+        country: action.payload.country,
+      },
+      action.units,
+    );
   } else if (!state.location.dataLoaded) {
     const { data: locationData, error: locationError } = yield call(locationRequest);
     if (locationError) {
