@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { isEmailValid } from 'utils/validators';
 import { updateTextField, resetTextFieldError, setTextFieldError } from 'utils/helperFunctions';
-import { LOGIN_SEND, REGISTER_SEND, SIGN_OUT_SEND } from 'store/actionTypes/authActionTypes';
+import { LOGIN_SEND, REGISTER_SEND } from 'store/actionTypes/authActionTypes';
 import Spinner from 'components/Spinner/Spinner';
 import styles from './Login.module.css';
 

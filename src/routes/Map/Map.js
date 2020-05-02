@@ -216,15 +216,6 @@ const Map = props => {
     [currentMap, favoritesData, markers, setFavoritesMarkers, sliderIndex, weatherMap.daily],
   );
 
-  // useEffect(() => {
-  //   if (uid) {
-  //     if (currentLocation && isLoaded(favoritesDB))
-  //       setFavoriteIndex(favoritesData.findIndex(fav => fav.city === currentLocation.city));
-  //   } else if (currentLocation) {
-  //     setFavoriteIndex(favoritesData.findIndex(fav => fav.city === currentLocation.city));
-  //   }
-  // }, [currentLocation, favoritesData, favoriteIndex, uid, favoritesDB]);
-
   useEffect(() => {
     if (uid) {
       if (
@@ -251,15 +242,6 @@ const Map = props => {
     uid,
     favoritesDB,
   ]);
-
-  // useEffect(() => {
-  //   if (favoriteIndex !== -1 && weatherMap.daily.length > 0 && weatherMap.daily.length === favoritesData.length) {
-  //     setWeatherData({
-  //       day: weatherMap.daily[favoriteIndex][sliderIndex],
-  //       hourly: weatherMap.hourly[favoriteIndex][sliderIndex],
-  //     });
-  //   }
-  // }, [favoritesData.length, favoriteIndex, sliderIndex, weatherMap]);
 
   useEffect(() => {
     const initMap = () => {
