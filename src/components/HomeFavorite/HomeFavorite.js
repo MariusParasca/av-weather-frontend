@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { Typography, makeStyles, IconButton } from '@material-ui/core';
+import { Typography, makeStyles } from '@material-ui/core';
 
 import darkSkyAxios from 'axios/darkSky';
 import useHttp from 'hooks/useHttp';
@@ -27,7 +27,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const HomeFavorite = props => {
-  const { utcOffset, latitude, longitude, city, onClickIcon, className, onClickContainer } = props;
+  const { utcOffset, latitude, longitude, city, /*onClickIcon,*/ className, onClickContainer } = props;
 
   const units = useSelector(state => state.userSettings.settings.weatherUnits.type);
 
@@ -99,9 +99,9 @@ const HomeFavorite = props => {
         <Typography variant="caption" color="primary" classes={{ root: classes.timeTypo }}>
           {time}
         </Typography>
-        <IconButton classes={{ root: classes.iconButton }} onClick={onClickIcon}>
-          <WithSvg component={StarFilledSvg} size={13} />
-        </IconButton>
+        {/* <IconButton classes={{ root: classes.iconButton }} onClick={onClickIcon}> */}
+        <WithSvg component={StarFilledSvg} size={13} />
+        {/* </IconButton> */}
       </div>
       <Typography variant="subtitle1" classes={{ root: classes.cityTypo }} noWrap>
         {city}

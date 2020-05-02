@@ -39,6 +39,8 @@ const HomeSearchBox = () => {
 
   useFirestoreConnect(getFavoritesQuery(uid));
 
+  const favoritesPending = useSelector(state => state.favorites.pending);
+
   const favoritesDB = useSelector(getFavoritesDB);
   const favoritesLocal = useSelector(getFavoritesLocal);
 
@@ -90,7 +92,7 @@ const HomeSearchBox = () => {
           <Typography variant="subtitle1">Frequent locations</Typography>
           <WithSvg component={SettingsSvg} size={15} className={styles.icon} />
         </div> */}
-        {isLoaded(favoritesDB) || !uid ? (
+        {isLoaded(favoritesDB) || (!uid && !favoritesPending) ? (
           <Grid container classes={{ root: classes.gridRoot }}>
             {favoritesData.slice(0, numberOfFavorites).map((fav, index) => (
               <Grid item key={`${fav.city}`} classes={{ root: classes.gridItem }}>
