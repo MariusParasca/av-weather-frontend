@@ -7,7 +7,7 @@ import { WEATHER_MAP_API_SEND } from 'store/actionTypes/weatherMapActionTypes';
 import FavoriteCity from 'components/FavoriteCity/FavoriteCity';
 import Spinner from 'components/Spinner/Spinner';
 import { getMinArray, getMaxArray } from 'utils/helperFunctions';
-import { getFavoritesDB, getFavoritesLocal, getUid } from 'utils/stateGetters';
+import { getFavoritesDB, getFavoritesLocal, getUid, getDefaultLocation } from 'utils/stateGetters';
 import { getFavoritesQuery } from 'utils/firestoreQueries';
 
 import { SEND_NOTIFICATION } from 'store/actionTypes/notificationActionTypes';
@@ -16,6 +16,7 @@ import styles from './Favorites.module.css';
 const Favorites = () => {
   const weatherMap = useSelector(state => state.weatherMap);
   const currentLocation = useSelector(state => state.weatherData.location);
+  const defaultLocation = useSelector(getDefaultLocation);
 
   const uid = useSelector(getUid);
 
@@ -72,8 +73,13 @@ const Favorites = () => {
         currently={weatherMap.currently[index]}
         daily={weatherMap.daily[index]}
         onClickIcon={() => {
-          if (favoritesData[index].city !== currentLocation.city) {
+          if (
+            favoritesData[index].city !== currentLocation.city &&
+            favoritesData[index].city !== defaultLocation.city
+          ) {
             dispatch({ type: DELETE_FAVORITE_SEND, id: favorite.id, index });
+          } else if (favoritesData[index].city === defaultLocation.city) {
+            dispatch({ type: SEND_NOTIFICATION, status: 'warning', message: "Can't delete default location" });
           } else {
             dispatch({ type: SEND_NOTIFICATION, status: 'warning', message: "Can't delete current selected location" });
           }

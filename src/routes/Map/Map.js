@@ -27,11 +27,11 @@ import WithSvg from 'components/WithSvg/WithSvg';
 import Spinner from 'components/Spinner/Spinner';
 
 import { getFavoritesQuery } from 'utils/firestoreQueries';
-import { getUid, getFavoritesDB, getFavoritesLocal } from 'utils/stateGetters';
+import { getUid, getFavoritesDB, getFavoritesLocal, getDefaultLocation } from 'utils/stateGetters';
+import { SEND_NOTIFICATION } from 'store/actionTypes/notificationActionTypes';
 import styles from './Map.module.css';
 import mapStyles from './mapStyle';
 import './ControlMapStyles.css';
-import { SEND_NOTIFICATION } from 'store/actionTypes/notificationActionTypes';
 
 const createMarks = () => {
   const followDay = new Date();
@@ -106,6 +106,7 @@ const Map = props => {
 
   const currentLocation = useSelector(state => state.weatherData.location);
   const weatherMap = useSelector(state => state.weatherMap);
+  const defaultLocation = useSelector(getDefaultLocation);
 
   const uid = useSelector(getUid);
 
@@ -197,7 +198,10 @@ const Map = props => {
   );
 
   const deleteCity = useCallback(() => {
-    if (favoritesData[favoriteIndex].city !== currentLocation.city) {
+    if (
+      favoritesData[favoriteIndex].city !== currentLocation.city &&
+      favoritesData[favoriteIndex].city !== defaultLocation.city
+    ) {
       markers[favoriteIndex].setMap(null);
       dispatch({ type: DELETE_FAVORITE_SEND, index: favoriteIndex, id: favoritesData[favoriteIndex].id });
       setFavoriteIndex(0);
@@ -205,6 +209,8 @@ const Map = props => {
       newMarkers.splice(favoriteIndex, 1);
 
       setFavoritesMarkers(currentMap, favoritesData, weatherMap.daily, sliderIndex, newMarkers);
+    } else if (favoritesData[favoriteIndex].city === defaultLocation.city) {
+      dispatch({ type: SEND_NOTIFICATION, status: 'warning', message: "Can't delete default location" });
     } else {
       dispatch({ type: SEND_NOTIFICATION, status: 'warning', message: "Can't delete current selected location" });
     }
@@ -212,6 +218,7 @@ const Map = props => {
     favoritesData,
     favoriteIndex,
     currentLocation.city,
+    defaultLocation.city,
     markers,
     dispatch,
     setFavoritesMarkers,
