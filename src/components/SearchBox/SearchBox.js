@@ -113,7 +113,7 @@ const SearchBox = props => {
         latitude: value.position[0],
         longitude: value.position[1],
         utcOffset: getUtcOffsetByCoordinates(value.position[0], value.position[1]),
-        dateTime: new Date(),
+        dateTime: new Date().toISOString(),
       };
 
       dispatch({

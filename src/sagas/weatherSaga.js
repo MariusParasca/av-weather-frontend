@@ -215,7 +215,7 @@ function* weatherRequestGenerator(latitude, longitude, city, location = {}, unit
       latitude: location.latitude,
       longitude: location.longitude,
       utcOffset: getUtcOffsetByCoordinates(location.latitude, location.longitude),
-      dateTime: new Date(),
+      dateTime: new Date().toISOString(),
     };
 
     if (uid) {

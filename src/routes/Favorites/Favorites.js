@@ -75,7 +75,7 @@ const Favorites = () => {
           if (favoritesData[index].city !== currentLocation.city) {
             dispatch({ type: DELETE_FAVORITE_SEND, id: favorite.id, index });
           } else {
-            dispatch({ type: SEND_NOTIFICATION, status: 'warning', message: "Can't delete current selected locaiton" });
+            dispatch({ type: SEND_NOTIFICATION, status: 'warning', message: "Can't delete current selected location" });
           }
         }}
       />

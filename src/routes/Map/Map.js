@@ -130,6 +130,18 @@ const Map = props => {
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (uid) {
+      if (isLoaded(favoritesDB)) {
+        const index = favoritesData.findIndex(fav => fav.city === currentLocation.city);
+        setFavoriteIndex(index === -1 ? 0 : index);
+      }
+    } else {
+      const index = favoritesData.findIndex(fav => fav.city === currentLocation.city);
+      setFavoriteIndex(index === -1 ? 0 : index);
+    }
+  }, [favoritesDB, favoritesData, currentLocation, uid]);
+
   const nextCity = useCallback(() => {
     if (favoriteIndex === favoritesData.length - 1) {
       setFavoriteIndex(0);
@@ -194,7 +206,7 @@ const Map = props => {
 
       setFavoritesMarkers(currentMap, favoritesData, weatherMap.daily, sliderIndex, newMarkers);
     } else {
-      dispatch({ type: SEND_NOTIFICATION, status: 'warning', message: "Can't delete current selected locaiton" });
+      dispatch({ type: SEND_NOTIFICATION, status: 'warning', message: "Can't delete current selected location" });
     }
   }, [
     favoritesData,
