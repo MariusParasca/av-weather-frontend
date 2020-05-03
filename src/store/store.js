@@ -1,4 +1,4 @@
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
@@ -7,7 +7,6 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/database';
 import { createFirestoreInstance, reduxFirestore } from 'redux-firestore';
-import { compose } from 'react-redux';
 
 import { composeWithDevTools } from 'redux-devtools-extension';
 
