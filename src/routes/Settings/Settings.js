@@ -101,8 +101,10 @@ const Settings = props => {
       },
       units: getWeatherUnits(!isCelsius).type,
     });
+    dispatch({ type: WEATHER_MAP_API_SEND });
     dispatch({
       type: WEATHER_MAP_API_SEND,
+      units: getWeatherUnits(!isCelsius).type,
     });
   }, [dispatch, favoritesData, isCelsius, locationIndex]);
 
@@ -120,6 +122,7 @@ const Settings = props => {
           country: favoritesData[indexLocation].country,
         },
       });
+      dispatch({ type: WEATHER_MAP_API_SEND });
     },
     [dispatch, favoritesData],
   );

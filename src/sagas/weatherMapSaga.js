@@ -31,7 +31,9 @@ async function makeWeatherRequest(favorites, units) {
 }
 
 function* apiRequest(action) {
-  const units = yield select(getWeatherUnitsType);
+  let units;
+  if (!action.units) units = yield select(getWeatherUnitsType);
+  else units = action.units;
   let favorites = [];
   if (!action.favorites) favorites = yield select(getFavoritesLocal);
   else favorites = action.favorites;
