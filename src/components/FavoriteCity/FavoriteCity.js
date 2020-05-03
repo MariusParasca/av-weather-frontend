@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles, Typography, IconButton } from '@material-ui/core';
 import { useSelector } from 'react-redux';
@@ -31,11 +31,16 @@ const useStyles = makeStyles(() => ({
   },
   typoWeatherInfo: {
     color: '#44448a',
-    fontSize: '16px',
+    fontSize: '1.45vh',
   },
   typoLabel: {
     fontSize: '14px',
     color: '#44448a',
+  },
+  typoTemp: {
+    fontSize: {
+      fontSize: '4.7vh',
+    },
   },
 }));
 
@@ -44,6 +49,10 @@ const FavoriteCity = props => {
 
   const distanceScale = useSelector(state => state.userSettings.settings.weatherUnits.distance);
   const temperatureScale = useSelector(state => state.userSettings.settings.weatherUnits.temperature);
+
+  const weatherContainerRef = useRef();
+
+  const [circularProgressSize, setCircularProgressSize] = useState(0);
 
   const classes = useStyles();
 
@@ -59,25 +68,45 @@ const FavoriteCity = props => {
     }
   }, [currently]);
 
+  useEffect(() => {
+    const resizeCircularProgress = () => {
+      setCircularProgressSize((weatherContainerRef.current.offsetHeight * 1) / 2);
+    };
+
+    resizeCircularProgress();
+
+    if (weatherContainerRef && weatherContainerRef.current) {
+      window.addEventListener('resize', resizeCircularProgress);
+    }
+
+    return () => {
+      window.removeEventListener('resize', resizeCircularProgress);
+    };
+  }, []);
+
   return (
     <div className={styles.container}>
       <div className={styles.imageContainer}>
         <img className={styles.imageResponsive} alt="weather icon" src={image.default} />
       </div>
       <div className={styles.cityCountryContainer}>
-        <Typography variant="h5">
+        <Typography variant="h3">
           {city}, {country}
         </Typography>
         <IconButton classes={{ root: classes.iconButton }} onClick={onClickIcon}>
           <WithSvg component={StarFilledSvg} size={16} />
         </IconButton>
       </div>
-      <Typography variant="h1">
+      <Typography variant="h2" classes={{ root: classes.typoTemp }}>
         {Math.round(currently.temperature)}°{temperatureScale}
       </Typography>
-      <div className={styles.todayWeatherContainer}>
+      <div className={styles.todayWeatherContainer} ref={weatherContainerRef}>
         <div className={styles.circularProgressContainer}>
-          <LabeledCircularProgress circularProgressSize={64} progressValue={Math.round(currently.windSpeed)} />
+          <LabeledCircularProgress
+            circularProgressSize={circularProgressSize}
+            strokeWidth={(1 / 10) * circularProgressSize}
+            progressValue={Math.round(currently.windSpeed)}
+          />
         </div>
         <div className={styles.todayWeatherSubContainer}>
           <div className={styles.todayWeatherIconsContainer}>

@@ -11,9 +11,21 @@ import { getFavoritesDB, getFavoritesLocal, getUid, getDefaultLocation } from 'u
 import { getFavoritesQuery } from 'utils/firestoreQueries';
 
 import { SEND_NOTIFICATION } from 'store/actionTypes/notificationActionTypes';
+import { Grid, makeStyles } from '@material-ui/core';
 import styles from './Favorites.module.css';
 
+const useStyles = makeStyles(() => ({
+  gridContainer: {
+    height: '100%',
+  },
+  gridItem: {
+    height: '50%',
+  },
+}));
+
 const Favorites = () => {
+  const classes = useStyles();
+
   const weatherMap = useSelector(state => state.weatherMap);
   const currentLocation = useSelector(state => state.weatherData.location);
   const defaultLocation = useSelector(getDefaultLocation);
@@ -64,27 +76,32 @@ const Favorites = () => {
 
   const mapFunction = (favorite, index) => {
     return (
-      <FavoriteCity
-        minTemp={getMinArray(weatherMap.hourly[index][0], el => el.temperature)}
-        maxTemp={getMaxArray(weatherMap.hourly[index][0], el => el.temperature)}
-        key={favorite.city}
-        city={favorite.city}
-        country={favorite.country}
-        currently={weatherMap.currently[index]}
-        daily={weatherMap.daily[index]}
-        onClickIcon={() => {
-          if (
-            favoritesData[index].city !== currentLocation.city &&
-            favoritesData[index].city !== defaultLocation.city
-          ) {
-            dispatch({ type: DELETE_FAVORITE_SEND, id: favorite.id, index });
-          } else if (favoritesData[index].city === defaultLocation.city) {
-            dispatch({ type: SEND_NOTIFICATION, status: 'warning', message: "Can't delete default location" });
-          } else {
-            dispatch({ type: SEND_NOTIFICATION, status: 'warning', message: "Can't delete current selected location" });
-          }
-        }}
-      />
+      <Grid item xs={4} classes={{ root: classes.gridItem }} key={favorite.city}>
+        <FavoriteCity
+          minTemp={getMinArray(weatherMap.hourly[index][0], el => el.temperature)}
+          maxTemp={getMaxArray(weatherMap.hourly[index][0], el => el.temperature)}
+          city={favorite.city}
+          country={favorite.country}
+          currently={weatherMap.currently[index]}
+          daily={weatherMap.daily[index]}
+          onClickIcon={() => {
+            if (
+              favoritesData[index].city !== currentLocation.city &&
+              favoritesData[index].city !== defaultLocation.city
+            ) {
+              dispatch({ type: DELETE_FAVORITE_SEND, id: favorite.id, index });
+            } else if (favoritesData[index].city === defaultLocation.city) {
+              dispatch({ type: SEND_NOTIFICATION, status: 'warning', message: "Can't delete default location" });
+            } else {
+              dispatch({
+                type: SEND_NOTIFICATION,
+                status: 'warning',
+                message: "Can't delete current selected location",
+              });
+            }
+          }}
+        />
+      </Grid>
     );
   };
 
@@ -94,7 +111,11 @@ const Favorites = () => {
     favoritesPending ? (
     <Spinner />
   ) : (
-    <div className={styles.container}>{favoritesData.map(mapFunction)}</div>
+    <div className={styles.container}>
+      <Grid container spacing={3} classes={{ root: classes.gridContainer }}>
+        {favoritesData.map(mapFunction)}
+      </Grid>
+    </div>
   );
 };
 

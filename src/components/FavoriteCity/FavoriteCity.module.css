@@ -1,6 +1,9 @@
 .container {
+  flex-basis: 100%;
   min-height: 280px;
-  /* width: 400px; */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   padding: 20px 10px 20px 30px;
   background: #18163d;
   border-radius: 5px;
@@ -29,6 +32,8 @@
 .todayWeatherContainer {
   display: flex;
   margin-top: 1%;
+  flex: 1;
+  align-items: center;
 }
 
 .todayWeatherIconsContainer {
@@ -43,13 +48,15 @@
 
 .todayWeatherSubContainer {
   display: flex;
+  height: 100%;
 }
 
 .todayWeatherTextContainer {
-  margin-left: 10px;
-  width: 70px;
+  margin-left: 10%;
+  padding-right: 30%;
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
 }
 
 .todayWeatherTextContainer div {
@@ -73,7 +80,7 @@
 }
 
 .circularProgressContainer {
-  margin-right: 30px;
+  margin-right: 4%;
 }
 
 .forecastContainer {
