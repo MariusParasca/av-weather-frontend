@@ -53,7 +53,8 @@ const RequestComponent = props => {
 
   useEffect(() => {
     if (uid) {
-      if (isLoaded(settingsDB)) dispatch({ type: WEATHER_API_SEND, defaultLocation: settingsDB.defaultLocation });
+      if (isLoaded(settingsDB) && settingsDB && settingsDB.defaultLocation)
+        dispatch({ type: WEATHER_API_SEND, defaultLocation: settingsDB.defaultLocation });
     } else {
       dispatch({ type: WEATHER_API_SEND });
     }
