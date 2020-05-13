@@ -107,7 +107,7 @@ const Favorites = () => {
 
   return weatherMap.daily.length !== favoritesData.length ||
     weatherMap.pending ||
-    !isLoaded(favoritesDB) ||
+    (!isLoaded(favoritesDB) && uid) ||
     favoritesPending ? (
     <Spinner />
   ) : (
