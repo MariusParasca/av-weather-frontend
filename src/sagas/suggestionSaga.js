@@ -9,6 +9,10 @@ import {
   UP_VOTE_SUGGESTION_SEND,
   DOWN_VOTE_SUGGESTION,
   DOWN_VOTE_SUGGESTION_SEND,
+  DELETE_SUGGESTION,
+  DELETE_SUGGESTION_SEND,
+  EDIT_SUGGESTION_SEND,
+  EDIT_SUGGESTION,
 } from 'store/actionTypes/suggestionActionTypes';
 
 async function postSuggestion(options) {
@@ -56,8 +60,54 @@ function* watchDownVoteSuggestion() {
   yield takeLatest(DOWN_VOTE_SUGGESTION_SEND, downVoteSuggestionSaga);
 }
 
+async function deleteSuggestion(options) {
+  try {
+    await firestore
+      .collection('suggestions')
+      .doc(options.action.id)
+      .delete();
+    return null;
+  } catch (error) {
+    return error;
+  }
+}
+
+function* deleteSuggestionSaga(action) {
+  yield createRequestCallbackSaga(action, DELETE_SUGGESTION, deleteSuggestion, { text: action.text });
+}
+
+function* watchDeleteSuggestion() {
+  yield takeLatest(DELETE_SUGGESTION_SEND, deleteSuggestionSaga);
+}
+
+async function editSuggestion(options) {
+  try {
+    await firestore
+      .collection('suggestions')
+      .doc(options.action.id)
+      .update({ text: options.action.text });
+    return null;
+  } catch (error) {
+    return error;
+  }
+}
+
+function* editSuggestionSaga(action) {
+  yield createRequestCallbackSaga(action, EDIT_SUGGESTION, editSuggestion);
+}
+
+function* watchEditSuggestion() {
+  yield takeLatest(EDIT_SUGGESTION_SEND, editSuggestionSaga);
+}
+
 function* watchAll() {
-  yield all([fork(watchPostSuggestion), fork(watchUpVoteSuggestion), fork(watchDownVoteSuggestion)]);
+  yield all([
+    fork(watchPostSuggestion),
+    fork(watchUpVoteSuggestion),
+    fork(watchDownVoteSuggestion),
+    fork(watchDeleteSuggestion),
+    fork(watchEditSuggestion),
+  ]);
 }
 
 export default watchAll;

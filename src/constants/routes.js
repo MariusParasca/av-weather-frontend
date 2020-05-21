@@ -1,6 +1,6 @@
 import { PageRoute, MapsRoute } from 'utils/routes';
 
-export const topContainerRoutes = [PageRoute.home, PageRoute.suggestion];
+export const topContainerRoutes = [PageRoute.home];
 
 export const mapRoutes = [
   `${PageRoute.map}${MapsRoute.cloudCover}`,

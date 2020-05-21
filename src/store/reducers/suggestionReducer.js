@@ -1,25 +1,30 @@
-import { POST_SUGGESTION, UP_VOTE_SUGGESTION, DOWN_VOTE_SUGGESTION } from 'store/actionTypes/suggestionActionTypes';
+import {
+  POST_SUGGESTION,
+  UP_VOTE_SUGGESTION,
+  DOWN_VOTE_SUGGESTION,
+  EDIT_SUGGESTION,
+} from 'store/actionTypes/suggestionActionTypes';
 
 const initialState = {
   pending: false,
+  pendingEdit: false,
   error: null,
-  dataLoaded: false,
 };
 
-const createReducerSuggestion = (state, action, prefix) => {
+const createReducerSuggestion = (state, action, prefix, pending = 'pending') => {
   const newState = { ...state };
 
   switch (action.type) {
     case `${prefix}_SEND`:
-      newState.pending = true;
+      newState[pending] = true;
       break;
     case `${prefix}_SUCCESS`:
       newState.error = null;
-      newState.pending = false;
+      newState[pending] = false;
       break;
     case `${prefix}_ERROR`:
       newState.error = action.error;
-      newState.pending = false;
+      newState[pending] = false;
       break;
     default:
       break;
@@ -39,6 +44,9 @@ const reducer = (state = initialState, action) => {
 
   if (action.type.indexOf(DOWN_VOTE_SUGGESTION) !== -1) {
     return createReducerSuggestion(state, action, DOWN_VOTE_SUGGESTION);
+  }
+  if (action.type.indexOf(EDIT_SUGGESTION) !== -1) {
+    return createReducerSuggestion(state, action, EDIT_SUGGESTION, 'pendingEdit');
   }
 
   return state;

@@ -2,6 +2,13 @@
   display: flex;
   width: 80%;
   height: 80%;
+  position: relative;
+}
+
+.adminIcon {
+  position: absolute;
+  top: -15px;
+  right: 0;
 }
 
 .sidebar {
@@ -48,4 +55,37 @@
   margin: 5px 20px 0 20px;
   display: flex;
   align-items: flex-start;
+}
+
+.errorBorder {
+  border: 1px solid red;
+}
+
+.modalWrapper {
+  width: 300px;
+  margin: 0 auto;
+  margin-top: 20%;
+  outline: none;
+  border-radius: 3px;
+}
+
+.modalContainer {
+  width: 300px;
+  background-color: #302d7c;
+}
+
+.dotsContainer {
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dot {
+  height: 15px;
+  width: 15px;
+  background-color: #6c66fa;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 0 5px;
 }
