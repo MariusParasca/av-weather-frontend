@@ -16,6 +16,7 @@ import Settings from 'routes/Settings/Settings';
 
 import { useSelector } from 'react-redux';
 import { mapRoutes } from 'constants/routes';
+import Suggestion from 'routes/Suggestion/Suggestion';
 import styles from './Main.module.css';
 
 // Calendar dumb data
@@ -57,7 +58,7 @@ const Main = () => {
   return (
     <div className={styles.container}>
       <div className={styles.wrapperContainer}>
-        <Route exact path={[PageRoute.home, PageRoute.charts, ...mapRoutes]}>
+        <Route exact path={[PageRoute.home, PageRoute.charts, PageRoute.suggestion, ...mapRoutes]}>
           {pending ? (
             <Spinner />
           ) : (
@@ -72,16 +73,11 @@ const Main = () => {
                   <Charts />
                 </ErrorBoundary>
               </Route>
-              {/* <Route path={PageRoute.history}>
+              <Route path={PageRoute.suggestion}>
                 <ErrorBoundary>
-                  <History
-                    monthTemperature={february}
-                    maxWind={weatherData.currently.maxWind}
-                    humidity={weatherData.currently.humidity}
-                    precipitation={weatherData.currently.precipitation}
-                  />
+                  <Suggestion />
                 </ErrorBoundary>
-              </Route> */}
+              </Route>
               <Route path={mapRoutes}>
                 <ErrorBoundary>
                   <Map />

@@ -1,0 +1,78 @@
+.container {
+  display: flex;
+  border-bottom: 2px solid #33325d;
+  align-items: center;
+  justify-content: center;
+  font-weight: 400;
+  padding: 1rem;
+  padding-left: 0;
+}
+
+.buttons {
+  display: flex;
+  margin-right: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  width: 15%;
+}
+
+.text {
+  width: 75%;
+  font-size: 1.2rem;
+}
+
+.votes {
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 300;
+  border: 3px solid red;
+  box-shadow: 0 10px 38px rgba(0, 0, 0, 0.2), 0 10px 12px rgba(0, 0, 0, 0.1);
+}
+
+.faArrowUp,
+.faArrowDown {
+  font-size: 1.5em;
+  margin: 10px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.faArrowUp:hover {
+  animation-name: move-up;
+  animation-duration: 0.7s;
+  animation-timing-function: ease-out;
+  color: #8bc34a;
+}
+
+@keyframes move-up {
+  0%,
+  50%,
+  100% {
+    transform: translateY(0);
+  }
+  25%,
+  75% {
+    transform: translateY(-3px);
+  }
+}
+.faArrowDown:hover {
+  animation-name: move-down;
+  animation-duration: 0.7s;
+  animation-timing-function: ease-out;
+  color: #f44336;
+}
+@keyframes move-down {
+  0%,
+  50%,
+  100% {
+    transform: translateY(0);
+  }
+  25%,
+  75% {
+    transform: translateY(3px);
+  }
+}

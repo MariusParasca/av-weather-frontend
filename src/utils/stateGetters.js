@@ -17,3 +17,5 @@ export const getWeatherUnits = state => state.userSettings.settings.weatherUnits
 export const getFavoritesLocal = state => state.favorites[FAVORITES_DATA];
 
 export const getFavoritesDB = state => state.firestore.ordered[FAVORITES_DATA];
+
+export const getSuggestionsDB = state => state.firestore.ordered.suggestions;

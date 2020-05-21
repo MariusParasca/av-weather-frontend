@@ -5,7 +5,7 @@ import Avatar from '@material-ui/core/Avatar';
 
 import { ReactComponent as LocationSvg } from 'svgs/Appbar/location.svg';
 import { ReactComponent as GraphSvg } from 'svgs/Appbar/graph.svg';
-// import { ReactComponent as HistorySvg } from 'svgs/Appbar/history.svg';
+import { ReactComponent as HistorySvg } from 'svgs/Appbar/history.svg';
 import { ReactComponent as MapSvg } from 'svgs/Appbar/map.svg';
 import { ReactComponent as SettingsSvg } from 'svgs/Appbar/settings.svg';
 import { ReactComponent as StarSvg } from 'svgs/Appbar/star.svg';
@@ -59,9 +59,9 @@ const ApplicationBar = () => {
           <MenuButton path={PageRoute.favorites}>
             <WithSvg component={StarSvg} size={20} />
           </MenuButton>
-          {/* <MenuButton path={PageRoute.history}>
+          <MenuButton path={PageRoute.suggestion}>
             <WithSvg component={HistorySvg} size={20} />
-          </MenuButton> */}
+          </MenuButton>
         </div>
         <div className={styles.settingsContainer}>
           <MenuButton exact path={PageRoute.settings}>

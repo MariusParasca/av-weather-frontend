@@ -1,0 +1,51 @@
+.container {
+  display: flex;
+  width: 80%;
+  height: 80%;
+}
+
+.sidebar {
+  background: #6c66fa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 30%;
+  text-align: center;
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.1), inset 0 0 25px #1d1b4a;
+  z-index: 2;
+  padding-left: 60px;
+}
+
+.title {
+  transform: rotate(45deg);
+  font-size: 3rem;
+  margin: 2rem;
+  color: white;
+  font-weight: 300;
+  letter-spacing: 0.6rem;
+}
+
+.title span {
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.suggestions {
+  height: 90%;
+  background: #2a2850;
+  align-self: center;
+  width: 70%;
+  overflow-y: auto;
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.1);
+}
+
+.suggestions h1 {
+  text-align: center;
+}
+
+.inputWrapper {
+  margin: 5px 20px 0 20px;
+  display: flex;
+  align-items: flex-start;
+}

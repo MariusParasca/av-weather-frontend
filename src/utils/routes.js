@@ -2,7 +2,7 @@ export const PageRoute = {
   home: '/',
   map: '/map',
   charts: '/charts',
-  history: '/history',
+  suggestion: '/suggestion',
   favorites: '/favorites',
   account: '/account',
   register: '/register',

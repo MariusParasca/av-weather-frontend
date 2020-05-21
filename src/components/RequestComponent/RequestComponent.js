@@ -42,9 +42,11 @@ const RequestComponent = props => {
 
   useEffect(() => {
     if (uid) {
-      if (isLoaded(settingsDB) && !isMount) {
+      if (isLoaded(settingsDB) && !isMount && settingsDB) {
         history.push(settingsDB.defaultView.url);
         setIsMount(true);
+      } else {
+        history.push(getSettingsDefaultViewUrl());
       }
     } else {
       history.push(getSettingsDefaultViewUrl());

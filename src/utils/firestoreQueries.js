@@ -34,3 +34,12 @@ export const getSettingsQuery = uid => {
       ]
     : [];
 };
+
+export const getSuggestionsQuery = () => {
+  return [
+    {
+      collection: 'suggestions',
+      orderBy: ['votes', 'desc'],
+    },
+  ];
+};
