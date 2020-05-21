@@ -14,6 +14,7 @@ import { updateTextField, setTextFieldError } from 'utils/helperFunctions';
 import { getSuggestionsDB } from 'utils/stateGetters';
 import { useFirestoreConnect, isLoaded } from 'react-redux-firebase';
 import { getSuggestionsQuery } from 'utils/firestoreQueries';
+import { adminPin } from 'utils/config';
 import Spinner from 'components/Spinner/Spinner';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import Suggestion from './Suggestion/Suggestion';
@@ -82,7 +83,7 @@ const SuggestionList = () => {
   }, [pin]);
 
   const onClickOk = useCallback(() => {
-    if (pin === '1234') {
+    if (pin === adminPin) {
       setIsAdmin(true);
       setIsModalOpen(false);
       setPin('');
