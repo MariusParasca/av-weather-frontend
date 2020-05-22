@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 // import PropTypes from 'prop-types';
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -9,9 +9,10 @@ import {
   UP_VOTE_SUGGESTION_SEND,
   DELETE_SUGGESTION_SEND,
   EDIT_SUGGESTION_SEND,
+  DOWN_VOTE_SUGGESTION_SEND,
 } from 'store/actionTypes/suggestionActionTypes';
 import { updateTextField, setTextFieldError } from 'utils/helperFunctions';
-import { getSuggestionsDB } from 'utils/stateGetters';
+import { getSuggestionsDB, getUid, getSuggestionVotesDB } from 'utils/stateGetters';
 import { useFirestoreConnect, isLoaded } from 'react-redux-firebase';
 import { getSuggestionsQuery } from 'utils/firestoreQueries';
 import { adminPin } from 'utils/config';
@@ -43,6 +44,12 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const compareSuggestions = (suggestionOne, suggestionTwo) => {
+  if (suggestionOne.votes > suggestionTwo.votes) return -1;
+  if (suggestionOne.votes < suggestionTwo.votes) return 1;
+  return 0;
+};
+
 const SuggestionList = () => {
   const classes = useStyles();
 
@@ -54,19 +61,48 @@ const SuggestionList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPinError, setIsPinError] = useState(false);
 
+  const [suggestionsWithUserVote, setSuggestionsWithUserVote] = useState([]);
+
   const [pin, setPin] = useState('');
+
+  const [pendingProcessing, setPendingProcessing] = useState(true);
 
   const toggleIsOpen = useCallback((setState, state) => () => setState(!state), []);
 
   const dispatch = useDispatch();
 
-  useFirestoreConnect(getSuggestionsQuery());
+  const uid = useSelector(getUid);
+
+  useFirestoreConnect(getSuggestionsQuery(uid));
 
   const authFirebase = useSelector(state => state.firebase.auth);
 
   const suggestions = useSelector(state => state.suggestions);
 
   const suggestionsDB = useSelector(getSuggestionsDB);
+
+  const suggestionVotes = useSelector(getSuggestionVotesDB);
+
+  useEffect(() => {
+    if (suggestionsDB && isLoaded(suggestionsDB) && suggestionVotes && isLoaded(suggestionVotes)) {
+      const newSuggestions = [];
+      setPendingProcessing(true);
+      const keys = Object.keys(suggestionsDB);
+      for (let i = 0; i < keys.length; i += 1) {
+        const key = keys[i];
+
+        const suggestionVoteIndex = suggestionVotes.findIndex(suggestionVote => key === suggestionVote.id);
+        if (suggestionVoteIndex === -1) {
+          newSuggestions.push({ ...suggestionsDB[key], id: key, vote: 0 });
+        } else {
+          newSuggestions.push({ ...suggestionsDB[key], id: key, vote: suggestionVotes[suggestionVoteIndex].vote });
+        }
+      }
+
+      setSuggestionsWithUserVote(newSuggestions.sort(compareSuggestions));
+      setPendingProcessing(false);
+    }
+  }, [suggestionVotes, suggestionsDB]);
 
   const onClickPin = useCallback(
     number => {
@@ -103,16 +139,42 @@ const SuggestionList = () => {
 
   const onUpVote = useCallback(
     index => {
-      dispatch({ type: UP_VOTE_SUGGESTION_SEND, id: suggestionsDB[index].id, votes: suggestionsDB[index].votes + 1 });
+      const commonDispatchProps = { type: UP_VOTE_SUGGESTION_SEND, id: suggestionsWithUserVote[index].id, uid };
+      if (suggestionsWithUserVote[index].vote === 0) {
+        dispatch({
+          ...commonDispatchProps,
+          votes: suggestionsWithUserVote[index].votes + 1,
+          vote: suggestionsWithUserVote[index].vote + 1,
+        });
+      } else if (suggestionsWithUserVote[index].vote === -1) {
+        dispatch({
+          ...commonDispatchProps,
+          votes: suggestionsWithUserVote[index].votes,
+          vote: suggestionsWithUserVote[index].vote + 1,
+        });
+      }
     },
-    [dispatch, suggestionsDB],
+    [dispatch, suggestionsWithUserVote, uid],
   );
 
   const onDownVote = useCallback(
     index => {
-      dispatch({ type: UP_VOTE_SUGGESTION_SEND, id: suggestionsDB[index].id, votes: suggestionsDB[index].votes - 1 });
+      const commonDispatchProps = { type: DOWN_VOTE_SUGGESTION_SEND, id: suggestionsWithUserVote[index].id, uid };
+      if (suggestionsWithUserVote[index].vote === 0) {
+        dispatch({
+          ...commonDispatchProps,
+          votes: suggestionsWithUserVote[index].votes - 1,
+          vote: suggestionsWithUserVote[index].vote - 1,
+        });
+      } else if (suggestionsWithUserVote[index].vote === 1) {
+        dispatch({
+          ...commonDispatchProps,
+          votes: suggestionsWithUserVote[index].votes,
+          vote: suggestionsWithUserVote[index].vote - 1,
+        });
+      }
     },
-    [dispatch, suggestionsDB],
+    [dispatch, suggestionsWithUserVote, uid],
   );
 
   const onClickDelete = useCallback(
@@ -168,10 +230,10 @@ const SuggestionList = () => {
                   Post
                 </ButtonWithSpinner>
               </div>
-              {!isLoaded(suggestionsDB) ? (
+              {!isLoaded(suggestionsDB) && !isLoaded(suggestionVotes) && pendingProcessing ? (
                 <Spinner />
               ) : (
-                suggestionsDB.map((suggestion, index) => (
+                suggestionsWithUserVote.map((suggestion, index) => (
                   <Suggestion
                     index={index}
                     key={suggestion.text}
@@ -182,6 +244,7 @@ const SuggestionList = () => {
                     deleteSuggestion={() => onClickDelete(index)}
                     editSuggestion={onClickEdit}
                     showAdminActions={isAdmin}
+                    vote={suggestion.vote}
                   />
                 ))
               )}

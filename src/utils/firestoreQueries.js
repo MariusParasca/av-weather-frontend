@@ -35,11 +35,23 @@ export const getSettingsQuery = uid => {
     : [];
 };
 
-export const getSuggestionsQuery = () => {
-  return [
-    {
-      collection: 'suggestions',
-      orderBy: ['votes', 'desc'],
-    },
-  ];
+export const getSuggestionsQuery = uid => {
+  return uid
+    ? [
+        {
+          collection: 'suggestions',
+          // orderBy: ['votes', 'desc'],
+        },
+        {
+          collection: 'users',
+          doc: uid || '',
+          subcollections: [
+            {
+              collection: 'suggestionVotes',
+            },
+          ],
+          storeAs: 'suggestionVotes',
+        },
+      ]
+    : [];
 };

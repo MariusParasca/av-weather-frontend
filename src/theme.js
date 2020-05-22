@@ -30,6 +30,13 @@ const theme = createMuiTheme({
         },
       },
     },
+    MuiIconButton: {
+      root: {
+        '&$disabled': {
+          opacity: 0.5,
+        },
+      },
+    },
     MuiOutlinedInput: {
       root: {
         '&:hover $notchedOutline': {

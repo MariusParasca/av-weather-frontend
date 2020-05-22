@@ -63,7 +63,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Suggestion = props => {
-  const { upVote, downVote, deleteSuggestion, editSuggestion, votes, text, showAdminActions, index } = props;
+  const { upVote, downVote, deleteSuggestion, editSuggestion, votes, text, showAdminActions, index, vote } = props;
 
   const classes = useStyles();
 
@@ -109,7 +109,7 @@ const Suggestion = props => {
       ) : (
         <>
           <div className={styles.buttons}>
-            <IconButton classes={{ root: classes.arrowUpButton }} onClick={upVote}>
+            <IconButton classes={{ root: classes.arrowUpButton }} disabled={vote === 1} onClick={upVote}>
               <ArrowUpwardIcon color="primary" />
             </IconButton>
             <div>
@@ -122,7 +122,7 @@ const Suggestion = props => {
                 {votes}
               </Typography>
             </div>
-            <IconButton classes={{ root: classes.arrowDownButton }} onClick={downVote}>
+            <IconButton classes={{ root: classes.arrowDownButton }} disabled={vote === -1} onClick={downVote}>
               <ArrowDownwardIcon color="primary" />
             </IconButton>
           </div>
@@ -156,6 +156,7 @@ Suggestion.propTypes = {
   deleteSuggestion: PropTypes.func.isRequired,
   editSuggestion: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired,
+  vote: PropTypes.number.isRequired,
 };
 
 Suggestion.defaultProps = {

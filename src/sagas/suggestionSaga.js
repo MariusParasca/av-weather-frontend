@@ -34,10 +34,24 @@ function* watchPostSuggestion() {
 
 async function upDownVoteSuggestion(options) {
   try {
-    await firestore
-      .collection('suggestions')
-      .doc(options.action.id)
-      .update({ votes: options.action.votes });
+    const promises = [];
+    promises.push(
+      firestore
+        .collection('suggestions')
+        .doc(options.action.id)
+        .update({ votes: options.action.votes }),
+    );
+    promises.push(
+      firestore
+        .collection('users')
+        .doc(options.action.uid)
+        .collection('suggestionVotes')
+        .doc(options.action.id)
+        .set({
+          vote: options.action.vote,
+        }),
+    );
+    await Promise.all(promises);
     return null;
   } catch (error) {
     return error;
