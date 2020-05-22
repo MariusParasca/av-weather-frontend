@@ -91,11 +91,13 @@ const SuggestionList = () => {
       for (let i = 0; i < keys.length; i += 1) {
         const key = keys[i];
 
-        const suggestionVoteIndex = suggestionVotes.findIndex(suggestionVote => key === suggestionVote.id);
-        if (suggestionVoteIndex === -1) {
-          newSuggestions.push({ ...suggestionsDB[key], id: key, vote: 0 });
-        } else {
-          newSuggestions.push({ ...suggestionsDB[key], id: key, vote: suggestionVotes[suggestionVoteIndex].vote });
+        if (suggestionsDB[key]) {
+          const suggestionVoteIndex = suggestionVotes.findIndex(suggestionVote => key === suggestionVote.id);
+          if (suggestionVoteIndex === -1) {
+            newSuggestions.push({ ...suggestionsDB[key], id: key, vote: 0 });
+          } else {
+            newSuggestions.push({ ...suggestionsDB[key], id: key, vote: suggestionVotes[suggestionVoteIndex].vote });
+          }
         }
       }
 
@@ -179,16 +181,16 @@ const SuggestionList = () => {
 
   const onClickDelete = useCallback(
     index => {
-      dispatch({ type: DELETE_SUGGESTION_SEND, id: suggestionsDB[index].id });
+      dispatch({ type: DELETE_SUGGESTION_SEND, id: suggestionsWithUserVote[index].id });
     },
-    [dispatch, suggestionsDB],
+    [dispatch, suggestionsWithUserVote],
   );
 
   const onClickEdit = useCallback(
     (index, editedText) => {
-      dispatch({ type: EDIT_SUGGESTION_SEND, id: suggestionsDB[index].id, text: editedText });
+      dispatch({ type: EDIT_SUGGESTION_SEND, id: suggestionsWithUserVote[index].id, text: editedText });
     },
-    [dispatch, suggestionsDB],
+    [dispatch, suggestionsWithUserVote],
   );
 
   return (
