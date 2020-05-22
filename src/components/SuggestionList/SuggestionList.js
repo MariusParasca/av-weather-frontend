@@ -136,6 +136,8 @@ const SuggestionList = () => {
     } else {
       dispatch({ type: POST_SUGGESTION_SEND, text });
       setText('');
+      setHelperText('');
+      setErrorText('');
     }
   }, [dispatch, text]);
 
@@ -145,13 +147,13 @@ const SuggestionList = () => {
       if (suggestionsWithUserVote[index].vote === 0) {
         dispatch({
           ...commonDispatchProps,
+          updateBoth: true,
           votes: suggestionsWithUserVote[index].votes + 1,
           vote: suggestionsWithUserVote[index].vote + 1,
         });
       } else if (suggestionsWithUserVote[index].vote === -1) {
         dispatch({
           ...commonDispatchProps,
-          votes: suggestionsWithUserVote[index].votes,
           vote: suggestionsWithUserVote[index].vote + 1,
         });
       }
@@ -165,13 +167,13 @@ const SuggestionList = () => {
       if (suggestionsWithUserVote[index].vote === 0) {
         dispatch({
           ...commonDispatchProps,
+          updateBoth: true,
           votes: suggestionsWithUserVote[index].votes - 1,
           vote: suggestionsWithUserVote[index].vote - 1,
         });
       } else if (suggestionsWithUserVote[index].vote === 1) {
         dispatch({
           ...commonDispatchProps,
-          votes: suggestionsWithUserVote[index].votes,
           vote: suggestionsWithUserVote[index].vote - 1,
         });
       }

@@ -8,6 +8,8 @@ import {
 const initialState = {
   pending: false,
   pendingEdit: false,
+  pendingDownVote: false,
+  pendingUpVote: false,
   error: null,
 };
 
@@ -39,11 +41,11 @@ const reducer = (state = initialState, action) => {
   }
 
   if (action.type.indexOf(UP_VOTE_SUGGESTION) !== -1) {
-    return createReducerSuggestion(state, action, UP_VOTE_SUGGESTION);
+    return createReducerSuggestion(state, action, UP_VOTE_SUGGESTION, 'pendingUpVote');
   }
 
   if (action.type.indexOf(DOWN_VOTE_SUGGESTION) !== -1) {
-    return createReducerSuggestion(state, action, DOWN_VOTE_SUGGESTION);
+    return createReducerSuggestion(state, action, DOWN_VOTE_SUGGESTION, 'pendingDownVote');
   }
   if (action.type.indexOf(EDIT_SUGGESTION) !== -1) {
     return createReducerSuggestion(state, action, EDIT_SUGGESTION, 'pendingEdit');

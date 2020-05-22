@@ -35,12 +35,14 @@ function* watchPostSuggestion() {
 async function upDownVoteSuggestion(options) {
   try {
     const promises = [];
-    promises.push(
-      firestore
-        .collection('suggestions')
-        .doc(options.action.id)
-        .update({ votes: options.action.votes }),
-    );
+    if (options.action.updateBoth) {
+      promises.push(
+        firestore
+          .collection('suggestions')
+          .doc(options.action.id)
+          .update({ votes: options.action.votes }),
+      );
+    }
     promises.push(
       firestore
         .collection('users')
