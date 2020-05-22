@@ -137,7 +137,7 @@ const SuggestionList = () => {
       dispatch({ type: POST_SUGGESTION_SEND, text });
       setText('');
       setHelperText('');
-      setErrorText('');
+      setErrorText(false);
     }
   }, [dispatch, text]);
 
